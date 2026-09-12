@@ -32,6 +32,11 @@ describe('parseDshArgs', () => {
       .toEqual({ mode: 'profile', profile: 'web', patches: ['web.yml'], args: [] })
   })
 
+  it('accepts the AkashX launcher name for the same profile grammar', () => {
+    expect(parseDshArgs(['--profile', 'headless', 'run', 'the', 'tests'], '1.2.3', 'akashx'))
+      .toEqual({ mode: 'profile', profile: 'headless', patches: [], args: ['run', 'the', 'tests'] })
+  })
+
   it('ends the launcher flags at the first token it does not own', () => {
     // App flags, including its -h, and positionals reach the app verbatim.
     expect(parse(['--profile', 'tui', '--resume', 'abc']))

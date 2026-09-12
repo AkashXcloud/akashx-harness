@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * Command-line entry for dsh.
+ * Command-line entry for the DeepSeek-compatible and AkashX launchers.
  * @module @deepseek-ai/dsh/bin
  */
 
 /* v8 ignore file -- built-bin acceptance exercises this self-executing dispatch. */
 
 import { readFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { loadLayeredEnv } from '@deepseek-ai/dsh-app-boot'
 import { parseDshArgs } from './args.ts'
@@ -22,17 +24,23 @@ function readVersion(): string {
 }
 
 /**
- * Run the public dsh command-line interface.
+ * Run the public command-line interface.
+ * @param commandName - the executable name shown in help and diagnostics.
  * @returns a promise that settles when the selected command mode finishes.
  */
-export async function runCli(): Promise<void> {
-  const invocation = parseDshArgs(process.argv.slice(2), readVersion())
+export async function runCli(commandName = 'dsh'): Promise<void> {
+  process.env.DSH_CLI_NAME = commandName
+  if (commandName === 'akashx' && (process.env.DSH_HOME ?? '').trim() === '') {
+    process.env.DSH_HOME = join(homedir(), '.akashx')
+  }
+  const invocation = parseDshArgs(process.argv.slice(2), readVersion(), commandName)
 
   switch (invocation.mode) {
     case 'profile': {
       const { runProfile } = await import('./profile-boot.ts')
       await runProfile({
-        environment: loadLayeredEnv('dsh'),
+        environment: loadLayeredEnv(commandName),
+        binName: commandName,
         profile: invocation.profile,
         fromDefaultProfile: invocation.fromDefaultProfile,
         patchFiles: invocation.patches,
@@ -42,7 +50,7 @@ export async function runCli(): Promise<void> {
     }
     case 'plugin': {
       const { runPlugin } = await import('./plugin.ts')
-      process.exit(runPlugin(invocation.profile, invocation.args))
+      process.exit(runPlugin(invocation.profile, invocation.args, commandName))
       break
     }
     case 'dump-config': {
@@ -52,12 +60,13 @@ export async function runCli(): Promise<void> {
         invocation.defaultOnly,
         invocation.patches,
         invocation.fromDefaultProfile,
+        commandName,
       )
       break
     }
     default:
       invocation satisfies never
-      throw new Error(`dsh: unhandled invocation mode ${JSON.stringify(invocation)}`)
+      throw new Error(`${commandName}: unhandled invocation mode ${JSON.stringify(invocation)}`)
   }
 }
 

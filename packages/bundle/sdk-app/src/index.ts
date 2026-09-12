@@ -36,13 +36,14 @@ export const Config: z<Config> = z.object({
  * @returns a fresh program for one invocation.
  */
 function sdkCommand(profile: string): Command {
+  const commandName = process.env.DSH_CLI_NAME ?? 'dsh'
   return new Command()
-    .name(`dsh --profile ${profile}`)
+    .name(`${commandName} --profile ${profile}`)
     .description('Serve DeepSeek Harness SDK clients over stdio JSON-RPC.')
     .helpOption('-h, --help', 'show this help')
     .addHelpText('after', `
 Example:
-  dsh --profile ${profile}     serve one SDK runtime until its client disconnects
+  ${commandName} --profile ${profile}     serve one SDK runtime until its client disconnects
 `)
 }
 

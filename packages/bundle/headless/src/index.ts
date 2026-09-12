@@ -60,6 +60,11 @@ export const internals: { stdout: HeadlessIo['stdout']; stderr: HeadlessIo['stde
   stderr: process.stderr,
 }
 
+/** Executable name used in process-facing diagnostics. */
+function cliName(): string {
+  return process.env.DSH_CLI_NAME ?? 'dsh'
+}
+
 /** Aggregate the last assistant text and turn outcome in one owned interval. */
 function summarize(session: Session, firstSeq: SessionLogOffset): RunOutcome {
   let started = false
@@ -125,7 +130,7 @@ function streamReasoning(
       case 'reasoning-delta':
         if (chunk.text === '') return
         if (!open) {
-          stderr.write('dsh: reasoning:\n')
+          stderr.write(`${cliName()}: reasoning:\n`)
           open = true
         }
         stderr.write(chunk.text)
@@ -157,7 +162,7 @@ function streamReasoning(
 
 /** Report an unexpected direct-driver failure and request a failing exit. */
 function fail(io: HeadlessIo, error: unknown): void {
-  io.stderr.write(`dsh: ${error instanceof Error ? error.message : String(error)}\n`)
+  io.stderr.write(`${cliName()}: ${error instanceof Error ? error.message : String(error)}\n`)
   io.exit(1)
 }
 
@@ -207,7 +212,7 @@ async function run(ctx: Context, task: string, io: HeadlessIo): Promise<void> {
   const outcome = summarize(agent.session, firstSeq)
   io.stdout.write(outcome.text + '\n')
   if (outcome.reason?.kind === 'error') {
-    io.stderr.write(`dsh: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`)
+    io.stderr.write(`${cliName()}: ${outcome.reason.error.code}: ${outcome.reason.error.message}\n`)
   }
   io.exit(outcome.reason?.kind === 'completed' ? 0 : 1)
 }

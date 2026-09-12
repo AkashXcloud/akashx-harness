@@ -308,6 +308,6 @@ export class BrowserAuth {
     })
     res.end(req.method === 'HEAD'
       ? undefined
-      : 'dsh web authentication required; reopen the URL printed by dsh web.\n')
+      : `${process.env.DSH_CLI_NAME ?? 'dsh'} web authentication required; reopen the URL printed by ${process.env.DSH_CLI_NAME ?? 'dsh'} web.\n`)
   }
 }

@@ -12,7 +12,8 @@
   },
   "type": "module",
   "bin": {
-    "dsh": "lib/bin.js"
+    "dsh": "lib/bin.js",
+    "akashx": "lib/akashx.js"
   },
   "files": [
     "lib/*.js"
