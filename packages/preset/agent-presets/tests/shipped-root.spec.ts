@@ -89,7 +89,7 @@ describe('the shipped preset root', () => {
     const ctx = await roster({ includeUserRoot: false })
 
     const listed = await ctx.agentPresets.list()
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cordis', 'minimal', 'ptc', 'standard'])
+    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', 'cordis', 'minimal', 'ptc', 'standard'])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
     // Not `broken === undefined`: health asks whether each row's package is
     // installed above the base, and the shipped rows name packages the
@@ -139,6 +139,20 @@ describe('the shipped preset root', () => {
       }
       expect(toolWeb.config.fetch, id).toBe(true)
     }
+  })
+
+  it('keeps Cognate additive to the Standard preset inventory', async () => {
+    const standard = await shippedEntries('standard')
+    const cognate = await shippedEntries('cognate')
+    const ids = (entries: unknown[]): string[] => entries.flatMap((entry) => {
+      if (typeof entry !== 'object' || entry === null) return []
+      const value = entry as ShippedEntry
+      const own = typeof value.id === 'string' ? [value.id] : []
+      return Array.isArray(value.config) ? [...own, ...ids(value.config)] : own
+    })
+    const cognateIds = new Set(ids(cognate))
+    for (const id of ids(standard)) expect(cognateIds.has(id), id).toBe(true)
+    expect(cognateIds).toEqual(new Set([...ids(standard), 'cognate', 'cognate-runtime', 'cognate-mysql', 'tool-cognate']))
   })
 
   it('omits the general workflow tool only from PTC while retaining Ralph infrastructure', async () => {

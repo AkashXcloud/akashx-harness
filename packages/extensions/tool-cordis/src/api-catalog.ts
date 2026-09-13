@@ -666,6 +666,37 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'cognate',
+    summary: 'Provider registry and bounded AkashXDB execution service.',
+    description: 'Provider registry and bounded AkashXDB execution service.',
+    methods: [
+      {
+        signature: 'registerProvider(provider: CognateProvider): () => void',
+        description: 'Register one transport provider and return its lifecycle disposer.',
+        parameters: [{ name: 'provider', description: 'provider to add to the runtime registry.' }],
+        returns: 'disposer that removes the provider.',
+      },
+      {
+        signature: 'context(): CognateSemanticContext | undefined',
+        description: 'Return the bounded context currently supplied by the selected provider.',
+        parameters: [],
+        returns: 'provider-supplied semantic context, when available.',
+      },
+      {
+        signature: 'async execute(request: { readonly sql: string; readonly signal: AbortSignal }): Promise<CognateQueryResult>',
+        description: 'Classify, authorize, execute, and bound one model-submitted SQL call.',
+        parameters: [{ name: 'request', description: 'SQL text and caller cancellation signal.' }],
+        returns: 'normalized and bounded query result.',
+      },
+      {
+        signature: 'async probe(probes: readonly CognateCapabilityProbe[], signal: AbortSignal): Promise<readonly CognateProbeResult[]>',
+        description: 'Run host-owned deployment capability checks through the selected provider.',
+        parameters: [{ name: 'probes', description: 'named, read-policy-checked SQL statements to execute.' }, { name: 'signal', description: 'cancellation signal for the whole probe operation.' }],
+        returns: 'support result for every requested capability.',
+      },
+    ],
+  },
+  {
     key: 'commands',
     summary: 'Human-command registry.',
     description: 'Human-command registry. Plain-context definitions are global; definitions registered through a command-injected child of an agent context shadow globals for that agent.',
@@ -3841,6 +3872,50 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'CodeRunResult',
     declaration: 'export interface CodeRunResult {\n    value?: CodeJsonValue;\n    logs: string[];\n    error?: CodeRunFailure;\n}',
+  },
+  {
+    name: 'CognateCapabilityProbe',
+    declaration: 'export interface CognateCapabilityProbe {\n    readonly id: string;\n    readonly sql: string;\n    readonly required?: boolean;\n}',
+  },
+  {
+    name: 'CognateCitation',
+    declaration: 'export interface CognateCitation {\n    readonly sourceIndex?: number;\n    readonly documentId?: string;\n    readonly knowledgeBaseId?: string;\n    readonly document?: string;\n    readonly page?: number;\n    readonly text?: string;\n    readonly start?: number;\n    readonly end?: number;\n    readonly nodePath?: readonly string[];\n    readonly confidence?: number;\n    readonly verified?: boolean;\n}',
+  },
+  {
+    name: 'CognateColumn',
+    declaration: 'export interface CognateColumn {\n    readonly name: string;\n    readonly type?: string;\n}',
+  },
+  {
+    name: 'CognateConceptTree',
+    declaration: 'export interface CognateConceptTree {\n    readonly source: string;\n    readonly enabled?: boolean;\n    readonly domain?: string;\n}',
+  },
+  {
+    name: 'CognateMetric',
+    declaration: 'export interface CognateMetric {\n    readonly name: string;\n    readonly definition: string;\n}',
+  },
+  {
+    name: 'CognateProbeResult',
+    declaration: 'export interface CognateProbeResult {\n    readonly id: string;\n    readonly supported: boolean;\n}',
+  },
+  {
+    name: 'CognateProvider',
+    declaration: 'export interface CognateProvider {\n    readonly id: string;\n    available(): boolean;\n    context(): CognateSemanticContext | undefined;\n    execute(request: CognateQueryRequest): Promise<CognateQueryResult>;\n    probe?(probes: readonly CognateCapabilityProbe[], signal: AbortSignal): Promise<readonly CognateProbeResult[]>;\n}',
+  },
+  {
+    name: 'CognateQueryKind',
+    declaration: 'export type CognateQueryKind = \'metadata\' | \'read\' | \'cognitive\' | \'mutation\';',
+  },
+  {
+    name: 'CognateQueryRequest',
+    declaration: 'export interface CognateQueryRequest {\n    readonly sql: string;\n    readonly kind: CognateQueryKind;\n    readonly signal: AbortSignal;\n}',
+  },
+  {
+    name: 'CognateQueryResult',
+    declaration: 'export interface CognateQueryResult {\n    readonly sql: string;\n    readonly kind: CognateQueryKind;\n    readonly columns: readonly CognateColumn[];\n    readonly rows: readonly Record<string, JsonValue>[];\n    readonly answer?: string;\n    readonly citations: readonly CognateCitation[];\n    readonly truncated?: boolean;\n    readonly queryId?: string;\n    readonly externalOperation: boolean;\n}',
+  },
+  {
+    name: 'CognateSemanticContext',
+    declaration: 'export interface CognateSemanticContext {\n    readonly dialect?: string;\n    readonly catalog?: string;\n    readonly database?: string;\n    readonly tables?: readonly string[];\n    readonly ontologyViews?: readonly string[];\n    readonly ragBuckets?: readonly string[];\n    readonly conceptTrees?: readonly CognateConceptTree[];\n    readonly metrics?: readonly CognateMetric[];\n    readonly instructions?: readonly string[];\n}',
   },
   {
     name: 'CollectedOutput',

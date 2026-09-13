@@ -224,7 +224,7 @@ describe('the shipped Web composition', () => {
   it('supplies both shipped presets, and only those, from the system root', async () => {
     const listed = await ctx.agentPresets.list()
 
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cordis', 'minimal', 'ptc', 'standard'])
+    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', 'cordis', 'minimal', 'ptc', 'standard'])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
     expect(ctx.agentPresets.defaultId).toBe('standard')
   })
@@ -247,6 +247,29 @@ describe('the shipped Web composition', () => {
         'workflow', 'write',
       ])
       expect(ctx.commands.find(handle.agent, 'goal')).toBeDefined()
+    } finally {
+      await handle.dispose()
+    }
+  })
+
+  it('composes Cognate additively with the complete Standard tool inventory', async () => {
+    const handle = await ctx.agents.create({
+      sessionId: SessionId('preset-cognate'),
+      setup: agentCtx => ctx.agentPresets.mount(agentCtx, 'cognate').then(() => undefined),
+    })
+    try {
+      const tools = toolNames(ctx, handle.agent)
+      expect(tools).toEqual(expect.arrayContaining([
+        'ask_user_question', 'bash', 'create_goal', 'edit', 'exit_plan_mode',
+        'get_goal', 'interrupt_agent', 'job_kill', 'job_list', 'job_output', 'list_agents',
+        'present', 'ralph', 'read', 'read_image', 'render_chart', 'run_sql', 'send_message',
+        'skill', 'subagent', 'subagent_fork', 'todo_write', 'update_goal', 'web_fetch',
+        'web_search', 'workflow', 'write',
+      ]))
+      expect(tools).not.toContain('cordis_define')
+      const assembly = await ctx.systemPrompt.assemble({ scope: handle.agent })
+      expect(assembly.sections.find(section => section.name === 'tool:cognate')?.text).toContain('Use run_sql')
+      expect(assembly.contexts.find(context => context.name === 'cognate:semantic-context')).toBeDefined()
     } finally {
       await handle.dispose()
     }
@@ -961,7 +984,7 @@ describe('a composition that configures its own preset roots', () => {
     ])
 
     const listed = await rootsCtx.agentPresets.list()
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cordis', 'minimal', 'ptc', 'standard', 'team-spec'])
+    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', 'cordis', 'minimal', 'ptc', 'standard', 'team-spec'])
     expect(listed.every(preset => preset.broken === undefined)).toBe(true)
     // The shipped root comes first: a configured directory claiming a shipped
     // id is shadowed, never the other way around.
