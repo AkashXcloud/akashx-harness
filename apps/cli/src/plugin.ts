@@ -33,14 +33,14 @@ const NAME = 'dsh'
  * @param profileDir - the profile directory (resolution anchor).
  * @returns true when the package manifest declares `dsh.bundle`.
  */
-function exportsPatch(packageName: string, profileDir: string): boolean {
+function exportsPatch(packageName: string, profileDir: string, binName: string): boolean {
   let dir: string
   try {
-    dir = resolveBundleDir(NAME, packageName, INSTALL_ANCHOR, profileDir)
+    dir = resolveBundleDir(binName, packageName, INSTALL_ANCHOR, profileDir)
   } catch {
     return false // pnpm reported success yet the package is unresolvable — treat as plain
   }
-  const manifest = readProfileManifest(NAME, dir)
+  const manifest = readProfileManifest(binName, dir)
   return manifest.dsh?.bundle?.patch !== undefined
 }
 
@@ -56,20 +56,20 @@ function exportsPatch(packageName: string, profileDir: string): boolean {
  * per newly-added bundle-less dependency (a plain library is fine; the
  * warning is orientation).
  */
-function reconcilePlugins(before: ProfileManifest, profileDir: string): void {
-  const after = readProfileManifest(NAME, profileDir)
+function reconcilePlugins(before: ProfileManifest, profileDir: string, binName: string): void {
+  const after = readProfileManifest(binName, profileDir)
   const beforeDeps = new Set(Object.keys(before.dependencies ?? {}))
   const dependencies = Object.keys(after.dependencies ?? {})
   const plugins = after.dsh?.profile?.bundles ?? []
   let changed = false
   for (const packageName of dependencies) {
-    const isBundle = exportsPatch(packageName, profileDir)
+    const isBundle = exportsPatch(packageName, profileDir, binName)
     if (isBundle && !plugins.includes(packageName)) {
       plugins.push(packageName)
       changed = true
     } else if (!isBundle && !beforeDeps.has(packageName)) {
       process.stderr.write(
-        `${NAME}: warning: ${packageName} declares no dsh.bundle — installed as a plain dependency, not a profile layer `
+        `${binName}: warning: ${packageName} declares no dsh.bundle — installed as a plain dependency, not a profile layer `
         + '(a later update that gains one activates it automatically)\n',
       )
     }
@@ -79,7 +79,7 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string): void {
     // Only dependency-managed entries are subject to removal; template
     // bundles (dsh-base and friends) are not dependencies.
     const wasDependency = beforeDeps.has(packageName) || dependencySet.has(packageName)
-    const stillBundle = dependencySet.has(packageName) && exportsPatch(packageName, profileDir)
+    const stillBundle = dependencySet.has(packageName) && exportsPatch(packageName, profileDir, binName)
     if (wasDependency && !stillBundle) {
       plugins.splice(plugins.indexOf(packageName), 1)
       changed = true
@@ -115,9 +115,10 @@ function anchorPathSpec(argument: string, cwd: string): string {
  * Run one `dsh plugin` invocation: init if needed, forward to pnpm, reconcile.
  * @param profile - the profile name.
  * @param args - pnpm arguments with relative path specs anchored to the invoking directory.
+ * @param binName - executable name used in diagnostics.
  * @returns the pnpm exit code.
  */
-export function runPlugin(profile: string, args: readonly string[]): number {
+export function runPlugin(profile: string, args: readonly string[], binName = NAME): number {
   const dir = resolveProfileDir(profile)
   if (!existsSync(join(dir, 'package.json'))) {
     const template = PROFILE_TEMPLATES[profile]
@@ -126,9 +127,9 @@ export function runPlugin(profile: string, args: readonly string[]): number {
       template?.bundles ?? DEFAULT_PROFILE_BUNDLES,
       template?.patchReload,
     )
-    process.stderr.write(`${NAME}: initialized profile ${profile} at ${dir}\n`)
+    process.stderr.write(`${binName}: initialized profile ${profile} at ${dir}\n`)
   }
-  const before = readProfileManifest(NAME, dir)
+  const before = readProfileManifest(binName, dir)
   // Windows resolves pnpm through its .cmd shim, which spawn() refuses
   // without a shell since the CVE-2024-27980 hardening.
   const result = spawnSync('pnpm', args.map(argument => anchorPathSpec(argument, process.cwd())), {
@@ -139,22 +140,22 @@ export function runPlugin(profile: string, args: readonly string[]): number {
   if (result.error !== undefined) {
     const code = (result.error as NodeJS.ErrnoException).code
     if (code === 'ENOENT') {
-      process.stderr.write(`${NAME}: pnpm not found on PATH — install pnpm to manage profile plugins\n`)
+      process.stderr.write(`${binName}: pnpm not found on PATH — install pnpm to manage profile plugins\n`)
       return 127
     }
     throw result.error
   }
   const exitCode = result.status ?? 1
   if (exitCode === 0) {
-    reconcilePlugins(before, dir)
+    reconcilePlugins(before, dir, binName)
   } else {
     // pnpm's own diagnostics name pnpm-workspace.yaml without saying WHICH
     // one; the profile owns it, and the commonest failure here is pnpm ≥10
     // blocking a git dependency's prepare (build) script until allowlisted.
-    process.stderr.write(`${NAME}: pnpm failed in profile directory ${dir}\n`)
+    process.stderr.write(`${binName}: pnpm failed in profile directory ${dir}\n`)
     if (args.some(argument => /^git\+|^github:|\.git(?:#|$)/.test(argument))) {
       process.stderr.write(
-        `${NAME}: git-hosted plugins build on install via their prepare script, which pnpm blocks until allowed — `
+        `${binName}: git-hosted plugins build on install via their prepare script, which pnpm blocks until allowed — `
         + `add the exact key pnpm printed above under allowBuilds in ${join(dir, 'pnpm-workspace.yaml')}, then re-run\n`,
       )
     }

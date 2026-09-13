@@ -23,13 +23,14 @@ export const ACP_APP_STARTUP_SERVICE = 'acpAppStartup'
  * @returns a fresh program for one invocation.
  */
 function acpCommand(): Command {
+  const commandName = process.env.DSH_CLI_NAME ?? 'dsh'
   return new Command()
-    .name('dsh --profile acp')
+    .name(`${commandName} --profile acp`)
     .description('Serve automation clients over Agent Client Protocol stdio.')
     .helpOption('-h, --help', 'show this help')
     .addHelpText('after', `
 Example:
-  dsh --profile acp     serve ACP until the client disconnects
+  ${commandName} --profile acp     serve ACP until the client disconnects
 `)
 }
 

@@ -438,6 +438,124 @@ export interface Config {
 
 Source: [`packages/code-runtime/code-runtime-worker-thread/src/index.ts:25`](../packages/code-runtime/code-runtime-worker-thread/src/index.ts)
 
+<a id="deepseek-aidsh-cognate"></a>
+
+## `@deepseek-ai/dsh-cognate`
+
+```ts config-catalog
+/** Runtime limits and provider selection for the Cognate capability. */
+export interface CognateConfig {
+  /** Provider id to use; omitted when exactly one provider is usable. */
+  readonly provider?: string
+  /** Permit ASK and cognitive UDF calls that may invoke external services. */
+  readonly allowExternalOperations?: boolean
+  /** Maximum SQL statement length in characters. */
+  readonly maxSqlLength?: number
+  /** Maximum returned rows retained in one result. */
+  readonly maxRows?: number
+  /** Maximum serialized result size in UTF-8 bytes. */
+  readonly maxBytes?: number
+  /** Maximum semantic-context prompt length in characters. */
+  readonly contextMaxChars?: number
+  /** Deployment-supplied semantic model and source catalog. */
+  readonly semanticContext?: CognateSemanticContext
+}
+
+/** Bounded semantic metadata shown to the model as runtime context. */
+export interface CognateSemanticContext {
+  /** SQL dialect accepted by the selected database. */
+  readonly dialect?: string
+  /** AkashXDB catalog selected for this session. */
+  readonly catalog?: string
+  /** AkashXDB database selected for this session. */
+  readonly database?: string
+  /** Known ordinary tables and views. */
+  readonly tables?: readonly string[]
+  /** Known structured extraction tables. */
+  readonly ontologyViews?: readonly string[]
+  /** Known document corpora queried with ASK. */
+  readonly ragBuckets?: readonly string[]
+  /** Known per-document concept-tree sources used by cognitive_ask. */
+  readonly conceptTrees?: readonly CognateConceptTree[]
+  /** Curated business metric definitions. */
+  readonly metrics?: readonly CognateMetric[]
+  /** Additional source-selection or dialect instructions. */
+  readonly instructions?: readonly string[]
+}
+
+/** One deployed concept-tree source available for per-document cognitive_ask. */
+export interface CognateConceptTree {
+  /** RagBucket backing source or fully qualified source table. */
+  readonly source: string
+  /** Whether the deployment has enabled concept-tree indexing for the source. */
+  readonly enabled?: boolean
+  /** Concept-tree domain supplied during ingestion, when known. */
+  readonly domain?: string
+}
+
+/** One business metric definition included in semantic context. */
+export interface CognateMetric {
+  /** Stable metric name. */
+  readonly name: string
+  /** Human-readable formula or business meaning. */
+  readonly definition: string
+}
+```
+
+Source: [`packages/cognate/cognate/src/index.ts:17`](../packages/cognate/cognate/src/index.ts)
+
+<a id="deepseek-aidsh-cognate-local"></a>
+
+## `@deepseek-ai/dsh-cognate-local`
+
+Requires: `cognate`
+
+```ts config-catalog
+/** Offline provider configuration. */
+export interface Config {
+  /** Directory containing Markdown knowledge documents. */
+  readonly knowledgeDir?: string
+  /** RagBucket name accepted by offline ASK statements. */
+  readonly bucket?: string
+  /** Maximum cited Markdown sections returned for one question. */
+  readonly maxResults?: number
+}
+```
+
+Source: [`packages/cognate/cognate-local/src/index.ts:12`](../packages/cognate/cognate-local/src/index.ts)
+
+<a id="deepseek-aidsh-cognate-mysql"></a>
+
+## `@deepseek-ai/dsh-cognate-mysql`
+
+Requires: `cognate`
+
+```ts config-catalog
+/** Direct provider configuration; credentials are never included in context or results. */
+export interface Config {
+  /** MySQL or MariaDB connection URL. */
+  readonly url?: string
+  /** Database host when `url` is omitted. */
+  readonly host?: string
+  /** MySQL wire port; AkashXDB deployments commonly remap this value. */
+  readonly port?: number
+  /** Database user when `url` is omitted. */
+  readonly user?: string
+  /** Database password when `url` is omitted; never model-visible. */
+  readonly password?: string
+  /** Default database when `url` is omitted. */
+  readonly database?: string
+  /** Provider-side query timeout in milliseconds. */
+  readonly queryTimeoutMs?: number
+  /** Bounded semantic model supplied to the prompt consumer. */
+  readonly semanticContext?: CognateSemanticContext
+}
+```
+
+Depends on: [`CognateSemanticContext`](subsystems/cognate.md)
+
+Source: [`packages/cognate/cognate-mysql/src/index.ts:30`](../packages/cognate/cognate-mysql/src/index.ts)
+
 <a id="deepseek-aidsh-compaction-basic"></a>
 
 ## `@deepseek-ai/dsh-compaction-basic`
@@ -2607,7 +2725,7 @@ export interface Config {
 }
 ```
 
-Source: [`packages/core/system-prompt/src/index.ts:242`](../packages/core/system-prompt/src/index.ts)
+Source: [`packages/core/system-prompt/src/index.ts:244`](../packages/core/system-prompt/src/index.ts)
 
 <a id="deepseek-aidsh-terminal-bash"></a>
 
@@ -2743,6 +2861,24 @@ export interface Config {
 ```
 
 Source: [`packages/shell/tool-bash-persistent/src/index.ts:435`](../packages/shell/tool-bash-persistent/src/index.ts)
+
+<a id="deepseek-aidsh-tool-cognate"></a>
+
+## `@deepseek-ai/dsh-tool-cognate`
+
+Requires: `tools` · `systemPrompt` · `cognate`
+
+```ts config-catalog
+/** Tool configuration for bounded prompt context and chart points. */
+export interface Config {
+  /** Maximum characters emitted by the semantic-context prompt contribution. */
+  readonly contextMaxChars?: number
+  /** Maximum rows accepted by render_chart. */
+  readonly maxChartPoints?: number
+}
+```
+
+Source: [`packages/cognate/tool-cognate/src/index.ts:17`](../packages/cognate/tool-cognate/src/index.ts)
 
 <a id="deepseek-aidsh-tool-fs"></a>
 

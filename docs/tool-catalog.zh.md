@@ -19,6 +19,7 @@
 
 | 工具包 | 模型可见名称 | 依赖 | 写入／影响 | 随产品发布的别名 | 部署说明 |
 | --- | --- | --- | --- | --- | --- |
+| `@deepseek-ai/dsh-tool-cognate` | `render_chart`、`run_sql` | `ctx.tools`、`ctx.systemPrompt`、`ctx.cognate` | `tool/call`、`tool/result` | - | run_sql 使用 Cognate 服务策略和 Provider seam；render_chart 验证已有表格数据且从不执行 SQL。 |
 | `@deepseek-ai/dsh-tool-ask-user` | `ask_user_question` | `ctx.tools`、`ctx.userQuestions` | `tool/call`、`tool/result after a UI/provider answers the question` | - | ask_user_question 会暂停工具调用，直到当前 UI 提供方返回人类答案。 |
 | `@deepseek-ai/dsh-tools` | `run_code` | `ctx.tools`、`ctx.codeRuntime (execution time)`、`ctx.systemPrompt` | `tool/call`、`one tool/ptc-dispatch-start + tool/ptc-dispatch pair per bridged sub-call`、`tool/result` | - | 在 `mode: ptc`／`mode: both` 下，它由工具注册表所有，作为可过滤能力层之外的保留传输机制（参见 PTC mode Agent Note）。在 `ptc` 下，它是注册表对协议格式（wire format）的唯一贡献；其他可见能力在使用已加载运行时语言生成的 SDK 章节中声明。程序通过 binding 调用这些能力，调用按照原生并发约定调度：启动顺序和策略遵循提交顺序，并发安全的函数体最多重叠执行 `maxParallelSubCalls` 个。调用会重新进入完整且受守卫保护的工具流水线，并将每个嵌套执行关联到此外层结果。 |
 | `@deepseek-ai/dsh-plan-mode` | `exit_plan_mode` | `ctx.tools`、`ctx.systemPrompt`、`ctx.userQuestions (execution time, opportunistic)` | `tool/call`、`plan/mode inactive on an approved review`、`tool/result` | - | 规划未激活时，exit_plan_mode 仍保留在面向模型的 schema 中，这样状态转换不会在规划策略变更之外额外造成工具目录变动。其执行路径会拒绝规划模式之外的调用；在规划模式下，它通过用户交互 seam 提交计划（批准／根据反馈继续规划），批准后会在步骤边界记录规划模式已停用。 |
@@ -45,6 +46,84 @@
 | `@deepseek-ai/dsh-tool-todo` | `todo_write` | `ctx.tools`、`owning Agent session` | `tool/call`、`todo/write`、`tool/result` | - | todo_write 是会话所有的状态；UI 将最新的 todo/write 事件渲染为检查清单。`allowParallelInProgress` 是没有默认值的必填项，因此本目录明确选择 `true`，对应描述允许同时存在多个 `in_progress` 项。选择 `false` 的部署会获得同一工具，但描述会要求只能有 1 个活动任务。 |
 | `@deepseek-ai/dsh-tool-workflow` | `workflow` | `ctx.tools`、`ctx.workflowEngine`、`ctx.systemPrompt`、`a calling Agent (exec.agent parents the script children)` | `tool/call`、`tool/result` | - | - |
 | `@deepseek-ai/dsh-tool-web` | `web_fetch`、`web_search` | `ctx.tools`、`ctx.web`、`ctx.systemPrompt` | `tool/call`、`tool/result` | - | web_search 和 web_fetch 将提供方选择置于 ctx.web 之后，使模型可见 schema 在更换后端时保持稳定。 |
+
+<a id="deepseek-aidsh-tool-cognate"></a>
+
+## `@deepseek-ai/dsh-tool-cognate`
+
+### `render_chart`
+
+从 run_sql 已返回的表格数据创建确定性的图表展示元数据。此工具不会执行 SQL。
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "bar",
+        "line",
+        "area",
+        "pie",
+        "scatter"
+      ]
+    },
+    "label_column": {
+      "type": "string"
+    },
+    "value_columns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "columns": {
+      "type": "array",
+      "items": {}
+    },
+    "rows": {
+      "type": "array",
+      "items": {}
+    },
+    "title": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "type",
+    "label_column",
+    "value_columns",
+    "columns",
+    "rows"
+  ]
+}
+```
+
+来源：[`packages/cognate/tool-cognate/src/index.ts`](../packages/cognate/tool-cognate/src/index.ts)
+
+### `run_sql`
+
+针对已配置的 AkashXDB 语义模型运行一条有界且经过策略检查的 SQL 语句。返回行、元数据、答案和引用。
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "sql": {
+      "type": "string",
+      "description": "One SQL, SHOW, DESCRIBE, or approved AkashX cognitive statement."
+    }
+  },
+  "required": [
+    "sql"
+  ]
+}
+```
+
+来源：[`packages/cognate/tool-cognate/src/index.ts`](../packages/cognate/tool-cognate/src/index.ts)
+
+run_sql 使用 Cognate 服务策略和 Provider seam；render_chart 验证已有表格数据且从不执行 SQL。
 
 <a id="deepseek-aidsh-tool-ask-user"></a>
 

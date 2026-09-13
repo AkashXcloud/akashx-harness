@@ -16,8 +16,6 @@ import {
 } from '@deepseek-ai/dsh-app-boot'
 import { homePatchPath, prepareProfile, PROFILE_ROOT_FILENAME } from './profile-boot.ts'
 
-const NAME = 'dsh'
-
 /* v8 ignore start -- built-bin acceptance drives this boot-free dispatch */
 /**
  * Print a profile composition with comments naming each source file and patch layer.
@@ -27,14 +25,16 @@ const NAME = 'dsh'
  * never parsed).
  * @param patches - `--patch` overlay paths, in argv order.
  * @param fromDefaultProfile - shipped template used once to initialize a missing profile.
+ * @param binName - executable name used in diagnostics and dump comments.
  */
 export function runDumpConfig(
   profile: string,
   defaultOnly: boolean,
   patches: readonly string[],
   fromDefaultProfile?: string,
+  binName = 'dsh',
 ): void {
-  const loaded = prepareProfile(profile, !defaultOnly, fromDefaultProfile)
+  const loaded = prepareProfile(profile, !defaultOnly, fromDefaultProfile, binName)
   const layers: ConfigDumpLayer[] = loaded.layers.map(layer => ({
     label: layer.packageName,
     patches: layer.patches,
@@ -44,16 +44,16 @@ export function runDumpConfig(
       layers.push({ label: loaded.patchPath, patches: loaded.patches })
     }
     const homePatchFile = homePatchPath()
-    const homePatches = loadOptionalPatches(NAME, homePatchFile)
+    const homePatches = loadOptionalPatches(binName, homePatchFile)
     if (homePatches !== undefined) {
       layers.push({ label: homePatchFile, patches: homePatches })
     }
     for (const file of patches) {
       const absolute = resolve(file)
-      layers.push({ label: absolute, patches: loadOverlayPatches(NAME, absolute) })
+      layers.push({ label: absolute, patches: loadOverlayPatches(binName, absolute) })
     }
   }
   // The dump anchors on the same empty root file the boot includes.
-  process.stdout.write(renderConfigDump(NAME, join(loaded.dir, PROFILE_ROOT_FILENAME), layers))
+  process.stdout.write(renderConfigDump(binName, join(loaded.dir, PROFILE_ROOT_FILENAME), layers))
 }
 /* v8 ignore stop */

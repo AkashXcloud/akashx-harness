@@ -4,9 +4,9 @@ import { execa } from 'execa'
 import { describe, expect, it } from 'vitest'
 
 /**
- * Keyless smoke for SOURCE `dsh` execution: run `apps/cli/src/bin.ts`
+ * Keyless smoke for SOURCE launcher execution: run the source entries in
  * with the exact production runtime vector (`node --import tsx/esm`, the
- * vector the root `dsh` script invokes directly) and assert the
+ * vector the root launcher scripts invoke directly) and assert the
  * required-config diagnostic. The Node compatibility matrix runs this
  * WHOLE file, so a Node release changing module hooks or TypeScript handling
  * breaks this gate instead of every developer's `pnpm dsh`; the built-bin
@@ -15,6 +15,7 @@ import { describe, expect, it } from 'vitest'
 
 const repoRoot = fileURLToPath(new URL('../../../', import.meta.url))
 const dshSourceBin = 'apps/cli/src/bin.ts'
+const akashxSourceBin = 'apps/cli/src/akashx.ts'
 
 describe('dsh SOURCE launcher (node --import tsx/esm)', () => {
   it('launches the source CLI without building', async () => {
@@ -22,7 +23,21 @@ describe('dsh SOURCE launcher (node --import tsx/esm)', () => {
       readonly scripts?: Record<string, string>
     }
     expect(rootPackage.scripts?.dsh).toBe('node --import tsx/esm apps/cli/src/bin.ts')
+    expect(rootPackage.scripts?.akashx).toBe('node --import tsx/esm apps/cli/src/akashx.ts')
   })
+
+  it('renders the AkashX launcher name without building', async () => {
+    const result = await execa(process.execPath, ['--import', 'tsx/esm', akashxSourceBin, '--help'], {
+      cwd: repoRoot,
+      input: '',
+      timeout: 25_000,
+      killSignal: 'SIGKILL',
+      reject: false,
+    })
+    expect(result.exitCode).toBe(0)
+    expect(result.stdout).toContain('Usage: akashx')
+    expect(result.stderr).toBe('')
+  }, 30_000)
 
   it('boots the source entry and requires a profile', async () => {
     const result = await execa(process.execPath, ['--import', 'tsx/esm', dshSourceBin], {

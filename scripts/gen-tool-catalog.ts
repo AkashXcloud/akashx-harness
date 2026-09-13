@@ -68,6 +68,8 @@ import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
 import VmWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
 import * as ToolRalph from '@deepseek-ai/dsh-tool-ralph'
 import * as ToolWorkflow from '@deepseek-ai/dsh-tool-workflow'
+import CognateRuntime from '@deepseek-ai/dsh-cognate'
+import * as ToolCognate from '@deepseek-ai/dsh-tool-cognate'
 import { githubSlug } from './verify-md-links.ts'
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
@@ -188,6 +190,19 @@ export interface ToolPackage {
  * guard proves it is exhaustive against the on-disk glob.
  */
 const TOOL_PACKAGES: ToolPackage[] = [
+  {
+    pkg: '@deepseek-ai/dsh-tool-cognate',
+    dir: 'tool-cognate',
+    source: 'packages/cognate/tool-cognate/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt', 'ctx.cognate'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(CognateRuntime, {})
+      await ctx.plugin(ToolCognate)
+    },
+    note:
+      'run_sql uses the Cognate service policy and provider seam; render_chart validates existing tabular data and never executes SQL.',
+  },
   {
     pkg: '@deepseek-ai/dsh-tool-ask-user',
     dir: 'tool-ask-user',

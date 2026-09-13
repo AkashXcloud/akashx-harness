@@ -99,12 +99,14 @@ export const PROFILE_ROOT_FILENAME = 'cordis.yml'
  * @param name - the new profile name.
  * @param fromDefaultProfile - shipped profile template to copy.
  * @param home - Harness home containing the profile directory.
+ * @param binName - executable name used in diagnostics.
  * @throws when the template is unknown, the target name is shipped, or the target directory exists.
  */
 export function initializeProfileFromDefault(
   name: string,
   fromDefaultProfile: string,
   home: string = resolveDshHome(),
+  binName = NAME,
 ): void {
   const dir = resolveProfileDir(name, home)
   const template = Object.hasOwn(PROFILE_TEMPLATES, fromDefaultProfile)
@@ -113,12 +115,12 @@ export function initializeProfileFromDefault(
   if (template === undefined) {
     const expected = Object.keys(PROFILE_TEMPLATES).sort().map(value => JSON.stringify(value)).join(', ')
     throw new Error(
-      `${NAME}: unknown default profile ${JSON.stringify(fromDefaultProfile)}; expected one of ${expected}`,
+      `${binName}: unknown default profile ${JSON.stringify(fromDefaultProfile)}; expected one of ${expected}`,
     )
   }
   if (Object.hasOwn(PROFILE_TEMPLATES, name)) {
     throw new Error(
-      `${NAME}: profile ${JSON.stringify(name)} is shipped and cannot be a custom profile target; `
+      `${binName}: profile ${JSON.stringify(name)} is shipped and cannot be a custom profile target; `
       + 'omit --from-default-profile to use it',
     )
   }
@@ -130,12 +132,12 @@ export function initializeProfileFromDefault(
     const manifestPath = join(dir, 'package.json')
     if (existsSync(manifestPath)) {
       throw new Error(
-        `${NAME}: profile ${JSON.stringify(name)} already exists at ${manifestPath}; `
+        `${binName}: profile ${JSON.stringify(name)} already exists at ${manifestPath}; `
         + 'omit --from-default-profile to use it',
       )
     }
     throw new Error(
-      `${NAME}: profile directory ${dir} already exists; choose an unused profile name`,
+      `${binName}: profile directory ${dir} already exists; choose an unused profile name`,
     )
   }
   try {
@@ -146,7 +148,7 @@ export function initializeProfileFromDefault(
     } catch (cleanupError) {
       throw new AggregateError(
         [error, cleanupError],
-        `${NAME}: profile initialization failed and ${dir} could not be removed`,
+        `${binName}: profile initialization failed and ${dir} could not be removed`,
       )
     }
     throw error
@@ -181,12 +183,13 @@ export function resolveTelemetryPatch(disabledEnv: string | undefined, hasRow: b
  * @param name - the profile name.
  * @param userLayer - `false` skips parsing `cordis.patch.yml` (the default dump).
  * @param fromDefaultProfile - shipped template used once to initialize a missing profile.
+ * @param binName - executable name used in diagnostics.
  * @returns the loaded profile.
  * @throws when explicit initialization names an unknown template or an existing profile.
  */
-export function prepareProfile(name: string, userLayer = true, fromDefaultProfile?: string): Profile {
-  if (fromDefaultProfile !== undefined) initializeProfileFromDefault(name, fromDefaultProfile)
-  const profile = loadProfile(NAME, name, INSTALL_ANCHOR, undefined, { userLayer })
+export function prepareProfile(name: string, userLayer = true, fromDefaultProfile?: string, binName = NAME): Profile {
+  if (fromDefaultProfile !== undefined) initializeProfileFromDefault(name, fromDefaultProfile, resolveDshHome(), binName)
+  const profile = loadProfile(binName, name, INSTALL_ANCHOR, undefined, { userLayer })
   writeFileSync(join(profile.dir, PROFILE_ROOT_FILENAME), PROFILE_ROOT_CONFIG)
   return profile
 }
@@ -221,17 +224,20 @@ function allPatches(composed: ComposedProfile): PatchOptions[] {
  * then the telemetry switch.
  * @param name - the profile name.
  * @param patchFiles - `--patch` overlay paths, in argv order.
+ * @param fromDefaultProfile - shipped template used once to initialize a missing profile.
+ * @param binName - executable name used in diagnostics.
  * @returns the profile and its patch layers.
  */
 async function composeProfile(
   name: string,
   patchFiles: readonly string[],
   fromDefaultProfile?: string,
+  binName = NAME,
 ): Promise<ComposedProfile> {
-  const profile = prepareProfile(name, true, fromDefaultProfile)
+  const profile = prepareProfile(name, true, fromDefaultProfile, binName)
   await healProfilesModuleFallback({ installAnchor: INSTALL_ANCHOR, profile })
-  const homePatches = loadOptionalPatches(NAME, homePatchPath()) ?? []
-  const overlays = patchFiles.flatMap(file => loadOverlayPatches(NAME, resolve(file)))
+  const homePatches = loadOptionalPatches(binName, homePatchPath()) ?? []
+  const overlays = patchFiles.flatMap(file => loadOverlayPatches(binName, resolve(file)))
   const bundlePatches = profile.layers.flatMap(layer => layer.patches)
   const rows = new Map<string, EntryOptions>()
   for (const row of composeEntries([bundlePatches, profile.patches, homePatches, overlays])) {
@@ -245,6 +251,8 @@ async function composeProfile(
 
 /** Options for {@link runProfile}. */
 export interface RunProfileOptions {
+  /** Executable name used in diagnostics and app-facing command help. */
+  binName?: string
   /** This run's frozen environment snapshot, provided before any entry mounts. */
   environment: LaunchEnvironmentSnapshot
   /** The profile name to boot. */
@@ -280,16 +288,17 @@ function suppressShutdownError(ctx: Context, signal: AbortSignal, error: unknown
  * @returns the settled root context and the shutdown controller.
  */
 export async function runProfile(options: RunProfileOptions): Promise<{ ctx: Context; shutdown: ProcessShutdown }> {
+  const binName = options.binName ?? NAME
   // Before the first plugin mounts and before anything can issue a request: Node's fetch ignores the
   // proxy environment on its own, so every profile would otherwise connect directly. Resolving from
   // the launcher's snapshot — not `process.env` — is what lets a proxy declared in a `.env` layer
   // work, which the NODE_USE_ENV_PROXY flag cannot do because Node samples the environment at start.
   const disposeProxy = await installProxyFromEnvironment(
     options.environment,
-    (message) => { process.stderr.write(`${NAME}: ${message}\n`) },
+    (message) => { process.stderr.write(`${binName}: ${message}\n`) },
   )
 
-  const composed = await composeProfile(options.profile, options.patchFiles, options.fromDefaultProfile)
+  const composed = await composeProfile(options.profile, options.patchFiles, options.fromDefaultProfile, binName)
   const app: { current?: Context } = {}
   const appReady = createAppReady()
   const shutdown = createProcessShutdown(async () => {
@@ -308,7 +317,7 @@ export async function runProfile(options: RunProfileOptions): Promise<{ ctx: Con
   // complete; SIGINT is a user interrupt and reports 130.
   process.on('SIGTERM', () => { interrupt(0) })
   process.on('SIGINT', () => { interrupt(130) })
-  installFailLoud(NAME, process, async () => {
+  installFailLoud(binName, process, async () => {
     await app.current?.fiber.dispose()
   })
 
@@ -327,13 +336,13 @@ export async function runProfile(options: RunProfileOptions): Promise<{ ctx: Con
   // removing the override could never revert the row to the bundle default.
   const composeLive = (): PatchOptions[] => structuredClone([
     ...composed.bundlePatches,
-    ...loadOptionalPatches(NAME, composed.profile.patchPath) ?? [],
-    ...loadOptionalPatches(NAME, homePatchPath()) ?? [],
+    ...loadOptionalPatches(binName, composed.profile.patchPath) ?? [],
+    ...loadOptionalPatches(binName, homePatchPath()) ?? [],
     ...composed.overlays,
   ])
   // Cloned for the same insert-aliasing reason as composeLive: the boot
   // application must not mutate the objects later reloads recompose from.
-  const ctx = await boot(NAME, rootConfig, structuredClone(allPatches(composed)), (hostCtx) => {
+  const ctx = await boot(binName, rootConfig, structuredClone(allPatches(composed)), (hostCtx) => {
     app.current = hostCtx
     // Before any config-tree entry mounts, so plugins resolve all launch-time
     // environment values from the same immutable provenance snapshot.
@@ -370,12 +379,12 @@ export async function runProfile(options: RunProfileOptions): Promise<{ ctx: Con
         await ctx.loader.create({ name: '@deepseek-ai/cordis-plugin-hmr', config: { root: [] } })
       }
       await watchUserPatches(ctx, {
-        binName: NAME,
+        binName,
         filename: composed.profile.patchPath,
         compose: composeLive,
       })
       await watchUserPatches(ctx, {
-        binName: NAME,
+        binName,
         filename: homePatchPath(),
         compose: composeLive,
       })
