@@ -79,6 +79,12 @@ export class MysqlCognateProvider implements CognateProvider {
     return this.directExecutor !== undefined || this.options !== undefined
   }
 
+  /** Explain the missing deployment setting without exposing credentials. */
+  availabilityReason(): string | undefined {
+    if (this.available()) return undefined
+    return 'set AKASHXDB_URL or provide host, user, and password in the cognate-mysql configuration'
+  }
+
   context(): CognateSemanticContext | undefined {
     return this.config.semanticContext
   }

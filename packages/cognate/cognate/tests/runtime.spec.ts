@@ -43,6 +43,18 @@ describe('CognateRuntime', () => {
     await expect(ctx.cognate.execute({ sql: 'SELECT value FROM values', signal: new AbortController().signal })).rejects.toThrow('not registered')
   })
 
+  it('reports an actionable reason for an unavailable selected provider', async () => {
+    ctx = new Context()
+    await ctx.plugin(CognateRuntime, { provider: 'fixture' })
+    ctx.cognate.registerProvider({
+      ...provider([]),
+      available: () => false,
+      availabilityReason: () => 'set AKASHXDB_URL',
+    })
+    expect(ctx.cognate.availability()).toEqual({ provider: 'fixture', available: false, reason: 'set AKASHXDB_URL' })
+    await expect(ctx.cognate.execute({ sql: 'SELECT 1', signal: new AbortController().signal })).rejects.toThrow('set AKASHXDB_URL')
+  })
+
   it('rejects a result whose metadata alone exceeds the byte bound', async () => {
     ctx = new Context()
     await ctx.plugin(CognateRuntime, { provider: 'fixture', maxBytes: 10 })

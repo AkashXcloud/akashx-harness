@@ -113,6 +113,8 @@ export interface CognateQueryResult {
 export interface CognateProvider {
   readonly id: string
   available(): boolean
+  /** Explain why the provider cannot accept a request when unavailable. */
+  availabilityReason?(): string | undefined
   context(): CognateSemanticContext | undefined
   execute(request: CognateQueryRequest): Promise<CognateQueryResult>
   probe?(probes: readonly CognateCapabilityProbe[], signal: AbortSignal): Promise<readonly CognateProbeResult[]>

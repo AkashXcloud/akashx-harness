@@ -99,7 +99,7 @@ export function apply(ctx: Context, config: Config): void {
   ctx.systemPrompt.section({
     name: 'tool:cognate',
     order: ctx.systemPrompt.getSectionOrder('TOOL_COGNATE'),
-    text: 'Use run_sql for AkashXDB tables, ontology views, RagBucket ASK statements, and approved cognitive SQL. Use ontology views for structured extraction and filter completed rows with status = \'done\'. Use ASK only with a known RagBucket. Use render_chart only with returned tabular data; it never runs SQL. Use Bash for local process and filesystem work. Never invent tables, columns, buckets, credentials, or citations.',
+    text: () => `Cognate provider status: ${providerStatus(ctx)} Use run_sql for AkashXDB tables, ontology views, RagBucket ASK statements, and approved cognitive SQL. Use ontology views for structured extraction and filter completed rows with status = 'done'. Use ASK only with a known RagBucket. Use render_chart with explicitly supplied tabular data; it never runs SQL and does not require run_sql. Use Bash for local process and filesystem work. Never invent tables, columns, buckets, credentials, or citations.`,
   })
   ctx.systemPrompt.context({
     name: 'cognate:semantic-context',
@@ -123,7 +123,7 @@ export function apply(ctx: Context, config: Config): void {
 
   ctx.tools.register(defineTool({
     name: 'render_chart',
-    description: 'Create deterministic chart presentation metadata from tabular data already returned by run_sql. This tool never executes SQL.',
+    description: 'Create deterministic chart presentation metadata from explicitly supplied tabular data. This tool never executes SQL and does not require run_sql.',
     parameters: {
       type: { type: 'string', required: true, enum: ['bar', 'line', 'area', 'pie', 'scatter'] },
       label_column: { type: 'string', required: true },
@@ -177,6 +177,12 @@ function renderContext(context: CognateSemanticContext | undefined, maxChars: nu
   if (context === undefined) return ''
   const text = JSON.stringify({ cognate_context: context }, null, 2)
   return text.length <= maxChars ? text : `${text.slice(0, maxChars)}\n[context truncated]`
+}
+
+function providerStatus(ctx: Context): string {
+  const status = ctx.cognate.availability()
+  if (status.available) return `The configured provider "${status.provider ?? 'selected'}" is available.`
+  return `No Cognate query is available (${status.reason ?? 'provider unavailable'}). Do not claim that database-backed work succeeded; ask the user to configure the Cognate provider or use local tools.`
 }
 
 function createChart(args: {

@@ -59,7 +59,6 @@ export class CognateRuntime extends Service {
   registerProvider(provider: CognateProvider): () => void {
     if (this.providers.has(provider.id)) throw new Error(`cognate provider "${provider.id}" is already registered`)
     this.providers.set(provider.id, provider)
-    // oxlint-disable-next-line typescript/no-misused-promises -- exact synchronous disposer preserves Cordis effect identity
     return this.ctx.effect(() => () => { this.providers.delete(provider.id) }, 'cognate.registerProvider()')
   }
 
@@ -69,6 +68,29 @@ export class CognateRuntime extends Service {
   context(): CognateSemanticContext | undefined {
     const provider = this.resolveProvider(false)
     return provider?.context() ?? this.config.semanticContext
+  }
+
+  /**
+   * Describe the selected provider state for model-facing prompt context.
+   * @returns provider id, readiness, and an actionable unavailable reason.
+   */
+  availability(): { provider: string | undefined; available: boolean; reason?: string } {
+    const configured = this.config.provider
+    if (configured !== undefined) {
+      const provider = this.providers.get(configured)
+      if (provider === undefined) return { provider: configured, available: false, reason: `provider "${configured}" is not registered` }
+      if (!provider.available()) {
+        const reason = provider.availabilityReason?.()
+        return reason === undefined
+          ? { provider: configured, available: false }
+          : { provider: configured, available: false, reason }
+      }
+      return { provider: configured, available: true }
+    }
+    const available = [...this.providers.values()].filter(provider => provider.available())
+    if (available.length === 1) return { provider: available[0]?.id, available: true }
+    if (available.length === 0) return { provider: undefined, available: false, reason: 'no usable provider is registered' }
+    return { provider: undefined, available: false, reason: 'multiple usable providers are registered; configure one explicitly' }
   }
 
   /** Classify, authorize, execute, and bound one model-submitted SQL call.
@@ -122,7 +144,7 @@ export class CognateRuntime extends Service {
         return undefined
       }
       if (!provider.available()) {
-        if (required) throw new Error(`configured Cognate provider "${configured}" is unavailable`)
+        if (required) throw new Error(`configured Cognate provider "${configured}" is unavailable: ${provider.availabilityReason?.() ?? 'the provider is not ready'}`)
         return undefined
       }
       return provider

@@ -75,6 +75,12 @@ describe('Cognate tools', () => {
     expect(assembly.contexts.find(context => context.name === 'cognate:semantic-context')?.text).toContain('company_docs_raw_files')
   })
 
+  it('includes provider readiness in the model prompt', async () => {
+    const ctx = await setup({}, provider({ available: () => false, availabilityReason: () => 'set AKASHXDB_URL' }))
+    const assembly = await ctx.systemPrompt.assemble()
+    expect(assembly.sections.find(section => section.name === 'tool:cognate')?.text).toContain('set AKASHXDB_URL')
+  })
+
   it('executes a read through the native tool pipeline and preserves bounds metadata', async () => {
     const ctx = await setup()
     const result = await ctx.tools.execute({ signal, callId: ToolCallId('sql-1'), name: 'run_sql', arguments: { sql: 'SELECT * FROM sales' } })

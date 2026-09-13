@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-tool-cognate` registers `run_sql` and `render_chart`. `run_sql` sends one statement through `ctx.cognate`; the service owns SQL policy, cancellation, provider selection, and result bounds. `render_chart` validates tabular data already in its arguments and never opens a database connection.
+`dsh-tool-cognate` registers `run_sql` and `render_chart`. `run_sql` sends one statement through `ctx.cognate`; the service owns SQL policy, cancellation, provider selection, and result bounds. `render_chart` validates explicitly supplied tabular data and never opens a database connection.
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ No runtime invariant companion is published because tool registration and model-
 
 #### What the model sees
 
-The generated [`run_sql` and `render_chart` schemas`](../../../docs/tool-catalog.md#deepseek-aidsh-tool-cognate) expose one SQL argument or chart metadata and existing rows. `render_chart` cannot execute a query or access a provider.
+The generated [`run_sql` and `render_chart` schemas`](../../../docs/tool-catalog.md#deepseek-aidsh-tool-cognate) expose one SQL argument or chart metadata and rows. `render_chart` cannot execute a query or access a provider.
 
 #### Token effect
 
@@ -56,10 +56,10 @@ Stable tool definitions and semantic context preserve request-prefix reuse. A ch
 ## Known Limitations and Deferred Work
 <a id="known-limitations-and-deferred-work"></a>
 
-- Charts are returned as structured presentation metadata; a dedicated client chart renderer is deferred.
+- Charts are returned as structured presentation metadata and rendered as native SVG in the Web Tool card.
 - The tool does not provide a separate knowledge-search schema; production document retrieval uses AkashXDB operations supplied by the configured provider.
 
 ### Dev Note
 <a id="dev-note"></a>
 
-This package has no open maintainer decision beyond the deferred client chart renderer and provider-supplied knowledge operations.
+This package has no open maintainer decision beyond provider-supplied knowledge operations.

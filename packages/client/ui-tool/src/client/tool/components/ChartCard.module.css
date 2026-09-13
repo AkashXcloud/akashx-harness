@@ -1,0 +1,7 @@
+.root { margin: 0; padding: 12px 14px 10px; border: 1px solid var(--dsw-alias-border-l2); border-radius: 10px; background: var(--dsw-alias-bg-layer-2); }
+.title { margin-bottom: 4px; color: var(--dsw-alias-label-primary); font-size: 13px; font-weight: 600; }
+.svg { display: block; width: 100%; min-height: 160px; overflow: visible; }
+.axis { stroke: var(--dsw-alias-border-l2); stroke-width: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; color: var(--dsw-alias-label-secondary); font-size: 11px; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
