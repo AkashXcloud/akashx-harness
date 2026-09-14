@@ -4,6 +4,9 @@
     - button "General":
       - img
       - text: General
+    - button "Database":
+      - img
+      - text: Database
     - button "Models":
       - img
       - text: Models

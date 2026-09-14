@@ -245,6 +245,19 @@ describe('search', () => {
 })
 
 describe('Host Remote event routing', () => {
+  it('deletes a Session through Remote and clears the current list entry', async () => {
+    const api = new FakeApiClient()
+    const manager = new SessionManager(fakeRemote(api))
+    manager.handleSessionAdded(summary(S1))
+    manager.select(S1)
+
+    await expect(manager.delete(S1)).resolves.toMatchObject({ ok: true, value: { deleted: true } })
+
+    expect(api.callsOf('session.delete')).toEqual([{ sessionId: S1 }])
+    expect(manager.getListSnapshot().items).toHaveLength(0)
+    expect(manager.getListSnapshot().current).toBeUndefined()
+  })
+
   it('adds/removes/flips sessions and keeps removed instances resident', async () => {
     const api = new FakeApiClient()
     const manager = new SessionManager(fakeRemote(api))

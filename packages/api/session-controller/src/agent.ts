@@ -4,7 +4,7 @@ import { mkdir } from 'node:fs/promises'
 import type { Context } from '@deepseek-ai/cordis'
 import { installModelSelection } from '@deepseek-ai/dsh-agent'
 import type {
-  Agent, AgentOptions, AgentSetup, ModelSelection as AgentModelSelection, ModelSelectionRef,
+  Agent, AgentHandle, AgentOptions, AgentSetup, ModelSelection as AgentModelSelection, ModelSelectionRef,
 } from '@deepseek-ai/dsh-agent'
 import type {} from '@deepseek-ai/dsh-agent-default-model'
 import type {} from '@deepseek-ai/dsh-agent-presets'
@@ -140,6 +140,13 @@ export async function inspectApiSession(
 export class ApiSessionAgentController {
   private readonly resumes = new Map<SessionId, Promise<Agent>>()
   private readonly creations = new Map<SessionId, Promise<Agent>>()
+  /**
+   * The exact teardown capability for every agent this controller started.
+   * `AgentHandle.dispose()` awaits the loop's reverse teardown, which drains
+   * and closes the Session's write handle; disposing the agent's own fiber
+   * does not, so durable removal would otherwise race an open JSONL writer.
+   */
+  private readonly handles = new Map<SessionId, AgentHandle>()
   private readonly selections = new WeakMap<Agent, InstalledSelection>()
   private readonly imageAdmissionChains = new WeakMap<Agent, Promise<void>>()
 
@@ -160,6 +167,30 @@ export class ApiSessionAgentController {
       if ('error' in found) throw found.error
       return found.agent.ctx
     })
+    // A handle is discarded once its agent leaves the registry, so the map
+    // never keeps a disposed Agent alive.
+    ctx.on('agent/disposed', ({ agent }) => { this.handles.delete(agent.session.id) })
+  }
+
+  /**
+   * Stop one live Agent and await its complete reverse teardown, including the
+   * Session write-handle close that durable deletion requires.
+   * @param sessionId - the Session whose live Agent must be torn down.
+   * @returns when the owning handle settled, or immediately with no live Agent.
+   */
+  async disposeLiveAgent(sessionId: SessionId): Promise<void> {
+    const handle = this.handles.get(sessionId)
+    if (handle !== undefined) {
+      await handle.dispose()
+      return
+    }
+    // No retained handle: this controller never started this Agent (a
+    // subagent-owned or otherwise externally owned Session), so its owner
+    // keeps teardown and only an unregistered Agent is left to release.
+    const agent = this.ctx.agents.get(sessionId)
+    if (agent === undefined) return
+    agent.cancel({ kind: 'disposed' })
+    await agent.ctx.fiber.dispose()
   }
 
   /**
@@ -427,11 +458,11 @@ export class ApiSessionAgentController {
     if (published !== undefined && hasApiSessionSubagentOwner(this.ctx, published, live)) {
       throw new ApiSessionSubagentOwnership(sessionId)
     }
-    return (await this.ctx.agents.resume({
+    return this.adopt(await this.ctx.agents.resume({
       resumeSessionId: sessionId,
       agentOptions: this.agentOptions(),
       setup: composition.setup,
-    })).agent
+    }))
   }
 
   private async createOrAdopt(
@@ -459,11 +490,11 @@ export class ApiSessionAgentController {
         const storedPreset = this.presetForObservation(observation)
         this.assertPresetUnchanged(sessionId, presetId, storedPreset)
         const composition = await this.composeAgent(storedPreset)
-        return (await this.ctx.agents.resume({
+        return this.adopt(await this.ctx.agents.resume({
           resumeSessionId: sessionId,
           agentOptions: this.agentOptions(),
           setup: composition.setup,
-        })).agent
+        }))
       } catch (error: unknown) {
         if (!(error instanceof SessionQueryError)
           || error.code !== 'SESSION_QUERY_SESSION_NOT_FOUND') throw error
@@ -476,7 +507,7 @@ export class ApiSessionAgentController {
       throw new Error(`failed to ensure project directory "${cwd}": ${String(error)}`, { cause: error })
     }
     const composition = await this.composeAgent(presetId)
-    return (await this.ctx.agents.create({
+    return this.adopt(await this.ctx.agents.create({
       sessionId,
       agentOptions: this.agentOptions(),
       meta: {
@@ -484,7 +515,13 @@ export class ApiSessionAgentController {
         ...(composition.agentPreset === undefined ? {} : { agentPreset: composition.agentPreset }),
       },
       setup: composition.setup,
-    })).agent
+    }))
+  }
+
+  /** Retain one Agent's teardown capability and hand its Agent to the caller. */
+  private adopt(handle: AgentHandle): Agent {
+    this.handles.set(handle.agent.session.id, handle)
+    return handle.agent
   }
 
   private agentOptions(): AgentOptions {

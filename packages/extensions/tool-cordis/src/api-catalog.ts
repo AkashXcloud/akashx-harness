@@ -683,6 +683,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'provider-supplied semantic context, when available.',
       },
       {
+        signature: 'availability(): { provider: string | undefined; available: boolean; reason?: string }',
+        description: 'Describe the selected provider state for model-facing prompt context.',
+        parameters: [],
+        returns: 'provider id, readiness, and an actionable unavailable reason.',
+      },
+      {
         signature: 'async execute(request: { readonly sql: string; readonly signal: AbortSignal }): Promise<CognateQueryResult>',
         description: 'Classify, authorize, execute, and bound one model-submitted SQL call.',
         parameters: [{ name: 'request', description: 'SQL text and caller cancellation signal.' }],
@@ -1544,6 +1550,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the accepted title and durable event sequence.',
       },
       {
+        signature: '@Remote(\'delete\') delete(request: SessionDeleteRequest): Promise<SessionDeleteValue>',
+        description: 'Permanently delete one Session and its stored log.',
+        parameters: [{ name: 'request', description: 'the Session to delete.' }],
+        returns: 'confirmation that the stored log was removed.',
+      },
+      {
         signature: '@Remote(\'fork\') fork(request: SessionForkRequest): Promise<SessionForkValue>',
         description: 'Fork one cold-readable completed-turn prefix into a new Session.',
         parameters: [{ name: 'request', description: 'source Session and optional event anchor.' }],
@@ -1656,6 +1668,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'List every stored session visible to this process, in no promised order.',
         parameters: [{ name: 'options', description: 'optional cancellation.' }],
         returns: 'one snapshot per stored session.',
+      },
+      {
+        signature: 'remove(_id: SessionId): Promise<boolean>',
+        description: 'Permanently remove one stored session.',
+        parameters: [{ name: '_id', description: 'the stored session to remove.' }],
+        returns: 'whether a stored session was removed.',
       },
     ],
   },
@@ -3899,7 +3917,7 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   },
   {
     name: 'CognateProvider',
-    declaration: 'export interface CognateProvider {\n    readonly id: string;\n    available(): boolean;\n    context(): CognateSemanticContext | undefined;\n    execute(request: CognateQueryRequest): Promise<CognateQueryResult>;\n    probe?(probes: readonly CognateCapabilityProbe[], signal: AbortSignal): Promise<readonly CognateProbeResult[]>;\n}',
+    declaration: 'export interface CognateProvider {\n    readonly id: string;\n    available(): boolean;\n    availabilityReason?(): string | undefined;\n    context(): CognateSemanticContext | undefined;\n    execute(request: CognateQueryRequest): Promise<CognateQueryResult>;\n    probe?(probes: readonly CognateCapabilityProbe[], signal: AbortSignal): Promise<readonly CognateProbeResult[]>;\n}',
   },
   {
     name: 'CognateQueryKind',
@@ -5172,6 +5190,14 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SessionCreateValue',
     declaration: 'export interface SessionCreateValue {\n    readonly sessionId: SessionId;\n    readonly agentPreset?: string;\n}',
+  },
+  {
+    name: 'SessionDeleteRequest',
+    declaration: 'export interface SessionDeleteRequest {\n    readonly sessionId: SessionId;\n}',
+  },
+  {
+    name: 'SessionDeleteValue',
+    declaration: 'export interface SessionDeleteValue {\n    readonly deleted: true;\n}',
   },
   {
     name: 'SessionEvent',

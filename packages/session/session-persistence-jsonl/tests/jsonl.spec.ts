@@ -516,6 +516,16 @@ describe('JsonlSessionPersistence: stored-format refusals', () => {
   })
   afterEach(async () => { await ctx.fiber.dispose() })
 
+  it('removes a closed session artifact and makes it undiscoverable', async () => {
+    const session = meta('deletable-session', '/work')
+    await writeLog(ctx.sessionPersistence, session, oneTurnLog())
+
+    await expect(ctx.sessionPersistence.remove(session.id)).resolves.toBe(true)
+    await expect(ctx.sessionPersistence.stat(session.id)).resolves.toBeUndefined()
+    await expect(ctx.sessionPersistence.list()).resolves.toEqual([])
+    await expect(ctx.sessionPersistence.remove(session.id)).resolves.toBe(false)
+  })
+
   it('propagates a non-format header failure from stat and list unchanged', async () => {
     // Only foreign-version refusals are enriched (stat) or skipped (list);
     // any other header failure stays fail-loud on both paths.

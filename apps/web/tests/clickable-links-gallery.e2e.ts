@@ -401,8 +401,8 @@ describe('web e2e: clickable links gallery', () => {
     // The link language itself — ARIA records none of it, so pin the computed
     // styles: link-blue 500-weight text, no underline at rest, dotted underline
     // on hover, and a leading currentColor glyph. Light theme, so the link
-    // alias resolves to deepseek-500.
-    const LINK_BLUE = 'rgb(65, 118, 230)'
+    // alias resolves to AkashX purple-500.
+    const LINK_PURPLE = 'rgb(109, 77, 255)'
     const styleOf = async (target: ReturnType<Page['locator']>, property: string): Promise<string> =>
       target.evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property)
     const guideLink = markdown.locator(`a[href="${GUIDE_URL}"]`).first()
@@ -414,7 +414,7 @@ describe('web e2e: clickable links gallery', () => {
       ['fetch url', page.locator(`a[href="${FETCH_URL}"]`).first()],
       ['produced chip', chip],
     ] as const) {
-      expect.soft(await styleOf(link, 'color'), `${name} color`).toBe(LINK_BLUE)
+      expect.soft(await styleOf(link, 'color'), `${name} color`).toBe(LINK_PURPLE)
       expect.soft(await styleOf(link, 'font-weight'), `${name} weight`).toBe('500')
       expect.soft(await styleOf(link, 'text-decoration-line'), `${name} at rest`).toBe('none')
       expect.soft(await link.locator('svg').count(), `${name} glyph`).toBe(1)
@@ -427,6 +427,6 @@ describe('web e2e: clickable links gallery', () => {
     expect(await styleOf(chip, 'text-decoration-style')).toBe('dotted')
     expect(await styleOf(chip, 'background-color')).toBe('rgba(0, 0, 0, 0)')
     // The excluded grey affordance: tool-row file links keep their own color.
-    expect(await styleOf(page.locator('button[class*="fileLink"]').first(), 'color')).not.toBe(LINK_BLUE)
+    expect(await styleOf(page.locator('button[class*="fileLink"]').first(), 'color')).not.toBe(LINK_PURPLE)
   }, 90_000)
 })

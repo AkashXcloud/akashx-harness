@@ -4,6 +4,9 @@
     - button "通用设置":
       - img
       - text: 通用设置
+    - button "数据库":
+      - img
+      - text: 数据库
     - button "模型":
       - img
       - text: 模型
@@ -62,6 +65,16 @@
         - img
         - text: 查看
       - 'button "复制: 创造模式"':
+        - img
+        - text: 复制
+    - listitem:
+      - 'button "设为默认: Cognate mode"':
+        - text: Cognate mode 内置 Full coding Agent with AkashXDB context, bounded SQL queries, and deterministic chart output.
+        - code: cognate
+      - 'button "查看: Cognate mode"':
+        - img
+        - text: 查看
+      - 'button "复制: Cognate mode"':
         - img
         - text: 复制
   - heading "自定义" [level=3]

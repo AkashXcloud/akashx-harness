@@ -33,6 +33,8 @@ import type {
   SessionControlFrame,
   SessionCreateRequest,
   SessionCreateValue,
+  SessionDeleteRequest,
+  SessionDeleteValue,
   SessionFollowFrame,
   SessionFollowRequest,
   SessionForkRequest,
@@ -93,6 +95,7 @@ export class SessionController extends TypertRemoteService {
     'llm',
     'sessions',
     'sessionProjections',
+    'sessionPersistence',
     'sessionQuery',
     'typert',
     'workspaceRegistry',
@@ -147,7 +150,7 @@ export class SessionController extends TypertRemoteService {
       ctx.emit('api-session/added', this.listState.summaryFor(session))
     })
     ctx.on('session/disposed', (session) => {
-      ctx.emit('api-session/removed', session.id)
+      if (!this.commands.isDeleting(session.id)) ctx.emit('api-session/removed', session.id)
     })
     ctx.on('agent/status', ({ agent, status }) => {
       ctx.emit('api-session/status', agent.id, status === 'running')
@@ -325,6 +328,16 @@ export class SessionController extends TypertRemoteService {
   @Remote('rename')
   rename(request: SessionRenameRequest): Promise<SessionRenameValue> {
     return this.commands.rename(request)
+  }
+
+  /**
+   * Permanently delete one Session and its stored log.
+   * @param request - the Session to delete.
+   * @returns confirmation that the stored log was removed.
+   */
+  @Remote('delete')
+  delete(request: SessionDeleteRequest): Promise<SessionDeleteValue> {
+    return this.commands.delete(request)
   }
 
   /**

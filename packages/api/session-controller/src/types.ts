@@ -297,6 +297,16 @@ export interface SessionRenameValue {
   readonly seq: number
 }
 
+/** Session deletion request. */
+export interface SessionDeleteRequest {
+  readonly sessionId: SessionId
+}
+
+/** Confirmation that the session log was removed. */
+export interface SessionDeleteValue {
+  readonly deleted: true
+}
+
 /** Session fork request. */
 export interface SessionForkRequest {
   readonly sessionId: SessionId

@@ -585,6 +585,17 @@ export class SessionManager {
   }
 
   /**
+   * Permanently delete one Host Session and remove its local list row.
+   * @param sessionId - the Session to delete.
+   * @returns the Host result; a committed removal also clears the local row.
+   */
+  async delete(sessionId: SessionId): Promise<RemoteResult<{ deleted: true }>> {
+    const result = await this.remote.session.delete({ sessionId })
+    if (result.ok) this.handleSessionRemoved(sessionId)
+    return result
+  }
+
+  /**
    * Contract session.fork; on success merge the child into summaries
    * immediately (same synchronous-addressability guarantee as create). The
    * child carries the source's history, so it is never blank; lineage rides

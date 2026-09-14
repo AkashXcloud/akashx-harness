@@ -466,6 +466,15 @@ export class JsonlBackendTracker {
   }
 
   /**
+   * Return the active writer, if any, so deletion can refuse live ownership.
+   * @param id - the session whose route is read.
+   * @returns the write handle, null for a claim still constructing, or undefined when unclaimed.
+   */
+  writerOf(id: SessionId): JsonlSessionHandle | null | undefined {
+    return this.writers.get(id)
+  }
+
+  /**
    * Drop a pending entry once the session materialized durably.
    * @param id - the session that reached durable storage.
    */

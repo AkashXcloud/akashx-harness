@@ -408,6 +408,13 @@ abstract stat(id: SessionId, options?: SessionPersistenceStatOptions): Promise<S
  * @returns one snapshot per stored session.
  */
 abstract list(options?: SessionPersistenceListOptions): Promise<readonly SessionPersistenceSnapshot[]>
+
+/**
+ * Permanently remove one stored session.
+ * @param _id - the stored session to remove.
+ * @returns whether a stored session was removed.
+ */
+remove(_id: SessionId): Promise<boolean>
 ```
 
 Types: [SessionId](core.zh.md)

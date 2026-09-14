@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * Ownerless-copy registrations inside the assembled web client: the five
+ * Ownerless-copy registrations inside the assembled web client: the six
  * seats, the `settings` dictionaries, the locale-following nav label, the
  * loopback-only document action over the real settings mirror, and recovery
  * across Loader rebuilds of the declaring chain.
@@ -15,6 +15,7 @@ import { LOCALE_SETTINGS_NAMESPACE, LocaleSettingsSchema } from '@deepseek-ai/ds
 import { inject } from '../src/client/index.ts'
 import { CloseLabel, HeaderContent, TriggerContent } from '../src/client/chrome.tsx'
 import { GeneralSection } from '../src/client/GeneralSection.tsx'
+import { DatabaseSection } from '../src/client/DatabaseSection.tsx'
 import { SettingsDocumentAction } from '../src/client/SettingsDocumentAction.tsx'
 import type { SettingsDocumentActionInjected } from '../src/client/SettingsDocumentAction.tsx'
 
@@ -33,6 +34,7 @@ const SEATS = [
   ['settings.action', SettingsDocumentAction],
   ['settings.close', CloseLabel],
   ['settings.section', GeneralSection],
+  ['settings.section', DatabaseSection],
 ] as const
 
 /** One Host view of the locale preference, including its revision fence. */
@@ -77,7 +79,7 @@ function actionInjectedOf(c: TestClient): SettingsDocumentActionInjected {
 
 function expectSeated(c: TestClient): void {
   for (const [name, component] of SEATS) {
-    expect(ownEntries(c, name).map(entry => entry.component)).toEqual([component])
+    expect(ownEntries(c, name).filter(entry => entry.component === component).map(entry => entry.component)).toEqual([component])
   }
 }
 
@@ -149,7 +151,7 @@ describe('ui-settings-general apply', () => {
     // subscription), not re-registration.
     SEATS.forEach(([name], i) => {
       expect(c.ctx.slots.getVersion(name)).toBe(zhVersions[i]!)
-      expect(ownEntries(c, name)).toHaveLength(1)
+      expect(ownEntries(c, name)).toHaveLength(name === 'settings.section' ? 2 : 1)
     })
     expect(generalLabel(c)).toBe('General')
     await vi.waitFor(() => {

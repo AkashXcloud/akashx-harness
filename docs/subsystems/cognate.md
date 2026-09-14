@@ -49,6 +49,12 @@ registerProvider(provider: CognateProvider): () => void
  */
 context(): CognateSemanticContext | undefined
 
+/**
+ * Describe the selected provider state for model-facing prompt context.
+ * @returns provider id, readiness, and an actionable unavailable reason.
+ */
+availability(): { provider: string | undefined; available: boolean; reason?: string }
+
 /** Classify, authorize, execute, and bound one model-submitted SQL call.
  * @param request - SQL text and caller cancellation signal.
  * @returns normalized and bounded query result.

@@ -39,6 +39,8 @@ import type {
   SessionCancelValue,
   SessionCreateRequest,
   SessionCreateValue,
+  SessionDeleteRequest,
+  SessionDeleteValue,
   SessionForkRequest,
   SessionForkValue,
   SessionPromptRequest,
@@ -68,6 +70,8 @@ function hasPromptContent(content: readonly PromptContentCandidate[]): boolean {
 
 /** Implements Session business commands delegated by the Session Controller Remote service. */
 export class SessionCommandController {
+  private readonly deleting = new Set<SessionId>()
+
   /**
    * @param ctx - Host context carrying Agent, model, attachment, title, and Workspace services.
    * @param agents - sole owner of create, resume, and Session-local model selection.
@@ -78,6 +82,15 @@ export class SessionCommandController {
     private readonly agents: ApiSessionAgentController,
     private readonly defaultCwd: string,
   ) {}
+
+  /**
+   * Whether durable deletion owns the Session's disposal notification.
+   * @param sessionId - the Session being tested.
+   * @returns true while a deletion holds the id.
+   */
+  isDeleting(sessionId: SessionId): boolean {
+    return this.deleting.has(sessionId)
+  }
 
   /**
    * Create or idempotently adopt one ordinary Session.
@@ -191,6 +204,37 @@ export class SessionCommandController {
         `failed to rename session "${request.sessionId}": ${String(error)}`,
         {},
       )
+    }
+  }
+
+  /**
+   * Stop a live session and permanently remove its stored log.
+   * @param request - the Session to delete.
+   * @returns confirmation that the stored log was removed.
+   */
+  async delete(request: SessionDeleteRequest): Promise<SessionDeleteValue> {
+    this.deleting.add(request.sessionId)
+    try {
+      // The controller's retained handle awaits the loop teardown that drains
+      // and closes the Session write handle; removal refuses a live writer.
+      await this.agents.disposeLiveAgent(request.sessionId)
+      let removed: boolean
+      try {
+        removed = await this.ctx.sessionPersistence.remove(request.sessionId)
+      } catch (error) {
+        if (remoteErrorOf(error) !== undefined) throw error
+        throw new RemoteError(
+          'gateway/internal',
+          `failed to delete session "${request.sessionId}": ${String(error)}`,
+          { sessionId: request.sessionId },
+        )
+      }
+      if (!removed) throw new RemoteError('session/not-found', `session "${request.sessionId}" not found`, { sessionId: request.sessionId })
+      for (const workspace of this.ctx.workspaceRegistry.list()) await workspace.detachSession(request.sessionId)
+      this.ctx.emit('api-session/removed', request.sessionId)
+      return { deleted: true }
+    } finally {
+      this.deleting.delete(request.sessionId)
     }
   }
 

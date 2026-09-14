@@ -196,6 +196,15 @@ export abstract class SessionPersistence extends Service {
    * @returns one snapshot per stored session.
    */
   abstract list(options?: SessionPersistenceListOptions): Promise<readonly SessionPersistenceSnapshot[]>
+
+  /**
+   * Permanently remove one stored session.
+   * @param _id - the stored session to remove.
+   * @returns whether a stored session was removed.
+   */
+  remove(_id: SessionId): Promise<boolean> {
+    throw new Error('session deletion is not supported by this persistence provider')
+  }
 }
 
 export default SessionPersistence

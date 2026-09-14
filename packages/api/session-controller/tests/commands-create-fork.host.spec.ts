@@ -24,6 +24,7 @@ function controllerAgents(overrides: object = {}): ApiSessionAgentController {
     composeAgent: () => Promise.resolve({ setup: () => {} }),
     presetForSession: () => undefined,
     presetForObservation: () => undefined,
+    disposeLiveAgent: () => Promise.resolve(),
     ...overrides,
   } as unknown as ApiSessionAgentController
 }
@@ -41,6 +42,57 @@ async function baseContext(): Promise<Context> {
 }
 
 describe('Session creation failures', () => {
+  it('deletes durable storage, detaches every Workspace, and publishes removal after commit', async () => {
+    const ctx = await baseContext()
+    const sessionId = SessionId('delete-session')
+    const remove = vi.fn(async (id: SessionId) => id === sessionId)
+    const detachSession = vi.fn(() => Promise.resolve())
+    ctx.provide('sessionPersistence', { remove } as never)
+    ctx.provide('workspaceRegistry', {
+      list: () => [{ detachSession }],
+    } as never)
+    const removed = vi.fn()
+    ctx.on('api-session/removed', removed)
+    // The teardown must complete before persistence removal: a live loop still
+    // holds the Session's write handle, and the JSONL backend refuses removal
+    // while one is open.
+    const order: string[] = []
+    const disposeLiveAgent = vi.fn(async () => { order.push('dispose') })
+    const controller = new SessionCommandController(ctx, controllerAgents({
+      disposeLiveAgent,
+    }), '/default')
+    remove.mockImplementation(async (id: SessionId) => {
+      order.push('remove')
+      return id === sessionId
+    })
+
+    await expect(controller.delete({ sessionId })).resolves.toEqual({ deleted: true })
+
+    expect(disposeLiveAgent).toHaveBeenCalledWith(sessionId)
+    expect(order).toEqual(['dispose', 'remove'])
+    expect(remove).toHaveBeenCalledWith(sessionId)
+    expect(detachSession).toHaveBeenCalledWith(sessionId)
+    expect(removed).toHaveBeenCalledWith(sessionId)
+    await ctx.fiber.dispose()
+  })
+
+  it('does not remove durable storage when the live Agent teardown fails', async () => {
+    const ctx = await baseContext()
+    const sessionId = SessionId('delete-dispose-failure')
+    const remove = vi.fn(async () => true)
+    ctx.provide('sessionPersistence', { remove } as never)
+    ctx.provide('workspaceRegistry', { list: () => [] } as never)
+    const controller = new SessionCommandController(ctx, controllerAgents({
+      disposeLiveAgent: () => Promise.reject(new Error('teardown failed')),
+    }), '/default')
+
+    await expect(controller.delete({ sessionId })).rejects.toThrow('teardown failed')
+    // Refusing before removal keeps the storing commit authoritative: the log
+    // must survive for a later retry rather than be orphaned mid-teardown.
+    expect(remove).not.toHaveBeenCalled()
+    await ctx.fiber.dispose()
+  })
+
   it('mints an identity with the default cwd when no explicit target is supplied', async () => {
     const ctx = await baseContext()
     ctx.provide('workspaceRegistry', { get: () => undefined, list: () => [] } as never)

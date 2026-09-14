@@ -49,7 +49,7 @@ This table connects model-visible tool names to the plugin package and service s
 
 ### `render_chart`
 
-Create deterministic chart presentation metadata from tabular data already returned by run_sql. This tool never executes SQL.
+Create deterministic chart presentation metadata from explicitly supplied tabular data. This tool never executes SQL and does not require run_sql.
 
 ```json
 {

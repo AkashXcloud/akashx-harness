@@ -59,6 +59,7 @@ export class CognateRuntime extends Service {
   registerProvider(provider: CognateProvider): () => void {
     if (this.providers.has(provider.id)) throw new Error(`cognate provider "${provider.id}" is already registered`)
     this.providers.set(provider.id, provider)
+    // oxlint-disable-next-line typescript/no-misused-promises -- synchronous cleanup; direct return preserves disposer identity
     return this.ctx.effect(() => () => { this.providers.delete(provider.id) }, 'cognate.registerProvider()')
   }
 

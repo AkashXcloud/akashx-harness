@@ -4,6 +4,9 @@
     - button "通用设置":
       - img
       - text: 通用设置
+    - button "数据库":
+      - img
+      - text: 数据库
     - button "模型":
       - img
       - text: 模型

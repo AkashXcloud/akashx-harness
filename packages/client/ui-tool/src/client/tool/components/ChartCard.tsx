@@ -20,7 +20,7 @@ export function ChartCard({ model, label }: Props) {
   const series = model.valueColumns.map((column, index) => ({
     column,
     values: chartNumbers(model, column),
-    color: COLORS[index % COLORS.length] ?? COLORS[0] ?? 'var(--dsw-alias-link)',
+    color: COLORS[index % COLORS.length] ?? COLORS[0],
   }))
   const values = series.flatMap(item => item.values).filter((value): value is number => value !== null)
   const min = Math.min(0, ...values)

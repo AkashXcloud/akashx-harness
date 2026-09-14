@@ -410,6 +410,13 @@ export class ClientSessions implements ISessions {
     return result.value.sessionId
   }
 
+  /** Permanently delete one Host Session and clear the local selection if needed. */
+  async delete(id: SessionId): Promise<void> {
+    const result = await this.manager.delete(id)
+    if (!result.ok) throw new Error(result.error.message)
+    this.projectList()
+  }
+
   /**
    * Fork a session from a completed-turn prefix of the source (same
    * synchronous-addressability guarantee as {@link ClientSessions.create}:

@@ -108,6 +108,15 @@ const SERVICE_ROLES: ServiceRole[] = [
     note: 'The host commits accepted images before session events; provider adapters resolve authorized durable references into provider-native content.',
   },
   {
+    key: 'cognate',
+    pkg: 'cognate',
+    title: 'AkashXDB context and bounded SQL execution',
+    mode: 'seam',
+    implementations: ['cognate-local', 'cognate-mysql'],
+    consumers: ['tool-cognate'],
+    note: 'The interface owns provider registration, readiness reporting, and bounded SQL execution; providers own transport and credentials, and the model consumer owns the tool schema and result projection.',
+  },
+  {
     key: 'fileUploads',
     pkg: 'client-file-upload',
     title: 'Agent-scoped staged file uploads',

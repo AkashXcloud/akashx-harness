@@ -78,9 +78,9 @@ describe('official browser-brand plugin', () => {
     expect(subject.slots.entries(HERO_HOLE)).toHaveLength(0)
   })
 
-  it('renders the official name independently from both requested mark sizes', () => {
-    const name = render(<OfficialBrandName />)
-    expect(name.container.querySelector('svg')?.getAttribute('viewBox')).toBe('26 0 156 24')
+  it('renders the AkashX name independently from both requested mark sizes', () => {
+    const name = render(<OfficialBrandName t={key => key === 'name' ? 'AkashX' : key} />)
+    expect(name.container.textContent).toBe('AkashX')
     name.unmount()
 
     const mark = render(<OfficialBrandMark size={34} />)

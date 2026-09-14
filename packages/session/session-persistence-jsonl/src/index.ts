@@ -489,6 +489,22 @@ class JsonlSessionPersistence extends SessionPersistence {
     return snapshots
   }
 
+  /** Permanently remove a session artifact after all local writes have drained. */
+  override async remove(id: SessionId): Promise<boolean> {
+    await this.ensureRootEncoding()
+    const writer = this.tracker.writerOf(id)
+    if (writer !== undefined && writer !== null) {
+      throw new Error(`session "${id}" is still open for writing`)
+    }
+    if (this.tracker.hasPending(id)) return false
+    const selected = await this.findLog(id)
+    if (selected === undefined) return false
+    await rm(dirname(selected.currentPath), { recursive: true, force: true })
+    this.coldLogMemo.delete(id)
+    this.migrationPreparations.delete(id)
+    return true
+  }
+
   // --- handle-facing storage internals (package-private via the handle class below) ---
 
   /** Resolve and read one stored log, refusing loudly when the artifact is absent. */

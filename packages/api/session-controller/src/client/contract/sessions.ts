@@ -38,6 +38,12 @@ export interface ISessions {
     sessionId?: SessionId
   }): Promise<SessionId>
   /**
+   * Permanently delete a Session and remove it from its Workspace account.
+   * @param id - the Session to delete.
+   * @returns when the Host committed the removal and the local row cleared.
+   */
+  delete(id: SessionId): Promise<void>
+  /**
    * Select a session as current.
    * @param id - session id (must exist in the list; unknown ids fail loud).
    */
