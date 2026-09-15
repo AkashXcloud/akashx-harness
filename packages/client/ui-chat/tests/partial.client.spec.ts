@@ -38,7 +38,7 @@ describe('PartialAccumulator', () => {
     acc.push(chunk({ type: 'block-start', index: 0, blockType: 'reasoning' }))
     acc.push(chunk({ type: 'reasoning-delta', index: 0, text: '思' }))
     acc.push(chunk({ type: 'reasoning-delta', index: 0, text: '考' }))
-    expect(acc.toPartial().blocks).toEqual([{ kind: 'reasoning', text: '思考' }])
+    expect(acc.toPartial().blocks).toEqual([{ kind: 'reasoning', text: 'Thinking' }])
   })
 
   it('continues from a materialized history prefix', () => {

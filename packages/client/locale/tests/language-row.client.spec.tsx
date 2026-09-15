@@ -16,7 +16,7 @@ const usePanelInfo: GlobalStandardProps['usePanelInfo'] = selector => selector({
 
 afterEach(cleanup)
 
-const OPTIONS = [{ id: 'zh', label: '中文' }, { id: 'en', label: 'English' }]
+const OPTIONS = [{ id: 'zh', label: 'Français' }, { id: 'en', label: 'English' }]
 
 function emptySessions() {
   const store = createSnapshotStore<SessionListState>(
@@ -66,18 +66,18 @@ describe('LanguageRow', () => {
     const trigger = screen.getByRole('button', { name: /English/ })
     fireEvent.click(trigger)
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
-    fireEvent.click(screen.getByRole('menuitem', { name: '中文' }))
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Français' }))
     expect(b.setLocale).toHaveBeenCalledWith('zh')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
-    expect(screen.queryByRole('menuitem', { name: '中文' })).toBeNull()
+    expect(screen.queryByRole('menuitem', { name: 'Français' })).toBeNull()
   })
 
   it('closes on outside pointerdown without selecting', () => {
     const b = mount('en')
     fireEvent.click(screen.getByRole('button', { name: /English/ }))
-    expect(screen.getByRole('menuitem', { name: '中文' })).toBeDefined()
+    expect(screen.getByRole('menuitem', { name: 'Français' })).toBeDefined()
     fireEvent.pointerDown(document.body)
-    expect(screen.queryByRole('menuitem', { name: '中文' })).toBeNull()
+    expect(screen.queryByRole('menuitem', { name: 'Français' })).toBeNull()
     expect(b.setLocale).not.toHaveBeenCalled()
   })
 

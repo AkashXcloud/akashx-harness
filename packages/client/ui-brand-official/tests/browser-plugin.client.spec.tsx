@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
 import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
 import { apply, inject } from '../src/client/index.ts'
-import { OfficialBrandMark, OfficialBrandName } from '../src/client/Brand.tsx'
+import { AkashxMark, AkashxName } from '../src/client/Brand.tsx'
 import { apply as hostApply } from '../src/index.ts'
 
 afterEach(() => {
@@ -79,13 +79,13 @@ describe('official browser-brand plugin', () => {
   })
 
   it('renders the AkashX name independently from both requested mark sizes', () => {
-    const name = render(<OfficialBrandName t={key => key === 'name' ? 'AkashX' : key} />)
+    const name = render(<AkashxName t={(key: string) => key === 'name' ? 'AkashX' : key} />)
     expect(name.container.textContent).toBe('AkashX')
     name.unmount()
 
-    const mark = render(<OfficialBrandMark size={34} />)
+    const mark = render(<AkashxMark size={34} />)
     expect(mark.container.querySelector('svg')?.getAttribute('width')).toBe('34')
-    mark.rerender(<OfficialBrandMark size={24} />)
+    mark.rerender(<AkashxMark size={24} />)
     expect(mark.container.querySelector('svg')?.getAttribute('width')).toBe('24')
   })
 })

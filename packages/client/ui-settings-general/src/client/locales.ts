@@ -1,43 +1,9 @@
 /** Shell chrome and General-nav dictionaries; feature rows own their copy. */
 
-/** Simplified Chinese dictionary (the key-set source of truth). */
-export const zh = {
-  'trigger': '设置',
-  'title': '设置',
-  'close': '关闭',
-  'openDocument': '打开配置文件',
-  'openDocument.error': '无法打开配置文件',
-  'general.nav': '通用设置',
-  'connection.error': '连接异常',
-  'connection.retry': '立即重连',
-  'connection.connecting': '自动重连中',
-  'connection.connected': '连接成功',
-  'connection.reconnect': '连接异常，点击立即重连',
-  'connection.restart': '连接中断，正在自动重试，点击立即重连',
-  'database.nav': '数据库',
-  'database.title': '语义模型与数据库',
-  'database.subtitle': '查看 Cognate 数据源和语义资产状态。',
-  'database.readOnly': '只读状态',
-  'database.connection.title': '数据库连接',
-  'database.connection.copy': '数据库连接由 Cognate Host 配置管理；浏览器不会显示凭据。',
-  'database.connection.status': '未配置',
-  'database.endpoint': '端点',
-  'database.endpoint.value': '请在 Host 配置 AKASHXDB_URL',
-  'database.authentication': '身份验证',
-  'database.authentication.value': '由 Host 管理',
-  'database.semantic.title': '语义资产',
-  'database.semantic.copy': '连接后，这里会显示语义模型中的表、Ontology View 和 RagBucket。',
-  'database.semantic.tables': '表和视图',
-  'database.semantic.ontology': 'Ontology View',
-  'database.semantic.rag': 'RagBucket',
-  'database.notAvailable': '不可用',
-  'database.configurationHint': '要启用数据库查询，请在启动配置中选择 Cognate provider 并设置 AKASHXDB_URL。',
-} satisfies Record<string, string>
-
 /** The settings namespace key union. */
-export type SettingsKey = keyof typeof zh
+export type SettingsKey = keyof typeof en
 
-/** English dictionary, checked complete against the zh key set. */
+/** Locale keys this namespace declares. */
 export const en = {
   'trigger': 'Settings',
   'title': 'Settings',
@@ -69,4 +35,4 @@ export const en = {
   'database.semantic.rag': 'RagBuckets',
   'database.notAvailable': 'Not available',
   'database.configurationHint': 'To enable database queries, select a Cognate provider and set AKASHXDB_URL in the startup configuration.',
-} satisfies Record<SettingsKey, string>
+}

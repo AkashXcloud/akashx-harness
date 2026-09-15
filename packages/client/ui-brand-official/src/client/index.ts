@@ -1,10 +1,11 @@
-/** Official DeepSeek Harness occupants for the generic browser-brand slots. */
+/** AkashX occupants for the generic browser-brand slots. */
 import type { Context as ClientContext } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
+import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
-import { OfficialBrandMark, OfficialBrandName } from './Brand.tsx'
-import { en, zh, type BrandKey } from './locales.ts'
+import { AkashxMark, AkashxName } from './Brand.tsx'
+import { en, type BrandKey } from './locales.ts'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
@@ -16,18 +17,20 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
 export const inject = ['slots']
 
 /**
- * Fill the sidebar brand slots as one declaration-aware registration set. The
- * conversation hero stays on its declaring package's animated fish fallback,
- * so the official build registers nothing there.
+ * Fill every browser-brand slot with the AkashX mark and name: the sidebar
+ * identity, its collapsed rail, and the blank-session hero. Registration is
+ * unconditional because this package ships the AkashX build; a build profile
+ * must not be required for the product to carry its own brand.
  * @param ctx - Client root context.
  */
 export function apply(ctx: ClientContext): void {
   const locale = ctx.get('locale')
-  if (locale !== undefined) ctx.effect(() => locale.register('brand', { zh, en }), 'ui-brand-official: dictionaries')
-  if (process.env.DSH_CLIENT_BUILD_PROFILE !== 'official') return
+  if (locale !== undefined) ctx.effect(() => locale.register('brand', { en }), 'ui-brand-official: dictionaries')
   ctx.slots.inject('sidebar.brand.mark', () =>
     ctx.slots.inject('sidebar.brand.name', function* () {
-      yield ctx.slots.register({ name: 'sidebar.brand.mark' }, OfficialBrandMark)
-      yield ctx.slots.register({ name: 'sidebar.brand.name', locale: 'brand' }, OfficialBrandName)
+      yield ctx.slots.register({ name: 'sidebar.brand.mark' }, AkashxMark)
+      yield ctx.slots.register({ name: 'sidebar.brand.name', locale: 'brand' }, AkashxName)
     }))
+  ctx.slots.inject('conversation.hero.brand.mark', () =>
+    ctx.slots.register({ name: 'conversation.hero.brand.mark' }, AkashxMark))
 }

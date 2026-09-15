@@ -8,6 +8,7 @@
  * itself is not a dependency of this package; the source below is the
  * decision-table contract at the `InputTriggerSource` boundary.
  */
+import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
 import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
@@ -25,13 +26,12 @@ import {
 } from '@deepseek-ai/dsh-client-test-runtime'
 import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
 import type { DraftAttachmentId } from '../src/client/contract/input.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { $replaceDetectSpanWithText } from '../src/client/input/editor/span-map.ts'
 import { InputBar } from '../src/client/skeleton/InputBar.tsx'
 import type { InputBarProps } from '../src/client/skeleton/InputBar.tsx'
-import { zh } from '../src/client/locales.ts'
+import { en } from '../src/client/locales.ts'
 
 // Every fixture carries the resource hook the resources plugin merges into GlobalStandardProps.
 const useResource = (() => ({ status: 'none' as const, value: undefined, failure: undefined })) as GlobalStandardProps['useResource']
@@ -109,8 +109,8 @@ function commandSource(
 }
 
 const COMMANDS: FakeCommand[] = [
-  { name: 'goal', description: '设定目标', input: { hint: '目标内容' } },
-  { name: 'compact', description: '压缩上下文' },
+  { name: 'goal', description: '设定目标', input: { hint: 'Goal objective' } },
+  { name: 'compact', description: 'CompactionCONTEXT' },
   { name: 'vision', description: '识别图片', input: { hint: '想问什么', attachments: true } },
 ]
 
@@ -187,7 +187,7 @@ async function scopedBench(register?: (inputTriggers: InputTriggerService) => vo
     renderSlot: (() => null) as InputBarProps['renderSlot'],
     stop: vi.fn(),
     command: () => Promise.resolve(true),
-    t: makeTranslate(zh, commonZh),
+    t: makeTranslate(en, commonEn),
     variant: 'composer',
   }
   const view = render(<InputBar {...barProps} />)
@@ -222,17 +222,17 @@ describe('scenario A: menu-pick /goal, type args, enter submits', () => {
     expect(b.shell.snapshot.draft).toBe('/goal ')
     act(() => { b.shell.editor.update(() => {}, { discrete: true }) }) // flush the queued decoration refresh
     expect(b.view.container.querySelector('[data-lexical-text][style*="warn-label"]')?.textContent).toBe('/goal ')
-    // The zh dictionary owns a hint.goal entry, which overrides the machine's raw hint (production behavior).
-    expect(b.textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('输入目标，智能体将持续执行'))
+    // The en dictionary owns a hint.goal entry, which overrides the machine's raw hint (production behavior).
+    expect(b.textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
     // Continue typing args; hint drops; claim holds.
-    b.type('/goal 发布 v1')
+    b.type(' of goal 发布 v1')
     expect(b.shell.snapshot.phase).toBe('claimed')
     // Enter: submitting → command execute → commit clears.
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 发布 v1', []) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of goal 发布 v1', []) })
     await vi.waitFor(() => { expect(b.shell.snapshot.draft).toBe('') })
     expect(b.shell.snapshot.phase).toBe('plain')
-    expect(b.view.getByText('已执行 /goal 发布 v1')).toBeTruthy()
+    expect(b.view.getByText('已执行  of goal 发布 v1')).toBeTruthy()
     expect(b.sink).not.toHaveBeenCalled()
   })
 })
@@ -242,9 +242,9 @@ describe('scenario C: pasted /goal xxx + enter (menu never opened)', () => {
     const b = await bench()
     // Paste lands whole; caret at end means detectTrigger sees no token under
     // the caret mid-whitespace — menu stays closed; enter runs adjudication.
-    act(() => { b.shell.setDraft('/goal 尽快发布') })
+    act(() => { b.shell.setDraft(' of goal 尽快发布') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 尽快发布', []) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of goal 尽快发布', []) })
     await vi.waitFor(() => { expect(b.shell.snapshot.phase).toBe('plain') })
     expect(b.shell.snapshot.draft).toBe('')
     expect(b.sink).not.toHaveBeenCalled()
@@ -271,10 +271,10 @@ describe('scenario D: execute-kind /compact', () => {
     await vi.waitFor(() => { expect(b.shell.snapshot.phase).toBe('plain') })
     cleanup()
     const b2 = await bench()
-    act(() => { b2.shell.setDraft('/compact 现在') })
+    act(() => { b2.shell.setDraft(' of compact 现在') })
     fireEvent.keyDown(b2.textarea, { key: 'Enter' })
     // execute with trailing → matchEnter answers undefined → default sink.
-    await vi.waitFor(() => { expect(b2.sink).toHaveBeenCalledWith('/compact 现在', [], 'queue', expect.any(AbortSignal)) })
+    await vi.waitFor(() => { expect(b2.sink).toHaveBeenCalledWith(' of compact 现在', [], 'queue', expect.any(AbortSignal)) })
     expect(b2.executed).toHaveLength(0)
   })
 })
@@ -283,9 +283,9 @@ describe('scenario: images ride an accepting command through the real pipeline',
   it('adjudication reports the image count; the claim chain serializes, submits, and consumes', async () => {
     const b = await bench()
     act(() => { b.shell.addAttachments(['img-1' as DraftAttachmentId]) })
-    act(() => { b.shell.setDraft('/vision 这张图是什么') })
+    act(() => { b.shell.setDraft(' of vision 这张图是什么') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/vision 这张图是什么', [PNG]) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of vision 这张图是什么', [PNG]) })
     // The envelope the controller forwarded to matchEnter carried the count.
     expect(b.envelopes).toEqual([{ attachments: 1 }])
     expect(b.serialize).toHaveBeenCalledWith(['img-1'])
@@ -297,9 +297,9 @@ describe('scenario: images ride an accepting command through the real pipeline',
 
   it('an imageless enter adjudicates with a zero-image envelope', async () => {
     const b = await bench()
-    act(() => { b.shell.setDraft('/goal 发布') })
+    act(() => { b.shell.setDraft(' of goal 发布') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 发布', []) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of goal 发布', []) })
     expect(b.envelopes).toEqual([{ attachments: 0 }])
     expect(b.serialize).not.toHaveBeenCalled()
     expect(b.release).not.toHaveBeenCalled()
@@ -307,8 +307,8 @@ describe('scenario: images ride an accepting command through the real pipeline',
 })
 
 describe('scenario H: backspace breaks the token', () => {
-  it.each(['goal', '目标', 'plan', '计划', 'feedback', '反馈'])('keeps /%s claimed when its arguments and separator are deleted', async (name) => {
-    const { source } = commandSource([{ name, description: name, input: { hint: '目标内容' } }],
+  it.each(['goal', 'Goal', 'plan', 'plan', 'feedback', 'feedback'])('keeps /%s claimed when its arguments and separator are deleted', async (name) => {
+    const { source } = commandSource([{ name, description: name, input: { hint: 'Goal objective' } }],
       () => Promise.resolve({ kind: 'success' }))
     const b = await scopedBench((triggers) => { triggers.registerSource(source) })
     b.type(`/${name}`)
@@ -382,9 +382,9 @@ describe('scenario: reference decoration lights up when the lexicon settles', ()
 describe('scenario I: unknown /xyz + enter', () => {
   it('adjudication misses in one hop and the whole line rides the default sink', async () => {
     const b = await bench()
-    act(() => { b.shell.setDraft('/xyz 干点啥') })
+    act(() => { b.shell.setDraft(' of xyz 干点啥') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.sink).toHaveBeenCalledWith('/xyz 干点啥', [], 'queue', expect.any(AbortSignal)) })
+    await vi.waitFor(() => { expect(b.sink).toHaveBeenCalledWith(' of xyz 干点啥', [], 'queue', expect.any(AbortSignal)) })
     await vi.waitFor(() => { expect(b.shell.snapshot.phase).toBe('plain') })
     expect(b.execute).not.toHaveBeenCalled()
   })
@@ -398,11 +398,11 @@ describe('scenario I: unknown /xyz + enter', () => {
         matchEnter: () => Promise.reject(new Error('目录预热失败')),
       } as never)
     })
-    act(() => { b.shell.setDraft('/plan 上线') })
+    act(() => { b.shell.setDraft(' of plan 上线') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
     await vi.waitFor(() => { expect(b.view.getByText('目录预热失败')).toBeTruthy() })
     // Never a silent downgrade: draft retained, sink untouched.
-    expect(b.shell.snapshot.draft).toBe('/plan 上线')
+    expect(b.shell.snapshot.draft).toBe(' of plan 上线')
     expect(b.sink).not.toHaveBeenCalled()
   })
 })

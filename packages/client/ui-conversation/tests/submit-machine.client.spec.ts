@@ -203,8 +203,8 @@ describe('submit-machine: claimed lifecycle', () => {
   })
 
   it.each([
-    ['goal', '/goal '], ['goal', '/目标 '], ['plan', '/plan '], ['plan', '/计划 '],
-    ['feedback', '/feedback '], ['feedback', '/反馈 '],
+    ['goal', '/goal '], ['goal', '/Goal '], ['plan', '/plan '], ['plan', '/plan '],
+    ['feedback', '/feedback '], ['feedback', '/feedback '],
   ])('retains %s as %s without its separator and submits an empty argument', (name, token) => {
     const m = new SubmitMachine()
     m.dispatch({ type: 'claim', claim: { ...claimOf(name), token } })
@@ -221,9 +221,9 @@ describe('submit-machine: claimed lifecycle', () => {
     expect(m.state.claim?.name).toBe(name)
   })
 
-  it.each(['/目', '/目标x', '/目标/文件', '', '看看 /目标'])('releases a goal claim for %j', (draft) => {
+  it.each(['/目', '/Goalx', '/Goal/Files', '', '看看 /目标'])('releases a goal claim for %j', (draft) => {
     const m = new SubmitMachine()
-    m.dispatch({ type: 'claim', claim: { ...claimOf('goal'), token: '/目标 ' } })
+    m.dispatch({ type: 'claim', claim: { ...claimOf('goal'), token: '/Goal ' } })
     m.dispatch({ type: 'draft-changed', draft })
     expect(m.state.phase).toBe('plain')
     expect(m.state.claim).toBeUndefined()

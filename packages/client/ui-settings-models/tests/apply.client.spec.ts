@@ -19,14 +19,14 @@ import { apply as hostApply } from '../src/index.ts'
 
 // These specs assert the shipped Chinese copy. The lane has no jsdom `window`,
 // so browser-language detection never runs and a fresh LocaleRuntime opens on
-// FALLBACK_LOCALE (en); bench stages zh explicitly on the locale instead.
+// FALLBACK_LOCALE (en); bench stages en explicitly on the locale instead.
 
 async function bench(isLoopback = true, mock = RemoteMock.create().load(remoteDefaultResponses), services: object = {}) {
   onTestFinished(() => { mock.assertNoUnmatched() })
   const ctx = new Context()
   await ctx.plugin(SlotRegistry).await()
   const locale = new LocaleRuntime(ctx)
-  locale.setLocale('zh')
+  locale.setLocale('en')
   ctx.provide('locale', locale)
   const remote = new TestRemote(ctx, {
     credentials: {
@@ -84,9 +84,9 @@ describe('ui-settings-models apply', () => {
     expect(before.slots.spec('settings.models.provider-card')).toMatchObject({ kind: 'keyed', scope: 'root' })
     expect(before.slots.spec('settings.models.footer')).toMatchObject({ kind: 'list', scope: 'root' })
     // The nav label is a locale-following thunk; owners resolve at read time.
-    expect(resolveSlotLabel(entry.options.label)).toBe('模型')
+    expect(resolveSlotLabel(entry.options.label)).toBe('Model')
     const injected = (entry.inject as unknown as () => import('../src/client/ModelsSection.tsx').ModelsSectionInjected)()
-    expect(injected.t('nav')).toBe('模型')
+    expect(injected.t('nav')).toBe('Model')
     expect(injected.t('deleteTitle')).toBe('删除 {provider}？')
     expect(typeof injected.controller.load).toBe('function')
     expect(injected.hooks.snapshot).toBe(injected.controller.store)
@@ -126,8 +126,8 @@ describe('ui-settings-models apply', () => {
     expect(resolveSlotLabel(b.slots.entries('settings.section')[0]!.options.label)).toBe('Models')
     const injected = b.slots.entries('settings.section')[0]!.inject as unknown as () => import('../src/client/ModelsSection.tsx').ModelsSectionInjected
     expect(injected().t('deleteTitle')).toBe('Delete {provider}?')
-    b.locale.setLocale('zh')
-    expect(resolveSlotLabel(b.slots.entries('settings.section')[0]!.options.label)).toBe('模型')
+    b.locale.setLocale('en')
+    expect(resolveSlotLabel(b.slots.entries('settings.section')[0]!.options.label)).toBe('Model')
     expect(injected().t('deleteTitle')).toBe('删除 {provider}？')
   })
 
@@ -136,7 +136,7 @@ describe('ui-settings-models apply', () => {
     await b.ctx.plugin({ inject: [...inject], apply }).await()
     b.locale.setLocale('en')
     expect(b.slots.entries('settings.section')).toHaveLength(0)
-    b.locale.setLocale('zh')
+    b.locale.setLocale('en')
   })
 
   it('re-registers after an HMR collapse re-declares the slot (stale disposer must not block)', async () => {
@@ -156,7 +156,7 @@ describe('ui-settings-models apply', () => {
     // The locale path also recovers through the same ledger re-check.
     b.locale.setLocale('en')
     expect(resolveSlotLabel(b.slots.entries('settings.section')[0]!.options.label)).toBe('Models')
-    b.locale.setLocale('zh')
+    b.locale.setLocale('en')
   })
 
   it('accepts extension entries under the declared seats and cascades them with the declarer', async () => {
@@ -181,17 +181,17 @@ describe('ui-settings-models apply', () => {
     expect(b.slots.entries('settings.models.footer')).toHaveLength(0)
   })
 
-  it('registers the zh/en nav dictionaries and disposes everything with the fiber', async () => {
+  it('registers the en/en nav dictionaries and disposes everything with the fiber', async () => {
     const b = await bench()
     declare(b.slots)
     const fiber = b.ctx.plugin({ inject: [...inject], apply })
     await fiber.await()
-    expect(b.locale.bind('settings.models')('nav')).toBe('模型')
+    expect(b.locale.bind('settings.models')('nav')).toBe('Model')
     await fiber.dispose()
     expect(b.slots.entries('settings.section')).toHaveLength(0)
     expect(b.slots.entries('settings.onboarding')).toHaveLength(0)
     // The (ns, locale) seats are free again — the dictionary disposers ran.
-    expect(() => b.locale.register('settings.models', 'zh', {})).not.toThrow()
+    expect(() => b.locale.register('settings.models', 'en', {})).not.toThrow()
     expect(() => b.locale.register('settings.models', 'en', {})).not.toThrow()
   })
 

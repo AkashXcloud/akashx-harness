@@ -128,7 +128,7 @@ describe('Conversation inject API', () => {
     await vi.waitFor(() => { expect(contributions.has('file')).toBe(true) })
     const file = contributions.get('file')!
     const target = { sessionId: ROOT }
-    expect(file.label!()).toBe('文件')
+    expect(file.label!()).toBe('File')
     expect(file.available(target)).toBe(false)
     expect(file.available({ sessionId: 'missing' as SessionId })).toBe(false)
     if (file.ui.kind !== 'action') throw new Error('File must be an action')

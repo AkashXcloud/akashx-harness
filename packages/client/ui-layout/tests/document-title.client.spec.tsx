@@ -51,7 +51,7 @@ describe('DocumentTitle', () => {
   it('uses the localized product title supplied by the frame', () => {
     const { sessionId, sessions, props } = titleSources()
     sessions.update((state) => { state.byId[sessionId]!.title = 'First title' })
-    const mounted = render(<DocumentTitle {...props} productTitle="DSH Local Build" />)
+    const mounted = render(<DocumentTitle {...props} productTitle="AkashX Harness" />)
     expect(document.title).toBe('First title — DSH Local Build')
     mounted.unmount()
     expect(document.title).toBe('DSH Local Build')

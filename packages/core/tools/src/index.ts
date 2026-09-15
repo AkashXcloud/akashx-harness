@@ -40,7 +40,7 @@ import { renderToolsSdkPy } from './py-types.ts'
  * typecheck failure. What no check reaches is the prose that names the values
  * instead of deriving them: the seam's `dsh-code-runtime` README pair, its
  * `CodeRuntime.language` JSDoc, and `docs/subsystems/code-runtime.md`
- * with its zh pair, plus this package's own README pair and the
+ * with its en pair, plus this package's own README pair and the
  * {@link Config.mode} JSDoc.
  */
 /**
