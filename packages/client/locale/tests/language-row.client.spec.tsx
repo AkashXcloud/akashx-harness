@@ -16,7 +16,7 @@ const usePanelInfo: GlobalStandardProps['usePanelInfo'] = selector => selector({
 
 afterEach(cleanup)
 
-const OPTIONS = [{ id: 'zh', label: 'Français' }, { id: 'en', label: 'English' }]
+const OPTIONS = [{ id: 'fr', label: 'Français' }, { id: 'en', label: 'English' }]
 
 function emptySessions() {
   const store = createSnapshotStore<SessionListState>(
@@ -67,7 +67,7 @@ describe('LanguageRow', () => {
     fireEvent.click(trigger)
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
     fireEvent.click(screen.getByRole('menuitem', { name: 'Français' }))
-    expect(b.setLocale).toHaveBeenCalledWith('zh')
+    expect(b.setLocale).toHaveBeenCalledWith('fr')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
     expect(screen.queryByRole('menuitem', { name: 'Français' })).toBeNull()
   })
@@ -83,9 +83,9 @@ describe('LanguageRow', () => {
 
   it('follows store changes; an unknown active id falls back to the id itself', () => {
     const b = mount('en')
-    act(() => { b.store.actions.sync('zh', OPTIONS, 1) })
-    expect(screen.getByRole('button', { name: /中文/ })).toBeDefined()
-    act(() => { b.store.actions.sync('fr', OPTIONS, 2) })
-    expect(screen.getByRole('button', { name: /fr/ })).toBeDefined()
+    act(() => { b.store.actions.sync('fr', OPTIONS, 1) })
+    expect(screen.getByRole('button', { name: /Français/ })).toBeDefined()
+    act(() => { b.store.actions.sync('de', OPTIONS, 2) })
+    expect(screen.getByRole('button', { name: /de/ })).toBeDefined()
   })
 })
