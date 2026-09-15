@@ -10,6 +10,7 @@
 import type { Context as ClientContext } from '@deepseek-ai/cordis'
 // Type-only: pulls the ctx.remote merge and its fixed Host facts.
 import type {} from '@deepseek-ai/dsh-api-remotes/client'
+import type { CognateDatabaseStatus } from '@deepseek-ai/dsh-api-cognate-controller/types'
 import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
 import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
 // Type-only: the settings slot declarations plus the ctx.settingsScope Context
@@ -26,7 +27,7 @@ import type {
 import { SettingsRoot } from './SettingsRoot.tsx'
 import { CloseLabel, HeaderContent, TriggerContent } from './chrome.tsx'
 import { GeneralSection } from './GeneralSection.tsx'
-import { DatabaseSection } from './DatabaseSection.tsx'
+import { DatabaseSection, type DatabaseSectionInjected } from './DatabaseSection.tsx'
 import { SettingsDocumentAction } from './SettingsDocumentAction.tsx'
 import type { SettingsDocumentActionInjected } from './SettingsDocumentAction.tsx'
 import { SettingsDocumentStore } from './settings-document-store.ts'
@@ -59,7 +60,7 @@ const NS = 'settings'
  * ui-settings' apply, whose activation order relative to this one is NOT
  * constrained; registrations depend on their slots through `slots.inject()`.
  */
-export const inject = ['slots', 'locale', 'connection', 'remote', 'remote.settings', 'settingsScope']
+export const inject = ['slots', 'locale', 'connection', 'remote', 'remote.settings', 'remote.cognateController', 'settingsScope']
 
 /**
  * Register the `settings` dictionaries, the chrome content, and the General
@@ -74,6 +75,19 @@ export function apply(ctx: ClientContext): void {
   // seat, and the nav label is a thunk the owner resolves per render — no
   // locale/change re-registration wiring.
   const t = ctx.locale.bind(NS)
+  // Unwrap the Remote answers here so the section renders values, not envelopes.
+  type StatusAnswer = { ok: true; value: CognateDatabaseStatus }
+    | { ok: false; error: { code: string; message: string } }
+  const unwrap = async (call: () => Promise<StatusAnswer>): Promise<CognateDatabaseStatus> => {
+    const result = await call()
+    if (!result.ok) throw new Error(`${result.error.code}: ${result.error.message}`)
+    return result.value
+  }
+  const databaseInjected = (): DatabaseSectionInjected => ({
+    status: () => unwrap(() => ctx.remote.cognateController.status()),
+    assets: database => unwrap(() => ctx.remote.cognateController.assets({ database })),
+  })
+
   // The shared SettingsScope mirror updates after document commits and reconnects.
   const documentController = ctx.remote.$host.isLoopback
     ? new SettingsDocumentStore(ctx, ctx.settingsScope.describe())
@@ -188,5 +202,6 @@ export function apply(ctx: ClientContext): void {
     order: 10,
     label: () => t('database.nav'),
     locale: NS,
+    inject: databaseInjected,
   }, DatabaseSection))
 }

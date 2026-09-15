@@ -839,6 +839,25 @@ importers:
         specifier: workspace:^
         version: link:../../interaction/user-approval
 
+  packages/api/cognate-controller:
+    dependencies:
+      '@deepseek-ai/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+      mysql2:
+        specifier: ^3.14.3
+        version: 3.24.4(@types/node@22.20.0)
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@deepseek-ai/dsh-typert-protocol':
+        specifier: workspace:^
+        version: link:../../typert/protocol
+
   packages/api/gateway:
     dependencies:
       '@deepseek-ai/dsh-deque':
@@ -884,6 +903,9 @@ importers:
 
   packages/api/remotes:
     dependencies:
+      '@deepseek-ai/dsh-api-cognate-controller':
+        specifier: workspace:^
+        version: link:../cognate-controller
       '@deepseek-ai/dsh-deque':
         specifier: workspace:^
         version: link:../../util/deque
@@ -1766,6 +1788,9 @@ importers:
       '@deepseek-ai/dsh-agent-presets':
         specifier: workspace:^
         version: link:../../preset/agent-presets
+      '@deepseek-ai/dsh-api-cognate-controller':
+        specifier: workspace:^
+        version: link:../../api/cognate-controller
       '@deepseek-ai/dsh-api-remotes':
         specifier: workspace:^
         version: link:../../api/remotes
@@ -3608,6 +3633,9 @@ importers:
       '@deepseek-ai/cordis':
         specifier: workspace:^
         version: link:../../../vendor/cordis
+      '@deepseek-ai/dsh-api-cognate-controller':
+        specifier: workspace:^
+        version: link:../../api/cognate-controller
       '@deepseek-ai/dsh-api-remotes':
         specifier: workspace:^
         version: link:../../api/remotes

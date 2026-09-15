@@ -98,6 +98,11 @@
       name: '@deepseek-ai/dsh-host-directory-picker-auto'
 
     # Read-only projection of current Loader entries for trusted client RPCs.
+    # Cognate database settings: the Host owns the connection and reports
+    # readiness plus the semantic assets this deployment exposes.
+    - id: cognate-controller
+      name: '@deepseek-ai/dsh-api-cognate-controller'
+
     - id: plugin-inventory
       name: '@deepseek-ai/dsh-host-plugin-inventory'
 

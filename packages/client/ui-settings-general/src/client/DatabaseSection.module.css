@@ -14,3 +14,12 @@
 .assetGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
 .assetGrid div { padding: 11px; border-radius: 8px; background: var(--dsw-alias-bg-layer-1); }
 .note { padding: 0 4px; }
+.selector { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+.selectorLabel { color: var(--dsw-alias-label-caption); font-size: 11px; font-weight: 500; }
+.select { max-width: 320px; padding: 7px 9px; border: 0.5px solid var(--dsw-alias-border-l2); border-radius: 8px; color: var(--dsw-alias-label-primary); background: var(--dsw-alias-bg-layer-1); font-size: 12px; }
+.status[data-tone='ok'] { color: var(--dsw-alias-state-success-primary, var(--dsw-alias-link)); }
+.status[data-tone='warn'] { color: var(--dsw-alias-state-warning-primary, var(--dsw-alias-link)); }
+.count { color: var(--dsw-alias-label-caption) !important; font-variant-numeric: tabular-nums; }
+.members { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; max-height: 180px; overflow: auto; }
+.members li { color: var(--dsw-alias-label-secondary); font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.members .empty { font-family: inherit; font-style: italic; }

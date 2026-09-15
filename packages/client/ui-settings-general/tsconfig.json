@@ -45,6 +45,9 @@
       "path": "../../api/remotes/tsconfig.client.json"
     },
     {
+      "path": "../../api/cognate-controller"
+    },
+    {
       "path": "../ui-sidebar"
     }
   ]
