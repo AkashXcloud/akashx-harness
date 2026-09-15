@@ -362,7 +362,7 @@ describe('image draft rail', () => {
     const attachment = { kind: 'image' as const, id: 'draft-1' as DraftAttachmentId, file: held, previewUrl: 'blob:held' }
     const overTotal = bench({ addFiles: vi.fn(() => null), imageLimits: limits, attachments: [attachment] })
     intake(overTotal, [png(1024 * 1024, 'more.png')])
-    expect(overTotal.view.getByRole('alert').textContent).toContain('图片总大小超过 2MB')
+    expect(overTotal.view.getByRole('alert').textContent).toContain('Images exceed 2MB')
     expect(overTotal.props.addFiles).not.toHaveBeenCalled()
     cleanup()
     // Within every limit: the batch passes through to addFiles.
@@ -420,7 +420,7 @@ describe('image draft rail', () => {
     expect(model.view.getByRole('alert').textContent).toContain('The current model does not support images; switch to a model that does')
     cleanup()
     const unknown = bench({ promptError: attachmentError('ATTACHMENT_NOT_REFERENCED') })
-    expect(unknown.view.getByRole('alert').textContent).toContain('图片发送失败（ATTACHMENT_NOT_REFERENCED）')
+    expect(unknown.view.getByRole('alert').textContent).toContain('Sending images failed (ATTACHMENT_NOT_REFERENCED）')
     cleanup()
     // A subagent refusal uses the same product copy for the same reason.
     const subagent = bench({
