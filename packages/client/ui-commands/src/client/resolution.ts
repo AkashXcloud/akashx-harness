@@ -37,8 +37,7 @@ export function claimToken(descriptor: CommandDescriptor, t: TranslateNS<'comman
 }
 
 const TOKEN_ALIASES = new Map(
-  (Object.keys(BUILTINS) as BuiltinCommandName[]).flatMap(name =>
-    [en[`token.${name}`], en[`token.${name}`]].map(token => [token, name] as const)),
+  (Object.keys(BUILTINS) as BuiltinCommandName[]).map(name => [en[`token.${name}`], name] as const),
 )
 
 /**

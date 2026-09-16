@@ -352,8 +352,8 @@ describe('candidates', () => {
       const { source } = await bench({ commands: () => Promise.resolve({ commands }) })
       const [row] = await source.candidates(proj('s1'), req(''))
       expect(row).toEqual({ name: 'goal', description: en['description.goal'], hint: 'x', section: 'command:section.add' })
-      expect(source.matchSpace!(proj('s1'), ' of Goal')).toBeUndefined()
-      expect(await source.matchEnter!(proj('s1'), ' of Goal x', new AbortController().signal, { attachments: 0 })).toBeUndefined()
+      expect(source.matchSpace!(proj('s1'), '/Goal')).toBeUndefined()
+      expect(await source.matchEnter!(proj('s1'), '/Goal x', new AbortController().signal, { attachments: 0 })).toBeUndefined()
       expect(source.matchSpace!(proj('s1'), '/goal')).toHaveProperty('claim.name', 'goal')
     })
 
@@ -419,28 +419,28 @@ describe('candidates', () => {
       expect(executeCalls).toEqual([{ sessionId: sid('s1'), line: '/plan do x', images: [] }])
     })
 
-    it('a typed localized token resolves to the built-in command on space and enter; the Host line carries the catalog name', async () => {
+    it('a typed token resolves to the built-in command on space and enter; the Host line carries the catalog name', async () => {
       const { source, mint, warm, executeCalls } = await bench({ commands: () => Promise.resolve({ commands: SHIPPED }) })
       mint('s1')
       await warm(proj('s1'))
-      const space = source.matchSpace!(proj('s1'), ' of plan')
+      const space = source.matchSpace!(proj('s1'), '/plan')
       if (space === undefined || space === 'handled' || !('claim' in space)) throw new Error('expected the plan claim')
       expect(space.claim.hint).toBe('[off|message]')
       // The claim keeps the typed spelling (the draft carries it and the
       // arguments are read after it); the submission sends the catalog name.
-      expect(space.claim.token).toBe(' of plan ')
+      expect(space.claim.token).toBe('/plan ')
       expect(space.claim.name).toBe('plan')
-      const enter = await source.matchEnter!(proj('s1'), ' of Goal ship it', new AbortController().signal, { attachments: 0 })
+      const enter = await source.matchEnter!(proj('s1'), '/goal ship it', new AbortController().signal, { attachments: 0 })
       if (enter === undefined || enter === 'handled' || !('claim' in enter)) throw new Error('expected the goal claim')
       expect(enter.claim.attachments).toBe(true)
-      expect(enter.claim.token).toBe(' of Goal ')
+      expect(enter.claim.token).toBe('/goal ')
       await enter.claim.submit('ship it', new Context(), [])
       expect(executeCalls).toEqual([{ sessionId: sid('s1'), line: '/goal ship it', images: [] }])
       const typed = await source.matchEnter!(proj('s1'), '/plan now', new AbortController().signal, { attachments: 0 })
       if (typed === undefined || typed === 'handled' || !('claim' in typed)) throw new Error('expected the plan claim')
       expect(typed.claim.token).toBe('/plan ')
       executeCalls.length = 0
-      expect(await source.matchEnter!(proj('s1'), ' of Compaction', new AbortController().signal, { attachments: 0 })).toBe('handled')
+      expect(await source.matchEnter!(proj('s1'), '/compact', new AbortController().signal, { attachments: 0 })).toBe('handled')
       await vi.waitFor(() => { expect(executeCalls).toEqual([{ sessionId: sid('s1'), line: '/compact', images: [] }]) })
     })
   })

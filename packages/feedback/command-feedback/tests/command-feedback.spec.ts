@@ -220,7 +220,7 @@ describe('/feedback human command', () => {
     expect(feedbackTexts(test.session)).toEqual(['first', 'second'])
   })
 
-  it('keeps every recorded event out of model context and derived history', async () => {
+  it('keeps every recorded event out/model context and derived history', async () => {
     const test = await harness()
     await run(test, ' invisible to the model')
     for (const event of test.session.snapshotEvents()) {

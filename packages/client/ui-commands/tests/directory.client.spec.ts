@@ -53,7 +53,7 @@ function bench() {
 }
 
 describe('status and resolve (per key)', () => {
-  it('resolves bilingual aliases by definition identity and retains exact-name priority', async () => {
+  it('resolves a localized alias by definition identity and retains exact-name priority', async () => {
     const goal = {
       definitionId: CommandDefinitionId('@deepseek-ai/dsh-command-goal'),
       name: 'objective',
@@ -64,15 +64,16 @@ describe('status and resolve (per key)', () => {
     const refreshed = dir.refresh(S1)
     pull(S1, 0).resolve([goal])
     await refreshed
-    expect(dir.resolve(S1, 'Goal')).toEqual(goal)
+    // The descriptor's registered name is `objective`; the localized token
+    // reaches it through the alias map, by definition identity.
     expect(dir.resolve(S1, 'goal')).toEqual(goal)
     expect(dir.resolve(S1, 'plan')).toBeUndefined()
     expect(dir.resolve(S1, 'unregistered')).toBeUndefined()
     const next = dir.refresh(S1)
     pull(S1, 1).resolve([goal, exact])
     await next
+    // An exact-name entry outranks the alias for the same spelling.
     expect(dir.resolve(S1, 'goal')).toEqual(exact)
-    expect(dir.resolve(S1, 'Goal')).toEqual(goal)
   })
 
   it('starts cold and resolves nothing', () => {
