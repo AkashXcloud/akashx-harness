@@ -51,7 +51,7 @@ describe('AskQuestionRow', () => {
   it('running call reads waiting (args-independent: the composer takeover shows the questions)', () => {
     const view = render(<AskQuestionRow {...rowProps(runningCall(ARGS))} />)
     expect(screen.getByText('Ask question')).toBeTruthy()
-    expect(screen.getByText('Waiting for answer')).toBeTruthy()
+    expect(screen.getByText('waiting')).toBeTruthy()
     expect(view.container.querySelector('[data-state="running"]')).not.toBeNull()
   })
 
@@ -171,7 +171,7 @@ describe('AskQuestionRow', () => {
     // ASK_CANCELLED: the ask_user_question handler's cancel error.
     const view = render(<AskQuestionRow {...rowProps(resultNode(READABLE_ARGS, null,
       { isError: true, error: { name: 'UserQuestionError', code: 'ASK_CANCELLED' } }))} />)
-    expect(screen.getByText('Cancelled')).toBeTruthy()
+    expect(screen.getByText('cancelled')).toBeTruthy()
     expect(view.container.querySelector('[data-state="ok"]')).not.toBeNull()
     fireEvent.click(screen.getByRole('button', { expanded: false }))
     expect(screen.getByText('This question set was cancelled before answers were submitted.')).toBeTruthy()
@@ -187,7 +187,7 @@ describe('AskQuestionRow', () => {
     // ASK_ABORTED: the ask handler's turn-abort settlement.
     const view = render(<AskQuestionRow {...rowProps(resultNode(READABLE_ARGS, null,
       { isError: true, error: { name: 'UserQuestionError', code: 'ASK_ABORTED' } }))} />)
-    expect(screen.getByText('Interrupted')).toBeTruthy()
+    expect(screen.getByText('interrupted')).toBeTruthy()
     expect(view.container.querySelector('[data-state="stopped"]')).not.toBeNull()
     fireEvent.click(screen.getByRole('button', { expanded: false }))
     expect(screen.getByText('This question set was interrupted before answers were submitted.')).toBeTruthy()
@@ -202,7 +202,7 @@ describe('AskQuestionRow', () => {
   ])('cancelled result keeps raw diagnostics for $label', ({ args }) => {
     const view = render(<AskQuestionRow {...rowProps(resultNode(args, null,
       { isError: true, error: { name: 'UserQuestionError', code: 'ASK_CANCELLED' } }))} />)
-    expect(screen.getByText('Cancelled')).toBeTruthy()
+    expect(screen.getByText('cancelled')).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { expanded: false }))
     expect(view.container.querySelector('[class*="ioCard"]')).not.toBeNull()
   })

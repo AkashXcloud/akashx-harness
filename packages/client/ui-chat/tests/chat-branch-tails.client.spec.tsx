@@ -380,7 +380,7 @@ describe('MessageItem arms', () => {
     )
     fireEvent.click(view.getByRole('button', { name: /^Context injection\s*AGENTS\.md, sub\/AGENTS\.md$/u }))
     const files = [...view.container.querySelectorAll('[data-context-files] li')].map(node => node.textContent)
-    expect(files).toEqual(['AGENTS.mdloaded', 'sub of AGENTS.mdRemoved'])
+    expect(files).toEqual(['AGENTS.mdloaded', 'sub/AGENTS.mdremoved'])
     // The `<system-reminder>` framing is part of what the model read, so the
     // body keeps it verbatim rather than presenting a cleaned-up excerpt.
     expect(view.container.querySelector('[data-context-text]')?.textContent)
@@ -408,7 +408,7 @@ describe('MessageItem arms', () => {
     )
     fireEvent.click(view.getByRole('button', { name: /^Context injection\s*new\/AGENTS\.md, old\/AGENTS\.md$/u }))
     const files = [...view.container.querySelectorAll('[data-context-files] li')].map(node => node.textContent)
-    expect(files).toEqual(['new of AGENTS.mdadded', 'old of AGENTS.mdupdated'])
+    expect(files).toEqual(['new/AGENTS.mdadded', 'old/AGENTS.mdupdated'])
   })
 
   it('keeps an interleaved unknown block in the order the model received it', () => {
@@ -553,7 +553,7 @@ describe('MessageItem arms', () => {
     )
     fireEvent.click(view.getByRole('button', { name: /^Context injection\s*plugin$/u }))
     expect(view.container.querySelector('[data-context-fields] dd')?.textContent)
-      .toMatch(/… 已截断, 共 \d+ 字符$/u)
+      .toMatch(/… truncated, \d+ characters total$/u)
   })
 
   it('an empty replacement catalog stays a catalog: it retires every earlier name', () => {
@@ -733,7 +733,7 @@ describe('MessageItem arms', () => {
         } as never}
         />,
       )
-      fireEvent.click(view.getByRole('button', { name: new RegExp(`^上下文注入\\s*${label}$`) }))
+      fireEvent.click(view.getByRole('button', { name: new RegExp(`^Context injection\\s*${label}$`) }))
       expect(view.container.querySelector('[data-context-text]')?.textContent).toBe(`${form} prose`)
       expect(view.container.querySelector('[data-context-injection-body]')?.getAttribute('data-context-form'))
         .toBeNull()
@@ -797,7 +797,7 @@ describe('MessageItem arms', () => {
     expect(view.container.querySelector('[data-context-recall-icon]')).not.toBeNull()
     fireEvent.click(view.getByRole('button', { name: /^Session recall\s*重构 loader, 修 CI$/u }))
     const rows = [...view.container.querySelectorAll('[data-context-recalls] li')].map(node => node.textContent)
-    expect(rows).toEqual(['重构 loader保留 18 条 · 省略 42 条已截断', '修 CI保留 3 条 · 省略 0 条'])
+    expect(rows).toEqual(['重构 loader18 kept · 42 omittedtruncated', '修 CI3 kept · 0 omitted'])
     expect(view.container.querySelector('[data-context-text]')?.textContent).toBe('recalled material')
   })
 
@@ -872,13 +872,13 @@ describe('MessageItem arms', () => {
     expect(details?.open).toBe(false)
     expect(details?.dataset.active).toBe('true')
     expect(view.getByRole('status').textContent).toBe('Retrying model request (1/2) · 3s')
-    expect(view.getByText('Retry delay: ').parentElement?.textContent).toBe('重试延迟：2500毫s')
-    expect(view.getByText('Failure reason: ').parentElement?.textContent).toBe('失败原因：连接被重置')
+    expect(view.getByText(/^Retry delay:/u).parentElement?.textContent).toBe('Retry delay: 2500ms')
+    expect(view.getByText(/^Failure reason:/u).parentElement?.textContent).toBe('Failure reason: 连接被重置')
 
     act(() => { vi.advanceTimersByTime(1_100) })
-    expect(view.getByRole('status').textContent).toBe('Retrying model request (1 of 2) · 2s')
+    expect(view.getByRole('status').textContent).toBe('Retrying model request (1/2) · 2s')
     act(() => { vi.advanceTimersByTime(1_000) })
-    expect(view.getByRole('status').textContent).toBe('Retrying model request (1 of 2) · 1s')
+    expect(view.getByRole('status').textContent).toBe('Retrying model request (1/2) · 1s')
 
     view.rerender(
       <MessageItem
@@ -901,7 +901,7 @@ describe('MessageItem arms', () => {
         }}
       />,
     )
-    expect(view.getByRole('status').textContent).toBe('Retrying model request (2 of 2) · 4s')
+    expect(view.getByRole('status').textContent).toBe('Retrying model request (2/2) · 4s')
 
     if (summary === null) throw new Error('retry summary missing')
     fireEvent.click(summary)
@@ -927,7 +927,7 @@ describe('MessageItem arms', () => {
       />,
     )
     expect(details?.dataset.active).toBeUndefined()
-    expect(view.getByRole('status').textContent).toBe('Retried model request (2 of 2) · 4s')
+    expect(view.getByRole('status').textContent).toBe('Retried model request (2/2) · 4s')
 
     view.rerender(
       <MessageItem t={t} node={{
@@ -947,7 +947,7 @@ describe('MessageItem arms', () => {
       }}
       />,
     )
-    expect(view.getByRole('status').textContent).toBe('已重试模型请求 (3 of ∞) · 4s')
+    expect(view.getByRole('status').textContent).toBe('Retried model request (3/∞) · 4s')
 
     view.rerender(
       <MessageItem t={t} node={{
@@ -968,7 +968,7 @@ describe('MessageItem arms', () => {
       }}
       />,
     )
-    expect(view.getByRole('status').textContent).toBe('Model request retry cancelled (1 of 2) · 4s')
+    expect(view.getByRole('status').textContent).toBe('Model request retry cancelled (1/2) · 4s')
   })
 
 })
