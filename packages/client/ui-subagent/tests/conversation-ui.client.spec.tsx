@@ -120,7 +120,7 @@ describe('SubagentHeaderLineage', () => {
     }
     const view = render(<SubagentHeaderLineage {...props(catalog(), {}, summaries)} />)
 
-    const trigger = screen.getByRole('button', { name: '1 subagents running' })
+    const trigger = screen.getByRole('button', { name: '1 subagent running' })
     expect(trigger.querySelector('[data-state="ongoing"]')).not.toBeNull()
 
     view.rerender(<SubagentHeaderLineage {...props(catalog(), {}, {
@@ -196,7 +196,7 @@ describe('SubagentHeaderLineage', () => {
       }],
     }))
     render(<SubagentHeaderLineage {...input} />)
-    hoverCatalog(screen.getByRole('button', { name: /1 subagents/u }))
+    hoverCatalog(screen.getByRole('button', { name: /1 subagent/u }))
 
     expect(screen.getByRole('treeitem', { name: /worker/ }).children).toHaveLength(1)
   })
@@ -412,7 +412,7 @@ describe('SubagentHeaderLineage', () => {
     })) as Record<SessionId, SessionSummary>
     const input = props(catalog({ entries }), {}, summaries)
     render(<SubagentHeaderLineage {...input} />)
-    const trigger = screen.getByRole('button', { name: '1 subagents running' })
+    const trigger = screen.getByRole('button', { name: '1 subagent running' })
     expect(within(trigger).getByText('9 subagents')).toBeTruthy()
     hoverCatalog(trigger)
 
@@ -598,7 +598,7 @@ describe('SubagentHeaderLineage', () => {
     const absent = props(undefined, {}, summaries)
     const view = render(<SubagentHeaderLineage {...absent} />)
 
-    const trigger = screen.getByRole('button', { name: '1 subagents running' })
+    const trigger = screen.getByRole('button', { name: '1 subagent running' })
     expect(within(trigger).getByText('2 subagents')).toBeTruthy()
     hoverCatalog(trigger)
     expect(absent.setCatalogOpen).toHaveBeenCalledWith(PARENT, true)
@@ -607,7 +607,7 @@ describe('SubagentHeaderLineage', () => {
 
     const staleEmpty = props(catalog({ entries: [] }), {}, summaries)
     view.rerender(<SubagentHeaderLineage {...staleEmpty} />)
-    expect(screen.getByRole('button', { name: '1 subagents running' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: '1 subagent running' })).toBeTruthy()
     expect(screen.getAllByRole('treeitem', { name: 'Loading subagents' })).toHaveLength(2)
     expect(staleEmpty.openChild).not.toHaveBeenCalled()
   })
@@ -752,7 +752,7 @@ describe('SubagentHeaderLineage', () => {
 
     const switcher = screen.getByRole('button', { name: 'Switch subagent: worker' })
     expect(switcher.className).toContain('ancestorSwitcherTrigger')
-    expect(screen.queryByRole('button', { name: /1 subagents/u })).toBeNull()
+    expect(screen.queryByRole('button', { name: /1 subagent/u })).toBeNull()
     vi.useFakeTimers()
     fireEvent.mouseEnter(switcher.parentElement!)
     fireEvent.click(switcher)

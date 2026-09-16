@@ -65,7 +65,7 @@ describe('MessageImage', () => {
   it('loads a session-authorized URL, bounds the thumbnail, and clicks into the original', async () => {
     const load = vi.fn().mockResolvedValue('blob:history')
     const view = render(<MessageImage image={{ attachment }} load={load} variant="single" labels={labels} />)
-    const frame = view.getByRole('button', { name: 'history.png, click to view original' })
+    const frame = view.getByRole('button', { name: 'history.png，点击查看原图' })
     expect(frame.getAttribute('style')).toContain('width: 240px')
     expect(frame.getAttribute('style')).toContain('height: 120px')
     expect(frame.getAttribute('title')).toBe('View original')
@@ -80,7 +80,7 @@ describe('MessageImage', () => {
   it('ignores a click while the thumbnail is still loading', () => {
     const load = vi.fn(() => new Promise<string>(() => {}))
     const view = render(<MessageImage image={{ attachment }} load={load} variant="single" labels={labels} />)
-    const frame = view.getByRole('button', { name: 'history.png, click to view original' })
+    const frame = view.getByRole('button', { name: 'history.png，点击查看原图' })
     expect(view.getByText('Loading image…')).toBeTruthy()
     fireEvent.click(frame)
     expect(view.queryByRole('dialog')).toBeNull()
@@ -91,7 +91,7 @@ describe('MessageImage', () => {
     const load = vi.fn().mockResolvedValue('blob:unnamed')
     const view = render(<MessageImage image={{ attachment: unnamed }} load={load} variant="single" labels={labels} />)
     await waitFor(() => { expect(view.getByAltText('Image')).toBeTruthy() })
-    expect(view.getByRole('button', { name: 'Image, click to view original' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Image，点击查看原图' })).toBeTruthy()
   })
 
   it('surfaces a retry control when durable bytes cannot be read, including a failed retry', async () => {
@@ -113,7 +113,7 @@ describe('MessageImage', () => {
     const tall = render(
       <MessageImage image={{ attachment: { ...attachment, width: 100, height: 2000 } }} load={load} variant="single" labels={labels} />,
     )
-    const tallFrame = tall.getByRole('button', { name: 'history.png, click to view original' })
+    const tallFrame = tall.getByRole('button', { name: 'history.png，点击查看原图' })
     expect(tallFrame.getAttribute('style')).toContain('width: 60px')
     expect(tallFrame.getAttribute('style')).toContain('height: 240px')
     await waitFor(() => { expect(tall.getByAltText('history.png')).toBeTruthy() })
@@ -122,7 +122,7 @@ describe('MessageImage', () => {
     const wide = render(
       <MessageImage image={{ attachment: { ...attachment, width: 4000, height: 100 } }} load={load} variant="single" labels={labels} />,
     )
-    const wideFrame = wide.getByRole('button', { name: 'history.png, click to view original' })
+    const wideFrame = wide.getByRole('button', { name: 'history.png，点击查看原图' })
     expect(wideFrame.getAttribute('style')).toContain('width: 240px')
     expect(wideFrame.getAttribute('style')).toContain('height: 60px')
     await waitFor(() => { expect(wide.getByAltText('history.png')).toBeTruthy() })
@@ -131,7 +131,7 @@ describe('MessageImage', () => {
     const small = render(
       <MessageImage image={{ attachment: { ...attachment, width: 100, height: 100 } }} load={load} variant="single" labels={labels} />,
     )
-    const smallFrame = small.getByRole('button', { name: 'history.png, click to view original' })
+    const smallFrame = small.getByRole('button', { name: 'history.png，点击查看原图' })
     expect(smallFrame.getAttribute('style')).toContain('width: 100px')
     expect(smallFrame.getAttribute('style')).toContain('height: 100px')
   })
@@ -139,7 +139,7 @@ describe('MessageImage', () => {
   it('renders a tile at the fixed square without inline sizing', () => {
     const load = vi.fn(() => new Promise<string>(() => {}))
     const view = render(<MessageImage image={{ attachment }} load={load} variant="tile" labels={labels} />)
-    const frame = view.getByRole('button', { name: 'history.png, click to view original' })
+    const frame = view.getByRole('button', { name: 'history.png，点击查看原图' })
     expect(frame.getAttribute('data-variant')).toBe('tile')
     expect(frame.getAttribute('style')).toBeNull()
   })
@@ -201,7 +201,7 @@ describe('MessageImage preview arm', () => {
     const view = render(
       <MessageImage image={{ preview: { url: 'blob:box' } }} load={vi.fn(async () => '')} variant="tile" labels={labels} />,
     )
-    fireEvent.click(view.getByRole('button', { name: 'Image, click to view original' }))
+    fireEvent.click(view.getByRole('button', { name: 'Image，点击查看原图' }))
     expect(view.getByRole('dialog', { name: 'Original image preview' })).toBeTruthy()
   })
 })
@@ -295,7 +295,7 @@ describe('ImageGallery', () => {
     }
     const view = render(<MessageImages {...props} />)
     await waitFor(() => { expect(view.getByAltText('history.png')).toBeTruthy() })
-    expect(view.getByRole('button', { name: 'history.png, click to view original' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'history.png，点击查看原图' })).toBeTruthy()
     expect(view.container.querySelector('[data-align="end"]')).not.toBeNull()
   })
 })

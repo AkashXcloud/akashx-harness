@@ -267,12 +267,12 @@ describe('workspace browser rows', () => {
       const row = screen.getByRole('treeitem')
       expect(row.querySelectorAll('[data-state="ongoing"]')).toHaveLength(1)
       expect(screen.getByText('In progress')).toBeTruthy()
-      expect(screen.getByText('1 subagents running')).toBeTruthy()
+      expect(screen.getByText('1 subagent running')).toBeTruthy()
 
       fireEvent.pointerEnter(row.parentElement as HTMLElement)
       act(() => { vi.advanceTimersByTime(500) })
       expect(screen.getAllByText('In progress')).toHaveLength(2)
-      expect(screen.getAllByText('1 subagents running')).toHaveLength(2)
+      expect(screen.getAllByText('1 subagent running')).toHaveLength(2)
     } finally {
       vi.useRealTimers()
     }
@@ -289,7 +289,7 @@ describe('workspace browser rows', () => {
     expect(row.querySelector('[data-state="warning"]')).not.toBeNull()
     expect(row.querySelector('[data-state="ongoing"]')).toBeNull()
     expect(screen.getByText('Waiting for answer')).toBeTruthy()
-    expect(screen.getByText('1 subagents running')).toBeTruthy()
+    expect(screen.getByText('1 subagent running')).toBeTruthy()
   })
 
   it('shows the green done dot on a finished search result row', () => {

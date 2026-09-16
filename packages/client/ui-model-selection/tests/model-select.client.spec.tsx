@@ -69,7 +69,7 @@ describe('ModelSelect reasoning effort', () => {
     />)
 
     const trigger = screen.getByRole('button', {
-      name: 'Select model, current DeepSeek-V4-Flash, Effort High',
+      name: 'Select model, current DeepSeek-V4-Flash, reasoning effort High',
     })
     fireEvent.click(trigger)
     fireEvent.click(screen.getByRole('menuitem', { name: /Effort/u }))
@@ -111,7 +111,7 @@ describe('ModelSelect reasoning effort', () => {
     />)
 
     fireEvent.click(screen.getByRole('button', {
-      name: 'Select model, current Model, Effort Default',
+      name: 'Select model, current Model, reasoning effort Default',
     }))
     fireEvent.click(screen.getByRole('menuitem', { name: /Effort/u }))
     expect(screen.getAllByRole('menuitemradio').map(item => item.textContent))
@@ -163,7 +163,7 @@ describe('ModelSelect reasoning effort', () => {
     directory.set(state())
     await waitFor(() => {
       expect(screen.getByRole('button', {
-        name: 'Select model, current DeepSeek-V4-Flash, Effort High',
+        name: 'Select model, current DeepSeek-V4-Flash, reasoning effort High',
       })).toBeTruthy()
     })
   })

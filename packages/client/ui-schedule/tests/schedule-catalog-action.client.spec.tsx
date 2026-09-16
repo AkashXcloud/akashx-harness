@@ -191,7 +191,7 @@ describe('ScheduleCatalogAction rows', () => {
       [3_600, 'Every 1 hour', 'Every  1h'],
       [7_200, 'Every 2 hours', 'Every  2h'],
       [300, 'Every 5 minutes', 'Every  5min'],
-      [301, 'Every 301 seconds', 'Every  301s'],
+      [301, 'Every 301 second', 'Every  301s'],
     ] as const
     for (const [seconds, english, chinese] of samples) {
       const item = record(String(seconds), 'every', START + 1_000, { everySeconds: seconds })

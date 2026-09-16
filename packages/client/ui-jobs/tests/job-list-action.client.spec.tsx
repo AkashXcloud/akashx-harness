@@ -75,7 +75,7 @@ describe('JobListAction visibility', () => {
     expect(screen.getByRole('button', { name: '2 background jobs running' })).toBeDefined()
 
     rerender(<JobListAction {...props([job({ status: 'completed', finishedAt: START + 3_000 })])} />)
-    expect(screen.getByRole('button', { name: '1 background jobs' })).toBeDefined()
+    expect(screen.getByRole('button', { name: '1 background job' })).toBeDefined()
   })
 
   it('closes and unmounts when the last job disappears while the list is open', () => {

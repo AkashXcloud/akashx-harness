@@ -808,11 +808,11 @@ describe('running and lock semantics', () => {
     expect(stop).toHaveBeenCalledTimes(1)
 
     writeDraft(shell, '排队消息')
-    expect(button.getAttribute('aria-label')).toBe('Queue')
+    expect(button.getAttribute('aria-label')).toBe('Queue message')
     writeDraft(shell, '   ')
     expect(button.getAttribute('aria-label')).toBe('Stop generating')
     writeDraft(shell, '排队消息2')
-    expect(button.getAttribute('aria-label')).toBe('Queue')
+    expect(button.getAttribute('aria-label')).toBe('Queue message')
     fireEvent.click(button)
     expect(sink).toHaveBeenCalledWith('排队消息2', [], 'queue', expect.any(AbortSignal))
     await vi.waitFor(() => { expect(button.getAttribute('aria-label')).toBe('Stop generating') })
@@ -828,7 +828,7 @@ describe('running and lock semantics', () => {
 
   it('running Send relabels when the busy-state preference changes live', () => {
     const { button, busyEnter, sink } = bench({ running: true, draft: '跟随设置' })
-    expect(button.getAttribute('aria-label')).toBe('Queue')
+    expect(button.getAttribute('aria-label')).toBe('Queue message')
     act(() => { busyEnter.set('steer') })
     expect(button.getAttribute('aria-label')).toBe('Steer queued message')
     fireEvent.click(button)
@@ -896,7 +896,7 @@ describe('running and lock semantics', () => {
       previewUrl: 'blob:pixel',
     }
     const { button, sink } = bench({ running: true, attachments: [attachment] })
-    expect(button.getAttribute('aria-label')).toBe('Queue')
+    expect(button.getAttribute('aria-label')).toBe('Queue message')
     fireEvent.click(button)
     expect(sink).toHaveBeenCalledWith('', ['draft-1'], 'queue', expect.any(AbortSignal))
     await vi.waitFor(() => { expect(button.getAttribute('aria-label')).toBe('Stop generating') })
@@ -947,7 +947,7 @@ describe('running and lock semantics', () => {
         parentAvailable: true,
       },
     })
-    expect(button.getAttribute('aria-label')).toBe('Queue')
+    expect(button.getAttribute('aria-label')).toBe('Queue message')
     expect(interruptButton).not.toBeNull()
     expect(textarea.getAttribute('aria-disabled')).not.toBe('true')
     expect(view.container.querySelector<HTMLInputElement>('input[type="file"]')?.disabled).toBe(true)
