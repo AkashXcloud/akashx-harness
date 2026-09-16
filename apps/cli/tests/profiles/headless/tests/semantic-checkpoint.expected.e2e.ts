@@ -1,17 +1,17 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import {
   fixtureContext,
   normalizeSessionSnapshot,
   normalizeSessionSnapshots,
   type NormalizeContext,
-} from '@deepseek-ai/dsh-session-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
-import { createUserMessage, ToolCallId, createMessage } from '@deepseek-ai/dsh-llm'
-import { SessionSeq, SESSION_FORMAT_VERSION, SessionId, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+} from '@akashx/akx-session-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@akashx/akx-loader-smoke'
+import { createUserMessage, ToolCallId, createMessage } from '@akashx/akx-llm'
+import { SessionSeq, SESSION_FORMAT_VERSION, SessionId, type SessionEvent, type SessionHeader } from '@akashx/akx-session'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
 import { logPath } from '../../../../../../packages/session/session-persistence-jsonl/src/format.ts'
 import { describe, expect, it } from 'vitest'
 
@@ -23,7 +23,7 @@ const configPath = fileURLToPath(new URL('../semantic-checkpoint-snapshot.patch.
 const binScript = fileURLToPath(new URL('../../../../../../packages/test-support/loader-smoke/tests/fixtures/headless-driver.ts', import.meta.url))
 const tsconfigPath = fileURLToPath(new URL('../../../../../../tsconfig.json', import.meta.url))
 const sessionId = SessionId('semantic-checkpoint-unknown-outcome')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.AKX_SNAPSHOT === 'refresh'
 const task = 'Continue safely from the interrupted operation.'
 
 /** Compare one current normalized Session with its generation-aware committed fixture. */
@@ -52,7 +52,7 @@ async function seedInterruptedSession(root: string, cwd: string): Promise<string
     { type: 'step/start', seq: SessionSeq(1), time: 11, data: { turn: 1, step: 1 } },
     {
       type: 'system/message', seq: SessionSeq(2), time: 12,
-      data: { turn: 1, step: 1, message: createMessage({ role: 'system', content: [], source: { kind: 'plugin', plugin: '@deepseek-ai/dsh-system-prompt' } }) },
+      data: { turn: 1, step: 1, message: createMessage({ role: 'system', content: [], source: { kind: 'plugin', plugin: '@akashx/akx-system-prompt' } }) },
       surfaceOp: 'append',
     },
     { type: 'user/message', seq: SessionSeq(3), time: 13, data: createUserMessage({
@@ -71,7 +71,7 @@ async function seedInterruptedSession(root: string, cwd: string): Promise<string
           content: [{ type: 'tool-call', id: ToolCallId('unknown-outcome-call'), name: 'write_remote', arguments: '{"value":1}' }],
           source: {
             kind: 'model',
-            ...{ provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+            ...{ provider: 'akashx-official', model: 'akashx-v4-flash' },
           },
         }),
       },
@@ -106,15 +106,15 @@ describe('semantic checkpoint recovery snapshot', () => {
     let sessionPath = ''
     const result = await runLoaderSmoke({
       label: 'semantic checkpoint headless stream-json snapshot',
-      tempDirPrefix: 'dsh-semantic-snapshot-',
+      tempDirPrefix: 'akx-semantic-snapshot-',
       binScript,
       libBinScript: binScript,
       configPath,
       binArgs: [configPath, task],
       tsconfigPath,
       env: {
-        DSH_SNAPSHOT_FILE: replayFixture,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        AKX_SNAPSHOT_FILE: replayFixture,
+        AKX_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd

@@ -1,9 +1,9 @@
-/** Offline Markdown knowledge provider for Cognate development and tests. @module @deepseek-ai/dsh-cognate-local */
+/** Offline Markdown knowledge provider for Cognate development and tests. @module @akashx/akx-cognate-local */
 
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { CognateProvider, CognateQueryRequest, CognateQueryResult, CognateSemanticContext } from '@deepseek-ai/dsh-cognate'
-import type {} from '@deepseek-ai/dsh-cognate'
+import { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import type { CognateProvider, CognateQueryRequest, CognateQueryResult, CognateSemanticContext } from '@akashx/akx-cognate'
+import type {} from '@akashx/akx-cognate'
 import { readdir, readFile } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, relative } from 'node:path'

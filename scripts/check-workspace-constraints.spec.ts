@@ -2,22 +2,22 @@
 
 import { describe, expect, it } from 'vitest'
 import {
-  checkDshFamilyVersion,
+  checkAkxFamilyVersion,
   checkExperimentalDependencyIsolation,
   checkExperimentalManifest,
-  expectedDshPackageFiles,
+  expectedAkxPackageFiles,
   type WorkspaceManifest,
 } from './check-workspace-constraints.ts'
 
 const experimental: WorkspaceManifest = {
   dir: 'packages/experimental/prototype',
-  manifest: { name: '@deepseek-ai/dsh-experimental-prototype', private: true },
+  manifest: { name: '@akashx/akx-experimental-prototype', private: true },
 }
 
 const publicExperimental: WorkspaceManifest = {
   dir: 'packages/experimental/agent-team',
   manifest: {
-    name: '@deepseek-ai/dsh-experimental-agent-team',
+    name: '@akashx/akx-experimental-agent-team',
     publishConfig: { access: 'public' },
   },
 }
@@ -26,9 +26,9 @@ describe('experimental workspace constraints', () => {
   it('requires the experimental package-name prefix', () => {
     expect(checkExperimentalManifest({
       ...experimental,
-      manifest: { ...experimental.manifest, name: '@deepseek-ai/dsh-prototype' },
+      manifest: { ...experimental.manifest, name: '@akashx/akx-prototype' },
     })).toEqual([
-      '@deepseek-ai/dsh-prototype: experimental package name must start with "@deepseek-ai/dsh-experimental-"',
+      '@akashx/akx-prototype: experimental package name must start with "@akashx/akx-experimental-"',
     ])
   })
 
@@ -38,8 +38,8 @@ describe('experimental workspace constraints', () => {
       ...experimental,
       manifest: { ...experimental.manifest, private: false, publishConfig: { access: 'public' } },
     })).toEqual([
-      '@deepseek-ai/dsh-experimental-prototype: experimental package must set "private": true',
-      '@deepseek-ai/dsh-experimental-prototype: experimental package must omit publishConfig',
+      '@akashx/akx-experimental-prototype: experimental package must set "private": true',
+      '@akashx/akx-experimental-prototype: experimental package must omit publishConfig',
     ])
   })
 
@@ -48,12 +48,12 @@ describe('experimental workspace constraints', () => {
     expect(checkExperimentalManifest({
       ...publicExperimental,
       manifest: {
-        name: '@deepseek-ai/dsh-experimental-agent-team',
+        name: '@akashx/akx-experimental-agent-team',
         private: true,
       },
     })).toEqual([
-      '@deepseek-ai/dsh-experimental-agent-team: public experimental package must not set "private": true',
-      '@deepseek-ai/dsh-experimental-agent-team: public experimental package must set publishConfig.access to "public"',
+      '@akashx/akx-experimental-agent-team: public experimental package must not set "private": true',
+      '@akashx/akx-experimental-agent-team: public experimental package must set publishConfig.access to "public"',
     ])
   })
 
@@ -63,11 +63,11 @@ describe('experimental workspace constraints', () => {
       expect(checkExperimentalDependencyIsolation([experimental, {
         dir: 'packages/core/consumer',
         manifest: {
-          name: '@deepseek-ai/dsh-consumer',
-          [section]: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+          name: '@akashx/akx-consumer',
+          [section]: { '@akashx/akx-experimental-prototype': 'workspace:^' },
         },
       }])).toEqual([
-        `@deepseek-ai/dsh-consumer: ${section}.@deepseek-ai/dsh-experimental-prototype must not reference an experimental package`,
+        `@akashx/akx-consumer: ${section}.@akashx/akx-experimental-prototype must not reference an experimental package`,
       ])
     },
   )
@@ -76,66 +76,66 @@ describe('experimental workspace constraints', () => {
     const manifests: WorkspaceManifest[] = [experimental, {
       dir: 'packages/core/test-only',
       manifest: {
-        name: '@deepseek-ai/dsh-test-only',
-        devDependencies: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+        name: '@akashx/akx-test-only',
+        devDependencies: { '@akashx/akx-experimental-prototype': 'workspace:^' },
       },
     }, {
       dir: 'packages/experimental/consumer',
       manifest: {
-        name: '@deepseek-ai/dsh-experimental-consumer',
-        dependencies: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+        name: '@akashx/akx-experimental-consumer',
+        dependencies: { '@akashx/akx-experimental-prototype': 'workspace:^' },
       },
     }, {
       dir: 'python/sdk-runtime',
       manifest: {
-        name: '@deepseek-ai/dsh-python-runtime',
-        dependencies: { '@deepseek-ai/dsh-experimental-prototype': 'workspace:^' },
+        name: '@akashx/akx-python-runtime',
+        dependencies: { '@akashx/akx-experimental-prototype': 'workspace:^' },
       },
     }]
 
     expect(checkExperimentalDependencyIsolation(manifests)).toEqual([
-      '@deepseek-ai/dsh-python-runtime: dependencies.@deepseek-ai/dsh-experimental-prototype must not reference an experimental package',
+      '@akashx/akx-python-runtime: dependencies.@akashx/akx-experimental-prototype must not reference an experimental package',
     ])
   })
 })
 
-describe('dsh family version coherence', () => {
+describe('akx family version coherence', () => {
   it('rejects a package carrying a stale shared version', () => {
-    expect(checkDshFamilyVersion(
-      { name: '@deepseek-ai/dsh-http-proxy', version: '0.1.2-alpha.5' },
+    expect(checkAkxFamilyVersion(
+      { name: '@akashx/akx-http-proxy', version: '0.1.2-alpha.5' },
       '0.1.2-rc.1',
-    )).toBe('@deepseek-ai/dsh-http-proxy: package.json version must match root version 0.1.2-rc.1')
+    )).toBe('@akashx/akx-http-proxy: package.json version must match root version 0.1.2-rc.1')
   })
 
   it('rejects the root-named CLI app on a stale shared version', () => {
-    expect(checkDshFamilyVersion(
-      { name: '@deepseek-ai/dsh', version: '0.1.2-alpha.5' },
+    expect(checkAkxFamilyVersion(
+      { name: '@akashx/akx', version: '0.1.2-alpha.5' },
       '0.1.2-rc.1',
-    )).toBe('@deepseek-ai/dsh: package.json version must match root version 0.1.2-rc.1')
+    )).toBe('@akashx/akx: package.json version must match root version 0.1.2-rc.1')
   })
 
   it('accepts a manifest carrying the shared version', () => {
-    expect(checkDshFamilyVersion(
-      { name: '@deepseek-ai/dsh-http-proxy', version: '0.1.2-rc.1' },
+    expect(checkAkxFamilyVersion(
+      { name: '@akashx/akx-http-proxy', version: '0.1.2-rc.1' },
       '0.1.2-rc.1',
     )).toBeUndefined()
   })
 
   it('leaves other sequences to their own version lines', () => {
-    expect(checkDshFamilyVersion({ name: '@deepseek-ai/cordis', version: '4.0.1' }, '0.1.2-rc.1')).toBeUndefined()
-    expect(checkDshFamilyVersion(
-      { name: '@deepseek-ai/node-addon-system', version: '0.1.1' },
+    expect(checkAkxFamilyVersion({ name: '@akashx/cordis', version: '4.0.1' }, '0.1.2-rc.1')).toBeUndefined()
+    expect(checkAkxFamilyVersion(
+      { name: '@akashx/node-addon-system', version: '0.1.1' },
       '0.1.2-rc.1',
     )).toBeUndefined()
-    expect(checkDshFamilyVersion({ version: '0.1.2-alpha.5' }, '0.1.2-rc.1')).toBeUndefined()
+    expect(checkAkxFamilyVersion({ version: '0.1.2-alpha.5' }, '0.1.2-rc.1')).toBeUndefined()
   })
 })
 
 describe('package payload constraints', () => {
   it('includes a declared profile patch without a package-name allowlist', () => {
-    expect(expectedDshPackageFiles({
-      name: '@deepseek-ai/dsh-private-profile',
-      dsh: { bundle: { patch: './cordis.patch.yml' } },
+    expect(expectedAkxPackageFiles({
+      name: '@akashx/akx-private-profile',
+      akx: { bundle: { patch: './cordis.patch.yml' } },
     })).toEqual([
       'lib/index.js',
       'cordis.patch.yml',

@@ -3,13 +3,13 @@ description: "Direct MySQL-wire AkashXDB provider for the Cognate capability."
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cognate-mysql
+# @akashx/akx-cognate-mysql
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-cognate-mysql` registers `MysqlCognateProvider` on `ctx.cognate`. It connects directly to an AkashXDB/StarRocks MySQL endpoint, normalizes driver values to lossless JSON, and destroys the active connection when the caller signal aborts. URL credentials are never returned in context or results.
+`akx-cognate-mysql` registers `MysqlCognateProvider` on `ctx.cognate`. It connects directly to an AkashXDB/StarRocks MySQL endpoint, normalizes driver values to lossless JSON, and destroys the active connection when the caller signal aborts. URL credentials are never returned in context or results.
 
 ## Table of Contents
 

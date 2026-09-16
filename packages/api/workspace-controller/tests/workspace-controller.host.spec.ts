@@ -2,19 +2,19 @@ import { existsSync, mkdirSync, mkdtempSync, realpathSync, rmSync } from 'node:f
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import Storage from '@deepseek-ai/dsh-storage'
-import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import WorkspaceRegistry from '@deepseek-ai/dsh-workspace'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
+import { Context } from '@akashx/cordis'
+import SessionStore, { SessionId } from '@akashx/akx-session'
+import Storage from '@akashx/akx-storage'
+import { DomainFacility } from '@akashx/akx-storage-domain'
+import { RemoteError } from '@akashx/akx-typert-protocol'
+import WorkspaceRegistry from '@akashx/akx-workspace'
+import type { WorkspaceId } from '@akashx/akx-workspace/types'
 import WorkspaceController from '../src/index.ts'
 import { WorkspaceFeed } from '../src/feed.ts'
 import type { WorkspaceFollowFrame } from '../src/types.ts'
 import { MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@akashx/akx-typert-protocol' {
   interface RemoteErrorDetailsMap {
     'fixture/failure': {}
   }
@@ -42,7 +42,7 @@ function deferred<T>(): Deferred<T> {
 }
 
 async function harness() {
-  const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'dsh-workspace-controller-')))
+  const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'akx-workspace-controller-')))
   tempDirs.push(root)
   const ctx = new Context()
   roots.push(ctx)

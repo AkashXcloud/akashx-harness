@@ -1,4 +1,4 @@
-/** Verify npm's physical package placement for two incompatible DSH releases. */
+/** Verify npm's physical package placement for two incompatible AKX releases. */
 
 import { readFileSync } from 'node:fs'
 import { posix, resolve } from 'node:path'
@@ -10,15 +10,15 @@ import {
   type RegistryIndex,
 } from './benchmark-npm-resolution.ts'
 
-const DSH_PACKAGE = '@deepseek-ai/dsh'
-const CORDIS_PACKAGE = '@deepseek-ai/cordis'
-const NESTED_DSH_ALIAS = 'dsh-previous'
-const NESTED_DSH_PATH = `node_modules/${NESTED_DSH_ALIAS}`
+const AKX_PACKAGE = '@akashx/akx'
+const CORDIS_PACKAGE = '@akashx/cordis'
+const NESTED_AKX_ALIAS = 'akx-previous'
+const NESTED_AKX_PATH = `node_modules/${NESTED_AKX_ALIAS}`
 const DEPENDENCY_FIELDS = ['dependencies', 'optionalDependencies', 'peerDependencies'] as const
 const TIMEOUT_MS = 300_000
 
 /** Synthetic incompatible versions used to expose cross-release placement errors. */
-export const SYNTHETIC_DSH_VERSIONS = ['0.1.0', '0.2.0'] as const
+export const SYNTHETIC_AKX_VERSIONS = ['0.1.0', '0.2.0'] as const
 
 interface MutableRegistryManifest {
   name: string
@@ -30,13 +30,13 @@ interface MutableRegistryManifest {
 }
 
 /** Summary of a verified two-release npm layout. */
-export interface DshInstallLayoutSummary {
-  readonly dshPackagesPerVersion: number
-  readonly checkedDshEdges: number
+export interface AkxInstallLayoutSummary {
+  readonly akxPackagesPerVersion: number
+  readonly checkedAkxEdges: number
 }
 
-function isDshPackage(name: string): boolean {
-  return name === DSH_PACKAGE || name.startsWith(`${DSH_PACKAGE}-`)
+function isAkxPackage(name: string): boolean {
+  return name === AKX_PACKAGE || name.startsWith(`${AKX_PACKAGE}-`)
 }
 
 function cloneForVersion(manifest: object, version: string): MutableRegistryManifest {
@@ -46,35 +46,35 @@ function cloneForVersion(manifest: object, version: string): MutableRegistryMani
     const dependencies = cloned[field]
     if (dependencies === undefined) continue
     for (const name of Object.keys(dependencies)) {
-      if (isDshPackage(name)) dependencies[name] = `^${version}`
+      if (isAkxPackage(name)) dependencies[name] = `^${version}`
     }
   }
   return cloned
 }
 
 /**
- * Replace the working release with two incompatible, internally consistent DSH releases.
+ * Replace the working release with two incompatible, internally consistent AKX releases.
  * @param index - Registry metadata containing the working release.
  * @param sourceVersion - Workspace version copied into each synthetic release.
- * @returns Registry metadata containing both synthetic DSH releases and unchanged external packages.
+ * @returns Registry metadata containing both synthetic AKX releases and unchanged external packages.
  */
-export function buildDualDshRegistry(index: RegistryIndex, sourceVersion: string): RegistryIndex {
+export function buildDualAkxRegistry(index: RegistryIndex, sourceVersion: string): RegistryIndex {
   const output = new Map(index)
-  let dshPackages = 0
+  let akxPackages = 0
   for (const [name, versions] of index) {
-    if (!isDshPackage(name)) {
+    if (!isAkxPackage(name)) {
       output.set(name, versions)
       continue
     }
     const source = versions.get(sourceVersion)
     if (source === undefined) throw new Error(`${name} has no workspace version ${sourceVersion}`)
-    dshPackages++
-    output.set(name, new Map(SYNTHETIC_DSH_VERSIONS.map(version => [
+    akxPackages++
+    output.set(name, new Map(SYNTHETIC_AKX_VERSIONS.map(version => [
       version,
       cloneForVersion(source, version),
     ])))
   }
-  if (dshPackages === 0) throw new Error('registry contains no DSH packages')
+  if (akxPackages === 0) throw new Error('registry contains no AKX packages')
   return output
 }
 
@@ -110,44 +110,44 @@ function setDifference(left: ReadonlySet<string>, right: ReadonlySet<string>): s
 }
 
 /**
- * Assert that npm isolates both DSH releases while sharing the Cordis runtime.
+ * Assert that npm isolates both AKX releases while sharing the Cordis runtime.
  * @param packageLock - Metadata-only package lock produced by npm.
- * @returns Counts for the verified DSH packages and dependency edges.
+ * @returns Counts for the verified AKX packages and dependency edges.
  */
-export function assertDualDshInstallLayout(packageLock: NpmPackageLock): DshInstallLayoutSummary {
-  const [nestedVersion, rootVersion] = SYNTHETIC_DSH_VERSIONS
+export function assertDualAkxInstallLayout(packageLock: NpmPackageLock): AkxInstallLayoutSummary {
+  const [nestedVersion, rootVersion] = SYNTHETIC_AKX_VERSIONS
   const errors: string[] = []
   const namesByVersion = new Map<string, Set<string>>([
     [nestedVersion, new Set()],
     [rootVersion, new Set()],
   ])
   const installed = Object.entries(packageLock.packages)
-  let checkedDshEdges = 0
+  let checkedAkxEdges = 0
 
   for (const [path, manifest] of installed) {
     const name = packageNameAtPath(path, manifest)
     if (name === 'react' || name === 'react-dom') {
-      errors.push(`${path}: ${name} is a browser build input, not a dependency of the synthetic DSH-only consumer`)
+      errors.push(`${path}: ${name} is a browser build input, not a dependency of the synthetic AKX-only consumer`)
     }
-    if (name === undefined || !isDshPackage(name)) continue
+    if (name === undefined || !isAkxPackage(name)) continue
     const version = manifest.version
     if (version !== nestedVersion && version !== rootVersion) {
-      errors.push(`${path}: expected DSH version ${nestedVersion} or ${rootVersion}, got ${String(version)}`)
+      errors.push(`${path}: expected AKX version ${nestedVersion} or ${rootVersion}, got ${String(version)}`)
       continue
     }
     namesByVersion.get(version)?.add(name)
     const expectedPath = version === rootVersion
       ? `node_modules/${name}`
-      : name === DSH_PACKAGE
-        ? NESTED_DSH_PATH
-        : `${NESTED_DSH_PATH}/node_modules/${name}`
+      : name === AKX_PACKAGE
+        ? NESTED_AKX_PATH
+        : `${NESTED_AKX_PATH}/node_modules/${name}`
     if (path !== expectedPath) {
       errors.push(`${path}: expected ${name}@${version} at ${expectedPath}`)
     }
 
     for (const field of DEPENDENCY_FIELDS) {
       for (const dependency of Object.keys(manifest[field] ?? {})) {
-        if (!isDshPackage(dependency)) continue
+        if (!isAkxPackage(dependency)) continue
         const targetPath = resolvePackagePath(packageLock.packages, path, dependency)
         const optionalPeer = field === 'peerDependencies'
           && manifest.peerDependenciesMeta?.[dependency]?.optional === true
@@ -156,7 +156,7 @@ export function assertDualDshInstallLayout(packageLock: NpmPackageLock): DshInst
           errors.push(`${path}: ${field} ${dependency} does not resolve`)
           continue
         }
-        checkedDshEdges++
+        checkedAkxEdges++
         const targetVersion = packageLock.packages[targetPath]?.version
         if (targetVersion !== version) {
           errors.push(
@@ -169,8 +169,8 @@ export function assertDualDshInstallLayout(packageLock: NpmPackageLock): DshInst
 
   const nestedNames = namesByVersion.get(nestedVersion) ?? new Set<string>()
   const rootNames = namesByVersion.get(rootVersion) ?? new Set<string>()
-  if (!nestedNames.has(DSH_PACKAGE)) errors.push(`${NESTED_DSH_PATH}: missing ${DSH_PACKAGE}@${nestedVersion}`)
-  if (!rootNames.has(DSH_PACKAGE)) errors.push(`node_modules/${DSH_PACKAGE}: missing ${DSH_PACKAGE}@${rootVersion}`)
+  if (!nestedNames.has(AKX_PACKAGE)) errors.push(`${NESTED_AKX_PATH}: missing ${AKX_PACKAGE}@${nestedVersion}`)
+  if (!rootNames.has(AKX_PACKAGE)) errors.push(`node_modules/${AKX_PACKAGE}: missing ${AKX_PACKAGE}@${rootVersion}`)
   const onlyNested = setDifference(nestedNames, rootNames)
   const onlyRoot = setDifference(rootNames, nestedNames)
   if (onlyNested.length > 0) errors.push(`only ${nestedVersion} contains: ${onlyNested.join(', ')}`)
@@ -183,7 +183,7 @@ export function assertDualDshInstallLayout(packageLock: NpmPackageLock): DshInst
   }
 
   if (errors.length > 0) throw new Error(`invalid npm install layout:\n${errors.map(error => `  - ${error}`).join('\n')}`)
-  return { dshPackagesPerVersion: rootNames.size, checkedDshEdges }
+  return { akxPackagesPerVersion: rootNames.size, checkedAkxEdges }
 }
 
 function workspaceVersion(root: string): string {
@@ -194,17 +194,17 @@ function workspaceVersion(root: string): string {
 
 async function main(): Promise<void> {
   const root = resolve(import.meta.dirname, '..')
-  const index = buildDualDshRegistry(buildRegistryIndex(root), workspaceVersion(root))
-  const [nestedVersion, rootVersion] = SYNTHETIC_DSH_VERSIONS
+  const index = buildDualAkxRegistry(buildRegistryIndex(root), workspaceVersion(root))
+  const [nestedVersion, rootVersion] = SYNTHETIC_AKX_VERSIONS
   const result = await resolveNpmPackageLock(index, {
-    [DSH_PACKAGE]: rootVersion,
-    [NESTED_DSH_ALIAS]: `npm:${DSH_PACKAGE}@${nestedVersion}`,
+    [AKX_PACKAGE]: rootVersion,
+    [NESTED_AKX_ALIAS]: `npm:${AKX_PACKAGE}@${nestedVersion}`,
   }, TIMEOUT_MS)
   if (result.archiveRequests !== 0) throw new Error(`npm requested ${String(result.archiveRequests)} package archive(s)`)
-  const summary = assertDualDshInstallLayout(result.packageLock)
+  const summary = assertDualAkxInstallLayout(result.packageLock)
   console.log(
-    `verify-npm-install-layout: ${String(summary.dshPackagesPerVersion)} DSH package(s) per release and `
-    + `${String(summary.checkedDshEdges)} internal edge(s) verified in ${(result.durationMs / 1000).toFixed(2)} s; `
+    `verify-npm-install-layout: ${String(summary.akxPackagesPerVersion)} AKX package(s) per release and `
+    + `${String(summary.checkedAkxEdges)} internal edge(s) verified in ${(result.durationMs / 1000).toFixed(2)} s; `
     + `both releases share one Cordis installation; ${String(result.unknownPackages.length)} unavailable optional `
     + 'package name(s) ignored by npm.',
   )

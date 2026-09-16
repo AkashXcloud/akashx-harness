@@ -4,10 +4,10 @@
  * carries no content, the disappearance that stats again, failures
  * as frames, and the life bounded by the signal.
  */
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { RemoteFailure } from '@deepseek-ai/dsh-typert-protocol'
-import { absoluteFileAddress, sessionFileAddress } from '@deepseek-ai/dsh-util-workspace-path'
+import { RemoteError } from '@akashx/akx-client-test-runtime'
+import type { SessionId } from '@akashx/akx-session/types'
+import type { RemoteFailure } from '@akashx/akx-typert-protocol'
+import { absoluteFileAddress, sessionFileAddress } from '@akashx/akx-util-workspace-path'
 import type { WorkspaceFileStat } from '../src/types.ts'
 import { describe, expect, it, onTestFinished } from 'vitest'
 import { ChangeFeed } from '../src/client/change-feed.ts'
@@ -56,10 +56,10 @@ async function live(version = 'v0', bytes = 3) {
 
 describe('file provider — the address', () => {
   it.each([
-    ['another scope', 'dsh-resource://file/shared/x/w/a.txt'],
-    ['no path', 'dsh-resource://file/session/s1'],
-    ['an absolute address with no path', 'dsh-resource://file/absolute/'],
-    ['another resource type', 'dsh-resource://terminal/session/s1/1'],
+    ['another scope', 'akx-resource://file/shared/x/w/a.txt'],
+    ['no path', 'akx-resource://file/session/s1'],
+    ['an absolute address with no path', 'akx-resource://file/absolute/'],
+    ['another resource type', 'akx-resource://terminal/session/s1/1'],
     ['the retired file:// grammar', 'file://sessions/s1/w/a.txt'],
     ['a bare file URL', 'file:///w/a.txt'],
     ['another protocol', 'sidebar:guide'],

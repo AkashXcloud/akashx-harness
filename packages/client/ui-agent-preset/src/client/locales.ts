@@ -5,6 +5,7 @@ export type AgentPresetSettingsKey =
   | 'error' | 'userTrust' | 'seatHint' | 'headerHint'
   | 'nav' | 'sectionIntro' | 'builtIn' | 'setDefault' | 'view'
   | 'presetStandardName' | 'presetStandardDescription'
+  | 'presetCognateName' | 'presetCognateDescription'
   | 'presetPtcName' | 'presetPtcDescription'
   | 'presetMinimalName' | 'presetMinimalDescription'
   | 'presetCordisName' | 'presetCordisDescription'
@@ -36,6 +37,8 @@ export const en: Record<AgentPresetSettingsKey, string> = {
   presetStandardName: 'Standard mode',
   presetStandardDescription:
     'Full coding agent with file editing, shell, file and web search, skills, planning, goals, subagents, and workflows.',
+  presetCognateName: 'Cognate',
+  presetCognateDescription: 'The Cognate coding agent.',
   presetPtcName: 'PTC mode',
   presetPtcDescription:
     'Full coding agent without the workflow tool; other tools are exposed through the PTC mode SDK so the model can combine multi-step operations in one TypeScript program.',
@@ -93,8 +96,8 @@ export const en: Record<AgentPresetSettingsKey, string> = {
 
 /** Simplified Chinese copy. */
 
-// The resolution itself is the shared fold in `dsh-agent-presets/display`,
+// The resolution itself is the shared fold in `akx-agent-presets/display`,
 // re-exported here so every surface in this plugin reads one path; the
 // Settings plugin list inlines the same fold over this plugin's dictionaries.
-export { presetDisplayText } from '@deepseek-ai/dsh-agent-presets/display'
-export type { PresetDisplaySource, PresetDisplayText } from '@deepseek-ai/dsh-agent-presets/display'
+export { presetDisplayText } from '@akashx/akx-agent-presets/display'
+export type { PresetDisplaySource, PresetDisplayText } from '@akashx/akx-agent-presets/display'

@@ -4,9 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import type {
   AssistantMessageNode, ChatSnapshot, LegacyConversationSlice, ToolResultNode,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+} from '@akashx/akx-client-ui-chat/client'
+import { bindSnapshotSelector, makeTranslate } from '@akashx/akx-client-test-runtime'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { StatsPills, deriveStats, formatDuration, type StatsPillsProps } from '../src/client/chat/StatsPills.tsx'
 import { formatTokens } from '../src/client/chat/token-format.ts'
 import { en } from '../src/client/locale.ts'

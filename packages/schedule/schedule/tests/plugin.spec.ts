@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { agentEvents } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { SessionLogOffset, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import { agentEvents } from '@akashx/akx-agent'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import { ToolCallId } from '@akashx/akx-llm'
+import { SessionLogOffset, SessionId } from '@akashx/akx-session'
+import type { SessionEvent, SessionHeader } from '@akashx/akx-session'
 import {
   SessionPersistence,
   SessionPersistenceNotFoundError,
   SessionPersistenceRevision,
-} from '@deepseek-ai/dsh-session-persistence'
-import type { SessionAccess, SessionHandle, SessionPersistenceSnapshot } from '@deepseek-ai/dsh-session-persistence'
+} from '@akashx/akx-session-persistence'
+import type { SessionAccess, SessionHandle, SessionPersistenceSnapshot } from '@akashx/akx-session-persistence'
 import * as toolSchedule from '../src/index.ts'
 
 interface StoredProbeSession {

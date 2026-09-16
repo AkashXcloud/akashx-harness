@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import { Context } from '@akashx/cordis'
+import { ToolCallId } from '@akashx/akx-llm'
+import AgentRegistry, { type Agent } from '@akashx/akx-agent'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
 import UserQuestionService, {
   type AskUserQuestionAnswer,
   type AskUserQuestionRequest,
-} from '@deepseek-ai/dsh-user-questions'
-import * as toolAskUser from '@deepseek-ai/dsh-tool-ask-user'
+} from '@akashx/akx-user-questions'
+import * as toolAskUser from '@akashx/akx-tool-ask-user'
 
 const testToolSignal = new AbortController().signal
 

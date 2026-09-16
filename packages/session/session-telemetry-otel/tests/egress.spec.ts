@@ -4,10 +4,10 @@ import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { installProxyFromEnvironment } from '@deepseek-ai/dsh-http-proxy'
-import { recordFeedback } from '@deepseek-ai/dsh-command-feedback'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
+import { installProxyFromEnvironment } from '@akashx/akx-http-proxy'
+import { recordFeedback } from '@akashx/akx-command-feedback'
+import { Context } from '@akashx/cordis'
+import SessionStore, { SessionId } from '@akashx/akx-session'
 import OpenTelemetrySessionBackend, { SessionTelemetryMode } from '../src/index.ts'
 
 const seen: string[] = []
@@ -28,9 +28,9 @@ async function listen(server: Server): Promise<string> {
 }
 
 beforeAll(async () => {
-  home = mkdtempSync(join(tmpdir(), 'dsh-otel-egress-'))
-  previousHome = process.env.DSH_HOME
-  process.env.DSH_HOME = home
+  home = mkdtempSync(join(tmpdir(), 'akx-otel-egress-'))
+  previousHome = process.env.AKX_HOME
+  process.env.AKX_HOME = home
   const proxy = createServer((request, response) => {
     seen.push(request.url ?? '')
     response.writeHead(502).end('fake-proxy')
@@ -61,8 +61,8 @@ afterAll(async () => {
       server.closeAllConnections()
     })))
   } finally {
-    if (previousHome === undefined) delete process.env.DSH_HOME
-    else process.env.DSH_HOME = previousHome
+    if (previousHome === undefined) delete process.env.AKX_HOME
+    else process.env.AKX_HOME = previousHome
     rmSync(home, { recursive: true, force: true })
   }
 })
@@ -73,7 +73,7 @@ function proxyEnv(): { get(name: string): { value: string } | undefined } {
 }
 
 describe('session-telemetry-otel egress', () => {
-  it.each(['mock', 'deepseek-official', 'unknown-provider', undefined])(
+  it.each(['mock', 'akashx-official', 'unknown-provider', undefined])(
     'exports only explicit feedback directly for provider %s, ignoring the configured proxy',
     async (provider) => {
       seen.length = 0

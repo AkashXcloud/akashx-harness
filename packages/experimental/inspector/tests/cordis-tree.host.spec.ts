@@ -1,6 +1,6 @@
 /** Host-driven Cordis tree integration. */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import WebSocket, { type RawData } from 'ws'
 import { afterEach, describe, expect, it, vi, type TestContext } from 'vitest'
 import { CordisTreeCollector } from '../src/shared/cordis/collector.ts'
@@ -316,7 +316,7 @@ describe('Cordis tree inspection', () => {
     const snapshot = collector.snapshot()
     const store = new CordisTreeStore({ maxNodes: 100, maxDisconnectedTrees: 1 })
     const first = source('client-a', 'generation-1')
-    store.replace(first, [{ sequence: 1, monotonicMs: 1, topic: 'cordis/tree', payload: asJson(snapshot) }])
+    store.replace(first, [{ sequence: 1, monotonicMs: 1, topic: '@akashx/cordis/tree', payload: asJson(snapshot) }])
 
     const object = snapshot.root
     expect(store.resolveObject(first, {
@@ -334,7 +334,7 @@ describe('Cordis tree inspection', () => {
     store.replace(reconnected, [{
       sequence: 1,
       monotonicMs: 2,
-      topic: 'cordis/tree',
+      topic: '@akashx/cordis/tree',
       payload: asJson({ ...snapshot, revision: snapshot.revision + 1 }),
     }])
     expect(store.snapshots()).toEqual([
@@ -343,7 +343,7 @@ describe('Cordis tree inspection', () => {
 
     store.close(reconnected, 'transport closed again')
     const other = source('client-b', 'generation-1')
-    store.replace(other, [{ sequence: 1, monotonicMs: 3, topic: 'cordis/tree', payload: asJson(snapshot) }])
+    store.replace(other, [{ sequence: 1, monotonicMs: 3, topic: '@akashx/cordis/tree', payload: asJson(snapshot) }])
     store.close(other, 'other transport closed')
     const retained = store.snapshots()
     expect(retained).toHaveLength(1)
@@ -377,7 +377,7 @@ describe('Cordis tree inspection', () => {
       truncated: false,
     }) as InspectorJsonValue
     const replace = (revision: number, children: unknown[]): void => {
-      store.append(host, [{ sequence: revision, monotonicMs: revision, topic: 'cordis/tree', payload: snapshot(revision, children) }])
+      store.append(host, [{ sequence: revision, monotonicMs: revision, topic: '@akashx/cordis/tree', payload: snapshot(revision, children) }])
     }
 
     replace(1, [fiber(1, 'fiber-1')])
@@ -443,7 +443,7 @@ describe('Cordis tree inspection', () => {
     expect(document.children?.map(node => node.localName)).toEqual(['host', 'clients'])
     expect(document.children?.every(node => (node.attributes ?? []).length === 0)).toBe(true)
 
-    const stored = await cdp.call('DSHInspector.getCordisTree')
+    const stored = await cdp.call('AkxInspector.getCordisTree')
     const model = stored.result?.tree as {
       host: { root: Record<string, unknown> } | null
       clients: Array<{ root: Record<string, unknown> }>
@@ -590,7 +590,7 @@ describe('Cordis tree inspection', () => {
     expect((await cdp.call('DOM.requestNode', {
       objectId: (clientEvaluated.result?.result as Record<string, unknown>).objectId,
     })).error).toBeDefined()
-    const disconnectedTree = (await cdp.call('DSHInspector.getCordisTree')).result?.tree as {
+    const disconnectedTree = (await cdp.call('AkxInspector.getCordisTree')).result?.tree as {
       clients: Array<{ connection: { state: string } }>
     }
     expect(disconnectedTree.clients[0]?.connection.state).toBe('disconnected')
@@ -618,14 +618,14 @@ describe('Cordis tree inspection', () => {
     expect(insertedClient?.children).toBeUndefined()
     await cdp.call('DOM.requestChildNodes', { nodeId: insertedClient!.nodeId, depth: -1 })
 
-    const firstTree = (await cdp.call('DSHInspector.getCordisTree')).result?.tree as {
+    const firstTree = (await cdp.call('AkxInspector.getCordisTree')).result?.tree as {
       clients: Array<{ revision: number }>
     }
     const firstRevision = firstTree.clients[0]?.revision
     offset = cdp.events.length
     await clientSource.refreshTree()
     await vi.waitFor(async () => {
-      const tree = (await cdp!.call('DSHInspector.getCordisTree')).result?.tree as {
+      const tree = (await cdp!.call('AkxInspector.getCordisTree')).result?.tree as {
         clients: Array<{ revision: number }>
       }
       expect(tree.clients[0]?.revision).toBeGreaterThan(firstRevision ?? 0)
@@ -758,7 +758,7 @@ describe('Cordis tree inspection', () => {
       contextId = (created?.params?.context as { id?: number } | undefined)?.id
       expect(contextId).toBeTypeOf('number')
     })
-    const initialTree = (await cdp.call('DSHInspector.getCordisTree')).result?.tree as {
+    const initialTree = (await cdp.call('AkxInspector.getCordisTree')).result?.tree as {
       clients: Array<{ source: { sourceId: string } }>
     }
     const sourceId = initialTree.clients[0]?.source.sourceId
@@ -788,7 +788,7 @@ describe('Cordis tree inspection', () => {
       const current = (await cdp!.call('DOM.getDocument')).result?.root as CdpNode
       expect(clientContainers(current)).toHaveLength(1)
       expect(clientContainers(current)[0]?.children?.[0]?.localName).toBe('context')
-      const tree = (await cdp!.call('DSHInspector.getCordisTree')).result?.tree as {
+      const tree = (await cdp!.call('AkxInspector.getCordisTree')).result?.tree as {
         clients: Array<{
           source: { sourceId: string }
           connection: { state: string }

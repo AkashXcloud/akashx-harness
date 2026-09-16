@@ -1,13 +1,13 @@
 /**
- * `dsh plugin --profile <name> <args...>` — profile plugin management as a
+ * `akx plugin --profile <name> <args...>` — profile plugin management as a
  * thin pnpm forwarder: initialize the profile on first use, run
  * `pnpm <args...>` in the profile directory, then reconcile the
- * `dsh.profile.bundles` layer list against the installed state (a dependency
- * resolving to a package that declares `dsh.bundle` joins the layer stack; a
+ * `akx.profile.bundles` layer list against the installed state (a dependency
+ * resolving to a package that declares `akx.bundle` joins the layer stack; a
  * removed or bundle-less dependency leaves it). Reconciling by installed
  * state, not by dependency diff, means `update` activates a package that
- * gained its `dsh.bundle` declaration in a newer version.
- * @module @deepseek-ai/dsh/plugin
+ * gained its `akx.bundle` declaration in a newer version.
+ * @module @akashx/akx/plugin
  */
 
 import { spawnSync } from 'node:child_process'
@@ -22,16 +22,16 @@ import {
   resolveProfileDir,
   writeProfileManifest,
   type ProfileManifest,
-} from '@deepseek-ai/dsh-app-boot'
+} from '@akashx/akx-app-boot'
 import { INSTALL_ANCHOR } from './profile-boot.ts'
 
-const NAME = 'dsh'
+const NAME = 'akx'
 
 /**
  * Whether a resolved dependency exports a profile patch, i.e. is a bundle.
  * @param packageName - the dependency's package name.
  * @param profileDir - the profile directory (resolution anchor).
- * @returns true when the package manifest declares `dsh.bundle`.
+ * @returns true when the package manifest declares `akx.bundle`.
  */
 function exportsPatch(packageName: string, profileDir: string, binName: string): boolean {
   let dir: string
@@ -41,14 +41,14 @@ function exportsPatch(packageName: string, profileDir: string, binName: string):
     return false // pnpm reported success yet the package is unresolvable — treat as plain
   }
   const manifest = readProfileManifest(binName, dir)
-  return manifest.dsh?.bundle?.patch !== undefined
+  return manifest.akx?.bundle?.patch !== undefined
 }
 
 /**
- * Reconcile `dsh.profile.bundles` against the installed state: pnpm has
+ * Reconcile `akx.profile.bundles` against the installed state: pnpm has
  * already written the real installed names (so a git/path/tarball/alias spec
  * on the command line reconciles by its true package name) and materialized
- * the packages. A dependency that resolves to a `dsh.bundle`-declaring
+ * the packages. A dependency that resolves to a `akx.bundle`-declaring
  * package joins the layer stack (appended in dependency order); a
  * dependency-listed name that no longer does — removed, or the installed
  * version dropped the declaration — leaves it. In-box bundles from the
@@ -60,7 +60,7 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string, binName: 
   const after = readProfileManifest(binName, profileDir)
   const beforeDeps = new Set(Object.keys(before.dependencies ?? {}))
   const dependencies = Object.keys(after.dependencies ?? {})
-  const plugins = after.dsh?.profile?.bundles ?? []
+  const plugins = after.akx?.profile?.bundles ?? []
   let changed = false
   for (const packageName of dependencies) {
     const isBundle = exportsPatch(packageName, profileDir, binName)
@@ -69,7 +69,7 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string, binName: 
       changed = true
     } else if (!isBundle && !beforeDeps.has(packageName)) {
       process.stderr.write(
-        `${binName}: warning: ${packageName} declares no dsh.bundle — installed as a plain dependency, not a profile layer `
+        `${binName}: warning: ${packageName} declares no akx.bundle — installed as a plain dependency, not a profile layer `
         + '(a later update that gains one activates it automatically)\n',
       )
     }
@@ -77,7 +77,7 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string, binName: 
   const dependencySet = new Set(dependencies)
   for (const packageName of [...plugins]) {
     // Only dependency-managed entries are subject to removal; template
-    // bundles (dsh-base and friends) are not dependencies.
+    // bundles (akx-base and friends) are not dependencies.
     const wasDependency = beforeDeps.has(packageName) || dependencySet.has(packageName)
     const stillBundle = dependencySet.has(packageName) && exportsPatch(packageName, profileDir, binName)
     if (wasDependency && !stillBundle) {
@@ -86,7 +86,7 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string, binName: 
     }
   }
   if (!changed) return
-  after.dsh = { ...after.dsh, profile: { ...after.dsh?.profile, bundles: plugins } }
+  after.akx = { ...after.akx, profile: { ...after.akx?.profile, bundles: plugins } }
   writeProfileManifest(profileDir, after)
 }
 
@@ -98,7 +98,7 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string, binName: 
  * specs, registry names, and every other pnpm argument pass through
  * untouched.
  * @param argument - one pnpm argument, verbatim from argv.
- * @param cwd - the directory `dsh` was invoked from.
+ * @param cwd - the directory `akx` was invoked from.
  * @returns the argument with a relative path spec anchored to `cwd`.
  */
 function anchorPathSpec(argument: string, cwd: string): string {
@@ -112,7 +112,7 @@ function anchorPathSpec(argument: string, cwd: string): string {
 }
 
 /**
- * Run one `dsh plugin` invocation: init if needed, forward to pnpm, reconcile.
+ * Run one `akx plugin` invocation: init if needed, forward to pnpm, reconcile.
  * @param profile - the profile name.
  * @param args - pnpm arguments with relative path specs anchored to the invoking directory.
  * @param binName - executable name used in diagnostics.

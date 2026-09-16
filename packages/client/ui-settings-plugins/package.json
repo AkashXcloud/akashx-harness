@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-settings-plugins",
+  "name": "@akashx/akx-client-ui-settings-plugins",
   "description": "Plugins settings section with feature-owned tabs and configurable host-plane plugin cards",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/client/ui-settings-plugins"
   },
   "type": "module",
@@ -25,12 +25,12 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "akx": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-settings",
-        "@deepseek-ai/dsh-api-remotes"
+        "@akashx/akx-client-locale",
+        "@akashx/akx-client-ui-settings",
+        "@akashx/akx-api-remotes"
       ],
       "platform": "web"
     }
@@ -41,20 +41,20 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-settings": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-api-remotes": "workspace:^",
+    "@akashx/akx-client-locale": "workspace:^",
+    "@akashx/akx-client-store": "workspace:^",
+    "@akashx/akx-client-test-runtime": "workspace:^",
+    "@akashx/akx-client-ui-primitives": "workspace:^",
+    "@akashx/akx-client-ui-settings": "workspace:^",
+    "@akashx/akx-client-ui-slots": "workspace:^",
     "@types/react": "~18.3.1",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:^",
+    "@akashx/akx-client-ui-renderer": "workspace:^",
     "clsx": "^2.0.0"
   },
   "files": [

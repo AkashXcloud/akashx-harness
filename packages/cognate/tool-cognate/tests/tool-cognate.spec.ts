@@ -3,13 +3,13 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import CognateRuntime, { type CognateProvider } from '@deepseek-ai/dsh-cognate'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import Include from '@akashx/cordis-plugin-include'
+import { ToolCallId } from '@akashx/akx-llm'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
+import CognateRuntime, { type CognateProvider } from '@akashx/akx-cognate'
 import * as toolCognate from '../src/index.ts'
 
 let tempRoot: string | undefined
@@ -152,15 +152,15 @@ describe('Cognate tools', () => {
   })
 
   it('boots the service and tools through a real Loader composition', async () => {
-    tempRoot = await mkdtemp(join(tmpdir(), 'dsh-cognate-loader-'))
+    tempRoot = await mkdtemp(join(tmpdir(), 'akx-cognate-loader-'))
     const configPath = join(tempRoot, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-system-prompt'",
-      "- name: '@deepseek-ai/dsh-tools'",
-      "- name: '@deepseek-ai/dsh-cognate'",
+      "- name: '@akashx/akx-system-prompt'",
+      "- name: '@akashx/akx-tools'",
+      "- name: '@akashx/akx-cognate'",
       '  config:',
       '    provider: fake',
-      "- name: '@deepseek-ai/dsh-tool-cognate'",
+      "- name: '@akashx/akx-tool-cognate'",
       '',
     ].join('\n'))
     const ctx = new Context()
@@ -172,10 +172,10 @@ describe('Cognate tools', () => {
       version: 'v2',
       async import(specifier: string) {
         const modules = new Map<string, unknown>([
-          ['@deepseek-ai/dsh-system-prompt', SystemPrompt],
-          ['@deepseek-ai/dsh-tools', ToolRuntime],
-          ['@deepseek-ai/dsh-cognate', CognateRuntime],
-          ['@deepseek-ai/dsh-tool-cognate', toolCognate],
+          ['@akashx/akx-system-prompt', SystemPrompt],
+          ['@akashx/akx-tools', ToolRuntime],
+          ['@akashx/akx-cognate', CognateRuntime],
+          ['@akashx/akx-tool-cognate', toolCognate],
         ])
         if (!modules.has(specifier)) throw new Error(`unexpected Loader import: ${specifier}`)
         return modules.get(specifier)

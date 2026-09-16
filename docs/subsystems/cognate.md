@@ -9,7 +9,7 @@ English | [中文](cognate.zh.md)
 
 ## Summary
 
-The Cognate capability adds AkashXDB execution to the native Harness agent loop. `dsh-cognate` selects a provider and enforces SQL policy; `dsh-cognate-mysql` supplies direct MySQL-wire execution; `dsh-cognate-local` retains deterministic Markdown retrieval for offline development and tests; `dsh-tool-cognate` contributes `run_sql`, semantic context, and deterministic chart metadata. Existing Bash, filesystem, web, session, skill, workflow, subagent, and MCP tools remain independent capabilities.
+The Cognate capability adds AkashXDB execution to the native Harness agent loop. `akx-cognate` selects a provider and enforces SQL policy; `akx-cognate-mysql` supplies direct MySQL-wire execution; `akx-cognate-local` retains deterministic Markdown retrieval for offline development and tests; `akx-tool-cognate` contributes `run_sql`, semantic context, and deterministic chart metadata. Existing Bash, filesystem, web, session, skill, workflow, subagent, and MCP tools remain independent capabilities.
 
 ## Query policy
 

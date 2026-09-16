@@ -1,13 +1,13 @@
 /** Cordis dynamic-plugin UI dictionaries. */
 
-export const NS = 'cordis'
+export const NS = '@akashx/cordis'
 
 /** Simplified Chinese Cordis UI messages. */
 
 /** Translation keys owned by the Cordis UI namespace. */
 export type CordisKey = keyof typeof en
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Dynamic Cordis UI copy. */
     cordis: CordisKey

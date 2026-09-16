@@ -4,11 +4,11 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-api-remotes/client'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import type { SessionControlFrame } from '@deepseek-ai/dsh-api-session-controller/types'
-import type {} from '@deepseek-ai/dsh-session-title/client'
+import type { SessionId } from '@akashx/akx-api-remotes/client'
+import { SessionSeq } from '@akashx/akx-session/types'
+import { RemoteError } from '@akashx/akx-typert-protocol'
+import type { SessionControlFrame } from '@akashx/akx-api-session-controller/types'
+import type {} from '@akashx/akx-session-title/client'
 import { SessionManager } from '../src/client/sessions/manager.ts'
 import { FakeApiClient, deferred, err, fakeRemote, ok } from './fake-api.client.ts'
 import { entries, plainTurn } from './event-script.client.ts'
@@ -769,7 +769,7 @@ describe('connected generation', () => {
     api.onHistory = () => Promise.resolve(ok({
       records: entries(plainTurn(SessionSeq(0), 0, 'a', 'b')) as never[],
       hasMore: false,
-      modelSelection: { provider: 'deepseek-official', model: 'deepseek-chat' },
+      modelSelection: { provider: 'akashx-official', model: 'akashx-chat' },
     }))
     const manager = new SessionManager(fakeRemote(api))
     const openedSession = manager.get(S1)

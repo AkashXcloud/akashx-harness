@@ -2,13 +2,13 @@ import {
   RELEASED_V0_EVENT_DISPOSITIONS,
   defineReleasedPayloadDisposition,
   type ReleasedV0PayloadDisposition,
-} from '@deepseek-ai/dsh-session-format-v0-to-v1'
+} from '@akashx/akx-session-format-v0-to-v1'
 
 const retained = Object.fromEntries(
   Object.entries(RELEASED_V0_EVENT_DISPOSITIONS).filter(([type]) => (
     type !== 'assistant/chunk'
     && type !== 'assistant/message'
-    && type !== 'session-log-deepseek/delivery-accepted'
+    && type !== 'session-log-akx/delivery-accepted'
     && type !== 'session/end-seed'
   )),
 )
@@ -21,7 +21,7 @@ export const RELEASED_V2_EVENT_DISPOSITIONS: Readonly<Record<string, ReleasedV0P
     ['turn', 'step', 'message', 'stream'],
     ['usage', 'interrupted'],
   ),
-  'session-log-deepseek/delivery-accepted': defineReleasedPayloadDisposition(
+  'session-log-akx/delivery-accepted': defineReleasedPayloadDisposition(
     ['sessionId', 'throughSeq'],
     ['sessionFormatVersion'],
   ),

@@ -16,10 +16,10 @@ afterEach(() => {
 
 describe('process shim', () => {
   it('publishes cwd, env, and version zero for the loader probe', () => {
-    const shim = installProcessGlobal({ cwd: '/dsh', env: { DSH_HOME: '/dsh/home' } })
-    expect(shim.cwd()).toBe('/dsh')
-    expect(shim.env.DSH_HOME).toBe('/dsh/home')
-    expect(shim.title).toBe('dsh-webworker')
+    const shim = installProcessGlobal({ cwd: '/akx', env: { AKX_HOME: '/akx/home' } })
+    expect(shim.cwd()).toBe('/akx')
+    expect(shim.env.AKX_HOME).toBe('/akx/home')
+    expect(shim.title).toBe('akx-webworker')
     // "0.0.0" keeps the vendored Loader off Node internals so the worker owns
     // the module seam.
     expect(shim.versions.node).toBe('0.0.0')
@@ -32,14 +32,14 @@ describe('process shim', () => {
     // same object every time.
     const factory = (): unknown => fs
     const vfs = new MemoryVfs()
-    vfs.seedDirectory('/dsh')
+    vfs.seedDirectory('/akx')
     const loader = new WorkerModuleLoader({
       vfs,
-      root: '/dsh',
+      root: '/akx',
       staticModules: { 'node:fs': factory, 'fs': factory },
     })
     setActiveModuleLoader(loader)
-    const shim = installProcessGlobal({ cwd: '/dsh', env: {} })
+    const shim = installProcessGlobal({ cwd: '/akx', env: {} })
     // The shim calls the factory: a caller receives the module, never the thunk.
     expect(shim.getBuiltinModule('fs')).toBe(fs)
     expect(shim.getBuiltinModule('node:fs')).toBe(fs)

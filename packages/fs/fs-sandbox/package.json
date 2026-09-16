@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-fs-sandbox",
-  "description": "Sandbox-enforcing implementation of the DeepSeek Harness filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
+  "name": "@akashx/akx-fs-sandbox",
+  "description": "Sandbox-enforcing implementation of the AkashX Harness filesystem seam: fences write/edit by the per-call sandbox mode (read-only denies mutation, workspace-write contains it to the workspace + temp roots) while reads pass through",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/fs/fs-sandbox"
   },
   "type": "module",
@@ -27,18 +27,18 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-fs-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-fs": "workspace:^",
+    "@akashx/akx-fs-local": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-fs-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-fs": "workspace:^",
+    "@akashx/akx-fs-local": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   }
 }

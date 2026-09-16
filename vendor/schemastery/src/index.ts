@@ -1,7 +1,7 @@
-import { Binary, clone, deepEqual, filterKeys, isNullable, isPlainObject, pick, valueMap, type Dict } from '@deepseek-ai/cosmokit'
+import { Binary, clone, deepEqual, filterKeys, isNullable, isPlainObject, pick, valueMap, type Dict } from '@akashx/cosmokit'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 
-const kSchema = Symbol.for('schemastery')
+const kSchema = Symbol.for('@akashx/schemastery')
 const kValidationError = Symbol.for('ValidationError')
 
 declare global {
@@ -276,7 +276,7 @@ Object.defineProperty(Schema.prototype, '~standard', {
   get(this: Schema) {
     return {
       version: 1,
-      vendor: 'schemastery',
+      vendor: '@akashx/schemastery',
       validate: (value: unknown) => {
         try {
           return { value: Schema.resolve(value, this, {})[0] }

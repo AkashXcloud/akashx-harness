@@ -1,27 +1,27 @@
 # Workspace-context snapshot patch: keep project-root and user-global
 # discovery inside the scenario's temporary cwd.
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@akashx/akx-agent-default-model'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: akashx-official
+    model: akashx-v4-pro
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@akashx/akx-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
-    compression: !!js 'process.env.DSH_SNAPSHOT === undefined ? ''zstd'' : ''none'''
+    root: !!js akxHomePath('sessions')
+    compression: !!js 'process.env.AKX_SNAPSHOT === undefined ? ''zstd'' : ''none'''
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@akashx/akx-agent-instructions'
   config:
     maxBytes: 65536
-    dshHome: !!js process.cwd() + '/.dsh'
+    akxHome: !!js process.cwd() + '/.akx'
     projectRootMarkers:
-      - .dsh-project
+      - .akx-project
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@akashx/akx-system-prompt'
   config:
     personaPrefix: |
       You are a coding assistant powered by the {{model}} model. Your working directory is {{cwd}}.

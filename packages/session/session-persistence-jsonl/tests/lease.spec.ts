@@ -16,15 +16,15 @@ import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionHeader } from '@deepseek-ai/dsh-session'
+import { Context } from '@akashx/cordis'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@akashx/akx-session'
+import type { SessionHeader } from '@akashx/akx-session'
 import {
   SessionAlreadyExistsError,
   SessionAlreadyOwnedError,
   SessionPersistenceNotFoundError,
-} from '@deepseek-ai/dsh-session-persistence'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
+} from '@akashx/akx-session-persistence'
+import type { SessionPersistence } from '@akashx/akx-session-persistence'
 import JsonlSessionPersistence from '../src/index.ts'
 import { LEASE_FILENAME, SessionWriteLease } from '../src/lease.ts'
 import type { JsonlSessionHandle } from '../src/storage.ts'
@@ -84,8 +84,8 @@ vi.mock('node:fs/promises', async (importOriginal) => {
   }
 })
 
-vi.mock('@deepseek-ai/node-addon-system/flock', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@deepseek-ai/node-addon-system/flock')>()
+vi.mock('@akashx/node-addon-system/flock', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@akashx/node-addon-system/flock')>()
   return {
     tryLockExclusive: async (fd: number): Promise<void> => {
       if (refuse.flock) {
@@ -120,7 +120,7 @@ function meta(id: string, cwd = '/work'): SessionHeader {
 }
 
 async function freshRoot(): Promise<string> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-jsonl-lease-'))
+  const root = await mkdtemp(join(tmpdir(), 'akx-jsonl-lease-'))
   dirs.push(root)
   return root
 }

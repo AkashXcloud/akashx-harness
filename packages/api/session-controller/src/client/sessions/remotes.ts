@@ -2,16 +2,16 @@
  * Remote namespaces the Session cluster calls. One parameter for one concept:
  * the generated surface a Session and its manager reach the Host through.
  *
- * @module @deepseek-ai/dsh-api-session-controller/client/sessions/remotes
+ * @module @akashx/akx-api-session-controller/client/sessions/remotes
  */
 
-import type { ClientRemote } from '@deepseek-ai/dsh-api-gateway/client'
-import type { CommandSubmitAttachment } from '@deepseek-ai/dsh-commands/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { ClientRemote } from '@akashx/akx-api-gateway/client'
+import type { CommandSubmitAttachment } from '@akashx/akx-commands/types'
+import type { SessionId } from '@akashx/akx-session/types'
 import type {
   SubagentCatalog, SubagentInterruptReceipt, SubagentPromptReceipt, SubagentPromptRequest,
-} from '@deepseek-ai/dsh-subagent/client'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+} from '@akashx/akx-subagent/client'
+import type { RemoteResult } from '@akashx/akx-typert-protocol'
 import type { SessionRemote } from '../transport.ts'
 
 /** Narrow Commands namespace consumed by a Client Session. */

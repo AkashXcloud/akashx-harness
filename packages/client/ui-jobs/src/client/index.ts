@@ -4,14 +4,14 @@
  * through the `jobsBySession` list mirror, so the plugin issues no RPC and
  * holds no state of its own beyond popover visibility.
  */
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type { Context as ClientContext } from '@akashx/cordis'
 import { JobListAction } from './JobListAction.tsx'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-session/client'
+import type {} from '@akashx/akx-client-locale/client'
+import type {} from '@akashx/akx-client-ui-renderer/client'
+import type {} from '@akashx/akx-client-ui-session/client'
 import { en, NS, type JobKey } from './locales.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Background-job list copy. */
     'job': JobKey

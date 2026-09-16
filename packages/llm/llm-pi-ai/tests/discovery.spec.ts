@@ -2,9 +2,9 @@ import { readFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import type { IncomingMessage, Server, ServerResponse } from 'node:http'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { userAgent } from '@deepseek-ai/dsh-llm'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
+import { Context } from '@akashx/cordis'
+import LlmRuntime, { userAgent } from '@akashx/akx-llm'
+import * as LlmPiAi from '@akashx/akx-llm-pi-ai'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
 import { discoverModels } from '../src/discovery.ts'
 
@@ -139,9 +139,9 @@ describe('draft-provider model discovery', () => {
     const server = await listingServer({
       body: JSON.stringify({
         models: {
-          'lobechat-deepseek-chat': {
-            id: 'deepseek/deepseek-v4-flash',
-            name: 'DeepSeek V4 Flash',
+          'lobechat-akashx-chat': {
+            id: 'akashx/akashx-v4-flash',
+            name: 'AkashX V4 Flash',
             limit: { context: 1_048_576, output: 384_000 },
           },
           'bare-route': {},
@@ -155,8 +155,8 @@ describe('draft-provider model discovery', () => {
 
     expect(await ctx.llm.discoverModels('llm-pi-ai', { baseURL: server.url })).toEqual([
       {
-        id: 'lobechat-deepseek-chat',
-        name: 'DeepSeek V4 Flash',
+        id: 'lobechat-akashx-chat',
+        name: 'AkashX V4 Flash',
         contextWindow: 1_048_576,
         maxTokens: 384_000,
       },
@@ -296,7 +296,7 @@ describe('draft-provider model discovery', () => {
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)
     Reflect.deleteProperty(process.env, 'ABSENT_FOR_DISCOVERY')
-    await ctx.plugin(LlmPiAi, { providers: { deepseek: { apiKeyEnv: 'ABSENT_FOR_DISCOVERY' } } })
+    await ctx.plugin(LlmPiAi, { providers: { akashx: { apiKeyEnv: 'ABSENT_FOR_DISCOVERY' } } })
 
     await expect(ctx.llm.discoverModels('llm-pi-ai', { provider: 'deepseek' })).resolves.not.toHaveLength(0)
   })
@@ -423,7 +423,7 @@ describe('draft-provider model discovery', () => {
     const ctx = await harness()
 
     await expect(ctx.llm.discoverModels('llm-pi-ai', { provider: 'openai' })).resolves.not.toHaveLength(0)
-    await expect(ctx.llm.discoverModels('llm-deepseek', { baseURL: 'https://api.deepseek.com' }))
+    await expect(ctx.llm.discoverModels('llm-akx', { baseURL: 'https://api.akashx.com' }))
       .rejects.toMatchObject({ code: 'NO_DISCOVERY' })
     await expect(ctx.llm.discoverModels('llm-pi-ai', { baseURL: '' }))
       .rejects.toMatchObject({ code: 'INVALID_DISCOVERY' })
@@ -499,7 +499,7 @@ const RECORDED_LISTINGS = [
       { id: 'anthropic/claude-fable-5.1', name: 'Anthropic: Claude Fable 5.1', contextWindow: 1_000_000, maxTokens: 128_000 },
       // The router's own aggregate route reports no completion cap.
       { id: 'openrouter/auto-beta', name: 'Auto Router (Beta)', contextWindow: 2_000_000 },
-      { id: 'deepseek/deepseek-v4-flash', name: 'DeepSeek: DeepSeek V4 Flash 0423', contextWindow: 1_048_576, maxTokens: 384_000 },
+      { id: 'akashx/akashx-v4-flash', name: 'AkashX: AkashX V4 Flash 0423', contextWindow: 1_048_576, maxTokens: 384_000 },
     ],
   },
   {
@@ -513,13 +513,13 @@ const RECORDED_LISTINGS = [
     ],
   },
   {
-    name: 'DeepSeek GET /models',
+    name: 'AkashX GET /models',
     file: 'deepseek-2026-09-02.json',
     api: 'openai-completions',
     models: [
-      { id: 'deepseek-v4-flash', name: 'deepseek-v4-flash' },
-      { id: 'deepseek-v4-pro', name: 'deepseek-v4-pro' },
-      { id: 'deepseek-v4-flash-vision-exp', name: 'deepseek-v4-flash-vision-exp' },
+      { id: 'akashx-v4-flash', name: 'akashx-v4-flash' },
+      { id: 'akashx-v4-pro', name: 'akashx-v4-pro' },
+      { id: 'akashx-v4-flash-vision-exp', name: 'akashx-v4-flash-vision-exp' },
     ],
   },
   {

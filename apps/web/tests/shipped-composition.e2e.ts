@@ -7,17 +7,17 @@ import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { afterEach, expect, it } from 'vitest'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { canonicalPath, writableRoots } from '@deepseek-ai/dsh-sandbox'
-import { SessionId } from '@deepseek-ai/dsh-session'
+import { ToolCallId } from '@akashx/akx-llm'
+import { canonicalPath, writableRoots } from '@akashx/akx-sandbox'
+import { SessionId } from '@akashx/akx-session'
 // These imports carry the tools/sandboxPolicy/approval Context merges.
-import { RUN_CODE_NAME } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-permission-presets'
-import type {} from '@deepseek-ai/dsh-agent-presets'
-import type {} from '@deepseek-ai/dsh-commands'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import { RUN_CODE_NAME } from '@akashx/akx-tools'
+import type {} from '@akashx/akx-sandbox-policy'
+import type {} from '@akashx/akx-user-approval'
+import type {} from '@akashx/akx-permission-presets'
+import type {} from '@akashx/akx-agent-presets'
+import type {} from '@akashx/akx-commands'
+import type {} from '@akashx/akx-system-prompt'
 import { launchWebScaffold, type WebScaffold } from './scaffold.ts'
 
 const FILE_REFERENCE_PROMPT = fileURLToPath(new URL(
@@ -62,7 +62,7 @@ const EXPECTED_TOOLS = [
 ]
 
 /**
- * `glob` and `grep` come from `dsh-tool-fs-search`, which spawns the PACKAGED
+ * `glob` and `grep` come from `akx-tool-fs-search`, which spawns the PACKAGED
  * ripgrep binary (`@vscode/ripgrep`) through the subprocess seam, so the pair
  * is always present on every host — asserted as fixed members, not a host
  * dependency.
@@ -85,7 +85,7 @@ it('assembles the shipped Web transport, catalog, guidance, and defaults', async
   expect(index.headers.get('content-encoding')).toBe('gzip')
   expect(index.headers.get('vary')).toContain('Accept-Encoding')
   await index.body?.cancel()
-  expect(ctx.llm.providerRetryPolicy('deepseek-official')).toMatchInlineSnapshot(`
+  expect(ctx.llm.providerRetryPolicy('akashx-official')).toMatchInlineSnapshot(`
     {
       "initialDelayMs": 500,
       "jitterRatio": 0.1,
@@ -101,10 +101,10 @@ it('assembles the shipped Web transport, catalog, guidance, and defaults', async
       ],
     }
   `)
-  await ctx.settings.update('llm-deepseek', {
+  await ctx.settings.update('llm-akx', {
     retryPolicy: { mode: 'always', maxRetries: 5 },
   })
-  expect(ctx.llm.providerRetryPolicy('deepseek-official')).toMatchInlineSnapshot(`
+  expect(ctx.llm.providerRetryPolicy('akashx-official')).toMatchInlineSnapshot(`
     {
       "initialDelayMs": 500,
       "jitterRatio": 0.1,
@@ -179,11 +179,11 @@ it('assembles the shipped Web transport, catalog, guidance, and defaults', async
   const commandHandle = await scaffold.ctx.agents.create({
     sessionId: SessionId('shipped-command-catalog'),
     meta: { cwd: scaffold.workspaceCwd },
-    agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+    agentOptions: { provider: 'akashx-official', model: 'akashx-v4-flash' },
   })
   try {
     expect(scaffold.ctx.commands.list(commandHandle.agent)).toContainEqual({
-      definitionId: '@deepseek-ai/dsh-command-feedback',
+      definitionId: '@akashx/akx-command-feedback',
       name: 'feedback',
       description: 'Record feedback about this session',
       input: { hint: '<text>' },

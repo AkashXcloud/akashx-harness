@@ -1,21 +1,21 @@
-import { createUserMessage, type GenerateOptions } from '@deepseek-ai/dsh-llm'
+import { createUserMessage, type GenerateOptions } from '@akashx/akx-llm'
 import { describe, expect, it } from 'vitest'
-import { Context, symbols, type EffectMeta } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
-import * as SessionInvariant from '@deepseek-ai/dsh-session/invariant'
-import * as AgentInvariant from '@deepseek-ai/dsh-agent/invariant'
-import * as AgentLoopInvariant from '@deepseek-ai/dsh-agent-loop/invariant'
-import SubagentRuntime, { type SubagentStartRequest } from '@deepseek-ai/dsh-subagent'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context, symbols, type EffectMeta } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import AgentRegistry, { type Agent } from '@akashx/akx-agent'
+import { SessionId } from '@akashx/akx-session'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import InvariantRegistry from '@akashx/akx-invariants'
+import * as SessionInvariant from '@akashx/akx-session/invariant'
+import * as AgentInvariant from '@akashx/akx-agent/invariant'
+import * as AgentLoopInvariant from '@akashx/akx-agent-loop/invariant'
+import SubagentRuntime, { type SubagentStartRequest } from '@akashx/akx-subagent'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
 import { MockAdapter, maxTokensResponse, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as spawn from '../src/index.ts'
-import { STRUCTURED_OUTPUT_TOOL } from '@deepseek-ai/dsh-subagent-in-process-driver'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
+import { STRUCTURED_OUTPUT_TOOL } from '@akashx/akx-subagent-in-process-driver'
+import { defineContentToolFixture } from '@akashx/akx-tools'
 
 type Script = ConstructorParameters<typeof MockAdapter>[0]
 
@@ -73,7 +73,7 @@ function systemPromptOf(request: GenerateOptions): string {
   return head.content.flatMap(block => block.type === 'text' ? [block.text] : []).join('')
 }
 
-describe('dsh-subagent-spawn-in-process', () => {
+describe('akx-subagent-spawn-in-process', () => {
   it('runs a fresh child to completion and returns its final assistant output', async () => {
     // One model call for the child: a plain text answer.
     const { ctx, parent } = await setup([textResponse('child answer')])

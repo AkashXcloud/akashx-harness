@@ -1,5 +1,5 @@
 /** Pure projection of Cognate chart presentation metadata into a safe SVG model. */
-import type { ToolCallBlock } from '@deepseek-ai/dsh-client-ui-chat/client'
+import type { ToolCallBlock } from '@akashx/akx-client-ui-chat/client'
 
 /** Chart type and the tabular data the persisted `render_chart` result carries. */
 export interface ChartCardModel {

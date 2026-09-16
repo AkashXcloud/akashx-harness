@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-webhook-github",
-  "description": "Signed GitHub HTTP webhook adapter for the DeepSeek Harness webhook runtime",
+  "name": "@akashx/akx-webhook-github",
+  "description": "Signed GitHub HTTP webhook adapter for the AkashX Harness webhook runtime",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/webhook/webhook-github"
   },
   "type": "module",
@@ -32,24 +32,24 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-webhook": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-credentials": "workspace:^",
+    "@akashx/akx-host-webserver": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-webhook": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "@octokit/webhooks": "^14.2.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-webhook": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-credentials": "workspace:^",
+    "@akashx/akx-host-webserver": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-webhook": "workspace:^"
   }
 }

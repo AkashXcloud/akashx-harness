@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-agent-loop",
-  "description": "The concrete agent loop plugin for the DeepSeek Harness",
+  "name": "@akashx/akx-agent-loop",
+  "description": "The concrete agent loop plugin for the AkashX Harness",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/core/agent-loop"
   },
   "type": "module",
@@ -31,37 +31,37 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-persistence": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-settings": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tools": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-llm-pi-ai": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-llm-pi-ai": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-persistence": "workspace:^",
+    "@akashx/akx-session-persistence-jsonl": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-settings": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tools": "workspace:^"
   }
 }

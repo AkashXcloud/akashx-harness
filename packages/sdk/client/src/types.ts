@@ -2,12 +2,12 @@
  * Types for the TypeScript SDK client: launch options, notification shapes,
  * and owned activity results.
  *
- * @module @deepseek-ai/dsh-sdk-client/types
+ * @module @akashx/akx-sdk-client/types
  */
 
-import type { ContentBlock, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { SdkPromptContentBlock } from '@deepseek-ai/dsh-sdk-protocol'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import type { ContentBlock, ReasoningEffortId } from '@akashx/akx-llm'
+import type { SdkPromptContentBlock } from '@akashx/akx-sdk-protocol'
+import type { SessionEvent } from '@akashx/akx-session'
 
 /** One server-to-client notification as received off the wire. */
 export interface HarnessNotification {
@@ -22,21 +22,21 @@ export type NotificationFilter = (notification: HarnessNotification) => boolean
 
 /** Launch and timeout options for {@link HarnessClient}. */
 export interface HarnessClientOptions {
-  /** Absolute or caller-relative dsh CLI module; omitted resolves this package's same-version dependency. */
-  dshBin?: string
+  /** Absolute or caller-relative akx CLI module; omitted resolves this package's same-version dependency. */
+  akxBin?: string
   /** Named profile serving the SDK protocol (default `sdk`). */
   profile?: string
   /** Ordered per-launch profile patches; relative paths resolve before spawn. */
   patches?: string[]
   /** Explicit Harness home for this child; relative paths resolve before spawn. */
-  dshHome?: string
-  /** Working directory for the dsh process itself. */
+  akxHome?: string
+  /** Working directory for the akx process itself. */
   processCwd?: string
   /**
    * The complete child environment, read when {@link HarnessClient.start}
    * spawns. `undefined` reads the parent env at that time; passing an object
    * reads that object at spawn and replaces the parent environment entirely, so callers own
-   * credential policy (see `scrubbedParentEnv` in `@deepseek-ai/dsh-subprocess`
+   * credential policy (see `scrubbedParentEnv` in `@akashx/akx-subprocess`
    * for the shared scrub-then-merge base).
    */
   env?: NodeJS.ProcessEnv
@@ -52,13 +52,13 @@ export interface HarnessClientOptions {
   disposeGraceMs?: number
 }
 
-/** Options for the high-level {@link DeepSeekHarness} wrapper. */
-export interface DeepSeekHarnessOptions extends HarnessClientOptions {
+/** Options for the high-level {@link AkashXHarness} wrapper. */
+export interface AkashXHarnessOptions extends HarnessClientOptions {
   /** Workspace cwd recorded on every SDK-created session (default: the process cwd, else `process.cwd()`). */
   cwd?: string
-  /** Provider route for SDK-created agents (default `deepseek-official`). */
+  /** Provider route for SDK-created agents (default `akashx-official`). */
   provider?: string
-  /** Model for SDK-created agents (default `deepseek-v4-flash`). */
+  /** Model for SDK-created agents (default `akashx-v4-flash`). */
   model?: string
   /** Adapter-owned reasoning effort for the selected provider/model route. */
   reasoningEffort?: ReasoningEffortId

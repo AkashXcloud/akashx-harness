@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { GoalSnapshot } from '@deepseek-ai/dsh-goal/client'
-import { makeTranslate, RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import type { GoalSnapshot } from '@akashx/akx-goal/client'
+import { makeTranslate, RemoteError } from '@akashx/akx-client-test-runtime'
 import { GoalBar } from '../src/client/GoalBar.tsx'
 import type { GoalActionResult, GoalBarActions } from '../src/client/slots.ts'
 import { en } from '../src/client/locales.ts'

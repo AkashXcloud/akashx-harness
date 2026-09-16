@@ -3,13 +3,13 @@ description: "共享超时运算、截止时间融合与超时和取消分类，
 kind: "package-library"
 ---
 
-# @deepseek-ai/dsh-timeout
+# @akashx/akx-timeout
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-timeout` 让调用方为工作设置有上限的截止时间、区分本地超时与上游取消，并监测流式读取是否空闲。`clampTimeout` 在提示缺失时填入后端默认值，把结果限制在允许的最大值以内，并在工作开始前拒绝无效值。`deadline` 将选定的超时与上游取消合并到一个信号中，而调用方仍负责真正停止自己的进程、套接字或任务。`idleWatchdog` 只计算等待提供方读取所花的时间；零仍保留给后端自有的不计时工作，而不是公开配置。
+`akx-timeout` 让调用方为工作设置有上限的截止时间、区分本地超时与上游取消，并监测流式读取是否空闲。`clampTimeout` 在提示缺失时填入后端默认值，把结果限制在允许的最大值以内，并在工作开始前拒绝无效值。`deadline` 将选定的超时与上游取消合并到一个信号中，而调用方仍负责真正停止自己的进程、套接字或任务。`idleWatchdog` 只计算等待提供方读取所花的时间；零仍保留给后端自有的不计时工作，而不是公开配置。
 
 ## 目录
 
@@ -30,7 +30,7 @@ kind: "package-library"
 ### 限制超时提示
 
 ```ts
-import { clampTimeout } from '@deepseek-ai/dsh-timeout'
+import { clampTimeout } from '@akashx/akx-timeout'
 
 declare const requested: number | undefined
 declare const DEFAULT_TIMEOUT_MS: number
@@ -44,7 +44,7 @@ const timeoutMs = clampTimeout(requested, DEFAULT_TIMEOUT_MS, MAX_TIMEOUT_MS, 'b
 ### 在 deadline 下运行工作
 
 ```text
-import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
+import { deadline, timeoutOf } from '@akashx/akx-timeout'
 
 using d = deadline(upstream, timeoutMs, 'BASH_TIMEOUT')
 const outcome = await runWork({ signal: d.signal })   // work listens on d.signal and terminates itself
@@ -61,7 +61,7 @@ const aborted = d.signal.aborted && !timedOut
 ### 用空闲 watchdog 处理流式传输
 
 ```ts
-import { idleWatchdog } from '@deepseek-ai/dsh-timeout'
+import { idleWatchdog } from '@akashx/akx-timeout'
 
 declare const upstream: AbortSignal | undefined
 declare const idleMs: number
@@ -104,7 +104,7 @@ timer 只在某个迭代器 `next()` 尚未完成时启动，并会因不产生�
 
 ### 空闲 watchdog 为何重新启动
 
-`idleWatchdog` 保持一个稳定的融合信号，只在 `next()` 尚未完成时启动 timer；完成后停止，后续需求或 `pulse()` 重新启动，dispose（资源释放）时清除，并发需求被拒绝。只有传输层观察该信号，因此提供方的真实读取必须监听它——DeepSeek 与 pi-ai 适配器会在中止时关闭响应正文或 SDK 请求。
+`idleWatchdog` 保持一个稳定的融合信号，只在 `next()` 尚未完成时启动 timer；完成后停止，后续需求或 `pulse()` 重新启动，dispose（资源释放）时清除，并发需求被拒绝。只有传输层观察该信号，因此提供方的真实读取必须监听它——AkashX 与 pi-ai 适配器会在中止时关闭响应正文或 SDK 请求。
 
 </details>
 

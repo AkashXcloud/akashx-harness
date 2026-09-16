@@ -1,0 +1,62 @@
+{
+  "name": "@akashx/akx-plugin-package-inventory",
+  "description": "Active Loader-backed plugin package inventory for official AkashX LLM API requests",
+  "version": "0.1.5-rc.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
+    "directory": "packages/llm/plugin-package-inventory"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/schemastery": "workspace:^"
+  },
+  "peerDependencies": {
+    "@akashx/cordis": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-presets": "workspace:^",
+    "@akashx/akx-llm-api-extensions": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@akashx/akx-agent-presets": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@akashx/cordis": "workspace:^",
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-presets": "workspace:^",
+    "@akashx/akx-llm-api-extensions": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
+  }
+}

@@ -1,19 +1,19 @@
 /** Default-off settings and per-session model-selection decisions. */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { Session, SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import { bindScopeParent, createScope, scopeOf, scopeTarget } from '@deepseek-ai/dsh-scope'
-import { SettingsProvider } from '@deepseek-ai/dsh-settings'
-import type { SettingsNamespace } from '@deepseek-ai/dsh-settings'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
+import { Context } from '@akashx/cordis'
+import { ToolCallId } from '@akashx/akx-llm'
+import { Session, SESSION_FORMAT_VERSION, SessionId } from '@akashx/akx-session'
+import type { SessionEvent } from '@akashx/akx-session'
+import { bindScopeParent, createScope, scopeOf, scopeTarget } from '@akashx/akx-scope'
+import { SettingsProvider } from '@akashx/akx-settings'
+import type { SettingsNamespace } from '@akashx/akx-settings'
+import InvariantRegistry from '@akashx/akx-invariants'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import SubagentRuntime from '@akashx/akx-subagent'
+import * as SubagentSpawn from '@akashx/akx-subagent-spawn-in-process'
 import * as tool from '../src/index.ts'
 import * as ToolInvariant from '../src/invariant.ts'
 import SubagentModelSelectionConfig, {
@@ -375,7 +375,7 @@ describe('SubagentModelSelectionConfig', () => {
         modelSelectionSettings: true,
         maxDepth: 'provider-managed',
       })
-    }).toThrow('requires @deepseek-ai/dsh-tool-subagent/model-selection-settings')
+    }).toThrow('requires @akashx/akx-tool-subagent/model-selection-settings')
     await withoutSettings.fiber.dispose()
 
     const withoutAgent = await boot(false)

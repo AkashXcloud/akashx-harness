@@ -3,90 +3,90 @@ import { homedir, tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
-  DEFAULT_DSH_HOME_DISPLAY,
-  DSH_HOME_DIR_NAME,
+  DEFAULT_AKX_HOME_DISPLAY,
+  AKX_HOME_DIR_NAME,
   canonicalizeWatchPath,
-  defaultDshHome,
-  dshCachePath,
-  dshHomeDisplay,
-  dshHomePath,
+  defaultAkxHome,
+  akxCachePath,
+  akxHomeDisplay,
+  akxHomePath,
   expandHomePath,
-  resolveDshHome,
-} from '@deepseek-ai/dsh-home-paths'
+  resolveAkxHome,
+} from '@akashx/akx-home-paths'
 
 afterEach(() => {
   vi.unstubAllEnvs()
 })
 
-describe('dsh path helpers', () => {
-  it('owns the shared default DSH home directory name', () => {
-    expect(DSH_HOME_DIR_NAME).toBe('.dsh')
-    expect(DEFAULT_DSH_HOME_DISPLAY).toBe('~/.dsh')
-    expect(defaultDshHome()).toBe(join(homedir(), '.dsh'))
+describe('akx path helpers', () => {
+  it('owns the shared default AKX home directory name', () => {
+    expect(AKX_HOME_DIR_NAME).toBe('.akx')
+    expect(DEFAULT_AKX_HOME_DISPLAY).toBe('~/.akx')
+    expect(defaultAkxHome()).toBe(join(homedir(), '.akx'))
   })
 
   it('expands tilde paths without changing non-tilde paths', () => {
     expect(expandHomePath('~')).toBe(homedir())
-    expect(expandHomePath('~/.dsh')).toBe(join(homedir(), '.dsh'))
-    expect(expandHomePath('~\\.dsh')).toBe(join(homedir(), '.dsh'))
-    expect(expandHomePath('/tmp/.dsh')).toBe('/tmp/.dsh')
-    expect(expandHomePath('~other/.dsh')).toBe('~other/.dsh')
+    expect(expandHomePath('~/.akx')).toBe(join(homedir(), '.akx'))
+    expect(expandHomePath('~\\.akx')).toBe(join(homedir(), '.akx'))
+    expect(expandHomePath('/tmp/.akx')).toBe('/tmp/.akx')
+    expect(expandHomePath('~other/.akx')).toBe('~other/.akx')
   })
 
-  it('resolves explicit path before DSH_HOME and the default', () => {
-    const envHome = join(homedir(), 'env-dsh')
+  it('resolves explicit path before AKX_HOME and the default', () => {
+    const envHome = join(homedir(), 'env-akx')
 
-    expect(resolveDshHome('/tmp/explicit-dsh', { DSH_HOME: '~/env-dsh' })).toBe(resolve('/tmp/explicit-dsh'))
-    expect(resolveDshHome(undefined, { DSH_HOME: '~/env-dsh' })).toBe(envHome)
-    expect(resolveDshHome(undefined, {})).toBe(defaultDshHome())
+    expect(resolveAkxHome('/tmp/explicit-akx', { AKX_HOME: '~/env-akx' })).toBe(resolve('/tmp/explicit-akx'))
+    expect(resolveAkxHome(undefined, { AKX_HOME: '~/env-akx' })).toBe(envHome)
+    expect(resolveAkxHome(undefined, {})).toBe(defaultAkxHome())
   })
 
-  it('treats an empty or whitespace-only DSH_HOME as unset', () => {
-    expect(resolveDshHome(undefined, { DSH_HOME: '' })).toBe(defaultDshHome())
-    expect(resolveDshHome(undefined, { DSH_HOME: '   ' })).toBe(defaultDshHome())
+  it('treats an empty or whitespace-only AKX_HOME as unset', () => {
+    expect(resolveAkxHome(undefined, { AKX_HOME: '' })).toBe(defaultAkxHome())
+    expect(resolveAkxHome(undefined, { AKX_HOME: '   ' })).toBe(defaultAkxHome())
   })
 
-  it('joins child segments onto the resolved DSH_HOME', () => {
-    vi.stubEnv('DSH_HOME', '~/env-dsh')
-    expect(dshHomePath()).toBe(join(homedir(), 'env-dsh'))
-    expect(dshHomePath('storages', 'cache')).toBe(join(homedir(), 'env-dsh', 'storages', 'cache'))
+  it('joins child segments onto the resolved AKX_HOME', () => {
+    vi.stubEnv('AKX_HOME', '~/env-akx')
+    expect(akxHomePath()).toBe(join(homedir(), 'env-akx'))
+    expect(akxHomePath('storages', 'cache')).toBe(join(homedir(), 'env-akx', 'storages', 'cache'))
   })
 
   it('labels a resolved home by whether it is the default root', () => {
-    expect(dshHomeDisplay(resolve(defaultDshHome()))).toBe('~/.dsh')
-    expect(dshHomeDisplay('/some/other/root')).toBe('$DSH_HOME')
+    expect(akxHomeDisplay(resolve(defaultAkxHome()))).toBe('~/.akx')
+    expect(akxHomeDisplay('/some/other/root')).toBe('$AKX_HOME')
   })
 
   it.each([
-    [undefined, join(homedir(), '.dsh')],
-    ['', join(homedir(), '.dsh')],
-    ['   ', join(homedir(), '.dsh')],
-    ['~/env-dsh', join(homedir(), 'env-dsh')],
-    ['./relative-dsh', resolve('./relative-dsh')],
-  ] as const)('resolves cache paths with DSH_HOME=%j', (home, expectedHome) => {
-    vi.stubEnv('DSH_HOME', home)
+    [undefined, join(homedir(), '.akx')],
+    ['', join(homedir(), '.akx')],
+    ['   ', join(homedir(), '.akx')],
+    ['~/env-akx', join(homedir(), 'env-akx')],
+    ['./relative-akx', resolve('./relative-akx')],
+  ] as const)('resolves cache paths with AKX_HOME=%j', (home, expectedHome) => {
+    vi.stubEnv('AKX_HOME', home)
     try {
-      expect(dshCachePath()).toBe(join(expectedHome, 'cache'))
-      expect(dshCachePath('models', 'index.json')).toBe(join(expectedHome, 'cache', 'models', 'index.json'))
+      expect(akxCachePath()).toBe(join(expectedHome, 'cache'))
+      expect(akxCachePath('models', 'index.json')).toBe(join(expectedHome, 'cache', 'models', 'index.json'))
     } finally {
       vi.unstubAllEnvs()
     }
   })
 
   it('resolves configured cache homes before the environment', () => {
-    vi.stubEnv('DSH_HOME', '~/env-dsh')
+    vi.stubEnv('AKX_HOME', '~/env-akx')
     try {
-      expect(dshCachePath({ dshHome: '~/explicit-dsh' })).toBe(join(homedir(), 'explicit-dsh', 'cache'))
-      expect(dshCachePath({ dshHome: './explicit-dsh' }, 'attachments', 'request-images'))
-        .toBe(resolve('./explicit-dsh/cache/attachments/request-images'))
-      expect(dshCachePath({}, 'attachments')).toBe(join(homedir(), 'env-dsh', 'cache', 'attachments'))
+      expect(akxCachePath({ akxHome: '~/explicit-akx' })).toBe(join(homedir(), 'explicit-akx', 'cache'))
+      expect(akxCachePath({ akxHome: './explicit-akx' }, 'attachments', 'request-images'))
+        .toBe(resolve('./explicit-akx/cache/attachments/request-images'))
+      expect(akxCachePath({}, 'attachments')).toBe(join(homedir(), 'env-akx', 'cache', 'attachments'))
     } finally {
       vi.unstubAllEnvs()
     }
   })
 
   it('canonicalizes a watcher ancestor while preserving a missing suffix', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-watch-path-'))
+    const root = await mkdtemp(join(tmpdir(), 'akx-watch-path-'))
     const target = join(root, 'target')
     const alias = join(root, 'alias')
     try {

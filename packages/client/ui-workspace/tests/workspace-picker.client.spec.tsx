@@ -1,15 +1,15 @@
 // @vitest-environment jsdom
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { SessionListState } from '@akashx/akx-api-session-controller/client'
 import type {
   WorkspaceId, WorkspaceSnapshot, WorkspaceView,
-} from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
+} from '@akashx/akx-api-workspace-controller/client'
+import type {} from '@akashx/akx-client-locale/client'
+import { bindSnapshotSelector, makeTranslate } from '@akashx/akx-client-test-runtime'
+import type { SessionPendingInteractionSnapshot } from '@akashx/akx-client-ui-session/client'
 import type { DirectoryFlowOwnerProps, WorkspacePickerProps } from '../src/client/contract/slots.ts'
 import { WorkspacePicker } from '../src/client/WorkspacePicker.tsx'
 import { en } from '../src/client/locales.ts'

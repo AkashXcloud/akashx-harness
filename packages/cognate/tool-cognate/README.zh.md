@@ -3,13 +3,13 @@ description: "面向模型的 Cognate SQL 和确定性图表工具。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-cognate
+# @akashx/akx-tool-cognate
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-tool-cognate` 注册 `run_sql` 和 `render_chart`。`run_sql` 将单条语句发送到 `ctx.cognate`；服务负责 SQL 策略、取消、Provider 选择和结果限制。`render_chart` 只验证显式传入的表格数据，不打开数据库连接。
+`akx-tool-cognate` 注册 `run_sql` 和 `render_chart`。`run_sql` 将单条语句发送到 `ctx.cognate`；服务负责 SQL 策略、取消、Provider 选择和结果限制。`render_chart` 只验证显式传入的表格数据，不打开数据库连接。
 
 ## 目录
 
@@ -43,7 +43,7 @@ kind: "package-reference"
 
 #### What the model sees
 
-生成的 [`run_sql` 和 `render_chart` Schema](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-cognate) 提供 SQL 参数或图表元数据和数据行。`render_chart` 不能执行查询或访问 Provider。
+生成的 [`run_sql` 和 `render_chart` Schema](../../../docs/tool-catalog.zh.md#akashx-akx-tool-cognate) 提供 SQL 参数或图表元数据和数据行。`render_chart` 不能执行查询或访问 Provider。
 
 #### Token effect
 

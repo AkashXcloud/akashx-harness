@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage, ToolCallId  } from '@deepseek-ai/dsh-llm'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { Scope } from '@deepseek-ai/dsh-scope'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import { CodeRuntime } from '@deepseek-ai/dsh-code-runtime'
-import type { CodeRunRequest, CodeRunResult } from '@deepseek-ai/dsh-code-runtime'
-import ToolRuntime, { CodeRunFailedError, RUN_CODE_NAME, TOOL_ABORTED_BEFORE_DISPATCH, defineContentToolFixture, defineTool } from '@deepseek-ai/dsh-tools'
-import type { Config, JsonSchemaNode, PostToolDecision, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEventMap } from '@deepseek-ai/dsh-session'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import { Context } from '@akashx/cordis'
+import { createUserMessage, ToolCallId  } from '@akashx/akx-llm'
+import { createScope } from '@akashx/akx-scope'
+import type { Scope } from '@akashx/akx-scope'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import { CodeRuntime } from '@akashx/akx-code-runtime'
+import type { CodeRunRequest, CodeRunResult } from '@akashx/akx-code-runtime'
+import ToolRuntime, { CodeRunFailedError, RUN_CODE_NAME, TOOL_ABORTED_BEFORE_DISPATCH, defineContentToolFixture, defineTool } from '@akashx/akx-tools'
+import type { Config, JsonSchemaNode, PostToolDecision, ToolExecutionResult } from '@akashx/akx-tools'
+import type { Agent } from '@akashx/akx-agent'
+import { Session, SessionId } from '@akashx/akx-session'
+import type { SessionEventMap } from '@akashx/akx-session'
+import type { JsonValue } from '@akashx/akx-util-values'
 
 const testToolSignal = new AbortController().signal
 
@@ -1749,7 +1749,7 @@ describe('per-agent presentation', () => {
   })
 
   it('inherits a STANDING preset scope\'s mode down the chain, agents beside it unaffected', async () => {
-    const { bindScopeParent } = await import('@deepseek-ai/dsh-scope')
+    const { bindScopeParent } = await import('@akashx/akx-scope')
     const { ctx, systemPrompt } = await setup({ mode: 'native' })
     const calls = registerEcho(ctx)
     // The preset's standing scope declares once; the agent only PARENTS to it
@@ -1767,7 +1767,7 @@ describe('per-agent presentation', () => {
     // `native` here, so a collapse predicate reading it instead of this
     // scope's effective mode would announce [run_code] and still execute the
     // native call — the bypass, reopened for exactly the preset composition
-    // `dsh-agent-tool-presentation` produces.
+    // `akx-agent-tool-presentation` produces.
     expect(ctx.tools.executionMode({
       signal: testToolSignal,
       callId: ToolCallId('preset-coded-schedule'),

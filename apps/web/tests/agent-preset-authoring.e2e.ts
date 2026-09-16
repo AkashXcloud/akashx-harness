@@ -27,7 +27,7 @@ const SECTION_EXPECTED = join(SNAPSHOT_DIR, 'section.expected.md')
 const COPY_DIALOG_EXPECTED = join(SNAPSHOT_DIR, 'copy-dialog.expected.md')
 const CREATED_EXPECTED = join(SNAPSHOT_DIR, 'created.expected.md')
 const DAMAGED_EXPECTED = join(SNAPSHOT_DIR, 'damaged.expected.md')
-/** The shipped roster, bundled inside the `dsh-agent-presets` package. */
+/** The shipped roster, bundled inside the `akx-agent-presets` package. */
 const SHIPPED_PRESETS = fileURLToPath(new URL('../../../packages/preset/agent-presets/presets', import.meta.url))
 const OVERLAY = fileURLToPath(new URL('./agent-preset-authoring.overlay.yml', import.meta.url))
 const MODE = webSnapshotMode()
@@ -45,7 +45,7 @@ describe('web e2e: agent-preset authoring is a host-side copy', () => {
   }
 
   beforeAll(async () => {
-    userRoot = await realpath(await mkdtemp(join(tmpdir(), 'dsh-web-e2e-presets-')))
+    userRoot = await realpath(await mkdtemp(join(tmpdir(), 'akx-web-e2e-presets-')))
     scaffold = await launchWebScaffold({
       extraOverlayPath: OVERLAY,
       agentPresets: {
@@ -267,7 +267,7 @@ describe('web e2e: agent-preset authoring is a host-side copy', () => {
         result: { value?: { items: unknown[] } }
       }
       return JSON.stringify(body.result.value?.items ?? body.result)
-    }, { timeout: 15_000 }).toContain('"agentPreset":"cordis"')
+    }, { timeout: 15_000 }).toContain('"agentPreset":"@akashx/cordis"')
   }, 60_000)
 
   it('drove every surface without a page error or a stream warning', () => {

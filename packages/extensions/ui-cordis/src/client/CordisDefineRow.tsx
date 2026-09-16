@@ -3,9 +3,9 @@
 import { useId, useState, type ReactNode } from 'react'
 import {
   CodeBlock, DisclosureRow, IconCodeOutline16, IconInspectOutline12, StateDot,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ToolCallViewProps } from '@deepseek-ai/dsh-client-ui-tool/client'
+} from '@akashx/akx-client-ui-primitives'
+import type { InjectFace, PropsLocale } from '@akashx/akx-client-ui-slots'
+import type { ToolCallViewProps } from '@akashx/akx-client-ui-tool/client'
 import { cordisDefineCard, type CordisToolState } from './card-model.ts'
 import type { CordisCardFace } from './slots.ts'
 import { cordisVisibleStatus, type CordisVisibleStatus } from './status.ts'
@@ -13,7 +13,7 @@ import type { CordisKey } from './locales.ts'
 import css from './CordisDefineRow.module.css'
 
 /** Full card props composed by the keyed Tool slot. */
-export type CordisDefineRowProps = ToolCallViewProps & InjectFace<CordisCardFace> & PropsLocale<'cordis'>
+export type CordisDefineRowProps = ToolCallViewProps & InjectFace<CordisCardFace> & PropsLocale<'@akashx/cordis'>
 
 type CardReading = CordisVisibleStatus | 'removed'
 type SourceTab = 'client' | 'host'

@@ -11,7 +11,7 @@ export const en = {
   failed: 'This image could not be displayed.',
   unsupported: 'Image preview requires the complete file contents.',
 }
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Image preview selection, accessible name, and status text. */
     sidebarImage: ImagePreviewKey

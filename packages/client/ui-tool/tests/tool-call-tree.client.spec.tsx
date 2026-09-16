@@ -1,14 +1,14 @@
 // @vitest-environment jsdom
 /** ToolCallTree-owned root/subcall markers and selection projection. */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
-import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import type { SessionSnapshot } from '@akashx/akx-api-session-controller/client'
+import type { ToolResultNode } from '@akashx/akx-client-ui-chat/client'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 import type { ToolCallOwnerProps, ToolTreeProps } from '../src/client/contract/slots.ts'
 import { ToolCallTree } from '../src/client/tool/ToolCallTree.tsx'
-import { en } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
+import { en } from '@akashx/akx-client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 

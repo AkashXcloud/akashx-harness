@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-spill-local",
-  "description": "Local-filesystem implementation of the DeepSeek Harness spill storage seam (private session-scoped files)",
+  "name": "@akashx/akx-spill-local",
+  "description": "Local-filesystem implementation of the AkashX Harness spill storage seam (private session-scoped files)",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/spill/spill-local"
   },
   "type": "module",
@@ -27,19 +27,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-spill": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-spill": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-spill": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-spill": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   }
 }

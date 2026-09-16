@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * AkashX command-line entry point.
- * @module @akashx/akashx-harness/akashx
+ * @module @akashx/akx-harness/akashx
  */
 
 import { runCli } from './bin.ts'

@@ -1,11 +1,11 @@
-/** Model-facing Cognate SQL and deterministic chart tools. @module @deepseek-ai/dsh-tool-cognate */
+/** Model-facing Cognate SQL and deterministic chart tools. @module @akashx/akx-tool-cognate */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { CognateQueryResult, CognateSemanticContext } from '@deepseek-ai/dsh-cognate'
-import type {} from '@deepseek-ai/dsh-cognate'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import type { CognateQueryResult, CognateSemanticContext } from '@akashx/akx-cognate'
+import type {} from '@akashx/akx-cognate'
+import { defineTool } from '@akashx/akx-tools'
+import type { JsonValue } from '@akashx/akx-util-values'
 
 /** Cordis plugin name. */
 export const name = 'tool-cognate'

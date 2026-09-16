@@ -1,9 +1,9 @@
 ---
-description: "dsh Web 客户端的 subagent 对话目录、续接路由 UI 与 '@' 引用 source。"
+description: "akx Web 客户端的 subagent 对话目录、续接路由 UI 与 '@' 引用 source。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-subagent
+# @akashx/akx-client-ui-subagent
 
 [English](README.md) | 中文
 

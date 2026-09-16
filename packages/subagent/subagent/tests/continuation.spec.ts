@@ -2,20 +2,20 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import * as toolSchedule from '@deepseek-ai/dsh-schedule'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import * as SubagentFork from '@deepseek-ai/dsh-subagent-fork-in-process'
-import type { ContentBlock, GenerateOptions, MessageId, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { ToolCallId, createUserMessage, LlmAdapter, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@akashx/cordis'
+import type { Agent } from '@akashx/akx-agent'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import { SessionId } from '@akashx/akx-session'
+import type { SessionEvent, SessionEventMap } from '@akashx/akx-session'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
+import * as toolSchedule from '@akashx/akx-schedule'
+import * as SubagentSpawn from '@akashx/akx-subagent-spawn-in-process'
+import * as SubagentFork from '@akashx/akx-subagent-fork-in-process'
+import type { ContentBlock, GenerateOptions, MessageId, StreamChunk } from '@akashx/akx-llm'
+import { ToolCallId, createUserMessage, LlmAdapter, ReasoningEffortId } from '@akashx/akx-llm'
+import { defineTool } from '@akashx/akx-tools'
+import InvariantRegistry from '@akashx/akx-invariants'
 import { MockAdapter, maxTokensResponse, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import SubagentRuntime, {
   SubagentError,
@@ -83,7 +83,7 @@ async function setupWith(
   let disposePersistence: (() => Promise<void>) | undefined
   let root: string | undefined
   if (options.persistence !== false) {
-    root = mkdtempSync(join(tmpdir(), 'dsh-subagent-continuation-'))
+    root = mkdtempSync(join(tmpdir(), 'akx-subagent-continuation-'))
     const persistedRoot = root
     const persistenceFiber = await ctx.plugin(JsonlSessionPersistence, { root })
     disposePersistence = () => persistenceFiber.dispose()
@@ -2551,7 +2551,7 @@ describe('continuable settlement delivery', () => {
       { chunks: textResponse('parent ack') },
     ])
     const { ctx, parent } = await setupWith(adapter)
-    // The shipped durability checkpoint (`dsh-session-checkpoint-policy`) is
+    // The shipped durability checkpoint (`akx-session-checkpoint-policy`) is
     // fail-closed at the step boundary, so a rejected write ends the turn after
     // it claimed its messages and before it entered a step.
     ctx.on('agent/pre-step', async ({ agent: subject, turn }, next) => {
@@ -3314,7 +3314,7 @@ describe('continuable errors', () => {
     const adapter = new GatedAdapter([{ chunks: textResponse('child'), gate: hold.promise }])
     const ctx = new Context()
     await mountAgentLoopTestDependencies(ctx)
-    const root = mkdtempSync(join(tmpdir(), 'dsh-subagent-continuation-'))
+    const root = mkdtempSync(join(tmpdir(), 'akx-subagent-continuation-'))
     const persistenceFiber = await ctx.plugin(JsonlSessionPersistence, { root })
     cleanups.push(async () => {
       await persistenceFiber.dispose()

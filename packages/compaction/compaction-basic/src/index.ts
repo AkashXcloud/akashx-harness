@@ -1,22 +1,22 @@
 /**
  * Basic replay-aware compaction backend.
  *
- * @module @deepseek-ai/dsh-compaction-basic
+ * @module @akashx/akx-compaction-basic
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { CompactionEngine, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
-import type { CompactionResult, CompactionTrigger } from '@deepseek-ai/dsh-compaction'
-import type { TokenMeter } from '@deepseek-ai/dsh-token-meter'
-import type { Session, SessionSeq } from '@deepseek-ai/dsh-session'
-import { CONTEXT_WINDOW_EXCEEDED_CODE } from '@deepseek-ai/dsh-llm'
-import type { LlmCallConfig } from '@deepseek-ai/dsh-llm'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
+import { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { CompactionEngine, ManualCompactionError } from '@akashx/akx-compaction'
+import type { CompactionResult, CompactionTrigger } from '@akashx/akx-compaction'
+import type { TokenMeter } from '@akashx/akx-token-meter'
+import type { Session, SessionSeq } from '@akashx/akx-session'
+import { CONTEXT_WINDOW_EXCEEDED_CODE } from '@akashx/akx-llm'
+import type { LlmCallConfig } from '@akashx/akx-llm'
+import { assertNever } from '@akashx/akx-util-values'
+import type { Agent, PreStepDecision } from '@akashx/akx-agent'
+import type { CommandId } from '@akashx/akx-commands/brand'
 // Type-only: makes the optional sibling service available to `ctx.get()`.
-import type {} from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+import type {} from '@akashx/akx-compaction-tool-result-pruner'
 import {
   resolveCompactSpec,
   resolveConfig,

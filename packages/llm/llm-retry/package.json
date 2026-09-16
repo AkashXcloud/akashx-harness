@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-llm-retry",
-  "description": "Provider-routed LLM request retry policy for the DeepSeek Harness",
+  "name": "@akashx/akx-llm-retry",
+  "description": "Provider-routed LLM request retry policy for the AkashX Harness",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/llm/llm-retry"
   },
   "type": "module",
@@ -36,37 +36,37 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-timeout": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-llm-mock-server": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-loop": "workspace:^",
+    "@akashx/akx-agent-loop-testkit": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-llm-akx": "workspace:^",
+    "@akashx/akx-llm-mock-server": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-session-persistence-jsonl": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-timeout": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   }
 }

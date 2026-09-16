@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { bindSnapshotSelector, makeTranslate } from '@akashx/akx-client-test-runtime'
 import type {
   ChatConversationViewNode, ConversationNode,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@akashx/akx-client-ui-chat/client'
 import type { ChatNodeViewProps } from '../src/client/contract/slots.ts'
 import {
   formatMessageClock, msUntilNextLocalMidnight, startOfLocalDay,
@@ -669,16 +669,16 @@ describe('MessageItem arms', () => {
         content: [{ type: 'text', text: 'Current runtime context.\n\nsandbox\n\nworkspace' }],
         source: {
           kind: 'plugin',
-          plugin: '@deepseek-ai/dsh-system-prompt',
+          plugin: '@akashx/akx-system-prompt',
           form: 'snapshot',
           sections: [{ name: 'sandbox:policy', text: 'workspace-write' }, { name: 'workspace', text: '/repo' }],
         },
-        provenance: { role: 'inject', label: '@deepseek-ai/dsh-system-prompt' },
+        provenance: { role: 'inject', label: '@akashx/akx-system-prompt' },
         form: 'snapshot',
       } as never}
       />,
     )
-    fireEvent.click(view.getByRole('button', { name: /^Context injection\s*@deepseek-ai\/dsh-system-prompt$/u }))
+    fireEvent.click(view.getByRole('button', { name: /^Context injection\s*@akashx\/akx-system-prompt$/u }))
     const rows = [...view.container.querySelectorAll('[data-context-sections] div')].map(node => node.textContent)
     expect(rows).toEqual(['sandbox:policyworkspace-write', 'workspace/repo'])
   })

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { CognateAssetGroup, CognateDatabaseStatus } from '@deepseek-ai/dsh-api-cognate-controller/types'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import type { CognateAssetGroup, CognateDatabaseStatus } from '@akashx/akx-api-cognate-controller/types'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@akashx/akx-client-ui-slots'
 import type { SettingsKey } from './locales.ts'
 import css from './DatabaseSection.module.css'
 

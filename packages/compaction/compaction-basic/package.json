@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-compaction-basic",
-  "description": "Token-meter-driven compaction policy and LLM summarization backend for the DeepSeek Harness",
+  "name": "@akashx/akx-compaction-basic",
+  "description": "Token-meter-driven compaction policy and LLM summarization backend for the AkashX Harness",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/compaction/compaction-basic"
   },
   "type": "module",
@@ -27,40 +27,40 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-token-meter": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-commands": "workspace:^",
+    "@akashx/akx-compaction": "workspace:^",
+    "@akashx/akx-compaction-tool-result-pruner": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-token-meter": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": {
+    "@akashx/akx-compaction-tool-result-pruner": {
       "optional": true
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-compaction-tool-result-pruner": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-retry": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-token-meter": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-loop": "workspace:^",
+    "@akashx/akx-agent-loop-testkit": "workspace:^",
+    "@akashx/akx-commands": "workspace:^",
+    "@akashx/akx-compaction": "workspace:^",
+    "@akashx/akx-compaction-tool-result-pruner": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-llm-retry": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-token-meter": "workspace:^",
+    "@akashx/akx-tools": "workspace:^"
   }
 }

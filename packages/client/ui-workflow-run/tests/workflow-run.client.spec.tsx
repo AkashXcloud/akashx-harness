@@ -1,26 +1,26 @@
 // @vitest-environment jsdom
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
-import { Context, Service } from '@deepseek-ai/cordis'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
+import { Context, Service } from '@akashx/cordis'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   ConversationNodeAssembler, UiConversation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@akashx/akx-client-ui-conversation/client'
 import type {
   ConversationMatch, ConversationNodeDefinition, ConversationStartMatch,
   ConversationViewDefinition,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { ChatConversationViewNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
+} from '@akashx/akx-client-ui-conversation/client'
+import type { ChatConversationViewNode } from '@akashx/akx-client-ui-chat/client'
+import { SlotRegistry } from '@akashx/akx-client-ui-renderer/client'
 import type {
   SessionListState, SessionLiveEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session/types'
-import { apply as applyLocale, inject as localeInject } from '@deepseek-ai/dsh-client-locale/client'
+} from '@akashx/akx-api-session-controller/client'
+import type { SessionEvent, SessionId } from '@akashx/akx-session/types'
+import { apply as applyLocale, inject as localeInject } from '@akashx/akx-client-locale/client'
 import {
   chatSnapshot as emptyChatSnapshot, conversationSnapshot, makeTranslate, sessionSnapshot,
   stubSettingsScope, workspaceSnapshot,
-} from '@deepseek-ai/dsh-client-test-runtime'
+} from '@akashx/akx-client-test-runtime'
 import {
   WorkflowRunPanel, type WorkflowRunInjected, type WorkflowRunPanelProps,
 } from '../src/client/WorkflowRunPanel.tsx'

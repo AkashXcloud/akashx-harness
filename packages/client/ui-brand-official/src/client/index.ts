@@ -1,13 +1,13 @@
 /** AkashX occupants for the generic browser-brand slots. */
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type { Context as ClientContext } from '@akashx/cordis'
+import type {} from '@akashx/akx-client-ui-renderer/client'
+import type {} from '@akashx/akx-client-ui-sidebar/client'
+import type {} from '@akashx/akx-client-ui-conversation/client'
+import type {} from '@akashx/akx-client-locale/client'
 import { AkashxMark, AkashxName } from './Brand.tsx'
 import { en, type BrandKey } from './locales.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     brand: BrandKey
   }

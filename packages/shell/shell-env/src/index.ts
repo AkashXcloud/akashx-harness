@@ -1,21 +1,21 @@
 /**
  * Tool-independent shell environment plugin: owns the `ctx.shellEnv` registry of
- * trusted, per-execution `DSH_*` variables consumed by the model-facing shell
- * tools (`dsh-tool-bash`, `dsh-tool-pwsh`). Built-in shell facts are owned by
+ * trusted, per-execution `AKX_*` variables consumed by the model-facing shell
+ * tools (`akx-tool-bash`, `akx-tool-pwsh`). Built-in shell facts are owned by
  * the registry itself while plugins can register additional, enumerable facts
  * with effect-scoped disposal.
  *
- * @module @deepseek-ai/dsh-shell-env
+ * @module @akashx/akx-shell-env
  */
 
-import { Service, type Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { DSH_ENV_PREFIX } from '@deepseek-ai/dsh-shell'
-import type { DshEnvironment, DshEnvironmentKey } from '@deepseek-ai/dsh-shell'
-import { DSH_HOME_ENV, resolveDshHome } from '@deepseek-ai/dsh-home-paths'
-import type { ToolExecution } from '@deepseek-ai/dsh-tools'
+import { Service, type Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { AKX_ENV_PREFIX } from '@akashx/akx-shell'
+import type { AkxEnvironment, AkxEnvironmentKey } from '@akashx/akx-shell'
+import { AKX_HOME_ENV, resolveAkxHome } from '@akashx/akx-home-paths'
+import type { ToolExecution } from '@akashx/akx-tools'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     shellEnv: ShellEnvRegistry
   }
@@ -26,16 +26,16 @@ export const inject: string[] = []
 
 /** Plugin config (all optional — the built-in facts resolve without defaults). */
 export interface Config {
-  /** DeepSeek Harness home directory exposed as `DSH_HOME`; defaults to `$DSH_HOME` or `~/.dsh`. */
-  dshHome?: string
+  /** AkashX Harness home directory exposed as `AKX_HOME`; defaults to `$AKX_HOME` or `~/.akx`. */
+  akxHome?: string
 }
 
 /** Runtime configuration schema for the shell-env plugin. */
 export const Config: z<Config> = z.object({
-  dshHome: z.string(),
+  akxHome: z.string(),
 })
 
-/** Model-visible metadata for one managed `DSH_*` environment variable. */
+/** Model-visible metadata for one managed `AKX_*` environment variable. */
 export interface BashEnvVariable {
   /** Concise description of the environment fact represented by the variable. */
   description: string
@@ -49,36 +49,36 @@ export interface BashEnvVariable {
 export interface BashEnvContributor {
   /** Stable contributor name used in diagnostics and duplicate detection. */
   name: string
-  /** Complete set of `DSH_*` keys this contributor may return. */
-  variables: Readonly<Record<DshEnvironmentKey, BashEnvVariable>>
+  /** Complete set of `AKX_*` keys this contributor may return. */
+  variables: Readonly<Record<AkxEnvironmentKey, BashEnvVariable>>
   /**
    * Resolve this contributor's available values for one tool execution.
    * @param execution - the shell tool execution and its optional calling agent.
    * @returns a partial map containing only keys declared in {@link variables}.
    */
-  resolve(execution: ToolExecution): Readonly<Partial<Record<DshEnvironmentKey, string>>>
+  resolve(execution: ToolExecution): Readonly<Partial<Record<AkxEnvironmentKey, string>>>
 }
 
 /** An enumerable declaration returned by {@link ShellEnvRegistry.list}. */
 export interface BashEnvVariableInfo extends BashEnvVariable {
   /** Contributor that owns the variable. */
   contributor: string
-  /** Declared `DSH_*` environment variable name. */
-  key: DshEnvironmentKey
+  /** Declared `AKX_*` environment variable name. */
+  key: AkxEnvironmentKey
 }
 
-const DSH_SHELL_KEY = `${DSH_ENV_PREFIX}SHELL` as const
-const DSH_SESSION_ID_KEY = `${DSH_ENV_PREFIX}SESSION_ID` as const
-const RESERVED_BASH_ENV_KEYS = new Set<DshEnvironmentKey>([
-  DSH_HOME_ENV,
-  DSH_SHELL_KEY,
-  DSH_SESSION_ID_KEY,
+const AKX_SHELL_KEY = `${AKX_ENV_PREFIX}SHELL` as const
+const AKX_SESSION_ID_KEY = `${AKX_ENV_PREFIX}SESSION_ID` as const
+const RESERVED_BASH_ENV_KEYS = new Set<AkxEnvironmentKey>([
+  AKX_HOME_ENV,
+  AKX_SHELL_KEY,
+  AKX_SESSION_ID_KEY,
 ])
 const BASH_ENV_KEY_SUFFIX = /^[A-Z][A-Z0-9_]*$/
 
 /**
- * Registry (`ctx.shellEnv`) for trusted, per-execution `DSH_*` variables.
- * The namespace is rebuilt for every model shell call: ambient `DSH_*` values
+ * Registry (`ctx.shellEnv`) for trusted, per-execution `AKX_*` variables.
+ * The namespace is rebuilt for every model shell call: ambient `AKX_*` values
  * are discarded by the executor, then the registry's current snapshot is
  * injected. Built-in shell facts remain owned by the registry itself while
  * plugins can register additional, enumerable facts with effect-scoped
@@ -86,8 +86,8 @@ const BASH_ENV_KEY_SUFFIX = /^[A-Z][A-Z0-9_]*$/
  */
 export class ShellEnvRegistry extends Service {
   private readonly contributors = new Map<string, BashEnvContributor>()
-  private readonly keyOwners = new Map<DshEnvironmentKey, string>()
-  private readonly dshHome: string
+  private readonly keyOwners = new Map<AkxEnvironmentKey, string>()
+  private readonly akxHome: string
 
   /**
    * Create and install the `ctx.shellEnv` service.
@@ -96,7 +96,7 @@ export class ShellEnvRegistry extends Service {
    */
   constructor(ctx: Context, config: Config = {}) {
     super(ctx, 'shellEnv')
-    this.dshHome = resolveDshHome(config.dshHome)
+    this.akxHome = resolveAkxHome(config.akxHome)
   }
 
   /**
@@ -114,10 +114,10 @@ export class ShellEnvRegistry extends Service {
         throw new Error(`bash env contributor "${contributor.name}" is already registered`)
       }
 
-      const variables = Object.entries(contributor.variables) as [DshEnvironmentKey, BashEnvVariable][]
+      const variables = Object.entries(contributor.variables) as [AkxEnvironmentKey, BashEnvVariable][]
       for (const [key, variable] of variables) {
-        if (!key.startsWith(DSH_ENV_PREFIX)
-          || !BASH_ENV_KEY_SUFFIX.test(key.slice(DSH_ENV_PREFIX.length))) {
+        if (!key.startsWith(AKX_ENV_PREFIX)
+          || !BASH_ENV_KEY_SUFFIX.test(key.slice(AKX_ENV_PREFIX.length))) {
           throw new Error(`bash env contributor "${contributor.name}" declared invalid key "${key}"`)
         }
         if (RESERVED_BASH_ENV_KEYS.has(key)) {
@@ -143,23 +143,23 @@ export class ShellEnvRegistry extends Service {
   }
 
   /**
-   * Build the trusted `DSH_*` snapshot for one shell tool execution.
+   * Build the trusted `AKX_*` snapshot for one shell tool execution.
    * @param execution - the current tool execution.
    * @returns an immutable environment overlay containing built-ins and current contributions.
    */
-  collect(execution: ToolExecution): DshEnvironment {
-    const values: Record<DshEnvironmentKey, string> = {
-      [DSH_HOME_ENV]: this.dshHome,
-      [DSH_SHELL_KEY]: '1',
+  collect(execution: ToolExecution): AkxEnvironment {
+    const values: Record<AkxEnvironmentKey, string> = {
+      [AKX_HOME_ENV]: this.akxHome,
+      [AKX_SHELL_KEY]: '1',
     }
     if (execution.agent !== undefined) {
-      values[DSH_SESSION_ID_KEY] = execution.agent.session.header.id
+      values[AKX_SESSION_ID_KEY] = execution.agent.session.header.id
     }
 
     for (const contributor of [...this.contributors.values()].sort((left, right) => left.name.localeCompare(right.name))) {
       const resolved = contributor.resolve(execution)
       for (const [rawKey, value] of Object.entries(resolved)) {
-        const key = rawKey as DshEnvironmentKey
+        const key = rawKey as AkxEnvironmentKey
         if (!Object.hasOwn(contributor.variables, key)) {
           throw new Error(`bash env contributor "${contributor.name}" returned undeclared key "${key}"`)
         }
@@ -184,7 +184,7 @@ export class ShellEnvRegistry extends Service {
       .flatMap(contributor => Object.entries(contributor.variables).map(([key, variable]) => ({
         contributor: contributor.name,
         description: variable.description,
-        key: key as DshEnvironmentKey,
+        key: key as AkxEnvironmentKey,
       })))
       .sort((left, right) => left.key.localeCompare(right.key))
   }

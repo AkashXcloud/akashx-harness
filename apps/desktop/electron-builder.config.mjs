@@ -27,13 +27,13 @@ export function createElectronBuilderConfig(
   hostArch = process.arch,
 ) {
   const appId = resolveDesktopAppId(env)
-  const targetPlatform = env.DSH_DESKTOP_TARGET_PLATFORM
+  const targetPlatform = env.AKX_DESKTOP_TARGET_PLATFORM
   const resolvedPlatform = targetPlatform ?? hostPlatform
-  const resolvedArch = env.DSH_DESKTOP_TARGET_ARCH ?? hostArch
-  if (env.DSH_DESKTOP_UNSIGNED !== undefined && !['0', '1'].includes(env.DSH_DESKTOP_UNSIGNED)) {
-    throw new Error('desktop package: DSH_DESKTOP_UNSIGNED must be 0 or 1')
+  const resolvedArch = env.AKX_DESKTOP_TARGET_ARCH ?? hostArch
+  if (env.AKX_DESKTOP_UNSIGNED !== undefined && !['0', '1'].includes(env.AKX_DESKTOP_UNSIGNED)) {
+    throw new Error('desktop package: AKX_DESKTOP_UNSIGNED must be 0 or 1')
   }
-  const unsigned = env.DSH_DESKTOP_UNSIGNED === '1'
+  const unsigned = env.AKX_DESKTOP_UNSIGNED === '1'
   if (unsigned && resolvedPlatform !== 'win32') throw new Error('desktop package: unsigned builds require Windows')
   const packagesMacOS = targetPlatform === 'darwin' || (targetPlatform === undefined && hostPlatform === 'darwin')
   const packagesWindows = targetPlatform === 'win32'
@@ -41,10 +41,10 @@ export function createElectronBuilderConfig(
   if (packagesMacOS) resolveMacOSNotarizationEnvironment(env)
   const windowsSigner = packagesWindows && !unsigned
     ? createWindowsTokenSigner({
-        certificateFile: env.DSH_DESKTOP_WINDOWS_CER_FILE,
-        signTool: env.DSH_DESKTOP_WINDOWS_SIGNTOOL,
-        tokenPin: env.DSH_DESKTOP_WINDOWS_TOKEN_PIN,
-        keyContainer: env.DSH_DESKTOP_WINDOWS_KEY_CONTAINER,
+        certificateFile: env.AKX_DESKTOP_WINDOWS_CER_FILE,
+        signTool: env.AKX_DESKTOP_WINDOWS_SIGNTOOL,
+        tokenPin: env.AKX_DESKTOP_WINDOWS_TOKEN_PIN,
+        keyContainer: env.AKX_DESKTOP_WINDOWS_KEY_CONTAINER,
       })
     : undefined
   if (windowsSigner !== undefined) {
@@ -54,8 +54,8 @@ export function createElectronBuilderConfig(
   const buildPaths = desktopTargetBuildPaths(resolveDesktopBuildTarget(env, hostPlatform, hostArch))
   return {
     appId,
-    productName: 'DeepSeek Harness',
-    artifactName: 'deepseek-harness-${version}-${os}-${arch}.${ext}',
+    productName: 'AkashX Harness',
+    artifactName: 'akx-harness-${version}-${os}-${arch}.${ext}',
     directories: { output: unsigned ? join(buildPaths.root, 'unsigned-artifacts') : buildPaths.artifacts },
     asar: true,
     files: [
@@ -66,9 +66,9 @@ export function createElectronBuilderConfig(
     ],
     extraResources: [
       { from: buildPaths.runtime, to: 'runtime' },
-      { from: buildPaths.dsh, to: 'dsh' },
+      { from: buildPaths.akx, to: 'akx' },
       // electron-builder excludes a source directory's root node_modules.
-      { from: join(buildPaths.dsh, 'node_modules'), to: 'dsh/node_modules' },
+      { from: join(buildPaths.akx, 'node_modules'), to: 'akx/node_modules' },
     ],
     mac: {
       category: 'public.app-category.developer-tools',
@@ -76,7 +76,7 @@ export function createElectronBuilderConfig(
       forceCodeSigning: true,
       hardenedRuntime: true,
       // Native runtime files are pre-signed; PAK resources are sealed by their enclosing bundle.
-      signIgnore: ['/Contents/Resources/dsh(?:/|$)', '\\.pak$'],
+      signIgnore: ['/Contents/Resources/akx(?:/|$)', '\\.pak$'],
       notarize: true,
       target: ['dmg', 'zip'],
     },
@@ -86,13 +86,13 @@ export function createElectronBuilderConfig(
     },
     afterPack: async context => {
       const { verifyDesktopRuntime } = await import('./lib/types/runtime-tree.js')
-      await verifyDesktopRuntime(join(context.packager.getResourcesDir(context.appOutDir), 'dsh'),
+      await verifyDesktopRuntime(join(context.packager.getResourcesDir(context.appOutDir), 'akx'),
         context.packager.appInfo.version, { platform: resolvedPlatform, arch: resolvedArch })
     },
     afterSign: async context => {
       if (context.electronPlatformName !== 'darwin') return
       const { verifyDesktopRuntime } = await import('./lib/types/runtime-tree.js')
-      await verifyDesktopRuntime(join(context.appOutDir, `${context.packager.appInfo.productFilename}.app`, 'Contents', 'Resources', 'dsh'),
+      await verifyDesktopRuntime(join(context.appOutDir, `${context.packager.appInfo.productFilename}.app`, 'Contents', 'Resources', 'akx'),
         context.packager.appInfo.version, { platform: 'darwin', arch: resolvedArch })
       verifyMacOSSignatureAfterSign(context, macOSSigning ?? resolveMacOSSigningEnvironment(env))
     },

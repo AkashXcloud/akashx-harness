@@ -1,80 +1,80 @@
 # Minimal live counterpart for the glob-sampling snapshot composition.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
+- id: llm-akx
+  name: '@akashx/akx-llm-akx'
   config:
     models:
-      - id: deepseek-v4-pro
+      - id: akashx-v4-pro
 
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@akashx/akx-subprocess-local'
 
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@akashx/akx-agent-default-model'
   config:
-    provider: deepseek-official
-    model: deepseek-v4-pro
+    provider: akashx-official
+    model: akashx-v4-pro
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@akashx/akx-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
-    compression: !!js 'process.env.DSH_SNAPSHOT === undefined ? ''zstd'' : ''none'''
+    root: !!js akxHomePath('sessions')
+    compression: !!js 'process.env.AKX_SNAPSHOT === undefined ? ''zstd'' : ''none'''
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@akashx/akx-agent-instructions'
   disabled: true
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@akashx/akx-system-prompt'
   config:
     personaPrefix: You are a concise snapshot agent working in {{cwd}}.
 
 - id: tool-jobs
-  name: '@deepseek-ai/dsh-tool-jobs'
+  name: '@akashx/akx-tool-jobs'
   disabled: true
 
 - id: goal
-  name: '@deepseek-ai/dsh-goal'
+  name: '@akashx/akx-goal'
   disabled: true
 
 - id: goal-round-driver
-  name: '@deepseek-ai/dsh-goal-round-driver'
+  name: '@akashx/akx-goal-round-driver'
   disabled: true
 
 - id: command-goal
-  name: '@deepseek-ai/dsh-command-goal'
+  name: '@akashx/akx-command-goal'
   disabled: true
 
 - id: tool-goal
-  name: '@deepseek-ai/dsh-tool-goal'
+  name: '@akashx/akx-tool-goal'
   disabled: true
 
 - id: skill
-  name: '@deepseek-ai/dsh-skill'
+  name: '@akashx/akx-skill'
   disabled: true
 
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@akashx/akx-skill-filesystem'
   disabled: true
 
 - id: tool-skill
-  name: '@deepseek-ai/dsh-tool-skill'
+  name: '@akashx/akx-tool-skill'
   disabled: true
 
 - id: tool-fs-search
-  name: '@deepseek-ai/dsh-tool-fs-search'
+  name: '@akashx/akx-tool-fs-search'
   config:
     sampleOverCapGlobResults: true
     globMaxResults: 4
 
 - id: spill-local
-  name: '@deepseek-ai/dsh-spill-local'
+  name: '@akashx/akx-spill-local'
   config:
-    root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT ?? './.spill'
+    root: !!js process.env.AKX_SNAPSHOT_SPILL_ROOT ?? './.spill'
 
 - insert:
     - id: snapshot-spill-locators
       name: ../../../scripts/snapshot-spill-locators.ts
       config:
-        root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT
-        locatorRoot: !!js process.env.DSH_SNAPSHOT_SPILL_LOCATOR_ROOT
+        root: !!js process.env.AKX_SNAPSHOT_SPILL_ROOT
+        locatorRoot: !!js process.env.AKX_SNAPSHOT_SPILL_LOCATOR_ROOT

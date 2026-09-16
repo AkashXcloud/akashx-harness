@@ -2,15 +2,15 @@
 
 import { performance } from 'node:perf_hooks'
 import { scheduler } from 'node:timers/promises'
-import { Context } from '@deepseek-ai/cordis'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import type { Agent, AgentHandle } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage, LlmAdapter } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, LlmResolvedModelInfo, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
+import { Context } from '@akashx/cordis'
+import AgentLoop from '@akashx/akx-agent-loop'
+import type { Agent, AgentHandle } from '@akashx/akx-agent'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import { createUserMessage, LlmAdapter } from '@akashx/akx-llm'
+import type { GenerateOptions, LlmResolvedModelInfo, StreamChunk } from '@akashx/akx-llm'
+import { SESSION_FORMAT_VERSION } from '@akashx/akx-session'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
+import { defineContentToolFixture } from '@akashx/akx-tools'
 import { assertBuiltBenchmarkRuntime } from '../support/built-worker.ts'
 import { PARENT_ID, response, resultText, syntheticHistory, TIME_ZERO, WORKLOAD } from './workload.ts'
 
@@ -127,8 +127,8 @@ async function measure(root: string, scenario: string): Promise<ContinuationRepo
 }
 
 assertBuiltBenchmarkRuntime(import.meta.url, Object.fromEntries([
-  '@deepseek-ai/dsh-agent-loop', '@deepseek-ai/dsh-session', '@deepseek-ai/dsh-llm',
-  '@deepseek-ai/dsh-tools', '@deepseek-ai/dsh-session-persistence-jsonl',
+  '@akashx/akx-agent-loop', '@akashx/akx-session', '@akashx/akx-llm',
+  '@akashx/akx-tools', '@akashx/akx-session-persistence-jsonl',
 ].map(name => [name, import.meta.resolve(name)])))
 const [root, scenario] = process.argv.slice(2)
 if (root === undefined || scenario === undefined || !['seed', 'request-history', 'tool-continuation'].includes(scenario)) {

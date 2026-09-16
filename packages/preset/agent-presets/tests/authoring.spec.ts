@@ -11,14 +11,14 @@ import { existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import Include from '@akashx/cordis-plugin-include'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import AgentPresets, {
   COMPOSITION_FILE, copyComposition, METADATA_FILE, type Config,
-} from '@deepseek-ai/dsh-agent-presets'
+} from '@akashx/akx-agent-presets'
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), 'fixtures')
 const VALID = '- id: tool-alpha\n  name: ../../plugins/contribute.js\n  config:\n    tool: alpha\n'
@@ -54,7 +54,7 @@ async function seedPreset(
 }
 
 beforeEach(async () => {
-  userRoot = await mkdtemp(join(tmpdir(), 'dsh-preset-authoring-'))
+  userRoot = await mkdtemp(join(tmpdir(), 'akx-preset-authoring-'))
   roots.push(userRoot)
   ctx = new Context()
   ctx.baseUrl = pathToFileURL(FIXTURES).href + '/'
@@ -207,7 +207,7 @@ describe('deleting a preset', () => {
 
 describe('a deployment with more than one user root', () => {
   it('refuses to delete a preset the writable root does not own', async () => {
-    const second = await mkdtemp(join(tmpdir(), 'dsh-preset-second-'))
+    const second = await mkdtemp(join(tmpdir(), 'akx-preset-second-'))
     roots.push(second)
     await seedPreset(second, 'elsewhere')
     const layered = new Context()
@@ -254,7 +254,7 @@ describe('a deployment with no writable root', () => {
 
 describe('a user root that does not exist yet', () => {
   it('is created by the first copy', async () => {
-    const absentRoot = await mkdtemp(join(tmpdir(), 'dsh-preset-absent-'))
+    const absentRoot = await mkdtemp(join(tmpdir(), 'akx-preset-absent-'))
     roots.push(absentRoot)
     const absent = join(absentRoot, 'nested', 'preset')
     const fresh = new Context()

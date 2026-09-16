@@ -1,7 +1,7 @@
 /** Host registration for the browser locale preference. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-settings'
+import type { Context } from '@akashx/cordis'
+import type {} from '@akashx/akx-settings'
 import { LOCALE_SETTINGS_NAMESPACE, LocaleSettingsSchema } from './locale-settings.ts'
 
 export {

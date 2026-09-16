@@ -7,15 +7,15 @@
  * focus, the highlight is exposed through aria-activedescendant +
  * aria-selected, and the list height clamps to the space above the composer.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 import { en } from '../src/client/locales.ts'
 import type {
   InputTriggerCrumb, MenuState, TriggerHit,
-} from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+} from '@akashx/akx-client-ui-input-trigger/client'
 import { MenuView } from '../src/client/MenuView.tsx'
 
 const hit: TriggerHit = {

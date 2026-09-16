@@ -4,21 +4,21 @@
  * static namespace, and the resulting module system serves the vendored Loader
  * without ever loading a bundle.
  */
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import * as modulesClient from '@deepseek-ai/dsh-client-modules/client'
-import { parseBootManifest } from '@deepseek-ai/dsh-client-modules/client'
-import type { WebBootGraph } from '@deepseek-ai/dsh-client-modules/client'
-import * as uiRenderer from '@deepseek-ai/dsh-client-ui-renderer/client'
-import * as typertRegistry from '@deepseek-ai/dsh-typert-registry/client'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import * as modulesClient from '@akashx/akx-client-modules/client'
+import { parseBootManifest } from '@akashx/akx-client-modules/client'
+import type { WebBootGraph } from '@akashx/akx-client-modules/client'
+import * as uiRenderer from '@akashx/akx-client-ui-renderer/client'
+import * as typertRegistry from '@akashx/akx-typert-registry/client'
 import { describe, expect, it, onTestFinished } from 'vitest'
 import { ClientRoster } from '../src/assembly/index.ts'
 import { MODULES_PACKAGE, createInProcessModules, loadPluginModules } from '../src/assembly/modules.ts'
 
-const RENDERER = '@deepseek-ai/dsh-client-ui-renderer'
-const TYPERT = '@deepseek-ai/dsh-typert-registry'
-const BRAND = '@deepseek-ai/dsh-client-ui-brand-official'
-const MISSING = '@deepseek-ai/dsh-client-does-not-exist'
+const RENDERER = '@akashx/akx-client-ui-renderer'
+const TYPERT = '@akashx/akx-typert-registry'
+const BRAND = '@akashx/akx-client-ui-brand-official'
+const MISSING = '@akashx/akx-client-does-not-exist'
 
 const row = (name: string, immediately = false) => ({ name, inject: [], immediately })
 
@@ -72,7 +72,7 @@ describe('createInProcessModules', () => {
     await expect(system.import(MODULES_PACKAGE, '', {})).resolves.toBe(modulesClient)
     expect(system.loadCache.get(TYPERT)?.exports).toBe(typertRegistry)
     expect(system.loadCache.get(RENDERER)?.exports).toBe(uiRenderer)
-    await expect(system.import('@deepseek-ai/dsh-client-unknown', '', {})).rejects.toThrow('cannot resolve')
+    await expect(system.import('@akashx/akx-client-unknown', '', {})).rejects.toThrow('cannot resolve')
   })
 
   it('rejects loudly instead of fetching when a graph row has no loaded module', async () => {

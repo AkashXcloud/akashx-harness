@@ -1,32 +1,32 @@
 # Keyless replay counterpart: the failed search remains real; only the
 # conversation model adapter is replaced by replay.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
+- id: llm-akx
+  name: '@akashx/akx-llm-akx'
   disabled: true
 
-- id: plugin-package-inventory-deepseek
+- id: plugin-package-inventory
   disabled: true
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@akashx/akx-llm-replay'
       config:
         providers:
-          - id: deepseek-official
-            name: DeepSeek
+          - id: akashx-official
+            name: AkashX
             models:
-              - id: deepseek-v4-flash
+              - id: akashx-v4-flash
                 contextWindow: 1000000
                 defaultMaxTokens: 256000
                 reasoningEfforts: ['off', 'low', 'high', 'max']
                 defaultReasoningEffort: max
-              - id: deepseek-v4-pro
+              - id: akashx-v4-pro
 
     - id: web-search-error-fixture
       name: './web-search-error-fixture.mjs'
 
-- id: web-search-deepseek
-  name: '@deepseek-ai/dsh-web-search-deepseek'
+- id: web-search-akx
+  name: '@akashx/akx-web-search-akx'
   config:
     apiKey: snapshot-key
     # The fixture maps this recorded authority to its OS-assigned listener.

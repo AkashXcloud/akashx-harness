@@ -1,11 +1,11 @@
-/** Content-block structure helpers. @module @deepseek-ai/dsh-llm/content */
+/** Content-block structure helpers. @module @akashx/akx-llm/content */
 
 import type { ContentBlock } from './types.ts'
 import type { Message } from './message.ts'
 import type {
   AttachmentStore, FileAttachmentRef, ImageAttachmentRef, ImageMediaType, RequestImageAttachment,
-} from '@deepseek-ai/dsh-attachment'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+} from '@akashx/akx-attachment'
+import { assertNever } from '@akashx/akx-util-values'
 
 /** Execution-world path that model tools can use to read one normalized attachment. */
 export interface ImageAttachmentAccess {

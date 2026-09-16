@@ -1,0 +1,63 @@
+{
+  "name": "@akashx/akx-subagent-akx-sdk",
+  "description": "Out-of-process SDK subagent backend: drives a child AkashX Harness runtime subprocess over stdio JSON-RPC through the TypeScript SDK client",
+  "version": "0.1.5-rc.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
+    "directory": "packages/subagent/subagent-akx-sdk"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/types/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sdk-client": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-subagent": "workspace:^",
+    "@akashx/akx-subprocess": "workspace:^"
+  },
+  "dependencies": {
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/schemastery": "workspace:^"
+  },
+  "devDependencies": {
+    "@akashx/cordis": "workspace:^",
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-instructions": "workspace:^",
+    "@akashx/akx-app-boot": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-llm-akx": "workspace:^",
+    "@akashx/akx-loader-smoke": "workspace:^",
+    "@akashx/akx-sdk-client": "workspace:^",
+    "@akashx/akx-sdk-protocol": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-checkpoint-policy": "workspace:^",
+    "@akashx/akx-session-persistence-jsonl": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-skill-filesystem": "workspace:^",
+    "@akashx/akx-subagent": "workspace:^",
+    "@akashx/akx-subprocess": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tool-subagent": "workspace:^"
+  }
+}

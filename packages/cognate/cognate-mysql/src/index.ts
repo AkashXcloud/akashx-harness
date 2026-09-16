@@ -1,9 +1,9 @@
-/** Direct MySQL-wire provider for AkashXDB and the Cognate service. @module @deepseek-ai/dsh-cognate-mysql */
+/** Direct MySQL-wire provider for AkashXDB and the Cognate service. @module @akashx/akx-cognate-mysql */
 
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
 import { createConnection } from 'mysql2/promise'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { JsonValue } from '@akashx/akx-util-values'
 import type {
   CognateColumn,
   CognateCapabilityProbe,
@@ -12,8 +12,8 @@ import type {
   CognateQueryRequest,
   CognateQueryResult,
   CognateSemanticContext,
-} from '@deepseek-ai/dsh-cognate'
-import type {} from '@deepseek-ai/dsh-cognate'
+} from '@akashx/akx-cognate'
+import type {} from '@akashx/akx-cognate'
 
 /** A transport-independent query result used by deterministic provider tests. */
 export interface DirectQueryResult {

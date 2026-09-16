@@ -1,18 +1,18 @@
-import { createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
+import { createAssistantMessage, createUserMessage } from '@akashx/akx-llm'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context, type Fiber } from '@deepseek-ai/cordis'
+import { Context, type Fiber } from '@akashx/cordis'
 import { DatabaseSync } from 'node:sqlite'
 import { chmod, mkdtemp, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
-import SessionStore, { SessionLogOffset, SessionSeq, SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@deepseek-ai/dsh-session'
+import SessionStore, { SessionLogOffset, SessionSeq, SESSION_FORMAT_VERSION, SessionId } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@akashx/akx-session'
 import SessionPersistence, {
   SessionPersistenceNotFoundError,
   SessionPersistenceRevision,
   SessionReadOnlyError,
-} from '@deepseek-ai/dsh-session-persistence'
+} from '@akashx/akx-session-persistence'
 import type {
   SessionAccess,
   SessionHandle,
@@ -20,11 +20,11 @@ import type {
   SessionHandleReadResult,
   SessionPersistenceListOptions,
   SessionPersistenceSnapshot,
-} from '@deepseek-ai/dsh-session-persistence'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+} from '@akashx/akx-session-persistence'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
 import SqliteSessionQueryEngine, {
   SESSION_QUERY_SQLITE_SCHEMA_VERSION,
-} from '@deepseek-ai/dsh-session-query-sqlite'
+} from '@akashx/akx-session-query-sqlite'
 import {
   SESSION_QUERY_DEFAULT_PERSISTED_INSPECT_CONCURRENCY,
   SessionQueryError,
@@ -32,7 +32,7 @@ import {
   type SessionAvailability,
   type SessionQueryErrorCode,
   type SessionSearchRequest,
-} from '@deepseek-ai/dsh-session-query'
+} from '@akashx/akx-session-query'
 
 const temporaryDirectories: string[] = []
 
@@ -43,7 +43,7 @@ afterEach(async () => {
 })
 
 async function temporaryPath(name = 'search.db'): Promise<string> {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-session-search-'))
+  const directory = await mkdtemp(join(tmpdir(), 'akx-session-search-'))
   temporaryDirectories.push(directory)
   return join(directory, name)
 }

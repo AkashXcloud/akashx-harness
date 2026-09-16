@@ -1,15 +1,15 @@
 /** Session Remote owner: cold reads, explicit Agent commands, and live control state. */
 
 import { hostname } from 'node:os'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { errorChain } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-client-file-upload'
-import { canOpenNativePath, nativeFileManager, openNativePath, revealNativePath } from '@deepseek-ai/dsh-native-command'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionInspection } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { Remote, RemoteError, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { errorChain } from '@akashx/akx-llm'
+import type {} from '@akashx/akx-client-file-upload'
+import { canOpenNativePath, nativeFileManager, openNativePath, revealNativePath } from '@akashx/akx-native-command'
+import type { SessionId } from '@akashx/akx-session'
+import type { SessionInspection } from '@akashx/akx-session-persistence'
+import type { SessionObservation } from '@akashx/akx-session-query'
+import { Remote, RemoteError, TypertRemoteService } from '@akashx/akx-typert-protocol'
 import {
   ApiSessionAgentController,
   inspectApiSession,
@@ -62,7 +62,7 @@ export { ApiSessionNotFound } from './agent.ts'
 export { SessionFileReferences } from './file-references.ts'
 export { SessionSkillCatalog } from './skill-catalog.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     /** Host Session business API and Remote namespace owner. */
     sessionController: SessionController

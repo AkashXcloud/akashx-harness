@@ -1,19 +1,19 @@
 /** Agent activation, composition, and model-selection policy owned by API Session. */
 
 import { mkdir } from 'node:fs/promises'
-import type { Context } from '@deepseek-ai/cordis'
-import { installModelSelection } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@akashx/cordis'
+import { installModelSelection } from '@akashx/akx-agent'
 import type {
   Agent, AgentHandle, AgentOptions, AgentSetup, ModelSelection as AgentModelSelection, ModelSelectionRef,
-} from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-default-model'
-import type {} from '@deepseek-ai/dsh-agent-presets'
-import { ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionInspection } from '@deepseek-ai/dsh-session-persistence'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import type {} from '@deepseek-ai/dsh-typert-registry'
+} from '@akashx/akx-agent'
+import type {} from '@akashx/akx-agent-default-model'
+import type {} from '@akashx/akx-agent-presets'
+import { ReasoningEffortId } from '@akashx/akx-llm'
+import type { Session, SessionId } from '@akashx/akx-session'
+import type { SessionInspection } from '@akashx/akx-session-persistence'
+import { SessionQueryError, type SessionObservation } from '@akashx/akx-session-query'
+import { RemoteError } from '@akashx/akx-typert-protocol'
+import type {} from '@akashx/akx-typert-registry'
 import type { ModelSelection } from './types.ts'
 
 /** Cold Session identity absent from persistence. */

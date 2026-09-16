@@ -10,14 +10,14 @@
  * it until asked again.
  */
 
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@akashx/cordis'
 import type {
   ApprovalRequestId, CordisDynamicPluginId, DynamicCordisInvokeResult,
   DynamicCordisInventoryRow,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { ClientModuleSystem } from '@deepseek-ai/dsh-client-modules/client'
-import type { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+} from '@akashx/akx-api-remotes/client'
+import type { ClientModuleSystem } from '@akashx/akx-client-modules/client'
+import type { SlotRegistry } from '@akashx/akx-client-ui-renderer/client'
+import type { JsonValue } from '@akashx/akx-util-values'
 // The Client Remote assembly is the one place the two planes meet: it mounts the
 // `dynamicCordisRunner` namespace and re-exports its payload vocabulary, so this
 // package names what it sends without importing a Host package.
@@ -55,7 +55,7 @@ export { ClientTimerService } from './timer.ts'
 export type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
   DynamicCordisPackage,
-} from '@deepseek-ai/dsh-api-remotes/client'
+} from '@akashx/akx-api-remotes/client'
 
 
 /**
@@ -123,7 +123,7 @@ export interface CordisRunnerFace {
   isLoaded(pluginId: CordisDynamicPluginId): boolean
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     /** Run orchestration and page-local load state: what run surfaces read and call. */
     dynamicCordisRunner: CordisRunnerFace
@@ -293,17 +293,17 @@ export function apply(ctx: Context): void {
 
   // Forwarded Host events: `$on` hands the listener the Host's own argument list,
   // so these read the request itself rather than a transport envelope.
-  ctx.remote.$on('cordis/request-run', (request) => {
+  ctx.remote.$on('@akashx/cordis/request-run', (request) => {
     orchestrator.open(request)
   })
-  ctx.remote.$on('cordis/request-run-resolved', (resolved) => { orchestrator.close(resolved.requestId) })
-  ctx.remote.$on('cordis/dynamic-retract', (retracted) => {
+  ctx.remote.$on('@akashx/cordis/request-run-resolved', (resolved) => { orchestrator.close(resolved.requestId) })
+  ctx.remote.$on('@akashx/cordis/dynamic-retract', (retracted) => {
     runner.retract(retracted.pluginId, retracted.pluginRunId)
   })
-  ctx.remote.$on('cordis/inspect-query', (request) => {
+  ctx.remote.$on('@akashx/cordis/inspect-query', (request) => {
     void inspect.query(request).catch((error: unknown) => {
       console.error(`[cordis-client-runner] inspect query ${request.provider}.${request.method} failed:`, error)
     })
   })
-  ctx.remote.$on('cordis/inspect-query-resolved', (resolved) => { inspect.close(resolved.requestId) })
+  ctx.remote.$on('@akashx/cordis/inspect-query-resolved', (resolved) => { inspect.close(resolved.requestId) })
 }

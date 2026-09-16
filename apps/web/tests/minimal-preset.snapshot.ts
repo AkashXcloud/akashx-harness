@@ -4,12 +4,12 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { AgentHandle } from '@deepseek-ai/dsh-agent'
-import { ToolCallId, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-agent-presets'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { AgentHandle } from '@akashx/akx-agent'
+import { ToolCallId, createUserMessage } from '@akashx/akx-llm'
+import { SessionId } from '@akashx/akx-session'
+import type { Session } from '@akashx/akx-session'
+import type {} from '@akashx/akx-agent-presets'
+import type {} from '@akashx/akx-system-prompt'
 import {
   assertFixtureInventory,
   captureStableAria,
@@ -51,7 +51,7 @@ describe('minimal agent preset', () => {
     agentHandle = await scaffold.ctx.agents.create({
       sessionId: SessionId('minimal-preset-smoke'),
       meta: { cwd: scaffold.workspaceCwd, agentPreset: 'minimal' },
-      agentOptions: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      agentOptions: { provider: 'akashx-official', model: 'akashx-v4-flash' },
       setup: agentCtx => scaffold.ctx.agentPresets.mount(agentCtx, 'minimal').then(() => undefined),
     })
     agentHandle.agent.followup(createUserMessage({
@@ -83,7 +83,7 @@ describe('minimal agent preset', () => {
     if (systemPrompt === undefined) throw new Error('the minimal agent issued no system prompt')
     expect(agentHandle.agent.session.snapshotEvents().some(event => event.type === 'user/message'
       && event.data.source.kind === 'plugin'
-      && event.data.source.plugin === '@deepseek-ai/dsh-system-prompt')).toBe(false)
+      && event.data.source.plugin === '@akashx/akx-system-prompt')).toBe(false)
     expect(scaffold.ctx.agentPresets.serviceFor(agentHandle.agent, 'fs')).toBeUndefined()
     expect(scaffold.ctx.agentPresets.serviceFor(agentHandle.agent, 'compaction')).toBeUndefined()
 
@@ -94,14 +94,14 @@ describe('minimal agent preset', () => {
       signal,
       callId: ToolCallId('minimal-bash-state-setup'),
       name: 'bash',
-      arguments: { command: `cd ${JSON.stringify(stateDir)} && export DSH_MINIMAL_STATE=PERSISTED` },
+      arguments: { command: `cd ${JSON.stringify(stateDir)} && export AKX_MINIMAL_STATE=PERSISTED` },
       agent: agentHandle.agent,
     })
     const bash = await scaffold.ctx.tools.execute({
       signal,
       callId: ToolCallId('minimal-bash-state-read'),
       name: 'bash',
-      arguments: { command: 'printf \'%s:%s\n\' "$DSH_MINIMAL_STATE" "$PWD"' },
+      arguments: { command: 'printf \'%s:%s\n\' "$AKX_MINIMAL_STATE" "$PWD"' },
       agent: agentHandle.agent,
     })
     const text = (result: typeof bash): string => result.content

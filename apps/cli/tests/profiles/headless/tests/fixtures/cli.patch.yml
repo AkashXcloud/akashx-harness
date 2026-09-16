@@ -5,7 +5,7 @@
 - id: headless-runner
   disabled: true
 
-- id: llm-deepseek
+- id: llm-akx
   disabled: true
 
 - id: agent-loop
@@ -18,14 +18,14 @@
 
 - id: shell-env
   config:
-    dshHome: './.dsh-home'
+    akxHome: './.akx-home'
 
 - id: agent-instructions
   disabled: true
 
 - id: skill-filesystem
   config:
-    dshHome: './.dsh-home'
+    akxHome: './.akx-home'
     agentsHome: './.agents-home'
 
 - id: session-persistence-jsonl

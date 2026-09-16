@@ -1,18 +1,18 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, HarnessError } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, SessionId, type UserMessage } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context } from '@akashx/cordis'
+import AgentRegistry, { agentEvents } from '@akashx/akx-agent'
+import type { Agent } from '@akashx/akx-agent'
+import { createUserMessage, HarnessError } from '@akashx/akx-llm'
+import SessionStore, { Session, SessionId, type UserMessage } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
 import GoalService, {
   GoalError,
   GoalId,
   decodeGoalChange,
   foldGoal,
-} from '@deepseek-ai/dsh-goal'
-import type { GoalChangeMeta, GoalRef, GoalSnapshotChangeMeta } from '@deepseek-ai/dsh-goal'
-import { createInboxStub } from '@deepseek-ai/dsh-agent-loop-testkit'
+} from '@akashx/akx-goal'
+import type { GoalChangeMeta, GoalRef, GoalSnapshotChangeMeta } from '@akashx/akx-goal'
+import { createInboxStub } from '@akashx/akx-agent-loop-testkit'
 
 interface StubAgent {
   agent: Agent
@@ -71,7 +71,7 @@ function stubAgentForSession(session: Session, suppliedCtx?: Context): StubAgent
 /** Build a registry-compatible agent around a fresh session. */
 function stubAgent(
   rawId: string,
-  seed?: readonly import('@deepseek-ai/dsh-session').SessionEvent[],
+  seed?: readonly import('@akashx/akx-session').SessionEvent[],
   ctx?: Context,
 ): StubAgent {
   const session = ctx === undefined

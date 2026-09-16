@@ -1,6 +1,6 @@
 /**
- * @deepseek-ai/dsh-web-app — the browser-surface bundle's runtime glue plugin
- * plus the bundle patch (`cordis.patch.yml`, declared by the `dsh.bundle.patch`
+ * @akashx/akx-web-app — the browser-surface bundle's runtime glue plugin
+ * plus the bundle patch (`cordis.patch.yml`, declared by the `akx.bundle.patch`
  * manifest field). The plugin owns the browser-surface glue: it resolves
  * the built frontend dist (workspace knowledge of this bundle, never user
  * config), mounts the `frontend-static` fallback owner over it, registers the
@@ -8,7 +8,7 @@
  * variable, the process-token URL line, and the default-browser handoff. The
  * model and shell retain the clean URL. App command-line values arrive through
  * the `webStartup` service expressions in the bundle patch.
- * @module @deepseek-ai/dsh-web-app
+ * @module @akashx/akx-web-app
  */
 
 import { spawn, type ChildProcess } from 'node:child_process'
@@ -16,21 +16,21 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { networkInterfaces } from 'node:os'
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { addHarnessSourceSection } from '@deepseek-ai/dsh-app-boot'
-import type {} from '@deepseek-ai/dsh-client-connection'
-import * as FrontendStatic from '@deepseek-ai/dsh-host-frontend-static'
-import { launchedThroughSsh, launchEnvironmentOf } from '@deepseek-ai/dsh-launch-environment'
-import { scrubbedParentEnv } from '@deepseek-ai/dsh-subprocess'
-import type {} from '@deepseek-ai/cordis-plugin-loader'
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import type {} from '@deepseek-ai/dsh-shell-env'
+import type { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { addHarnessSourceSection } from '@akashx/akx-app-boot'
+import type {} from '@akashx/akx-client-connection'
+import * as FrontendStatic from '@akashx/akx-host-frontend-static'
+import { launchedThroughSsh, launchEnvironmentOf } from '@akashx/akx-launch-environment'
+import { scrubbedParentEnv } from '@akashx/akx-subprocess'
+import type {} from '@akashx/cordis-plugin-loader'
+import type {} from '@akashx/akx-host-webserver'
+import type {} from '@akashx/akx-shell-env'
 
 /** Stable Cordis plugin name. */
 export const name = 'web-app'
 
-/** This dsh installation's root, from either this package's source or built entry. */
+/** This akx installation's root, from either this package's source or built entry. */
 const SOURCE_ROOT = fileURLToPath(new URL('../../../..', import.meta.url))
 const ANNOUNCED_ROOTS = new WeakSet<Context>()
 
@@ -48,7 +48,7 @@ export interface Config {
   printUrl: boolean
   /**
    * Register the model-visible surface context (the `app:web-surface` prompt
-   * section and the `DSH_WEB_URL` bash variable). A one-shot non-interactive
+   * section and the `AKX_WEB_URL` bash variable). A one-shot non-interactive
    * layer can turn it off when its user is not in the GUI, so the
    * orientation text would be false.
    */
@@ -73,7 +73,7 @@ export interface WebRuntimeValues {
 }
 
 /** Environment variable naming the canonical local URL of this Web GUI. */
-const DSH_WEB_URL = 'DSH_WEB_URL' as const
+const AKX_WEB_URL = 'AKX_WEB_URL' as const
 
 // Display-only mirror of the webserver schema's loopback host: the address the
 // local URL always prints. Not a source of truth — the schema is.
@@ -133,7 +133,7 @@ export function resolveLanTrust(bindHost: string, extra: readonly string[]): Web
 
 /** Executable name used in process-facing and model-visible Web references. */
 function cliName(): string {
-  return process.env.DSH_CLI_NAME ?? 'dsh'
+  return process.env.AKX_CLI_NAME ?? 'akx'
 }
 
 /** Model-visible orientation and acceptance boundary for sessions created through the Web launcher. */
@@ -141,12 +141,12 @@ function webSurfacePrompt(webUrl: string): string {
   const updateContract = 'The client-plugin HMR receiver is active, but client-plugin changes reload without a refresh only while '
     + '`pnpm run dev:web` is also running from this same checkout to rebuild their bundles; verify that watcher before promising automatic updates. '
     + 'Every other change — the apps/web shell and plain packages — requires rebuilding the affected Web artifacts and verifying this existing URL after a page refresh. '
-  return `You are interacting with the user through the DeepSeek Harness Web GUI at ${webUrl}. `
+  return `You are interacting with the user through the AkashX Harness Web GUI at ${webUrl}. `
     + 'When the user refers to "this page", "this GUI", or "this app" without naming another target, they mean this GUI. '
     + 'The browser provides no implicit DOM, route, or screenshot context. '
     + updateContract
     + 'Starting another server does not update this GUI. '
-    + `The apps/web Vite entry builds the shell but is not a standalone application because only ${cliName()} web injects window.__DSH_BOOT__. `
+    + `The apps/web Vite entry builds the shell but is not a standalone application because only ${cliName()} web injects window.__AKX_BOOT__. `
     + 'Do not start a replacement server unless the user asks; if one is needed, use a managed background job and verify its exact URL.'
 }
 
@@ -167,10 +167,10 @@ function localWebUrl(ctx: Context): string {
 function resolveDistIndex(): string {
   const require = createRequire(import.meta.url)
   try {
-    return join(dirname(require.resolve('@deepseek-ai/dsh-web-frontend/package.json')), 'dist', 'index.html')
+    return join(dirname(require.resolve('@akashx/akx-web-frontend/package.json')), 'dist', 'index.html')
   } catch {
     /* v8 ignore next 2 -- reachable only when the frontend package is absent from the checkout */
-    throw new Error('web-app: @deepseek-ai/dsh-web-frontend is not resolvable from this composition')
+    throw new Error('web-app: @akashx/akx-web-frontend is not resolvable from this composition')
   }
 }
 
@@ -248,9 +248,9 @@ export function apply(ctx: Context, config: Config): void {
       runtimeCtx.shellEnv.register({
         name: 'web-runtime',
         variables: {
-          [DSH_WEB_URL]: { description: 'Canonical local URL of the DeepSeek Harness Web GUI serving this session.' },
+          [AKX_WEB_URL]: { description: 'Canonical local URL of the AkashX Harness Web GUI serving this session.' },
         },
-        resolve: () => ({ [DSH_WEB_URL]: localWebUrl(runtimeCtx) }),
+        resolve: () => ({ [AKX_WEB_URL]: localWebUrl(runtimeCtx) }),
       })
     })
   }

@@ -8,11 +8,11 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { packedWorkspaceClosure, readWorkspacePackages } from './packed-workspace-closure.ts'
 
 /**
- * Keyless publish-path rehearsal. It packs the provider, its workspace peers, the vendored framework
- * peer, and the current repository's Landlock entry/platform packages, then installs those exact
- * tarballs in an external plain-Node consumer. The host launcher comes from the exact local tarballs,
- * so no registry copy, tsx, path mapping, or workspace resolution can hide missing files, dependency
- * errors, or lost executable modes. npm may still query registry metadata for an incompatible optional platform
+ * Keyless publish-path rehearsal. It packs the provider, its workspace peers, and the current
+ * repository's Landlock entry/platform packages, then installs those exact tarballs in an external
+ * plain-Node consumer. The host launcher comes from the exact local tarballs, so no registry copy,
+ * tsx, path mapping, or workspace resolution can hide missing files, dependency errors, or lost
+ * executable modes. npm may still query registry metadata for an incompatible optional platform
  * package that cannot supply the host launcher.
  *
  * The installed launcher must match the host architecture, remain executable, and either confine a
@@ -24,9 +24,9 @@ const packageDir = fileURLToPath(new URL('..', import.meta.url))
 const repoRoot = fileURLToPath(new URL('../../../..', import.meta.url))
 const nativeDir = join(repoRoot, 'native/system')
 const sourceLauncher = join(nativeDir, 'packages', `linux-${process.arch}`, 'bin', 'landlock-run')
-const platformPackageName = `@deepseek-ai/node-addon-system-linux-${process.arch}`
+const platformPackageName = `@akashx/node-addon-system-linux-${process.arch}`
 
-const NATIVE_PACKAGE_PREFIX = '@deepseek-ai/node-addon-system'
+const NATIVE_PACKAGE_PREFIX = '@akashx/node-addon-system'
 
 /** ELF `e_machine` (offset 18, LE) for this host: x86-64 = 62, AArch64 = 183. */
 const E_MACHINE = { x64: 62, arm64: 183 }[process.arch as 'x64' | 'arm64']
@@ -53,9 +53,9 @@ let verdict: {
 
 describe.skipIf(!packable)('sandbox-local: packed-tarball distribution (publish-path rehearsal)', () => {
   beforeAll(async () => {
-    const packDest = mkdtempSync(join(tmpdir(), 'dsh-pack-'))
-    consumerDir = mkdtempSync(join(tmpdir(), 'dsh-packed-consumer-'))
-    workDir = mkdtempSync(join(tmpdir(), 'dsh-packed-work-'))
+    const packDest = mkdtempSync(join(tmpdir(), 'akx-pack-'))
+    consumerDir = mkdtempSync(join(tmpdir(), 'akx-packed-consumer-'))
+    workDir = mkdtempSync(join(tmpdir(), 'akx-packed-work-'))
 
     const nativePackDest = join(packDest, 'native')
     const nativePack = spawnSync('node', ['./scripts/pack-release.mjs', nativePackDest, '--current-platform-only'], {
@@ -73,7 +73,7 @@ describe.skipIf(!packable)('sandbox-local: packed-tarball distribution (publish-
     // Derive the current runtime closure so a newly introduced workspace
     // dependency cannot fall through to an unpublished registry version.
     const workspaceClosure = packedWorkspaceClosure(
-      '@deepseek-ai/dsh-sandbox-local',
+      '@akashx/akx-sandbox-local',
       readWorkspacePackages(repoRoot),
     ).filter(member => !member.name.startsWith(NATIVE_PACKAGE_PREFIX))
 
@@ -91,10 +91,10 @@ describe.skipIf(!packable)('sandbox-local: packed-tarball distribution (publish-
     }
     tarballs.push(...nativeTarballs)
 
-    // Peer ranges resolve to the tarballs, the framework peer included. Do not omit optional
+    // Peer ranges resolve to the tarballs; Cordis is pinned to their peer range. Do not omit optional
     // dependencies because the launcher selects its OS/CPU package through one.
-    writeFileSync(join(consumerDir, 'package.json'), JSON.stringify({ name: 'dsh-packed-consumer', private: true, type: 'module' }))
-    const install = spawnSync('npm', ['install', '--no-audit', '--no-fund', ...tarballs], {
+    writeFileSync(join(consumerDir, 'package.json'), JSON.stringify({ name: 'akx-packed-consumer', private: true, type: 'module' }))
+    const install = spawnSync('npm', ['install', '--no-audit', '--no-fund', ...tarballs, 'cordis@4.0.0-rc.7'], {
       cwd: consumerDir,
       encoding: 'utf8',
       timeout: 300_000,
@@ -108,9 +108,9 @@ describe.skipIf(!packable)('sandbox-local: packed-tarball distribution (publish-
     writeFileSync(join(consumerDir, 'consumer.mjs'), `
       import { spawnSync } from 'node:child_process'
       import { existsSync } from 'node:fs'
-      import { Context } from '@deepseek-ai/cordis'
-      import { launcherPath } from '@deepseek-ai/node-addon-system/landlock-run'
-      import { LocalSandboxProvider } from '@deepseek-ai/dsh-sandbox-local'
+      import { Context } from '@akashx/cordis'
+      import { launcherPath } from '@akashx/node-addon-system/landlock-run'
+      import { LocalSandboxProvider } from '@akashx/akx-sandbox-local'
       const ctx = new Context()
       await ctx.plugin(LocalSandboxProvider, {})
       const sandbox = ctx.sandbox

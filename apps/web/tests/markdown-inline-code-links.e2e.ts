@@ -2,9 +2,9 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { createMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-title'
+import { createMessage, createUserMessage } from '@akashx/akx-llm'
+import { SESSION_FORMAT_VERSION, Session, SessionId } from '@akashx/akx-session'
+import type {} from '@akashx/akx-session-title'
 import {
   assertFixtureInventory,
   captureStableAria,

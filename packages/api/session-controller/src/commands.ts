@@ -1,27 +1,27 @@
 /** Session commands whose activation policy is explicit at each Remote method. */
 
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Agent, ModelSelection as AgentModelSelection } from '@deepseek-ai/dsh-agent'
-import { AttachmentError } from '@deepseek-ai/dsh-attachment'
+import type { Context } from '@akashx/cordis'
+import { brandString } from '@akashx/akx-brand'
+import type { Agent, ModelSelection as AgentModelSelection } from '@akashx/akx-agent'
+import { AttachmentError } from '@akashx/akx-attachment'
 import type {
   AttachmentAdmissionPart, FileAttachmentRef, ImageAttachmentRef,
-} from '@deepseek-ai/dsh-attachment'
-import type { FileUploadReceiptId } from '@deepseek-ai/dsh-client-file-upload/types'
-import type {} from '@deepseek-ai/dsh-client-file-upload'
+} from '@akashx/akx-attachment'
+import type { FileUploadReceiptId } from '@akashx/akx-client-file-upload/types'
+import type {} from '@akashx/akx-client-file-upload'
 import {
   ReasoningEffortId, assistantStreamChunks, createUserMessage, freezeMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { MessageSource } from '@deepseek-ai/dsh-llm'
-import { SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader, SessionId, UserMessage } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { SessionTitleInvalidError } from '@deepseek-ai/dsh-session-title'
-import { canonicalClientTimeZone } from '@deepseek-ai/dsh-util-time'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import { RemoteError, remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import type { Workspace } from '@deepseek-ai/dsh-workspace'
+} from '@akashx/akx-llm'
+import type { MessageSource } from '@akashx/akx-llm'
+import { SessionLogOffset, SessionSeq } from '@akashx/akx-session'
+import type { SessionEvent, SessionHeader, SessionId, UserMessage } from '@akashx/akx-session'
+import { SessionQueryError, type SessionObservation } from '@akashx/akx-session-query'
+import { SessionTitleInvalidError } from '@akashx/akx-session-title'
+import { canonicalClientTimeZone } from '@akashx/akx-util-time'
+import { assertNever } from '@akashx/akx-util-values'
+import { RemoteError, remoteErrorOf } from '@akashx/akx-typert-protocol'
+import type { Workspace } from '@akashx/akx-workspace'
 import {
   ApiSessionAgentController,
   ApiSessionCwdConflict,

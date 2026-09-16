@@ -5,7 +5,7 @@
 
 [English](persistence-catalog.md) | 中文
 
-会话持久事件日志中可能出现的所有事件类型：完整持久化的 `SessionEvent` 信封，以及可通过合并扩展的 `SessionEventMap` 中的每个成员，包括 `@deepseek-ai/dsh-session` 所属的词汇和本仓库中每个插件对 `@deepseek-ai/dsh-session/types` 的声明合并，并附有源 JSDoc、完整 payload 声明、surface 标记和声明位置。本文档是 [session.md](subsystems/session.zh.md)（surface 排序与 `deriveMessages()` 投影）、[persistence.md](subsystems/persistence.zh.md)（如何让日志持久化）和 [session.md](subsystems/session.zh.md#cordis-surface) 中生成区域（实时总线接线；日志事件**不是** cordis 事件，它通过唯一的 `session/event` emit 到达监听器）的补充。
+会话持久事件日志中可能出现的所有事件类型：完整持久化的 `SessionEvent` 信封，以及可通过合并扩展的 `SessionEventMap` 中的每个成员，包括 `@akashx/akx-session` 所属的词汇和本仓库中每个插件对 `@akashx/akx-session/types` 的声明合并，并附有源 JSDoc、完整 payload 声明、surface 标记和声明位置。本文档是 [session.md](subsystems/session.zh.md)（surface 排序与 `deriveMessages()` 投影）、[persistence.md](subsystems/persistence.zh.md)（如何让日志持久化）和 [session.md](subsystems/session.zh.md#cordis-surface) 中生成区域（实时总线接线；日志事件**不是** cordis 事件，它通过唯一的 `session/event` emit 到达监听器）的补充。
 
 英文源文件根据源码生成（`scripts/gen-persistence-catalog.ts`），并由 `pnpm run verify-persistence-catalog`（`doc-sync`（文档同步门禁）的一部分）验证新鲜度；本中文文件作为经评审对侧通过双语配对维护。声明块保留源码声明和嵌套属性的 JSDoc，只移除其所在接口／模块带来的缩进，并使用 `ts persistence-catalog` 围栏（doc-typecheck 会跳过这些围栏，因为声明引用了其所属模块中的类型）。payload 中的类型名称会链接到记录该类型的页面。已归档的 [persistence-log-catalog 记录](../.agents/notes/archived/process/2026-07-04-persistence-log-catalog.md)记载了最初的目录决策。
 
@@ -261,7 +261,7 @@ export type SessionEvent<T extends SessionEventType = SessionEventType> = {
   commandId: CommandId
   kind: 'success' | 'error'
   text?: string
-  sourceEventSeq?: import('@deepseek-ai/dsh-session/types').SessionSeq
+  sourceEventSeq?: import('@akashx/akx-session/types').SessionSeq
 }
 ```
 
@@ -732,25 +732,25 @@ export type SessionEvent<T extends SessionEventType = SessionEventType> = {
 
 来源：[`packages/session/session-title-llm/src/index.ts:45`](../packages/session/session-title-llm/src/index.ts)
 
-### `session-log-deepseek/*`
+### `session-log-akx/*`
 
-<a id="session-log-deepseekdelivery-accepted--log-only"></a>
+<a id="session-log-akxdelivery-accepted--log-only"></a>
 
-#### `session-log-deepseek/delivery-accepted` — log-only
+#### `session-log-akx/delivery-accepted` — log-only
 
 ```ts persistence-catalog
 /** Records that the configured endpoint accepted one delivery through `throughSeq`. */
-'session-log-deepseek/delivery-accepted': {
+'session-log-akx/delivery-accepted': {
   /** Session identity the accepted delivery carried; inherited fork markers retain the parent's id. */
-  sessionId: import('@deepseek-ai/dsh-session/types').SessionId
+  sessionId: import('@akashx/akx-session/types').SessionId
   /** Accepted Session format generation; absence identifies version 0. */
   sessionFormatVersion?: number
   /** Last canonical event included in the accepted request. */
-  throughSeq: import('@deepseek-ai/dsh-session/types').SessionSeq
+  throughSeq: import('@akashx/akx-session/types').SessionSeq
 }
 ```
 
-来源：[`packages/session/session-log-deepseek/src/types.ts:81`](../packages/session/session-log-deepseek/src/types.ts)
+来源：[`packages/session/session-log-akx/src/types.ts:81`](../packages/session/session-log-akx/src/types.ts)
 
 ### `step/*`
 
@@ -1006,7 +1006,7 @@ export type SessionEvent<T extends SessionEventType = SessionEventType> = {
  * runtime-validates all event data with `isJsonValue`, so a non-serializable
  * `meta` is rejected at the source, and the durable log reproduces the
  * identical card on replay. Absent
- * unless the tool attaches one (e.g. `dsh-tool-fs` carries its result-time
+ * unless the tool attaches one (e.g. `akx-tool-fs` carries its result-time
  * contextual diff here).
  */
 'tool/result': {
@@ -1089,7 +1089,7 @@ export type SessionEvent<T extends SessionEventType = SessionEventType> = {
 /**
  * Closes turn `turn` with the {@link TurnEndReason} that ended it. A turn
  * with no entered step has no `step/start` or `step/end`. The loop does not await a
- * flush at turn boundaries: `dsh-session-checkpoint-policy` owns the
+ * flush at turn boundaries: `akx-session-checkpoint-policy` owns the
  * per-request durability checkpoint, and consumers that read storage after
  * `whenIdle()` flush themselves. Success commits the turn; rejection is
  * reported live and does not prevent later work.
@@ -1138,13 +1138,13 @@ export type SessionEvent<T extends SessionEventType = SessionEventType> = {
 
 ### `web/*`
 
-<a id="webdeepseek-search-llm-request--log-only"></a>
+<a id="webakashx-search-llm-request--log-only"></a>
 
-#### `web/deepseek-search-llm-request` — log-only
+#### `web/akashx-search-llm-request` — log-only
 
 ```ts persistence-catalog
-/** Secret-free auxiliary DeepSeek search request recorded before dispatch. */
-'web/deepseek-search-llm-request': DeepSeekSearchLlmRequest
+/** Secret-free auxiliary AkashX search request recorded before dispatch. */
+'web/akashx-search-llm-request': AkashXSearchLlmRequest
 ```
 
-来源：[`packages/web/web-search-deepseek/src/provider.ts:83`](../packages/web/web-search-deepseek/src/provider.ts)
+来源：[`packages/web/web-search-akx/src/provider.ts:83`](../packages/web/web-search-akx/src/provider.ts)

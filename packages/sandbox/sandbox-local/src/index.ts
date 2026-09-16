@@ -17,7 +17,7 @@
  * stops managing DACLs itself. The rung reports partial enforcement because
  * WRITE_RESTRICTED must retain Everyone in its
  * restricting list and NTFS hard links alias one file object across paths.
- * @module @deepseek-ai/dsh-sandbox-local
+ * @module @akashx/akx-sandbox-local
  */
 
 import { spawnSync } from 'node:child_process'
@@ -30,14 +30,14 @@ import {
   LAUNCHER_FAILURE_EXIT,
   launcherPath as landlockLauncherPath,
   probe as defaultProbeLandlock,
-} from '@deepseek-ai/node-addon-system/landlock-run'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { SandboxProvider, SandboxUnavailableError } from '@deepseek-ai/dsh-sandbox'
-import type { ConfinedArgv, ConfinedSandboxMode, RunnerFailureRule, SandboxEnforcement, SandboxPolicy } from '@deepseek-ai/dsh-sandbox'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { AclWriteGrant, assertTempRootOutsideWorkspace, tempWriteSid, workspaceWriteSid } from '@deepseek-ai/dsh-sandbox-windows-acl'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+} from '@akashx/node-addon-system/landlock-run'
+import { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { SandboxProvider, SandboxUnavailableError } from '@akashx/akx-sandbox'
+import type { ConfinedArgv, ConfinedSandboxMode, RunnerFailureRule, SandboxEnforcement, SandboxPolicy } from '@akashx/akx-sandbox'
+import type { SessionId } from '@akashx/akx-session'
+import { AclWriteGrant, assertTempRootOutsideWorkspace, tempWriteSid, workspaceWriteSid } from '@akashx/akx-sandbox-windows-acl'
+import { assertNever } from '@akashx/akx-util-values'
 import { bwrapProfileArgs, landlockProfileArgs, seatbeltProfileArgs } from './profiles.ts'
 
 /** Plugin config. All optional — `static Config` supplies the defaults. */
@@ -159,7 +159,7 @@ interface AclTempCapability {
 const PLATFORM_CHAINS: Record<string, readonly SelectedRunner['runner'][]> = {
   linux: ['bwrap', 'landlock'],
   darwin: ['seatbelt'],
-  // The Windows restricted-token runner (@deepseek-ai/dsh-sandbox-windows-acl):
+  // The Windows restricted-token runner (@akashx/akx-sandbox-windows-acl):
   // a sole candidate, selected without a probe — its execution-time refusal
   // fails closed through its stderr signature (windows-acl-run:) and exit 127.
   win32: ['windows-acl'],
@@ -412,7 +412,7 @@ export class LocalSandboxProvider extends SandboxProvider {
     const key = JSON.stringify([String(sessionId), workspaceRoot])
     const existing = this.tempCapabilities.get(key)
     if (existing !== undefined) return existing
-    const tempDir = mkdtempSync(join(tmpdir(), 'dsh-'))
+    const tempDir = mkdtempSync(join(tmpdir(), 'akx-'))
     const tempSid = tempWriteSid(tempDir)
     let grant: AclWriteGrant | undefined
     try {
@@ -557,9 +557,9 @@ export class LocalSandboxProvider extends SandboxProvider {
   private windowsAclRunnerInvocation(): string[] {
     const override = this.internals.windowsAclRunnerArgs
     if (override !== undefined) return override
-    const builtEntry = this.internals.windowsAclRunnerEntry ?? fileURLToPath(import.meta.resolve('@deepseek-ai/dsh-sandbox-windows-acl/runner'))
+    const builtEntry = this.internals.windowsAclRunnerEntry ?? fileURLToPath(import.meta.resolve('@akashx/akx-sandbox-windows-acl/runner'))
     if (existsSync(builtEntry)) return [process.execPath, builtEntry]
-    const sourceEntry = fileURLToPath(import.meta.resolve('@deepseek-ai/dsh-sandbox-windows-acl/src/runner.ts'))
+    const sourceEntry = fileURLToPath(import.meta.resolve('@akashx/akx-sandbox-windows-acl/src/runner.ts'))
     return [process.execPath, '--import', 'tsx/esm', sourceEntry]
   }
 }

@@ -1,23 +1,23 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
-import type { RunningToolCall, ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import type { ToolCallOwnerProps } from '@deepseek-ai/dsh-client-ui-tool/client'
-import { IconGlobeOutline14 } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { RunningToolCall, ToolResultNode } from '@akashx/akx-client-ui-chat/client'
+import type { ToolCallOwnerProps } from '@akashx/akx-client-ui-tool/client'
+import { IconGlobeOutline14 } from '@akashx/akx-client-ui-primitives'
 import { webCardModel } from '../src/client/tool/models/web-card-model.ts'
 import { GenericToolCard } from '../src/client/tool/toolviews/GenericToolCard.tsx'
 import { WebRow, webToolview } from '../src/client/tool/toolviews/web-row.tsx'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { en } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
+import { en } from '@akashx/akx-client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 
 
 const t = makeTranslate(en, commonEn)
 
-const SEARCH_ARGS = '{"queries":["deepseek harness"]}'
+const SEARCH_ARGS = '{"queries":["akashx harness"]}'
 const FETCH_ARGS = '{"url":"https://example.com/page"}'
 
 interface SearchMeta {
@@ -111,7 +111,7 @@ describe('webCardModel', () => {
 
   it('accepts open-root extensions while validating declared web arguments', () => {
     expect(webCardModel(settledSearch({
-      call: { name: 'web_search', argsRaw: '{"queries":["deepseek"],"extension":1}' },
+      call: { name: 'web_search', argsRaw: '{"queries":["akashx"],"extension":1}' },
     }))).not.toBeNull()
     expect(webCardModel(settledSearch({
       call: { name: 'web_search', argsRaw: '{"queries":[7]}' },
@@ -215,7 +215,7 @@ describe('web toolview registration', () => {
           return () => {}
         },
       },
-    } as unknown as import('@deepseek-ai/cordis').Context
+    } as unknown as import('@akashx/cordis').Context
     webToolview.apply(ctx)
     expect(registered.map(r => r.key)).toEqual(['web_search', 'web_fetch'])
     // Both keys claim the conversation locale seat ToolRow's body copy needs.

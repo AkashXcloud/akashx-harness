@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/feature/2026-08-11-background-job-completion-wakes-an-idle-owner.md
-2026-08-11-background-job-completion-wakes-an-idle-owner.md: cb724d95f85900b3c55fdebfdc335e9da6439d29
-2026-08-11-background-job-completion-wakes-an-idle-owner.zh.md: 1107fa2c8fdd9d3e4e45031c54fb87f5aac8ea18
+2026-08-11-background-job-completion-wakes-an-idle-owner.md: 1bc847821acc77bbf0d1e8e9903f5112a5a088b0
+2026-08-11-background-job-completion-wakes-an-idle-owner.zh.md: 51de6f442e4e18bfe6310b860870e91b1e55d03a

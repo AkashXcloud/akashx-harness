@@ -13,13 +13,13 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import LlmRuntime, { createMessage, createUserMessage, userAgent } from '@deepseek-ai/dsh-llm'
-import LocalCredentialProvider from '@deepseek-ai/dsh-credentials-local'
-import FileSettingsProvider from '@deepseek-ai/dsh-settings-file'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import Include from '@akashx/cordis-plugin-include'
+import LlmRuntime, { createMessage, createUserMessage, userAgent } from '@akashx/akx-llm'
+import LocalCredentialProvider from '@akashx/akx-credentials-local'
+import FileSettingsProvider from '@akashx/akx-settings-file'
+import * as LlmPiAi from '@akashx/akx-llm-pi-ai'
 import { assemble } from './assemble.ts'
 import { closeMockServers, mockServer, textEvents } from './mock-server.ts'
 
@@ -46,7 +46,7 @@ afterEach(async () => {
 
 /** Boot the dormant composition: a bare `llm-pi-ai` row with no config at all. */
 async function loadComposition(): Promise<{ ctx: Context; settingsPath: string }> {
-  root = await mkdtemp(join(tmpdir(), 'dsh-pi-composition-'))
+  root = await mkdtemp(join(tmpdir(), 'akx-pi-composition-'))
   const settingsPath = join(root, 'settings.yaml')
   await writeFile(settingsPath, '# personal settings\n')
   await writeFile(join(root, '.credentials.yaml'), 'version: 1\nrefs:\n  PI_COMPOSITION_KEY: key-from-store\n', { mode: 0o600 })
@@ -56,17 +56,17 @@ async function loadComposition(): Promise<{ ctx: Context; settingsPath: string }
     '- id: llm',
     "  name: 'test-llm-service'",
     '- id: settings',
-    "  name: '@deepseek-ai/dsh-settings-file'",
+    "  name: '@akashx/akx-settings-file'",
     '  config:',
     `    path: ${JSON.stringify(settingsPath)}`,
     '    debounceMs: 10',
     '- id: credentials',
-    "  name: '@deepseek-ai/dsh-credentials-local'",
+    "  name: '@akashx/akx-credentials-local'",
     '  config:',
     `    path: ${JSON.stringify(join(root, '.credentials.yaml'))}`,
     '    debounceMs: 10',
     '- id: llm-pi-ai',
-    "  name: '@deepseek-ai/dsh-llm-pi-ai'",
+    "  name: '@akashx/akx-llm-pi-ai'",
     '',
   ].join('\n'))
 
@@ -77,9 +77,9 @@ async function loadComposition(): Promise<{ ctx: Context; settingsPath: string }
   ctx.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
     ['test-llm-service', LlmRuntime],
-    ['@deepseek-ai/dsh-settings-file', FileSettingsProvider],
-    ['@deepseek-ai/dsh-credentials-local', LocalCredentialProvider],
-    ['@deepseek-ai/dsh-llm-pi-ai', LlmPiAi],
+    ['@akashx/akx-settings-file', FileSettingsProvider],
+    ['@akashx/akx-credentials-local', LocalCredentialProvider],
+    ['@akashx/akx-llm-pi-ai', LlmPiAi],
   ])
   ctx.loader.internal = {
     version: 'v2',
@@ -109,7 +109,7 @@ describe('llm-pi-ai real dormant composition', () => {
     await writeFile(settingsPath, [
       'llm-pi-ai:',
       '  providers:',
-      '    deepseek:',
+      '    akashx:',
       '      apiKeyEnv: PI_COMPOSITION_KEY',
       `      baseURL: ${server.url}`,
       '',
@@ -118,7 +118,7 @@ describe('llm-pi-ai real dormant composition', () => {
       expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
     }, { timeout: 5000 })
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'deepseek', model: 'akashx-v4-flash', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer key-from-store')
   })
@@ -169,7 +169,7 @@ describe('llm-pi-ai real dormant composition', () => {
     await writeFile(settingsPath, [
       'llm-pi-ai:',
       '  providers:',
-      '    deepseek:',
+      '    akashx:',
       '      apiKeyEnv: PI_COMPOSITION_KEY',
       `      baseURL: ${server.url}`,
       '',
@@ -180,7 +180,7 @@ describe('llm-pi-ai real dormant composition', () => {
 
     const truncated = await assemble(ctx, {
       provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      model: 'akashx-v4-flash',
       messages: [],
     })
     expect(truncated.finish).toEqual({ kind: 'max-tokens' })
@@ -188,14 +188,14 @@ describe('llm-pi-ai real dormant composition', () => {
     expect(truncated.message.source).toEqual({
       kind: 'model',
       provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      model: 'akashx-v4-flash',
       replayState: {
         response: {
           kind: 'pi-ai',
           version: 2,
           api: 'openai-completions',
           provider: 'deepseek',
-          model: 'deepseek-v4-flash',
+          model: 'akashx-v4-flash',
           stopReason: 'length',
         },
         blocks: [{ type: 'text' }],
@@ -204,7 +204,7 @@ describe('llm-pi-ai real dormant composition', () => {
 
     const continued = await assemble(ctx, {
       provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      model: 'akashx-v4-flash',
       messages: [
         truncated.message,
         createUserMessage({ content: [{ type: 'text', text: 'continue' }], source: { kind: 'user' } }),
@@ -229,7 +229,7 @@ describe('llm-pi-ai real dormant composition', () => {
     await writeFile(settingsPath, [
       'llm-pi-ai:',
       '  providers:',
-      '    deepseek:',
+      '    akashx:',
       '      apiKeyEnv: PI_COMPOSITION_KEY',
       `      baseURL: ${server.url}`,
       '',
@@ -247,13 +247,13 @@ describe('llm-pi-ai real dormant composition', () => {
         kind: 'model',
         ...{
           provider: 'deepseek',
-          model: 'deepseek-v4-flash',
+          model: 'akashx-v4-flash',
           replayState: {
             kind: 'pi-ai',
             version: 1,
             api: 'openai-completions',
             provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            model: 'akashx-v4-flash',
             stopReason: 'length',
             blocks: [{ type: 'text' }, { type: 'tool-call' }],
           },
@@ -262,7 +262,7 @@ describe('llm-pi-ai real dormant composition', () => {
     })
     const continued = await assemble(ctx, {
       provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      model: 'akashx-v4-flash',
       messages: [
         poisoned,
         createUserMessage({ content: [{ type: 'text', text: 'continue' }], source: { kind: 'user' } }),

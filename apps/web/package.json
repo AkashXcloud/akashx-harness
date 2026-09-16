@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-web-frontend",
-  "description": "Web application entry: vite build over the @deepseek-ai/dsh-client-web shell library; dist/ served by apps/cli's dsh web",
+  "name": "@akashx/akx-web-frontend",
+  "description": "Web application entry: vite build over the @akashx/akx-client-web shell library; dist/ served by apps/cli's akx web",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "apps/web"
   },
   "type": "module",
@@ -25,22 +25,22 @@
     "build": "vite build",
     "dev": "vite",
     "watch": "vite build --watch --no-emptyOutDir",
-    "build:preview": "pnpm --filter @deepseek-ai/dsh-experimental-webworker-runtime exec tsdown && pnpm --filter @deepseek-ai/dsh-experimental-webworker-packer exec tsdown && vite build && dsh-pack-vfs-image --out dist/preview/vfs-image.tar.gz",
+    "build:preview": "pnpm --filter @akashx/akx-experimental-webworker-runtime exec tsdown && pnpm --filter @akashx/akx-experimental-webworker-packer exec tsdown && vite build && akx-pack-vfs-image --out dist/preview/vfs-image.tar.gz",
     "serve:preview": "http-server dist -a 0.0.0.0 -p 4173 -c-1"
   },
   "license": "MIT",
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-group": "workspace:^",
-    "@deepseek-ai/dsh-client-modules": "workspace:^",
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-dockkit": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-client-web": "workspace:^",
-    "@deepseek-ai/dsh-cmdline": "workspace:^",
-    "@deepseek-ai/dsh-pwsh-local": "workspace:^",
-    "@deepseek-ai/dsh-experimental-webworker-packer": "workspace:^",
-    "@deepseek-ai/dsh-experimental-webworker-runtime": "workspace:^",
+    "@akashx/cordis-plugin-group": "workspace:^",
+    "@akashx/akx-client-modules": "workspace:^",
+    "@akashx/akx-client-store": "workspace:^",
+    "@akashx/akx-client-ui-dockkit": "workspace:^",
+    "@akashx/akx-client-ui-primitives": "workspace:^",
+    "@akashx/akx-client-ui-slots": "workspace:^",
+    "@akashx/akx-client-web": "workspace:^",
+    "@akashx/akx-cmdline": "workspace:^",
+    "@akashx/akx-pwsh-local": "workspace:^",
+    "@akashx/akx-experimental-webworker-packer": "workspace:^",
+    "@akashx/akx-experimental-webworker-runtime": "workspace:^",
     "@types/node": "^22.0.0",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.0",
@@ -55,6 +55,6 @@
     "vite": "^6.0.0",
     "vitest": "^4.1.8",
     "ws": "8.21.0",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^"
+    "@akashx/akx-launch-environment": "workspace:^"
   }
 }

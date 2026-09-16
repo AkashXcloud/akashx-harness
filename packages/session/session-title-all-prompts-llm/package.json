@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-session-title-all-prompts-llm",
-  "description": "All-user-messages LLM provider plugin for DeepSeek Harness session titles",
+  "name": "@akashx/akx-session-title-all-prompts-llm",
+  "description": "All-user-messages LLM provider plugin for AkashX Harness session titles",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/session/session-title-all-prompts-llm"
   },
   "type": "module",
@@ -23,22 +23,22 @@
   "files": ["lib/index.js", "lib/types/**/*.d.ts"],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-session-title-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-title": "workspace:^",
+    "@akashx/akx-session-title-llm": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-session-title-llm": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^"
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-title": "workspace:^",
+    "@akashx/akx-session-title-llm": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-agent-loop": "workspace:^"
   }
 }

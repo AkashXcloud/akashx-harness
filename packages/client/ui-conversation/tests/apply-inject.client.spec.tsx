@@ -1,21 +1,21 @@
 // @vitest-environment jsdom
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import type { CommandContribution, CommandUiContract } from '@deepseek-ai/dsh-client-ui-commands/client'
-import type { ISession } from '@deepseek-ai/dsh-api-session-controller/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
+import type { CommandContribution, CommandUiContract } from '@akashx/akx-client-ui-commands/client'
+import type { ISession } from '@akashx/akx-api-session-controller/client'
+import { LocaleRuntime } from '@akashx/akx-client-locale/client'
+import type { ObservableSnapshot } from '@akashx/akx-client-store'
 import {
   SlotTestRuntime, stubSettingsScope, usePinnedBrowserLanguages,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionBehaviorOverrides } from '@deepseek-ai/dsh-client-test-runtime'
+} from '@akashx/akx-client-test-runtime'
+import type { SessionBehaviorOverrides } from '@akashx/akx-client-test-runtime'
 import {
   apply, inject, type ComposerBarInjected, type ConversationInjected,
   type ConversationSessionHeaderInjected, type ConversationSessionInjected, type ViewTab,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
+} from '@akashx/akx-client-ui-conversation/client'
+import type { SessionId } from '@akashx/akx-session/types'
+import type { WorkspaceId } from '@akashx/akx-workspace/types'
 import { createConversationStore } from '../src/client/stores.ts'
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import { RemoteError } from '@akashx/akx-client-test-runtime'
 
 usePinnedBrowserLanguages('zh-CN')
 
@@ -211,7 +211,7 @@ describe('Conversation inject API', () => {
     let removeCustom: (() => void) | undefined
     try {
       await b.runtime.flush()
-      localStorage.setItem(`dsh.conversation.${ROOT}`, JSON.stringify({
+      localStorage.setItem(`akx.conversation.${ROOT}`, JSON.stringify({
         draft: '', view: 'custom', viewRequest: null,
       }))
 

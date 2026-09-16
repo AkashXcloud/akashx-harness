@@ -5,26 +5,26 @@
  * Background policy is selected by this plugin's configuration: one-shot
  * calls own a plain Task, while continuable calls use
  * `ctx.subagents.startContinuable()`.
- * @module @deepseek-ai/dsh-tool-subagent
+ * @module @akashx/akx-tool-subagent
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { scopeChainOf, scopeOf } from '@deepseek-ai/dsh-scope'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { Agent, AgentOptions } from '@deepseek-ai/dsh-agent'
-import { ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import { SessionSeq } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
+import type { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { scopeChainOf, scopeOf } from '@akashx/akx-scope'
+import { defineTool } from '@akashx/akx-tools'
+import type { Agent, AgentOptions } from '@akashx/akx-agent'
+import { ReasoningEffortId } from '@akashx/akx-llm'
+import type { ContentBlock } from '@akashx/akx-llm'
+import type { JsonValue } from '@akashx/akx-util-values'
+import { SessionSeq } from '@akashx/akx-session'
+import type { Session } from '@akashx/akx-session'
 import {
   assertSubagentMaxDepth,
   parentAgentOptionsForDelegation,
   settleRun,
-} from '@deepseek-ai/dsh-subagent'
-import type { SubagentProvider, SubagentResult, SubagentRun } from '@deepseek-ai/dsh-subagent'
-import type { JobOutcome } from '@deepseek-ai/dsh-jobs'
+} from '@akashx/akx-subagent'
+import type { SubagentProvider, SubagentResult, SubagentRun } from '@akashx/akx-subagent'
+import type { JobOutcome } from '@akashx/akx-jobs'
 import {
   assertAllowedModelSelection,
   hasConfiguredLlmSelection,
@@ -537,7 +537,7 @@ export function apply(ctx: Context, config: Config, session?: Session): void {
             }
             const jobs = runtimeCtx.get('jobs')
             if (jobs === undefined) {
-              throw new Error('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+              throw new Error('background jobs unavailable: load @akashx/akx-jobs and @akashx/akx-tool-jobs')
             }
             // One-shot background child: job preflight finishes before the
             // starter can spawn, and the task-owned signal covers startup.
@@ -614,7 +614,7 @@ export function apply(ctx: Context, config: Config, session?: Session): void {
   if (settings === undefined) {
     throw new Error(
       'tool-subagent: `modelSelectionSettings` requires '
-      + '@deepseek-ai/dsh-tool-subagent/model-selection-settings in the Host scope',
+      + '@akashx/akx-tool-subagent/model-selection-settings in the Host scope',
     )
   }
   const selectForSession = (target: Session): ModelSelectionPolicy | undefined => {

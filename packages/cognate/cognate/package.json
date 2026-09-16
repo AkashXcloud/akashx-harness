@@ -1,11 +1,11 @@
 {
-  "name": "@deepseek-ai/dsh-cognate",
+  "name": "@akashx/akx-cognate",
   "description": "AkashXDB query capability seam for Cognate integrations",
   "version": "0.1.5-rc.2",
   "publishConfig": { "access": "public" },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/cognate/cognate"
   },
   "type": "module",
@@ -20,13 +20,13 @@
   "files": ["lib/index.js", "lib/types/**/*.js", "lib/types/**/*.d.ts"],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   }
 }

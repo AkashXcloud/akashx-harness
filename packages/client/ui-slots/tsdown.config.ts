@@ -1,6 +1,6 @@
 import { staticLinked } from '../tsdown.client.ts'
 
 export default staticLinked(
-  '@deepseek-ai/dsh-client-ui-slots',
+  '@akashx/akx-client-ui-slots',
   ['lib/types/index.js'],
 )

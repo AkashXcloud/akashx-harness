@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-http-proxy",
-  "description": "Process-wide outbound HTTP proxy policy for DeepSeek Harness: resolve it from the launch environment and install it as undici's global dispatcher",
+  "name": "@akashx/akx-http-proxy",
+  "description": "Process-wide outbound HTTP proxy policy for AkashX Harness: resolve it from the launch environment and install it as undici's global dispatcher",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/util/http-proxy"
   },
   "type": "module",
@@ -27,13 +27,13 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
     "undici": "^8.10.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^"
   }
 }

@@ -1,10 +1,10 @@
-/** Package-owned durable plan-mode invariants. @module @deepseek-ai/dsh-plan-mode/invariant */
+/** Package-owned durable plan-mode invariants. @module @akashx/akx-plan-mode/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@akashx/cordis'
+import type { Session, SessionEvent } from '@akashx/akx-session'
+import type { InvariantFailure, InvariantInstaller } from '@akashx/akx-invariants'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-plan-mode'
+const PACKAGE_NAME = '@akashx/akx-plan-mode'
 
 /** Cordis companion plugin name. */
 export const name = 'plan-mode-invariant'

@@ -11,13 +11,13 @@
  * `AKASHXDB_URL` convention the Cognate MySQL provider uses, so one environment
  * variable configures both the model-facing query path and this status surface.
  *
- * @module @deepseek-ai/dsh-api-cognate-controller
+ * @module @akashx/akx-api-cognate-controller
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import type { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
 import { createConnection } from 'mysql2/promise'
-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { Remote, TypertRemoteService } from '@akashx/akx-typert-protocol'
 // Typert-generated ./typert and ./remote artifacts import Zod at runtime.
 import type {} from 'zod'
 import type {

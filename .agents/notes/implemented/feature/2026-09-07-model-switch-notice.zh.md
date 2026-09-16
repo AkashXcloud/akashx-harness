@@ -6,7 +6,7 @@ Status: implemented
 
 ## 问题
 
-会话历史会标明消息角色，但不会告诉新选中的模型，先前的 assistant 消息由哪个路由生成。在引出本改动的会话中，用户从 `deepseek-v4-flash` 切换到 `deepseek-v4-flash-vision-exp`。新模型看到图片占位文本称纯文本模型省略了图片，于是误以为该限制描述的是自己的图片能力。
+会话历史会标明消息角色，但不会告诉新选中的模型，先前的 assistant 消息由哪个路由生成。在引出本改动的会话中，用户从 `akashx-v4-flash` 切换到 `akashx-v4-flash-vision-exp`。新模型看到图片占位文本称纯文本模型省略了图片，于是误以为该限制描述的是自己的图片能力。
 
 ## 决策
 

@@ -1,19 +1,19 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import BasicCompactionEngine from '@deepseek-ai/dsh-compaction-basic'
-import type { BasicCompactionConfig } from '@deepseek-ai/dsh-compaction-basic'
-import { selectCompactableRange } from '@deepseek-ai/dsh-compaction-basic/src/region.ts'
-import { frameSummary } from '@deepseek-ai/dsh-compaction-basic/src/summarizer.ts'
-import type { SummarizationInput, SummaryResult } from '@deepseek-ai/dsh-compaction-basic/src/summarizer.ts'
-import { CompactionId, toolPairingBalancedAfter, toolPairingBalancedBefore } from '@deepseek-ai/dsh-compaction'
+import { Context } from '@akashx/cordis'
+import { AttachmentId } from '@akashx/akx-attachment'
+import BasicCompactionEngine from '@akashx/akx-compaction-basic'
+import type { BasicCompactionConfig } from '@akashx/akx-compaction-basic'
+import { selectCompactableRange } from '@akashx/akx-compaction-basic/src/region.ts'
+import { frameSummary } from '@akashx/akx-compaction-basic/src/summarizer.ts'
+import type { SummarizationInput, SummaryResult } from '@akashx/akx-compaction-basic/src/summarizer.ts'
+import { CompactionId, toolPairingBalancedAfter, toolPairingBalancedBefore } from '@akashx/akx-compaction'
 import {
   resolveCompactSpec,
   resolveConfig,
   resolveTargetPolicy,
-} from '@deepseek-ai/dsh-compaction-basic/src/config.ts'
-import type { CompactionResult } from '@deepseek-ai/dsh-compaction'
-import LlmRuntime, { createUserMessage, ToolCallId, CONTEXT_WINDOW_EXCEEDED_CODE, createSystemMessage, createToolResultMessage, LlmAdapter , createMessage } from '@deepseek-ai/dsh-llm'
+} from '@akashx/akx-compaction-basic/src/config.ts'
+import type { CompactionResult } from '@akashx/akx-compaction'
+import LlmRuntime, { createUserMessage, ToolCallId, CONTEXT_WINDOW_EXCEEDED_CODE, createSystemMessage, createToolResultMessage, LlmAdapter , createMessage } from '@akashx/akx-llm'
 import type {
   ContentBlock,
   GenerateOptions,
@@ -22,12 +22,12 @@ import type {
   Message,
   StreamChunk,
   TokenUsage,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import { agentEvents, type Agent, type RequestErrorAction } from '@deepseek-ai/dsh-agent'
-import ToolResultPruner from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+} from '@akashx/akx-llm'
+import SessionStore, { Session, SessionId, SessionSeq } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import TokenMeter from '@akashx/akx-token-meter'
+import { agentEvents, type Agent, type RequestErrorAction } from '@akashx/akx-agent'
+import ToolResultPruner from '@akashx/akx-compaction-tool-result-pruner'
 
 const SIGNAL = new AbortController().signal
 const MODEL = 'test-model'
@@ -107,7 +107,7 @@ function promptInput(text: string): SummarizationInput {
   })] }
 }
 
-const SYSTEM_PROMPT_PLUGIN = '@deepseek-ai/dsh-system-prompt'
+const SYSTEM_PROMPT_PLUGIN = '@akashx/akx-system-prompt'
 
 /**
  * Closed two-message turns followed by one open turn for durable compaction events.

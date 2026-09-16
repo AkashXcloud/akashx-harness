@@ -9,7 +9,7 @@ kind: "subsystem-reference"
 
 ## 摘要
 
-Cognate 能力将 AkashXDB 执行加入原生 Harness Agent 循环。`dsh-cognate` 选择 Provider 并执行 SQL 策略；`dsh-cognate-mysql` 提供直接 MySQL 协议执行；`dsh-cognate-local` 为离线开发和测试保留确定性的 Markdown 检索；`dsh-tool-cognate` 提供 `run_sql`、语义上下文和确定性图表元数据。现有 Bash、文件系统、Web、Session、Skill、Workflow、Subagent 和 MCP 工具仍是独立能力。
+Cognate 能力将 AkashXDB 执行加入原生 Harness Agent 循环。`akx-cognate` 选择 Provider 并执行 SQL 策略；`akx-cognate-mysql` 提供直接 MySQL 协议执行；`akx-cognate-local` 为离线开发和测试保留确定性的 Markdown 检索；`akx-tool-cognate` 提供 `run_sql`、语义上下文和确定性图表元数据。现有 Bash、文件系统、Web、Session、Skill、Workflow、Subagent 和 MCP 工具仍是独立能力。
 
 ## 查询策略
 

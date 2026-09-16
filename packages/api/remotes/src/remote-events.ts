@@ -6,8 +6,8 @@
  * type-only.
  */
 
-import type {} from '@deepseek-ai/dsh-api-session-controller/remote-events'
-import type { TypertForwardableEventEntry } from '@deepseek-ai/dsh-typert-protocol'
+import type {} from '@akashx/akx-api-session-controller/remote-events'
+import type { TypertForwardableEventEntry } from '@akashx/akx-typert-protocol'
 
 /**
  * Host events this application forwards without renaming. The explicit mode is
@@ -24,12 +24,12 @@ export const API_REMOTE_FORWARDED_EVENTS = [
   { event: 'commands/change', mode: 'emit' },
   { event: 'credentials/reference-updated', mode: 'emit' },
   { event: 'goal/activation-changed', mode: 'emit' },
-  { event: 'cordis/request-run', mode: 'emit' },
-  { event: 'cordis/request-run-resolved', mode: 'emit' },
-  { event: 'cordis/dynamic-package', mode: 'emit' },
-  { event: 'cordis/dynamic-retract', mode: 'emit' },
-  { event: 'cordis/inspect-query', mode: 'emit' },
-  { event: 'cordis/inspect-query-resolved', mode: 'emit' },
+  { event: '@akashx/cordis/request-run', mode: 'emit' },
+  { event: '@akashx/cordis/request-run-resolved', mode: 'emit' },
+  { event: '@akashx/cordis/dynamic-package', mode: 'emit' },
+  { event: '@akashx/cordis/dynamic-retract', mode: 'emit' },
+  { event: '@akashx/cordis/inspect-query', mode: 'emit' },
+  { event: '@akashx/cordis/inspect-query-resolved', mode: 'emit' },
   { event: 'llm/adapters-updated', mode: 'emit' },
   { event: 'settings/document-updated', mode: 'emit' },
   { event: 'user-questions/request', mode: 'waterfall' },

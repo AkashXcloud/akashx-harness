@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-sandbox-policy",
+  "name": "@akashx/akx-sandbox-policy",
   "description": "Per-call sandbox policy resolver and current model context: deployment fallbacks plus each session's mode and workspace root, shared by every enforcing capability family",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/sandbox/sandbox-policy"
   },
   "type": "module",
@@ -32,25 +32,25 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   }
 }

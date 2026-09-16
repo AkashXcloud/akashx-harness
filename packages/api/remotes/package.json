@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-remotes",
+  "name": "@akashx/akx-api-remotes",
   "description": "Remote BFF assembly for application-selected Host capabilities",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/api/remotes"
   },
   "type": "module",
@@ -29,10 +29,10 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "akx": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-gateway"
+        "@akashx/akx-api-gateway"
       ],
       "platform": "web",
       "immediately": true
@@ -50,43 +50,43 @@
     "lib/types/**/*.d.ts"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-deque": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/dsh-api-cognate-controller": "workspace:^"
+    "@akashx/akx-deque": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/akx-api-cognate-controller": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-scope": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-api-settings-controller": "workspace:^",
-    "@deepseek-ai/dsh-api-workspace-controller": "workspace:^",
-    "@deepseek-ai/dsh-commands": "workspace:^",
-    "@deepseek-ai/dsh-cordis-host-runner": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-file-reference": "workspace:^",
-    "@deepseek-ai/dsh-goal": "workspace:^",
-    "@deepseek-ai/dsh-host-plugin-inventory": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-message-feedback": "workspace:^",
-    "@deepseek-ai/dsh-session-reference": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-subagent": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/dsh-user-questions": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-client-file-upload": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:^",
-    "@deepseek-ai/dsh-api-workspace-files": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-presets": "workspace:^",
+    "@akashx/akx-api-gateway": "workspace:^",
+    "@akashx/akx-api-settings-controller": "workspace:^",
+    "@akashx/akx-api-workspace-controller": "workspace:^",
+    "@akashx/akx-commands": "workspace:^",
+    "@akashx/akx-cordis-host-runner": "workspace:^",
+    "@akashx/akx-credentials": "workspace:^",
+    "@akashx/akx-file-reference": "workspace:^",
+    "@akashx/akx-goal": "workspace:^",
+    "@akashx/akx-host-plugin-inventory": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-message-feedback": "workspace:^",
+    "@akashx/akx-session-reference": "workspace:^",
+    "@akashx/akx-settings": "workspace:^",
+    "@akashx/akx-subagent": "workspace:^",
+    "@akashx/akx-user-approval": "workspace:^",
+    "@akashx/akx-user-questions": "workspace:^",
+    "@akashx/akx-client-connection": "workspace:^",
+    "@akashx/akx-client-file-upload": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-api-session-controller": "workspace:^",
+    "@akashx/akx-api-workspace-files": "workspace:^",
     "zod": "^4.4.3",
-    "@deepseek-ai/dsh-command-feedback": "workspace:^",
-    "@deepseek-ai/dsh-api-cognate-controller": "workspace:^"
+    "@akashx/akx-command-feedback": "workspace:^",
+    "@akashx/akx-api-cognate-controller": "workspace:^"
   }
 }

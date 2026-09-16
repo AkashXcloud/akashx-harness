@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/simplification/2026-06-26-fsspec-style-fs-seam.md
-2026-06-26-fsspec-style-fs-seam.md: 138d6d4d74d162ab2149350a76fc72dc31c1818e
-2026-06-26-fsspec-style-fs-seam.zh.md: bc7a3756dbf08673cfa63693a68aba1eb73da323
+2026-06-26-fsspec-style-fs-seam.md: 149d315b3977872a7ce871ea0c3fee0a1b0632f9
+2026-06-26-fsspec-style-fs-seam.zh.md: a58eb8ceff7ec4249c380ee9de4ae095a1f20e32

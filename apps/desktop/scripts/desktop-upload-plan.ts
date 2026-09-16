@@ -164,7 +164,7 @@ function uploadArtifact(
 }
 
 /**
- * Validate the completed package record, dsh version, update metadata, hashes, and target files.
+ * Validate the completed package record, akx version, update metadata, hashes, and target files.
  * @param targetName - Fixed platform and architecture selected by the upload command.
  * @param options - Optional filesystem roots and environment for tests or release automation.
  * @returns An upload plan whose mutable channel metadata is the final entry.
@@ -181,10 +181,10 @@ export async function createDesktopUploadPlan(
   const repositoryRoot = options.repositoryRoot ?? REPOSITORY_ROOT
   const appRoot = options.appRoot ?? APP_ROOT
   const artifactsRoot = options.artifactsRoot ?? desktopTargetBuildPaths(targetName).artifacts
-  const dshVersion = await manifestVersion(join(repositoryRoot, 'package.json'), 'dsh package')
+  const akxVersion = await manifestVersion(join(repositoryRoot, 'package.json'), 'akx package')
   const desktopVersion = await manifestVersion(join(appRoot, 'package.json'), 'desktop package')
-  if (dshVersion !== desktopVersion) {
-    throw new Error(`desktop upload: desktop version ${desktopVersion} does not match current dsh version ${dshVersion}`)
+  if (akxVersion !== desktopVersion) {
+    throw new Error(`desktop upload: desktop version ${desktopVersion} does not match current akx version ${akxVersion}`)
   }
 
   const update = resolveDesktopUploadConfig(environment, target.platform, target.arch)
@@ -194,13 +194,13 @@ export async function createDesktopUploadPlan(
   )
   if (buildRecord.schemaVersion !== 1
     || buildRecord.target !== targetName
-    || buildRecord.version !== dshVersion
+    || buildRecord.version !== akxVersion
     || buildRecord.environment !== update.environment
     || buildRecord.publicUrl !== update.publicUrl) {
-    throw new Error(`desktop upload: ${targetName} package completion record does not match dsh ${dshVersion} and ${update.environment} update destination`)
+    throw new Error(`desktop upload: ${targetName} package completion record does not match akx ${akxVersion} and ${update.environment} update destination`)
   }
 
-  const metadataFilename = desktopUpdateMetadataFilename(dshVersion, target.platform)
+  const metadataFilename = desktopUpdateMetadataFilename(akxVersion, target.platform)
   const metadataPath = join(artifactsRoot, metadataFilename)
   let metadataValue: unknown
   try {
@@ -211,14 +211,14 @@ export async function createDesktopUploadPlan(
   }
   const metadata = object(metadataValue, metadataFilename)
   const metadataVersion = stringField(metadata.version, `${metadataFilename}.version`)
-  if (metadataVersion !== dshVersion) {
-    throw new Error(`desktop upload: ${metadataFilename} version ${metadataVersion} does not match current dsh version ${dshVersion}`)
+  if (metadataVersion !== akxVersion) {
+    throw new Error(`desktop upload: ${metadataFilename} version ${metadataVersion} does not match current akx version ${akxVersion}`)
   }
   if (!Array.isArray(metadata.files) || metadata.files.length !== 1) {
     throw new Error(`desktop upload: ${metadataFilename}.files must contain exactly one target update file`)
   }
 
-  const base = `deepseek-harness-${dshVersion}-${target.os}-${target.arch}`
+  const base = `akx-harness-${akxVersion}-${target.os}-${target.arch}`
   const updaterExtension = target.platform === 'darwin' ? 'zip' : 'exe'
   const updaterInfo = updateFileInfo(metadata.files[0], `${metadataFilename}.files[0]`, `${base}.${updaterExtension}`)
   const updaterPath = await verifyChecksummedArtifact(artifactsRoot, updaterInfo)
@@ -247,7 +247,7 @@ export async function createDesktopUploadPlan(
   return {
     environment: update.environment,
     target: targetName,
-    version: dshVersion,
+    version: akxVersion,
     publicUrl: update.publicUrl,
     bucket: update.bucket,
     secretIdEnvName: update.secretIdEnvName,

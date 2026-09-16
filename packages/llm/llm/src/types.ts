@@ -4,12 +4,12 @@
  * mapped interfaces make the content, source, and finish unions extensible.
  */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
+import type { Branded } from '@akashx/akx-brand'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@akashx/akx-attachment'
 import type { ToolCallId, ProviderRequestId, ReasoningEffortId } from './brand.ts'
 import type { Message } from './message.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Events {
     /**
      * The provider topology changed: an adapter registered or unregistered
@@ -144,7 +144,7 @@ export type FinishReason = FinishReasonMap[keyof FinishReasonMap]
  * Counts are DISJOINT: `inputTokens` is uncached input only; cached input is
  * reported separately as `cacheReadTokens`/`cacheWriteTokens` (billed input =
  * sum of the three). Adapters whose providers fold cache hits into a total
- * prompt count (DeepSeek's `prompt_tokens`) subtract them out.
+ * prompt count (AkashX's `prompt_tokens`) subtract them out.
  */
 export interface TokenUsage {
   inputTokens: number
@@ -271,7 +271,7 @@ export interface LlmModelDiscoveryOperation extends LlmModelDiscoveryRequest {
   signal?: AbortSignal
 }
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@akashx/akx-typert-protocol' {
   interface RemoteErrorDetailsMap {
     /** A draft provider interrogation refused or failed. */
     'llm/model-discovery-rejected': {
@@ -404,8 +404,8 @@ export type StreamChunk =
 /**
  * JSON-schema description of a tool, as sent to the model.
  *
- * Declared here (not in dsh-tools) because it is part of {@link GenerateOptions};
- * dsh-tools' ToolDefinition and dsh-system-prompt's PromptAssembly both import
+ * Declared here (not in akx-tools) because it is part of {@link GenerateOptions};
+ * akx-tools' ToolDefinition and akx-system-prompt's PromptAssembly both import
  * it from this package.
  */
 export interface ToolSchema {
@@ -424,7 +424,7 @@ export interface GenerateOptions {
   reasoningEffort?: ReasoningEffortId
   /**
    * Ordered conversation messages, exactly as the provider sees them. A
-   * loop-built request passes the derived history (dsh-agent-loop), whose
+   * loop-built request passes the derived history (akx-agent-loop), whose
    * leading system-role message carries the system prompt; a hand-built
    * one-shot passes any list.
    */

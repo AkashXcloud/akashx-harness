@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/bug-fix/2026-09-10-built-bundle-css-exemption.md
-2026-09-10-built-bundle-css-exemption.md: e5a55689696f885b8ea9411a5b3a7598295fff35
-2026-09-10-built-bundle-css-exemption.zh.md: 1c1aab35df72497946b02bf2a7f67a2271c804e5
+2026-09-10-built-bundle-css-exemption.md: 132a3e771ae0e2a41b845276007588a4a19ebc0d
+2026-09-10-built-bundle-css-exemption.zh.md: 446b7780da2b25b5025a8e0919006b474f8074dc

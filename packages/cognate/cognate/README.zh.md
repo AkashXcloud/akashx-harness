@@ -3,13 +3,13 @@ description: "供 Cognate Agent 使用的 AkashXDB Provider 服务定义。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cognate
+# @akashx/akx-cognate
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-cognate` 提供 `ctx.cognate`。它在执行前分类并授权单条 SQL，限制 SQL 长度、行数和序列化结果，并且只暴露 Provider 提供的语义元数据。服务本身不执行 SQL，也不暴露凭据。
+`akx-cognate` 提供 `ctx.cognate`。它在执行前分类并授权单条 SQL，限制 SQL 长度、行数和序列化结果，并且只暴露 Provider 提供的语义元数据。服务本身不执行 SQL，也不暴露凭据。
 
 ## 目录
 

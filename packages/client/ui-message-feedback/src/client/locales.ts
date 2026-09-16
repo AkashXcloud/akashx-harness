@@ -3,7 +3,7 @@
 /** The feedback namespace key union. */
 export type MessageFeedbackKey = keyof typeof en
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The feedback surface's copy: the message controls, the dialog, and the acknowledgement. */
     feedback: MessageFeedbackKey

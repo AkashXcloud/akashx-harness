@@ -6,15 +6,15 @@
  * the Session's feedback is read on first interaction rather than on mount, and
  * a rejected retraction surfaces inline without losing the authoritative state.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { useSyncExternalStore } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/react'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { MessageId } from '@deepseek-ai/dsh-api-remotes/client'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
+import type { MessageId } from '@akashx/akx-api-remotes/client'
 import type {
   MessageFeedbackItem, MessageFeedbackRating, MessageFeedbackVersion,
-} from '@deepseek-ai/dsh-message-feedback/types'
+} from '@akashx/akx-message-feedback/types'
 import { MessageFeedbackActions } from '../src/client/MessageFeedbackActions.tsx'
 import type {
   MessageFeedbackActionResult, MessageFeedbackView,

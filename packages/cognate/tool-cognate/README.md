@@ -3,13 +3,13 @@ description: "Model-facing Cognate SQL and deterministic chart tools."
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-cognate
+# @akashx/akx-tool-cognate
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-tool-cognate` registers `run_sql` and `render_chart`. `run_sql` sends one statement through `ctx.cognate`; the service owns SQL policy, cancellation, provider selection, and result bounds. `render_chart` validates explicitly supplied tabular data and never opens a database connection.
+`akx-tool-cognate` registers `run_sql` and `render_chart`. `run_sql` sends one statement through `ctx.cognate`; the service owns SQL policy, cancellation, provider selection, and result bounds. `render_chart` validates explicitly supplied tabular data and never opens a database connection.
 
 ## Table of Contents
 
@@ -29,7 +29,7 @@ English | [中文](README.zh.md)
 <a id="further-exploration"></a>
 ## Further Exploration
 
-See the [Cognate subsystem reference](../../../docs/subsystems/cognate.md) and the [generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-tool-cognate).
+See the [Cognate subsystem reference](../../../docs/subsystems/cognate.md) and the [generated tool catalog](../../../docs/tool-catalog.md#akashx-akx-tool-cognate).
 
 <a id="implementation-notes"></a>
 ## Implementation Notes
@@ -43,7 +43,7 @@ No runtime invariant companion is published because tool registration and model-
 
 #### What the model sees
 
-The generated [`run_sql` and `render_chart` schemas`](../../../docs/tool-catalog.md#deepseek-aidsh-tool-cognate) expose one SQL argument or chart metadata and rows. `render_chart` cannot execute a query or access a provider.
+The generated [`run_sql` and `render_chart` schemas`](../../../docs/tool-catalog.md#akashx-akx-tool-cognate) expose one SQL argument or chart metadata and rows. `render_chart` cannot execute a query or access a provider.
 
 #### Token effect
 

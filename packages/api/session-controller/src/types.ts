@@ -2,17 +2,17 @@
 
 import type {
   AttachmentIdType, ImageAttachmentLimits, ImageAttachmentRef, ImageMediaType,
-} from '@deepseek-ai/dsh-attachment'
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { LlmAttemptId, MessageId } from '@deepseek-ai/dsh-llm/brand'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { SessionId, SessionSeqCursor } from '@deepseek-ai/dsh-session/types'
-import type { SessionProjectionMap } from '@deepseek-ai/dsh-session-projection/types'
-import type { JobId } from '@deepseek-ai/dsh-jobs/brand'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
+} from '@akashx/akx-attachment'
+import type { Branded } from '@akashx/akx-brand'
+import type { LlmAttemptId, MessageId } from '@akashx/akx-llm/brand'
+import type { ContentBlock } from '@akashx/akx-llm'
+import type { SessionId, SessionSeqCursor } from '@akashx/akx-session/types'
+import type { SessionProjectionMap } from '@akashx/akx-session-projection/types'
+import type { JobId } from '@akashx/akx-jobs/brand'
+import type { JsonValue } from '@akashx/akx-util-values'
+import type { WorkspaceId } from '@akashx/akx-workspace/types'
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@akashx/akx-session-projection/types' {
   interface SessionProjectionStateMap {
     /** Host state persisted for cold Session list summaries. */
     sessionListMetadata: SessionListMetadata
@@ -31,7 +31,7 @@ declare module '@deepseek-ai/dsh-session-projection/types' {
   }
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@akashx/akx-session/types' {
   interface SessionEventMap {
     /**
      * Complete validated model selection requested for subsequent prompt
@@ -183,7 +183,7 @@ export const SESSION_SEARCH_RESULT_LIMIT = 20
 /** Maximum search snippet length in Unicode code points. */
 export const SESSION_SEARCH_SNIPPET_MAX_CODE_POINTS = 240
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@akashx/akx-typert-protocol' {
   interface RemoteErrorDetailsMap {
     'session/model-unavailable': { readonly provider: string; readonly model: string }
     'session/conflict': {
@@ -384,7 +384,7 @@ export interface SessionOpenWorkspacePathValue {
 /** Client-minted prompt identity used to reconcile optimistic and durable messages. */
 export type SessionRequestId = Branded<'session-request-id'>
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@akashx/akx-llm' {
   interface MessageSourceMap {
     /** Browser prompt correlation and optional Host-validated time zone. */
     'user-rpc': { kind: 'user'; rpcId: SessionRequestId; clientTimeZone?: string }
@@ -581,7 +581,7 @@ export type SessionControlFrame =
   | { readonly type: 'jobs'; readonly sessionId: SessionId; readonly jobs: readonly SessionJob[] }
   | ({ readonly type: 'projection' } & SessionProjectionUpdate)
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Events {
     /**
      * A Session became visible to Session list consumers.

@@ -4,11 +4,11 @@
  * and the injected controller face.
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+import { SlotRegistry } from '@akashx/akx-client-ui-renderer/client'
+import { LocaleRuntime } from '@akashx/akx-client-locale/client'
+import type {} from '@akashx/akx-client-ui-conversation/client'
 import { apply, inject, type OpenInAppActionInjected } from '../src/client/index.ts'
 import { apply as nodeApply } from '../src/index.ts'
 import { OpenInAppAction } from '../src/client/OpenInAppAction.tsx'

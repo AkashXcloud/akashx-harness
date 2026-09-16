@@ -10,9 +10,9 @@ const t = (key: BuiltInPresetCopyKey): string => `t:${key}`
 
 describe('presetDisplayText', () => {
   it('resolves a shipped preset through its dictionary keys', () => {
-    expect(presetDisplayText({ id: 'standard', trust: 'system', name: 'Standard mode' }, t)).toEqual({
-      name: 't:presetStandardName',
-      description: 't:presetStandardDescription',
+    expect(presetDisplayText({ id: 'cognate', trust: 'system', name: 'Cognate mode' }, t)).toEqual({
+      name: 't:presetCognateName',
+      description: 't:presetCognateDescription',
     })
   })
 

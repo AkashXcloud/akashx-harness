@@ -3,13 +3,13 @@ description: "面向用户与维护者的共享模型标题生成策略说明，
 kind: "package-library"
 ---
 
-# @deepseek-ai/dsh-session-title-llm
+# @akashx/akx-session-title-llm
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-session-title-llm` 使用一致的模型请求策略，根据选中的用户消息生成简洁的会话标题。调用方选择每次修订包含哪些消息，以及成对提供 `provider`／`model` 路由，还是使用当前会话记录的路由。必填上限约束封装后的输入、生成输出与端到端时长，调用方取消在整个流式处理期间持续生效。无效、空、迟到、包含工具调用或其他非纯文本的结果会在替换标题前被拒绝。
+`akx-session-title-llm` 使用一致的模型请求策略，根据选中的用户消息生成简洁的会话标题。调用方选择每次修订包含哪些消息，以及成对提供 `provider`／`model` 路由，还是使用当前会话记录的路由。必填上限约束封装后的输入、生成输出与端到端时长，调用方取消在整个流式处理期间持续生效。无效、空、迟到、包含工具调用或其他非纯文本的结果会在替换标题前被拒绝。
 
 ## 目录
 
@@ -72,7 +72,7 @@ kind: "package-library"
 
 ### 请求流程
 
-生成在注册时校验一次配置；每次修订把选中的消息封装为 JSON，依据 `maxInputBytes` 检查封装提示词的 UTF-8 字节数，解析路由（显式对或已记录 `request/header`），追加一条携带确切可分发请求的仅日志 `session/title-llm-request` 事件，然后在组合的超时与取消截止时间内通过 `ctx.llm` 流式生成。分发的封套携带 `purpose: 'session-title'`，且有意不包含 agent loop 的进程本地请求身份；DeepSeek 适配器根据该用途禁用思考，使少量输出预算全部用于可见标题文本，其他适配器负责自身用途专用行为。输出只组装为文本块；工具调用、格式错误或空输出与非 stop 结束原因都会拒绝，后续模型失败会保留请求记录。
+生成在注册时校验一次配置；每次修订把选中的消息封装为 JSON，依据 `maxInputBytes` 检查封装提示词的 UTF-8 字节数，解析路由（显式对或已记录 `request/header`），追加一条携带确切可分发请求的仅日志 `session/title-llm-request` 事件，然后在组合的超时与取消截止时间内通过 `ctx.llm` 流式生成。分发的封套携带 `purpose: 'session-title'`，且有意不包含 agent loop 的进程本地请求身份；AkashX 适配器根据该用途禁用思考，使少量输出预算全部用于可见标题文本，其他适配器负责自身用途专用行为。输出只组装为文本块；工具调用、格式错误或空输出与非 stop 结束原因都会拒绝，后续模型失败会保留请求记录。
 
 </details>
 
@@ -102,7 +102,7 @@ kind: "package-library"
 
 #### Token 影响
 
-辅助请求根据所选输入大小与 `maxOutputTokens` 消耗 token。它与主 agent 请求相互独立，不会向 agent 历史增加标题文本或封装内容。DeepSeek 标题调用会关闭思考；主对话保留自身配置的思考模式。
+辅助请求根据所选输入大小与 `maxOutputTokens` 消耗 token。它与主 agent 请求相互独立，不会向 agent 历史增加标题文本或封装内容。AkashX 标题调用会关闭思考；主对话保留自身配置的思考模式。
 
 #### KV Cache 影响
 

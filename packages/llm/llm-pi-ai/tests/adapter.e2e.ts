@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { createUserMessage, ToolCallId, ReasoningEffortId  } from '@deepseek-ai/dsh-llm'
-import type { Message, ToolSchema } from '@deepseek-ai/dsh-llm'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import type { PiAiProviderProfile } from '@deepseek-ai/dsh-llm-pi-ai'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
+import { Context } from '@akashx/cordis'
+import LlmRuntime, { createUserMessage, ToolCallId, ReasoningEffortId  } from '@akashx/akx-llm'
+import type { Message, ToolSchema } from '@akashx/akx-llm'
+import * as LlmPiAi from '@akashx/akx-llm-pi-ai'
+import type { PiAiProviderProfile } from '@akashx/akx-llm-pi-ai'
+import * as LlmAkashX from '@akashx/akx-llm-akx'
 import { assemble, type AssembledResult } from './assemble.ts'
 
 /**
@@ -13,7 +13,7 @@ import { assemble, type AssembledResult } from './assemble.ts'
  * and exercises a replayed tool follow-up. Key-gated.
  */
 
-const FLASH = 'deepseek-v4-flash'
+const FLASH = 'akashx-v4-flash'
 const contexts: Context[] = []
 
 async function harness(_model: string, config: Partial<PiAiProviderProfile> = {}) {
@@ -22,9 +22,9 @@ async function harness(_model: string, config: Partial<PiAiProviderProfile> = {}
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(LlmPiAi, {
     providers: {
-      deepseek: {
-        ...process.env.DEEPSEEK_API_KEY === undefined ? {} : { apiKey: process.env.DEEPSEEK_API_KEY },
-        ...process.env.DEEPSEEK_BASE_URL === undefined ? {} : { baseURL: process.env.DEEPSEEK_BASE_URL },
+      akashx: {
+        ...process.env.AKASHX_API_KEY === undefined ? {} : { apiKey: process.env.AKASHX_API_KEY },
+        ...process.env.AKASHX_BASE_URL === undefined ? {} : { baseURL: process.env.AKASHX_BASE_URL },
         ...config,
       },
     },
@@ -64,7 +64,7 @@ const weatherTool: ToolSchema = {
   },
 }
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () => {
+describe.skipIf(!process.env.AKASHX_API_KEY)('llm-pi-ai e2e (real API)', () => {
   it(`${FLASH} + provider-default reasoning: plain text generation`, async () => {
     const ctx = await harness(FLASH)
     const result = await assemble(ctx,{
@@ -146,23 +146,23 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(textOf(second).toLowerCase()).toMatch(/sunny|22/)
   })
 
-  it('produces the same block structure as llm-deepseek for the same prompt', async () => {
+  it('produces the same block structure as llm-akx for the same prompt', async () => {
     // Loose structural equivalence between the two independent adapters:
     // same block KINDS in the same order for a deterministic prompt — the
     // cross-implementation check that the StreamChunk design holds.
-    const deepseekCtx = new Context()
-    contexts.push(deepseekCtx)
-    await deepseekCtx.plugin(LlmRuntime)
-    await deepseekCtx.plugin(LlmDeepSeek, { thinking: 'disabled' })
+    const akashxCtx = new Context()
+    contexts.push(akashxCtx)
+    await akashxCtx.plugin(LlmRuntime)
+    await akashxCtx.plugin(LlmAkashX, { thinking: 'disabled' })
 
     const piCtx = await harness(FLASH)
 
     const prompt = ask('Reply with exactly the word: pong')
-    const [fromDeepSeek, fromPiAi] = await Promise.all([
-      assemble(deepseekCtx, { provider: 'deepseek-official', model: FLASH, messages: prompt, maxTokens: 50 }),
+    const [fromAkashX, fromPiAi] = await Promise.all([
+      assemble(akashxCtx, { provider: 'akashx-official', model: FLASH, messages: prompt, maxTokens: 50 }),
       assemble(piCtx, { model: FLASH, messages: prompt, maxTokens: 50 }),
     ])
-    expect(blockKinds(fromPiAi)).toEqual(blockKinds(fromDeepSeek))
-    expect(fromPiAi.finish.kind).toBe(fromDeepSeek.finish.kind)
+    expect(blockKinds(fromPiAi)).toEqual(blockKinds(fromAkashX))
+    expect(fromPiAi.finish.kind).toBe(fromAkashX.finish.kind)
   })
 })

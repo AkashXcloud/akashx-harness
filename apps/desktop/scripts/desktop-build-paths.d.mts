@@ -6,10 +6,10 @@ export interface DesktopTargetBuildPaths {
   readonly artifacts: string
   readonly runtime: string
   readonly packageSet: string
-  readonly dsh: string
-  readonly dshPnpm: string
+  readonly akx: string
+  readonly akxPnpm: string
   readonly nodeExtract: string
-  readonly packedDsh: string
+  readonly packedAkx: string
   readonly packedVendor: string
   readonly packedLandlock: string
   readonly downloads: string

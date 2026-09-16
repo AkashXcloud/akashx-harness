@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import TerminalSessionService from '@deepseek-ai/dsh-terminal'
+import { Context } from '@akashx/cordis'
+import { ToolCallId } from '@akashx/akx-llm'
+import { SESSION_FORMAT_VERSION, Session, SessionId } from '@akashx/akx-session'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent } from '@akashx/akx-agent'
+import TerminalSessionService from '@akashx/akx-terminal'
 import type {
   TerminalBackend,
   TerminalBackendSession,
@@ -14,11 +14,11 @@ import type {
   TerminalSessionStatus,
   TerminalSignal,
   TerminalWaitReason,
-} from '@deepseek-ai/dsh-terminal'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRegistry from '@deepseek-ai/dsh-tools'
-import * as ToolPwshPersistent from '@deepseek-ai/dsh-tool-pwsh-persistent'
-import { unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
+} from '@akashx/akx-terminal'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRegistry from '@akashx/akx-tools'
+import * as ToolPwshPersistent from '@akashx/akx-tool-pwsh-persistent'
+import { unsupportedInbox } from '@akashx/akx-agent-loop-testkit'
 
 const contexts: Context[] = []
 let callNumber = 0
@@ -104,11 +104,11 @@ type StubMode =
   | 'exit-after-send'
   | 'prompt-collision'
 
-const START_PATTERN = /__DSH_PERSISTENT_PWSH_START_[^_]+(?:-[^_]+)*__/
-const END_PATTERN = /__DSH_PERSISTENT_PWSH_END_[^:]+:/
+const START_PATTERN = /__AKX_PERSISTENT_PWSH_START_[^_]+(?:-[^_]+)*__/
+const END_PATTERN = /__AKX_PERSISTENT_PWSH_END_[^:]+:/
 
 class StubTerminalSession implements TerminalBackendSession {
-  readonly motd = '__DSH_PERSISTENT_PWSH_PROMPT__ '
+  readonly motd = '__AKX_PERSISTENT_PWSH_PROMPT__ '
   readonly pid = 123
   statusValue: TerminalSessionStatus = { kind: 'running' }
   scrollback = this.motd
@@ -362,8 +362,8 @@ describe('tool-pwsh-persistent', () => {
     stub.sessions[0]!.mode = 'with-echo'
     const result = text(await call(ctx, owner, 'Write-Output hi'))
     expect(result).toBe('hello from stub')
-    expect(result).not.toContain('__DSH_PERSISTENT_PWSH_START_')
-    expect(result).not.toContain('__DSH_PERSISTENT_PWSH_END_')
+    expect(result).not.toContain('__AKX_PERSISTENT_PWSH_START_')
+    expect(result).not.toContain('__AKX_PERSISTENT_PWSH_END_')
     expect(result).not.toContain('Invoke-Expression')
   })
 
@@ -409,13 +409,13 @@ describe('tool-pwsh-persistent', () => {
     session.mode = 'prompt-only'
     const promptFallback = text(await call(ctx, owner, 'bad {'))
     expect(promptFallback).toContain('pwsh: synt')
-    expect(promptFallback).not.toContain('DSH_PERSISTENT_PWSH_PROMPT')
+    expect(promptFallback).not.toContain('AKX_PERSISTENT_PWSH_PROMPT')
 
     session.mode = 'prompt-crlf'
     session.scrollback = ''
     const crlfPromptFallback = text(await call(ctx, owner, 'bad {'))
     expect(crlfPromptFallback).toContain('pwsh: synt')
-    expect(crlfPromptFallback).not.toContain('DSH_PERSISTENT_PWSH_PROMPT')
+    expect(crlfPromptFallback).not.toContain('AKX_PERSISTENT_PWSH_PROMPT')
 
     session.mode = 'end-only'
     session.scrollback = ''
@@ -510,8 +510,8 @@ describe('tool-pwsh-persistent', () => {
     const result = text(await call(ctx, owner, 'bad {'))
     expect(result).toContain('partial syntax output')
     expect(result).toContain('pwsh: syntax error')
-    expect(result).not.toContain('DSH_PERSISTENT_PWSH_PROMPT')
-    expect(result).not.toContain('DSH_PERSISTENT_PWSH_START')
+    expect(result).not.toContain('AKX_PERSISTENT_PWSH_PROMPT')
+    expect(result).not.toContain('AKX_PERSISTENT_PWSH_START')
   })
 
   it('does not attribute old scrollback truncation to a complete current command', async () => {

@@ -1,17 +1,17 @@
 /** Plan projection behavior. */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import { CommandId } from '@deepseek-ai/dsh-commands/brand'
-import PlanModeController from '@deepseek-ai/dsh-plan-mode'
+import { Context } from '@akashx/cordis'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent } from '@akashx/akx-agent'
+import SessionStore from '@akashx/akx-session'
+import type { Session } from '@akashx/akx-session'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import UserQuestionService from '@akashx/akx-user-questions'
+import { CommandId } from '@akashx/akx-commands/brand'
+import PlanModeController from '@akashx/akx-plan-mode'
 
 interface Bench {
   ctx: Context

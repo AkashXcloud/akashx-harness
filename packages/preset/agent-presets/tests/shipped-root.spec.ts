@@ -5,21 +5,20 @@
  * `includeShippedRoot: false` is how a deployment supplying purely its own
  * presets — or an embedder using the roster as bare machinery — opts out.
  *
- * `$DSH_HOME` is repointed per test for the same reason as the user-root
+ * `$AKX_HOME` is repointed per test for the same reason as the user-root
  * suite: the derived writable root is resolved in the constructor.
  */
 
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include, { entryListSchema } from '@deepseek-ai/cordis-plugin-include'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as yaml from 'js-yaml'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import Include from '@akashx/cordis-plugin-include'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import AgentPresets, { SHIPPED_PRESET_ROOT, type Config } from '@deepseek-ai/dsh-agent-presets'
+import AgentPresets, { SHIPPED_PRESET_ROOT, type Config } from '@akashx/akx-agent-presets'
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), 'fixtures')
 const SYSTEM_ROOT = join(FIXTURES, 'system')
@@ -28,14 +27,14 @@ let home: string
 let previousHome: string | undefined
 
 beforeEach(async () => {
-  previousHome = process.env.DSH_HOME
-  home = await mkdtemp(join(tmpdir(), 'dsh-shipped-root-'))
-  process.env.DSH_HOME = home
+  previousHome = process.env.AKX_HOME
+  home = await mkdtemp(join(tmpdir(), 'akx-shipped-root-'))
+  process.env.AKX_HOME = home
 })
 
 afterEach(async () => {
-  if (previousHome === undefined) delete process.env.DSH_HOME
-  else process.env.DSH_HOME = previousHome
+  if (previousHome === undefined) delete process.env.AKX_HOME
+  else process.env.AKX_HOME = previousHome
   await rm(home, { recursive: true, force: true })
 })
 
@@ -47,7 +46,7 @@ async function roster(config: Partial<Config> = {}): Promise<Context> {
   ctx.loader.builtins.include = Include
   await ctx.plugin(SessionProjectionRegistry)
   await ctx.plugin(AgentPresets, {
-    default: 'standard',
+    default: 'cognate',
     roots: [],
     includeShippedRoot: true,
     includeUserRoot: true,
@@ -56,40 +55,12 @@ async function roster(config: Partial<Config> = {}): Promise<Context> {
   return ctx
 }
 
-interface ShippedEntry {
-  id?: unknown
-  disabled?: unknown
-  config?: unknown
-}
-
-/** Find one entry through the shipped composition's nested groups. */
-function findEntry(entries: unknown[], id: string): ShippedEntry | undefined {
-  for (const entry of entries) {
-    if (typeof entry !== 'object' || entry === null) continue
-    const candidate = entry as ShippedEntry
-    if (candidate.id === id) return candidate
-    if (Array.isArray(candidate.config)) {
-      const nested = findEntry(candidate.config, id)
-      if (nested !== undefined) return nested
-    }
-  }
-  return undefined
-}
-
-/** Read and validate one shipped preset's Cordis entry list. */
-async function shippedEntries(id: string): Promise<unknown[]> {
-  const source = await readFile(join(SHIPPED_PRESET_ROOT, id, 'agent.cordis.yml'), 'utf8')
-  const entries: unknown = yaml.load(source, { schema: entryListSchema })
-  if (!Array.isArray(entries)) throw new TypeError(`${id} preset must contain a Cordis entry list`)
-  return entries.map((entry: unknown) => entry)
-}
-
 describe('the shipped preset root', () => {
   it('supplies the built-in presets from a bare roster, healthy and system-trusted', async () => {
     const ctx = await roster({ includeUserRoot: false })
 
     const listed = await ctx.agentPresets.list()
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', 'cordis', 'minimal', 'ptc', 'standard'])
+    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate'])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
     // Not `broken === undefined`: health asks whether each row's package is
     // installed above the base, and the shipped rows name packages the
@@ -109,11 +80,7 @@ describe('the shipped preset root', () => {
       expect.stringContaining('.agent-presets'),
     ])
     expect(ctx.agentPresets.roots[0]).toEqual({ path: SHIPPED_PRESET_ROOT, trust: 'system' })
-    // Prepended, so a configured directory claiming a shipped id is shadowed:
-    // the fixture root also carries `minimal`, and the roster serves the
-    // shipped one.
-    const minimal = (await ctx.agentPresets.list()).find(preset => preset.id === 'minimal')
-    expect(minimal?.path.startsWith(SHIPPED_PRESET_ROOT)).toBe(true)
+    expect((await ctx.agentPresets.list()).map(preset => preset.id)).toContain('cognate')
   })
 
   it('mounts a roster without the shipped set when includeShippedRoot is false', async () => {
@@ -128,41 +95,4 @@ describe('the shipped preset root', () => {
     expect(minimal?.path.startsWith(SYSTEM_ROOT)).toBe(true)
   })
 
-  it('enables web_fetch in each tool-bearing Web app preset', async () => {
-    for (const id of ['cordis', 'ptc', 'standard']) {
-      const entries = await shippedEntries(id)
-      const toolWeb: unknown = entries.find((entry: unknown) =>
-        typeof entry === 'object' && entry !== null && 'id' in entry && entry.id === 'tool-web')
-      if (typeof toolWeb !== 'object' || toolWeb === null || !('config' in toolWeb)
-        || typeof toolWeb.config !== 'object' || toolWeb.config === null || !('fetch' in toolWeb.config)) {
-        throw new TypeError(`${id} preset must configure tool-web.fetch`)
-      }
-      expect(toolWeb.config.fetch, id).toBe(true)
-    }
-  })
-
-  it('keeps Cognate additive to the Standard preset inventory', async () => {
-    const standard = await shippedEntries('standard')
-    const cognate = await shippedEntries('cognate')
-    const ids = (entries: unknown[]): string[] => entries.flatMap((entry) => {
-      if (typeof entry !== 'object' || entry === null) return []
-      const value = entry as ShippedEntry
-      const own = typeof value.id === 'string' ? [value.id] : []
-      return Array.isArray(value.config) ? [...own, ...ids(value.config)] : own
-    })
-    const cognateIds = new Set(ids(cognate))
-    for (const id of ids(standard)) expect(cognateIds.has(id), id).toBe(true)
-    expect(cognateIds).toEqual(new Set([...ids(standard), 'cognate', 'cognate-runtime', 'cognate-mysql', 'tool-cognate']))
-  })
-
-  it('omits the general workflow tool only from PTC while retaining Ralph infrastructure', async () => {
-    const ptc = await shippedEntries('ptc')
-    expect(findEntry(ptc, 'tool-workflow')?.disabled).toBe(true)
-    expect(findEntry(ptc, 'workflow-worker-thread')?.disabled).not.toBe(true)
-    expect(findEntry(ptc, 'tool-ralph')?.disabled).not.toBe(true)
-
-    for (const id of ['standard', 'cordis']) {
-      expect(findEntry(await shippedEntries(id), 'tool-workflow')?.disabled, id).not.toBe(true)
-    }
-  })
 })

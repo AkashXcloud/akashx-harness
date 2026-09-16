@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-tool-web",
-  "description": "Model-facing web tools (web_search, web_fetch) over the DeepSeek Harness web capability seam (ctx.web)",
+  "name": "@akashx/akx-tool-web",
+  "description": "Model-facing web tools (web_search, web_fetch) over the AkashX Harness web capability seam (ctx.web)",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/web/tool-web"
   },
   "type": "module",
@@ -27,32 +27,32 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/akx-web": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "@joplin/turndown-plugin-gfm": "^1.0.67",
     "turndown": "^7.2.4"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-spill-local": "workspace:^",
-    "@deepseek-ai/dsh-spill-policy": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tool-call-timeout-policy": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-web": "workspace:^",
-    "@deepseek-ai/dsh-web-fetch-http": "workspace:^",
-    "@deepseek-ai/dsh-web-search-exa": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-spill-local": "workspace:^",
+    "@akashx/akx-spill-policy": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tool-call-timeout-policy": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/akx-web": "workspace:^",
+    "@akashx/akx-web-fetch-http": "workspace:^",
+    "@akashx/akx-web-search-exa": "workspace:^",
     "@types/turndown": "^5.0.6",
-    "@deepseek-ai/dsh-scope": "workspace:^"
+    "@akashx/akx-scope": "workspace:^"
   }
 }

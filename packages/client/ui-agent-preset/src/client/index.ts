@@ -13,18 +13,18 @@
  */
 
 // Type-only: pulls the Session Controller service merge (ctx.sessions).
-import type {} from '@deepseek-ai/dsh-api-session-controller/client'
+import type {} from '@akashx/akx-api-session-controller/client'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@akashx/akx-client-locale/client'
 // Type-only: pulls the ctx.remote merge and the forwarded-event key face
 // (the settings invalidation rides the allowlist) into this program.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
+import type {} from '@akashx/akx-api-remotes/client'
 // Type-only: pulls the settings shell's SlotMap merge (the 'settings.section' entry).
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type {} from '@akashx/akx-client-ui-settings/client'
+import type {} from '@akashx/akx-client-ui-renderer/client'
 // Type-only: pulls the Workspace UI navigation service merge (ctx.uiWorkspace).
-import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type {} from '@akashx/akx-client-ui-workspace/client'
+import type { Context as ClientContext } from '@akashx/cordis'
 import { AgentPresetLabel } from './AgentPresetLabel.tsx'
 import type { AgentPresetLabelInjected } from './AgentPresetLabel.tsx'
 import { AgentPresetSeat } from './AgentPresetSeat.tsx'
@@ -36,7 +36,7 @@ import { AgentPresetSectionController } from './section-store.ts'
 import { en, type AgentPresetSettingsKey } from './locales.ts'
 import { AGENT_PRESET_SETTINGS_NS, AgentPresetSettingsController } from './settings-store.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Agent-preset surface copy. */
     'settings.agentPreset': AgentPresetSettingsKey
@@ -152,7 +152,7 @@ export function apply(ctx: ClientContext): void {
         if (!section.store.getSnapshot().showPicker) return
         // The introduce cue makes the chip announce the pick the user never
         // made on this screen — the stage happened back in settings.
-        seat.stage('cordis', true)
+        seat.stage('@akashx/cordis', true)
         scope.uiWorkspace.startSession()
       }
       const chip = scope.slots.register({

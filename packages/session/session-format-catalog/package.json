@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-session-format-catalog",
+  "name": "@akashx/akx-session-format-catalog",
   "description": "Build-static first-party Session format codec and migration catalog",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/session/session-format-catalog"
   },
   "type": "module",
@@ -27,17 +27,17 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-session-format": "workspace:^",
-    "@deepseek-ai/dsh-session-format-v0-to-v1": "workspace:^",
-    "@deepseek-ai/dsh-session-format-v1-to-v2": "workspace:^",
-    "@deepseek-ai/dsh-session-format-v2-to-v3": "workspace:^"
+    "@akashx/akx-session-format": "workspace:^",
+    "@akashx/akx-session-format-v0-to-v1": "workspace:^",
+    "@akashx/akx-session-format-v1-to-v2": "workspace:^",
+    "@akashx/akx-session-format-v2-to-v3": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
   }
 }

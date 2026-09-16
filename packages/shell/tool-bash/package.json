@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-tool-bash",
+  "name": "@akashx/akx-tool-bash",
   "description": "Model-facing bash tool with optional generic background-job and sandbox-escalation support",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/shell/tool-bash"
   },
   "type": "module",
@@ -27,41 +27,41 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-shell-env": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-shell": "workspace:^",
+    "@akashx/akx-shell-env": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-jobs": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/akx-user-approval": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-shell": "workspace:^",
-    "@deepseek-ai/dsh-shell-env": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-jobs-local": "workspace:^",
-    "@deepseek-ai/dsh-tool-jobs": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-loop": "workspace:^",
+    "@akashx/akx-agent-loop-testkit": "workspace:^",
+    "@akashx/akx-shell": "workspace:^",
+    "@akashx/akx-shell-env": "workspace:^",
+    "@akashx/akx-bash-local": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-subprocess-local": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-persistence-jsonl": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-jobs": "workspace:^",
+    "@akashx/akx-jobs-local": "workspace:^",
+    "@akashx/akx-tool-jobs": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/akx-user-approval": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   }
 }

@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { act, cleanup, render } from '@testing-library/react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import { bindSnapshotSelector } from '@akashx/akx-client-test-runtime'
+import type { SessionListState } from '@akashx/akx-api-session-controller/client'
+import type { SessionId } from '@akashx/akx-session/types'
 import { DocumentTitle } from '../src/client/DocumentTitle.tsx'
 import type { MainPanelId, PanelInfo } from '../src/client/service.ts'
 
@@ -36,25 +36,25 @@ describe('DocumentTitle', () => {
   it('projects a durable title and restores the product title', () => {
     const { sessionId, sessions, props } = titleSources()
     document.title = 'stale title'
-    const mounted = render(<DocumentTitle {...props} productTitle="DeepSeek Harness" />)
-    expect(document.title).toBe('DeepSeek Harness')
+    const mounted = render(<DocumentTitle {...props} productTitle="AkashX Harness" />)
+    expect(document.title).toBe('AkashX Harness')
     act(() => { sessions.update((state) => { state.byId[sessionId]!.title = 'First title' }) })
-    expect(document.title).toBe('First title — DeepSeek Harness')
+    expect(document.title).toBe('First title — AkashX Harness')
     act(() => { sessions.update((state) => { state.byId[sessionId]!.title = 'Revised title' }) })
-    expect(document.title).toBe('Revised title — DeepSeek Harness')
+    expect(document.title).toBe('Revised title — AkashX Harness')
     act(() => { sessions.update((state) => { state.current = undefined }) })
-    expect(document.title).toBe('DeepSeek Harness')
+    expect(document.title).toBe('AkashX Harness')
     mounted.unmount()
-    expect(document.title).toBe('DeepSeek Harness')
+    expect(document.title).toBe('AkashX Harness')
   })
 
   it('uses the localized product title supplied by the frame', () => {
     const { sessionId, sessions, props } = titleSources()
     sessions.update((state) => { state.byId[sessionId]!.title = 'First title' })
     const mounted = render(<DocumentTitle {...props} productTitle="AkashX Harness" />)
-    expect(document.title).toBe('First title — DSH Local Build')
+    expect(document.title).toBe('First title — AKX Local Build')
     mounted.unmount()
-    expect(document.title).toBe('DSH Local Build')
+    expect(document.title).toBe('AKX Local Build')
   })
 
   it('keeps the product title across global panels and restores the latest Session title on return', () => {

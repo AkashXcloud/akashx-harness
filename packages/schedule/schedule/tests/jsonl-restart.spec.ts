@@ -4,12 +4,12 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { LlmAdapter, type GenerateOptions, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@akashx/cordis'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import { LlmAdapter, type GenerateOptions, type StreamChunk } from '@akashx/akx-llm'
+import SessionStore, { SessionId } from '@akashx/akx-session'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
 import * as toolSchedule from '../src/index.ts'
 import {
   ScheduleId,
@@ -96,7 +96,7 @@ async function readStored(ctx: Context, id: SessionId) {
 
 describe('Schedule production JSONL restart', () => {
   it('resumes one overdue reminder exactly once across fresh runtime mounts', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-schedule-jsonl-'))
+    const root = await mkdtemp(join(tmpdir(), 'akx-schedule-jsonl-'))
     roots.push(root)
     const sessionId = SessionId('schedule-jsonl-restart')
     const first = await mountPersistence(root)

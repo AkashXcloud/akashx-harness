@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-subagent",
+  "name": "@akashx/akx-subagent",
   "description": "Abstract subagent seam (ctx.subagents): named-provider registry for delegating to child agents",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/subagent/subagent"
   },
   "type": "module",
@@ -53,86 +53,86 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-chunked-list": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-chunked-list": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-projection-cache": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/dsh-util-time": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-presets": "workspace:^",
+    "@akashx/akx-attachment": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-jobs": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-persistence": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-session-projection-cache": "workspace:^",
+    "@akashx/akx-session-query": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-user-approval": "workspace:^",
+    "@akashx/akx-util-time": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-agent-presets": {
+    "@akashx/akx-agent-presets": {
       "optional": true
     },
-    "@deepseek-ai/dsh-sandbox": {
+    "@akashx/akx-sandbox": {
       "optional": true
     },
-    "@deepseek-ai/dsh-sandbox-policy": {
+    "@akashx/akx-sandbox-policy": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-persistence": {
+    "@akashx/akx-session-persistence": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-projection": {
+    "@akashx/akx-session-projection": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-projection-cache": {
+    "@akashx/akx-session-projection-cache": {
       "optional": true
     },
-    "@deepseek-ai/dsh-session-query": {
+    "@akashx/akx-session-query": {
       "optional": true
     },
-    "@deepseek-ai/dsh-jobs": {
+    "@akashx/akx-jobs": {
       "optional": true
     },
-    "@deepseek-ai/dsh-user-approval": {
+    "@akashx/akx-user-approval": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-presets": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-jobs": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-schedule": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-projection-cache": "workspace:^",
-    "@deepseek-ai/dsh-session-query": "workspace:^",
-    "@deepseek-ai/dsh-storage": "workspace:^",
-    "@deepseek-ai/dsh-storage-domain": "workspace:^",
-    "@deepseek-ai/dsh-storage-json": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-user-approval": "workspace:^",
-    "@deepseek-ai/dsh-util-time": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-presets": "workspace:^",
+    "@akashx/akx-attachment": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-jobs": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-schedule": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-persistence": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-session-projection-cache": "workspace:^",
+    "@akashx/akx-session-query": "workspace:^",
+    "@akashx/akx-storage": "workspace:^",
+    "@akashx/akx-storage-domain": "workspace:^",
+    "@akashx/akx-storage-json": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-user-approval": "workspace:^",
+    "@akashx/akx-util-time": "workspace:^"
   }
 }

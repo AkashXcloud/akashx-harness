@@ -10,7 +10,7 @@ Cognate 需要在 Harness 中执行结构化 AkashXDB 查询、文档检索、�
 
 ## 决策
 
-Cognate 是附加的 Harness 能力。`@deepseek-ai/dsh-cognate` 提供 `ctx.cognate`、Provider 选择、SQL 分类、外部操作授权、结果限制和 Provider 提供的语义上下文。`@deepseek-ai/dsh-cognate-mysql` 提供直接 MySQL 协议执行，并在取消时销毁当前连接。`@deepseek-ai/dsh-cognate-local` 为离线开发和测试提供确定性的按标题划分 Markdown 检索，已发布的生产 preset 不挂载它。`@deepseek-ai/dsh-tool-cognate` 提供面向模型的 `run_sql`、确定性的 `render_chart` 和 Cognate 来源选择指引。
+Cognate 是附加的 Harness 能力。`@akashx/akx-cognate` 提供 `ctx.cognate`、Provider 选择、SQL 分类、外部操作授权、结果限制和 Provider 提供的语义上下文。`@akashx/akx-cognate-mysql` 提供直接 MySQL 协议执行，并在取消时销毁当前连接。`@akashx/akx-cognate-local` 为离线开发和测试提供确定性的按标题划分 Markdown 检索，已发布的生产 preset 不挂载它。`@akashx/akx-tool-cognate` 提供面向模型的 `run_sql`、确定性的 `render_chart` 和 Cognate 来源选择指引。
 
 `cognate` Agent preset 复制 Standard 工具组合，并在 Agent 本地 realm 中添加 Cognate 服务、MySQL Provider 和工具。Bash、文件系统、Web、Skill、Session、Goal、Plan、Workflow、Subagent 和 MCP 仍是独立的 Harness 能力。
 

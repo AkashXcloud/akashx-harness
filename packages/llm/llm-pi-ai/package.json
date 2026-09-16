@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-llm-pi-ai",
-  "description": "pi-ai-backed DeepSeek adapter for the DeepSeek Harness LLM seam (design-verification twin of dsh-llm-deepseek)",
+  "name": "@akashx/akx-llm-pi-ai",
+  "description": "pi-ai-backed AkashX adapter for the AkashX Harness LLM seam (design-verification twin of akx-llm-akx)",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/llm/llm-pi-ai"
   },
   "type": "module",
@@ -27,33 +27,33 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-authorization": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-attachment": "workspace:^",
+    "@akashx/akx-authorization": "workspace:^",
+    "@akashx/akx-credentials": "workspace:^",
+    "@akashx/akx-fs": "workspace:^",
+    "@akashx/akx-launch-environment": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-settings": "workspace:^",
+    "@akashx/akx-timeout": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "@earendil-works/pi-ai": "^0.85.1"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-authorization": "workspace:^",
-    "@deepseek-ai/dsh-credentials": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-settings": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^",
-    "@deepseek-ai/dsh-http-proxy": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-attachment": "workspace:^",
+    "@akashx/akx-authorization": "workspace:^",
+    "@akashx/akx-credentials": "workspace:^",
+    "@akashx/akx-fs": "workspace:^",
+    "@akashx/akx-launch-environment": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-llm-akx": "workspace:^",
+    "@akashx/akx-settings": "workspace:^",
+    "@akashx/akx-timeout": "workspace:^",
+    "@akashx/akx-http-proxy": "workspace:^"
   }
 }

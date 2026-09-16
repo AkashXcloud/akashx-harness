@@ -1,4 +1,4 @@
-const api = window.dshDesktop
+const api = window.akxDesktop
 
 async function main() {
   const { id, messages } = await api.locale()

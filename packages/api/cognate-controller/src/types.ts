@@ -5,7 +5,7 @@
  * member of these types carries a password or a full connection string, because
  * every one of them crosses to the browser.
  *
- * @module @deepseek-ai/dsh-api-cognate-controller/types
+ * @module @akashx/akx-api-cognate-controller/types
  */
 
 /** One semantic asset kind, with the members the connection actually exposes. */

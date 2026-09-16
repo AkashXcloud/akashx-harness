@@ -1,15 +1,15 @@
 ---
-description: "共享的 dsh 核心：为每个 dsh --profile 表层提供模型访问、工具、持久会话与安全默认值，供用户组合或定制 profile。"
+description: "共享的 akx 核心：为每个 akx --profile 表层提供模型访问、工具、持久会话与安全默认值，供用户组合或定制 profile。"
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-base
+# @akashx/akx-base
 
 [English](README.md) | 中文
 
 ## 概述
 
-每个基于 base 的 `dsh --profile` 表层都运行在 `dsh-base` 上，因此这些表层共享模型连接、完整工具集、持久会话历史和 workspace 安全默认值。随附的 `sdk-minimal` profile 刻意改用完整的独立配置树。你通常不直接操作本组合包——随发行版交付的基于 base 的 profile 已经包含它，自定义的基于 base 的 profile 则把它放在第一位。需要其他默认值时，应修改自己的 profile patch 或添加后续组合包；本包不是供导入的库。
+每个基于 base 的 `akx --profile` 表层都运行在 `akx-base` 上，因此这些表层共享模型连接、完整工具集、持久会话历史和 workspace 安全默认值。随附的 `sdk-minimal` profile 刻意改用完整的独立配置树。你通常不直接操作本组合包——随发行版交付的基于 base 的 profile 已经包含它，自定义的基于 base 的 profile 则把它放在第一位。需要其他默认值时，应修改自己的 profile patch 或添加后续组合包；本包不是供导入的库。
 
 ## 目录
 
@@ -25,36 +25,36 @@ kind: "package-bundle"
 <a id="use-this-package"></a>
 ## 使用本包
 
-你会自动获得 dsh 核心：随发行版交付的 `web`、`headless`、`sdk` 与 `acp` profile 已包含它，自定义 profile 则把它列为第一个组合包。之后一切无需任何额外配置即可工作。
+你会自动获得 akx 核心：随发行版交付的 `web`、`headless`、`sdk` 与 `acp` profile 已包含它，自定义 profile 则把它列为第一个组合包。之后一切无需任何额外配置即可工作。
 
 ### 最小自定义 profile
 
-要在共享核心之上构建 profile，请创建一个 profile，其 `package.json` 把 `@deepseek-ai/dsh-base` 列在首位：
+要在共享核心之上构建 profile，请创建一个 profile，其 `package.json` 把 `@akashx/akx-base` 列在首位：
 
 ```json
 {
   "name": "my-profile",
   "private": true,
-  "dsh": {
+  "akx": {
     "profile": {
-      "bundles": ["@deepseek-ai/dsh-base"]
+      "bundles": ["@akashx/akx-base"]
     }
   }
 }
 ```
 
-运行 `dsh --profile my-profile "your task"`，你就得到一个可用的 agent（智能体），带模型访问、工具、持久化与默认权限策略。随发行版交付的 `web`、`headless`、`sdk` 与 `acp` profile 会在首次使用时为你创建。要添加更多组合包，运行 `dsh plugin --profile <name> add <package>`；内置组合包从 dsh 安装目录解析。profile 约定见 [app-boot 的 profile 章节](../../boot/app-boot/README.zh.md)。
+运行 `akx --profile my-profile "your task"`，你就得到一个可用的 agent（智能体），带模型访问、工具、持久化与默认权限策略。随发行版交付的 `web`、`headless`、`sdk` 与 `acp` profile 会在首次使用时为你创建。要添加更多组合包，运行 `akx plugin --profile <name> add <package>`；内置组合包从 akx 安装目录解析。profile 约定见 [app-boot 的 profile 章节](../../boot/app-boot/README.zh.md)。
 
 ### 你得到什么
 
-开箱即用，基于本核心构建的每个 profile 都提供：DeepSeek 模型连接（提供方与模型可配置，你还可以在设置中启用额外提供方）、完整工具集——文件编辑、shell 命令、web 搜索、公开 HTTP(S) 抓取、subagent、任务与目标跟踪——可跨重启存活的持久会话，以及默认权限策略：把文件写入限制在工作区内，危险操作前征询许可。Web 抓取无需逐次审批，其提供方会拒绝非公开目的地址。反馈保存在会话日志中。[OTel 会话上传](../../session/session-telemetry-otel/README.zh.md)对所有用户默认使用 `FEEDBACK_ONLY`，包括 `deepseek-official`：新的文本反馈、消息评分、编辑与撤回会释放截至该事件的完整规范会话日志前缀，包含上下文。后续记录等待下一次显式反馈；发送已授权批次无需进一步交互或模型调用。`DISABLED` 阻止 OTel 捕获。需主动开启的 [DeepSeek 会话日志贡献器](../../session/session-log-deepseek/README.zh.md)仍是独立的请求路径。
+开箱即用，基于本核心构建的每个 profile 都提供：AkashX 模型连接（提供方与模型可配置，你还可以在设置中启用额外提供方）、完整工具集——文件编辑、shell 命令、web 搜索、公开 HTTP(S) 抓取、subagent、任务与目标跟踪——可跨重启存活的持久会话，以及默认权限策略：把文件写入限制在工作区内，危险操作前征询许可。Web 抓取无需逐次审批，其提供方会拒绝非公开目的地址。反馈保存在会话日志中。[OTel 会话上传](../../session/session-telemetry-otel/README.zh.md)对所有用户默认使用 `FEEDBACK_ONLY`，包括 `akashx-official`：新的文本反馈、消息评分、编辑与撤回会释放截至该事件的完整规范会话日志前缀，包含上下文。后续记录等待下一次显式反馈；发送已授权批次无需进一步交互或模型调用。`DISABLED` 阻止 OTel 捕获。需主动开启的 [AkashX 会话日志贡献器](../../session/session-log-akx/README.zh.md)仍是独立的请求路径。
 
 默认文件编辑使用 `read`、`write` 和 `edit`。`str_replace_editor` 工具仍可显式启用。要将它加入基于 base 的 profile，请在 profile、home 或逐次调用 patch 中添加以下条目：
 
 ```yaml
 - insert:
     - id: tool-str-replace-editor
-      name: '@deepseek-ai/dsh-tool-str-replace-editor'
+      name: '@akashx/akx-tool-str-replace-editor'
       config:
         maxOutputChars: 16000
 ```
@@ -83,7 +83,7 @@ patch 会替换目标行的整个 `config`，而不是合并进它。后续组�
 
 ### 平台门控
 
-patch 在自身上按平台门控两个 shell 栈：`bash-sandbox` 与 `tool-bash` 携带 `disabled: !!js process.platform === 'win32'`，孪生行 `pwsh-sandbox` 与 `tool-pwsh` 以取反的表达式仅在 win32 挂载。权限面与 POSIX 完全一致：沙箱策略通过 Windows ACL 受限令牌 runner（`dsh-sandbox-local` → `@deepseek-ai/dsh-sandbox-windows-acl`）执行相同的文件效果策略，`fs-sandbox` 继续围栏 `ctx.fs` 写入——在其旁再挂载 `dsh-fs-local` 会重复注册 `ctx.fs` 并在加载时失败。
+patch 在自身上按平台门控两个 shell 栈：`bash-sandbox` 与 `tool-bash` 携带 `disabled: !!js process.platform === 'win32'`，孪生行 `pwsh-sandbox` 与 `tool-pwsh` 以取反的表达式仅在 win32 挂载。权限面与 POSIX 完全一致：沙箱策略通过 Windows ACL 受限令牌 runner（`akx-sandbox-local` → `@akashx/akx-sandbox-windows-acl`）执行相同的文件效果策略，`fs-sandbox` 继续围栏 `ctx.fs` 写入——在其旁再挂载 `akx-fs-local` 会重复注册 `ctx.fs` 并在加载时失败。
 
 ### 源码地图
 
@@ -133,7 +133,7 @@ patch 在自身上按平台门控两个 shell 栈：`bash-sandbox` 与 `tool-bas
 
 - **覆盖会替换整个设置块**——patch 条目会替换目标的整个配置，因此你的覆盖必须重述每个想保留的设置；不会自动合并。
 - **按表层的设置属于该表层的组合包**——web GUI 与 headless 模式取值不同的默认值放在对应表层的组合包里，而不是共享核心。
-- **Windows 的临时目录授权是按会话的私有子目录**——`workspace-write` 把写入限制在工作区与会话自己的 temp 子目录（`<temp>\dsh-<hash>`，受限子进程的 TMP/TEMP 被改写）；`read-only` 不授予任何临时目录写入权限。见 `@deepseek-ai/dsh-sandbox-windows-acl`。
+- **Windows 的临时目录授权是按会话的私有子目录**——`workspace-write` 把写入限制在工作区与会话自己的 temp 子目录（`<temp>\akx-<hash>`，受限子进程的 TMP/TEMP 被改写）；`read-only` 不授予任何临时目录写入权限。见 `@akashx/akx-sandbox-windows-acl`。
 - **在沙箱化文件系统提供方之上添加普通提供方会导致 profile 失败**——两者注册同一个服务，profile 因此拒绝加载；二选一。
 
 <a id="dev-note"></a>

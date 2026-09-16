@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-agent-team-web-profile",
+  "name": "@akashx/akx-experimental-agent-team-web-profile",
   "description": "Experimental Web profile layer for Agent Teams Remote and UI plugins",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/experimental/agent-team-web-profile"
   },
   "type": "module",
@@ -28,20 +28,20 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "akx": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-experimental-client-ui-agent-team": "workspace:^"
+    "@akashx/akx-experimental-client-ui-agent-team": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis": "workspace:^",
     "js-yaml": "^4.2.0"
   }
 }

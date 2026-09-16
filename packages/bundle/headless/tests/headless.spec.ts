@@ -1,15 +1,15 @@
 /** Direct one-shot Agent driving, durable aggregation, flushing, and exit mapping. */
 
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentHandle, AssistantStreamFrame, CreateAgentOptions } from '@deepseek-ai/dsh-agent'
-import AgentDefaultModelConfig from '@deepseek-ai/dsh-agent-default-model'
-import { LlmAttemptId, createAssistantMessage, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { Session, UserMessage } from '@deepseek-ai/dsh-session'
-import { createInboxStub } from '@deepseek-ai/dsh-agent-loop-testkit'
+import { Context } from '@akashx/cordis'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent, AgentHandle, AssistantStreamFrame, CreateAgentOptions } from '@akashx/akx-agent'
+import AgentDefaultModelConfig from '@akashx/akx-agent-default-model'
+import { LlmAttemptId, createAssistantMessage, type StreamChunk } from '@akashx/akx-llm'
+import SessionStore from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import type { Session, UserMessage } from '@akashx/akx-session'
+import { createInboxStub } from '@akashx/akx-agent-loop-testkit'
 import { apply, Config, internals } from '../src/index.ts'
 
 const originalInternals = { ...internals }
@@ -242,13 +242,13 @@ describe('headless runner', () => {
     const result = await running
     expect(streamed).toEqual({
       out: '',
-      err: 'dsh: reasoning:\nchecking the workspace safely\nsecond pass\n',
+      err: 'akx: reasoning:\nchecking the workspace safely\nsecond pass\n',
       order: [],
     })
     expect(result).toEqual({
       code: 0,
       out: 'done\n',
-      err: 'dsh: reasoning:\nchecking the workspace safely\nsecond pass\n',
+      err: 'akx: reasoning:\nchecking the workspace safely\nsecond pass\n',
       order: ['flush', 'exit'],
     })
     await test.ctx.fiber.dispose()
@@ -287,11 +287,11 @@ describe('headless runner', () => {
     })
     const running = test.run()
     await reasoningAppended.promise
-    expect(test.output().err).toBe('dsh: reasoning:\nunfinished reasoning')
+    expect(test.output().err).toBe('akx: reasoning:\nunfinished reasoning')
 
     releaseEnd.resolve(undefined)
     await ended.promise
-    expect(test.output().err).toBe('dsh: reasoning:\nunfinished reasoning\n')
+    expect(test.output().err).toBe('akx: reasoning:\nunfinished reasoning\n')
 
     finish.resolve(undefined)
     await expect(running).resolves.toMatchObject({ code: 1 })
@@ -322,7 +322,7 @@ describe('headless runner', () => {
     expect(await test.run()).toMatchObject({
       code: 1,
       out: '\n',
-      err: 'dsh: SERVER: provider unavailable\n',
+      err: 'akx: SERVER: provider unavailable\n',
     })
     await test.ctx.fiber.dispose()
   })
@@ -345,7 +345,7 @@ describe('headless runner', () => {
     expect(await test.run()).toMatchObject({
       code: 1,
       out: '\n',
-      err: 'dsh: reasoning:\ntrying recovery\ndsh: SERVER: provider unavailable\n',
+      err: 'akx: reasoning:\ntrying recovery\ndsh: SERVER: provider unavailable\n',
     })
     await test.ctx.fiber.dispose()
   })
@@ -370,7 +370,7 @@ describe('headless runner', () => {
     expect(result).toMatchObject({
       code: 1,
       out: '',
-      err: `dsh: headless summary cannot read seq 0 below captured length ${String(capturedLength)}\n`,
+      err: `akx: headless summary cannot read seq 0 below captured length ${String(capturedLength)}\n`,
     })
     await test.ctx.fiber.dispose()
   })
@@ -388,7 +388,7 @@ describe('headless runner', () => {
     ctx.provide('agents', { create: () => Promise.reject(new Error('factory exploded')) } as never)
     apply(ctx, { task: 't' })
     expect(await exited).toBe(1)
-    expect(err).toBe('dsh: factory exploded\n')
+    expect(err).toBe('akx: factory exploded\n')
     await ctx.fiber.dispose()
   })
 
@@ -410,7 +410,7 @@ describe('headless runner', () => {
     ctx.provide('agents', { create: () => rejected } as never)
     apply(ctx, { task: 't' })
     expect(await exited).toBe(1)
-    expect(err).toBe('dsh: factory exploded\n')
+    expect(err).toBe('akx: factory exploded\n')
     await ctx.fiber.dispose()
   })
 

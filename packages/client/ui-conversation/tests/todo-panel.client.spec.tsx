@@ -4,12 +4,12 @@
  * including several `in_progress` at once, collapse), and its TodoDock
  * adapter (selects the plan off the session snapshot and follows changes).
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { TodoItem } from '@deepseek-ai/dsh-tool-todo/client'
+import { bindSnapshotSelector, makeTranslate } from '@akashx/akx-client-test-runtime'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import type { TodoItem } from '@akashx/akx-tool-todo/client'
 import type { TodoDockProps } from '../src/client/skeleton/TodoPanel.tsx'
 import { TodoDock, TodoPanel, todoDockEntry } from '../src/client/skeleton/TodoPanel.tsx'
 import { en, NS } from '../src/client/locales.ts'

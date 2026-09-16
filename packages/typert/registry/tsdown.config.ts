@@ -1,3 +1,3 @@
 import { clientBundle } from '../../client/tsdown.client.ts'
 
-export default clientBundle('@deepseek-ai/dsh-typert-registry', ['lib/types/index.js'])
+export default clientBundle('@akashx/akx-typert-registry', ['lib/types/index.js'])

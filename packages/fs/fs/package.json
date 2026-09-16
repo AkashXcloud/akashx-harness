@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-fs",
-  "description": "Abstract filesystem capability seam (ctx.fs) for the DeepSeek Harness — vocabulary types, the FileSystem service (text IO + optional version-guarded atomic mutations), and the fs/* policy event vocabulary",
+  "name": "@akashx/akx-fs",
+  "description": "Abstract filesystem capability seam (ctx.fs) for the AkashX Harness — vocabulary types, the FileSystem service (text IO + optional version-guarded atomic mutations), and the fs/* policy event vocabulary",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/fs/fs"
   },
   "type": "module",
@@ -32,17 +32,17 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   }
 }

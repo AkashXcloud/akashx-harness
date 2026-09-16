@@ -1,18 +1,18 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render } from '@testing-library/react'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { RunningToolCall, ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { bindSnapshotSelector } from '@akashx/akx-client-test-runtime'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import type { RunningToolCall, ToolResultNode } from '@akashx/akx-client-ui-chat/client'
+import type { SessionListState } from '@akashx/akx-api-session-controller/client'
+import type { SessionId } from '@akashx/akx-session/types'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 import { CHAT_DIFF_MAX_LINES, diffCardModel } from '../src/client/tool/models/diff-card-model.ts'
 import { GenericToolCard, type GenericToolCardProps } from '../src/client/tool/toolviews/GenericToolCard.tsx'
 import { FileMutationRow, fileMutationToolview } from '../src/client/tool/toolviews/file-mutation-row.tsx'
-import { en } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
+import { en } from '@akashx/akx-client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 

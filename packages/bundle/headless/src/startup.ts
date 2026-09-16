@@ -2,12 +2,12 @@
  * The one-shot app's command-line provider: it parses the task positional and
  * `--help`, then publishes {@link HEADLESS_STARTUP_SERVICE}. The runner is an
  * ordinary consumer whose lazy config waits for that service.
- * @module @deepseek-ai/dsh-headless/startup
+ * @module @akashx/akx-headless/startup
  */
 
 import { Command } from 'commander'
-import type { Context } from '@deepseek-ai/cordis'
-import { parseCmdline } from '@deepseek-ai/dsh-cmdline'
+import type { Context } from '@akashx/cordis'
+import { parseCmdline } from '@akashx/akx-cmdline'
 
 /** Stable Cordis plugin name. */
 export const name = 'headless-startup'
@@ -26,7 +26,7 @@ export interface HeadlessStartupValues {
 
 /** Executable name used in app-facing help and diagnostics. */
 function cliName(): string {
-  return process.env.DSH_CLI_NAME ?? 'dsh'
+  return process.env.AKX_CLI_NAME ?? 'akx'
 }
 
 /**

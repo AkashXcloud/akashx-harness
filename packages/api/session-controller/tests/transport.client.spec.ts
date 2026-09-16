@@ -3,11 +3,11 @@ import {
   RemoteStream,
   RemoteStreamCarrierError,
   type RemoteStreamOptions,
-} from '@deepseek-ai/dsh-api-gateway/client'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import { LlmAttemptId } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session/types'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+} from '@akashx/akx-api-gateway/client'
+import { RemoteError } from '@akashx/akx-typert-protocol'
+import { LlmAttemptId } from '@akashx/akx-llm'
+import { SESSION_FORMAT_VERSION } from '@akashx/akx-session/types'
+import type { RemoteResult } from '@akashx/akx-typert-protocol'
 import {
   createSessionControlStream,
   SessionEventStream,

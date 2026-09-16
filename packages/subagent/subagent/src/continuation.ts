@@ -10,19 +10,19 @@
  * execution. No continuable path creates a Task or an intermediate
  * result-bearing wrapper.
  *
- * @module @deepseek-ai/dsh-subagent
+ * @module @akashx/akx-subagent
  */
 
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { ReasoningEffortId, contentHasImage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, MessageId, MessageSource } from '@deepseek-ai/dsh-llm'
-import { SessionLogOffset } from '@deepseek-ai/dsh-session'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionObservation, SessionQueryEngine } from '@deepseek-ai/dsh-session-query'
+import type { Context } from '@akashx/cordis'
+import type { Agent } from '@akashx/akx-agent'
+import { brandString } from '@akashx/akx-brand'
+import { ReasoningEffortId, contentHasImage, createUserMessage } from '@akashx/akx-llm'
+import type { ContentBlock, MessageId, MessageSource } from '@akashx/akx-llm'
+import { SessionLogOffset } from '@akashx/akx-session'
+import type { SessionId } from '@akashx/akx-session'
+import type { SessionPersistence } from '@akashx/akx-session-persistence'
+import type { SessionObservation, SessionQueryEngine } from '@akashx/akx-session-query'
 import {
   childSessionMeta,
   captureDelegatedPolicyOverrides,
@@ -527,7 +527,7 @@ export class SubagentContinuationManager {
     const persistence = this.ctx.get('sessionPersistence')
     if (persistence === undefined) {
       throw new SubagentError(
-        'continuable subagents require session persistence (load a dsh-session-persistence backend)',
+        'continuable subagents require session persistence (load a akx-session-persistence backend)',
         'PERSISTENCE_UNAVAILABLE',
       )
     }
@@ -539,7 +539,7 @@ export class SubagentContinuationManager {
     const query = this.ctx.get('sessionQuery')
     if (query === undefined) {
       throw new SubagentError(
-        'continuable subagents require session query (load @deepseek-ai/dsh-session-query)',
+        'continuable subagents require session query (load @akashx/akx-session-query)',
         'CONTINUATION_UNAVAILABLE',
       )
     }

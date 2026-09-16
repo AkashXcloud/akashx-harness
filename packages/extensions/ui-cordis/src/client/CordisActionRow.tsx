@@ -2,14 +2,14 @@
 
 import {
   IconInspectOutline12, IconStopFill16, IconTrashOutline16, StateDot,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ToolCallViewProps } from '@deepseek-ai/dsh-client-ui-tool/client'
+} from '@akashx/akx-client-ui-primitives'
+import type { PropsLocale } from '@akashx/akx-client-ui-slots'
+import type { ToolCallViewProps } from '@akashx/akx-client-ui-tool/client'
 import { cordisActionCard } from './card-model.ts'
 import css from './CordisRunRow.module.css'
 
 /** Full action-card props composed by the keyed Tool slot. */
-export type CordisActionRowProps = ToolCallViewProps & PropsLocale<'cordis'>
+export type CordisActionRowProps = ToolCallViewProps & PropsLocale<'@akashx/cordis'>
 
 /** Render one Stop or Remove call with Cordis-owned localized copy. */
 export function CordisActionRow({ callId, toolName, block, inspect, t }: CordisActionRowProps) {

@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-session",
-  "description": "Event-sourced session store for the DeepSeek Harness",
+  "name": "@akashx/akx-session",
+  "description": "Event-sourced session store for the AkashX Harness",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/core/session"
   },
   "type": "module",
@@ -41,19 +41,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-typert-registry": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-typert-registry": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^"
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^"
   }
 }

@@ -16,8 +16,8 @@ import {
   lastAssistantStreamChunk,
   runFirstTokenTime,
   runFirstVisibleTime,
-} from '@deepseek-ai/dsh-llm'
-import type { AssistantStreamRecord, AssistantStreamRun, StreamChunk, TimedStreamChunk } from '@deepseek-ai/dsh-llm'
+} from '@akashx/akx-llm'
+import type { AssistantStreamRecord, AssistantStreamRun, StreamChunk, TimedStreamChunk } from '@akashx/akx-llm'
 
 describe('AssistantStreamAccumulator', () => {
   it('keeps delta boundaries and timestamps while compacting one attempt', () => {

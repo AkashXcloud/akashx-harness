@@ -1,6 +1,6 @@
 /** Types shared by the Cognate/AkashXDB service and its consumers. */
 
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { JsonValue } from '@akashx/akx-util-values'
 
 /** Operation class selected from a submitted SQL statement. */
 export type CognateQueryKind = 'metadata' | 'read' | 'cognitive' | 'mutation'

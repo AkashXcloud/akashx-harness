@@ -6,7 +6,7 @@ type SessionControllerRemoteEvent =
   | 'api-session/removed'
   | 'api-session/status'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@akashx/akx-typert-protocol' {
   interface TypertRemoteEventSelection extends
     Record<SessionControllerRemoteEvent, true> {}
 }

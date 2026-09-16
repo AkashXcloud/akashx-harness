@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-hmr",
+  "name": "@akashx/akx-client-hmr",
   "description": "Dev-only hot-reload driver for script-loaded client entries: SSE rebuilt frames → invalidate/prefetch → fiber swap through the vendored Loader entry",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/client/hmr"
   },
   "type": "module",
@@ -29,10 +29,10 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "akx": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-modules"
+        "@akashx/akx-client-modules"
       ],
       "platform": "web",
       "immediately": true
@@ -40,17 +40,17 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "workspace:^",
-    "@deepseek-ai/dsh-client-modules": "workspace:^",
-    "@deepseek-ai/dsh-host-webserver": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis-plugin-loader": "workspace:^",
+    "@akashx/akx-client-modules": "workspace:^",
+    "@akashx/akx-host-webserver": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "files": [
     "lib/index.js",

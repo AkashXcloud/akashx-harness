@@ -1,12 +1,12 @@
-# Agent Note: DeepSeek image-token estimator on the v41 calculator
+# Agent Note: AkashX image-token estimator on the v41 calculator
 
 Status: implemented
 
-English | [中文](2026-09-10-deepseek-image-token-calculator-v41.zh.md)
+English | [中文](2026-09-10-akashx-image-token-calculator-v41.zh.md)
 
 ## Problem
 
-`deepSeekImageTokens()` in `llm-deepseek` ported the provider's published image-token calculator in its `v4` configuration: a 384×384 scale-up floor, a 384-token cap, an 8:1 width clamp, a grid layout that adds a row for odd row counts and parity corrections, and a pad-to-4 alignment charged at its worst case. The provider's Vision guide now documents a different projection for the current Flash model: images below roughly 544×544 total pixels scale up, larger images scale down to roughly 1300×1300 total pixels, and one image costs at most 1024 tokens. The published calculator carries this as a `v41` configuration and the docs page instantiates that one. The old port underprices an 800×800 request image by 73 tokens, which can delay automatic compaction in sessions containing these images. The error depends on dimensions: a 640×480 image is overestimated by 3 tokens.
+`deepSeekImageTokens()` in `llm-akashx` ported the provider's published image-token calculator in its `v4` configuration: a 384×384 scale-up floor, a 384-token cap, an 8:1 width clamp, a grid layout that adds a row for odd row counts and parity corrections, and a pad-to-4 alignment charged at its worst case. The provider's Vision guide now documents a different projection for the current Flash model: images below roughly 544×544 total pixels scale up, larger images scale down to roughly 1300×1300 total pixels, and one image costs at most 1024 tokens. The published calculator carries this as a `v41` configuration and the docs page instantiates that one. The old port underprices an 800×800 request image by 73 tokens, which can delay automatic compaction in sessions containing these images. The error depends on dimensions: a 640×480 image is overestimated by 3 tokens.
 
 ## Decision
 
@@ -16,7 +16,7 @@ The test vectors are re-pinned from the published calculator. The request-pricin
 
 ## Alternatives considered
 
-**Keep both configurations and select by model id.** The provider states that requests to the retired `deepseek-v4-flash-vision-exp` id are served by the current Flash model, so no reachable route prices under the old configuration. Two configurations would keep dead branches and their tests alive.
+**Keep both configurations and select by model id.** The provider states that requests to the retired `akashx-v4-flash-vision-exp` id are served by the current Flash model, so no reachable route prices under the old configuration. Two configurations would keep dead branches and their tests alive.
 
 **Keep the generic class with the `isNLayout`, pad, and ratio-clamp switches.** A one-configuration port has fewer unreachable branches to exclude from coverage and states the shipped rule directly; a future provider revision changes this one module and its pinned vectors either way.
 

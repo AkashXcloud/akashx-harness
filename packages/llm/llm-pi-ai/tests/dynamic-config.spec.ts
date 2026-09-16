@@ -1,14 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import LlmRuntime, { LlmAdapter } from '@deepseek-ai/dsh-llm'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
-import { LocalCredentialProvider } from '@deepseek-ai/dsh-credentials-local'
-import { FileSettingsProvider } from '@deepseek-ai/dsh-settings-file'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import AuthorizationService from '@deepseek-ai/dsh-authorization'
+import LlmRuntime, { LlmAdapter } from '@akashx/akx-llm'
+import { credentialRef } from '@akashx/akx-credentials'
+import { LocalCredentialProvider } from '@akashx/akx-credentials-local'
+import { FileSettingsProvider } from '@akashx/akx-settings-file'
+import * as LlmPiAi from '@akashx/akx-llm-pi-ai'
+import AuthorizationService from '@akashx/akx-authorization'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
 import { assemble } from './assemble.ts'
 import { closeMockServers, mockServer, textEvents } from './mock-server.ts'
@@ -32,7 +32,7 @@ afterEach(async () => {
 })
 
 async function home(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-pi-dynamic-'))
+  const dir = await mkdtemp(join(tmpdir(), 'akx-pi-dynamic-'))
   cleanups.push(() => rm(dir, { recursive: true, force: true }))
   return dir
 }
@@ -79,7 +79,7 @@ describe('request-level dynamic profiles', () => {
   it('retains the last accepted profiles after an invalid external edit and accepts a repaired file', { timeout: 30_000 }, async () => {
     const dir = await home()
     const path = join(dir, 'settings.yaml')
-    await writeFile(path, JSON.stringify({ [NS]: { providers: { deepseek: {} } } }))
+    await writeFile(path, JSON.stringify({ [NS]: { providers: { akashx: {} } } }))
     const ctx = await boot(dir, {}, { watchSettings: true })
 
     await writeFile(path, JSON.stringify({ [NS]: { providers: { openrouter: { models: [{ id: '111' }] } } } }))
@@ -128,7 +128,7 @@ describe('request-level dynamic profiles', () => {
     const good = await assemble(ctx, { provider: 'openrouter', model: known.id, messages: [] })
     expect(good.message.content).toEqual([{ type: 'text', text: 'hello' }])
 
-    await ctx.settings.update(NS, { providers: { deepseek: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } } })
+    await ctx.settings.update(NS, { providers: { akashx: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } } })
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openrouter', 'deepseek'])
     const beforeRejected = await readFile(path, 'utf8')
     await expect(ctx.settings.update(NS, { providers: { openrouter: { displayName: 'Edited' } } })).rejects.toThrow(failure)
@@ -193,12 +193,12 @@ describe('request-level dynamic profiles', () => {
       declared: false,
     })
     await ctx.settings.update(NS, {
-      providers: { deepseek: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
+      providers: { akashx: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
     })
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
     await expect(ctx.llm.listModels('deepseek')).resolves.not.toHaveLength(0)
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'deepseek', model: 'akashx-v4-flash', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer pk-from-settings')
 
@@ -221,11 +221,11 @@ describe('request-level dynamic profiles', () => {
 
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai'])
     await ctx.settings.update(NS, {
-      providers: { deepseek: { apiKeyEnv: 'PI_LIVE_KEY', baseURL: server.url } },
+      providers: { akashx: { apiKeyEnv: 'PI_LIVE_KEY', baseURL: server.url } },
     })
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai', 'deepseek'])
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'deepseek', model: 'akashx-v4-flash', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer live-key')
 
@@ -233,7 +233,7 @@ describe('request-level dynamic profiles', () => {
     // composition route stays.
     await ctx.settings.replace(NS, {})
     expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['openai'])
-    const removed = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    const removed = await assemble(ctx, { provider: 'deepseek', model: 'akashx-v4-flash', messages: [] })
     expect(removed.finish).toMatchObject({ kind: 'error', failure: { code: 'NO_ADAPTER' } })
   })
 
@@ -243,14 +243,14 @@ describe('request-level dynamic profiles', () => {
     await writeFile(join(dir, '.credentials.yaml'), 'version: 1\nrefs:\n  PI_DYNAMIC_KEY: pk-one\n', { mode: 0o600 })
     const server = await mockServer([{ events: textEvents }, { events: textEvents }])
     const ctx = await boot(dir, {
-      providers: { deepseek: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
+      providers: { akashx: { apiKeyEnv: 'PI_DYNAMIC_KEY', baseURL: server.url } },
     })
 
-    await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    await assemble(ctx, { provider: 'deepseek', model: 'akashx-v4-flash', messages: [] })
     expect(server.headers[0]?.authorization).toBe('Bearer pk-one')
 
     await ctx.credentials.set(credentialRef('PI_DYNAMIC_KEY'), 'pk-two')
-    await assemble(ctx, { provider: 'deepseek', model: 'deepseek-v4-flash', messages: [] })
+    await assemble(ctx, { provider: 'deepseek', model: 'akashx-v4-flash', messages: [] })
     expect(server.headers[1]?.authorization).toBe('Bearer pk-two')
   })
 

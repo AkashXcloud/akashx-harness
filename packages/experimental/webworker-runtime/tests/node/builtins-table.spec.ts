@@ -21,9 +21,9 @@ import { MemoryVfs } from '../../src/storage/memory.ts'
 /** A loader over an empty image: every specifier below resolves from the table. */
 function loaderRequire(): WorkerRequire {
   const vfs = new MemoryVfs()
-  vfs.seedDirectory('/dsh')
-  const loader = new WorkerModuleLoader({ vfs, root: '/dsh', staticModules: createNodeBuiltins() })
-  return loader.createRequire('/dsh/')
+  vfs.seedDirectory('/akx')
+  const loader = new WorkerModuleLoader({ vfs, root: '/akx', staticModules: createNodeBuiltins() })
+  return loader.createRequire('/akx/')
 }
 
 describe('the replacement table', () => {
@@ -62,16 +62,16 @@ describe('the replacement table', () => {
 describe('module identity through the loader', () => {
   it('exposes async and synchronous resolution through the Cordis internal seam', async () => {
     const vfs = new MemoryVfs()
-    vfs.seedDirectory('/dsh/node_modules/example')
-    vfs.writeFileSync('/dsh/node_modules/example/package.json', JSON.stringify({ main: 'index.js' }))
-    vfs.writeFileSync('/dsh/node_modules/example/index.js', 'module.exports = {}\n')
-    const loader = new WorkerModuleLoader({ vfs, root: '/dsh', staticModules: createNodeBuiltins() })
+    vfs.seedDirectory('/akx/node_modules/example')
+    vfs.writeFileSync('/akx/node_modules/example/package.json', JSON.stringify({ main: 'index.js' }))
+    vfs.writeFileSync('/akx/node_modules/example/index.js', 'module.exports = {}\n')
+    const loader = new WorkerModuleLoader({ vfs, root: '/akx', staticModules: createNodeBuiltins() })
 
-    expect(loader.internal.resolveSync('example', 'file:///dsh/app.js')).toEqual({
+    expect(loader.internal.resolveSync('example', 'file:///akx/app.js')).toEqual({
       format: 'commonjs',
-      url: 'file:///dsh/node_modules/example/index.js',
+      url: 'file:///akx/node_modules/example/index.js',
     })
-    await expect(loader.internal.resolve('node:fs', 'file:///dsh/app.js')).resolves.toEqual({
+    await expect(loader.internal.resolve('node:fs', 'file:///akx/app.js')).resolves.toEqual({
       format: 'builtin',
       url: 'node:fs',
     })
@@ -112,7 +112,7 @@ describe('module identity through the loader', () => {
     const require = loaderRequire()
     expect(require.resolve.paths('node:fs')).toBeNull()
     expect(require.resolve.paths('node:dns')).toBeNull()
-    expect(require.resolve.paths('workspace-package')).toEqual(['/dsh/node_modules'])
-    expect(require.resolve.paths('./local.js')).toEqual(['/dsh'])
+    expect(require.resolve.paths('workspace-package')).toEqual(['/akx/node_modules'])
+    expect(require.resolve.paths('./local.js')).toEqual(['/akx'])
   })
 })

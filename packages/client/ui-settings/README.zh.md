@@ -1,9 +1,9 @@
 ---
-description: "设置领域底座插件：设置命名空间 scope 服务、schema 服务，以及 dsh Web 客户端的规范设置 slot 类型约定。"
+description: "设置领域底座插件：设置命名空间 scope 服务、schema 服务，以及 akx Web 客户端的规范设置 slot 类型约定。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-settings
+# @akashx/akx-client-ui-settings
 
 [English](README.md) | 中文
 
@@ -72,7 +72,7 @@ kind: "package-reference"
 
 - [ui-settings-general](../ui-settings-general/README.zh.md)——设置外壳：触发控件、导航、「通用」分区、引导投影。
 - [ui-settings-plugins](../ui-settings-plugins/README.zh.md)——「插件」分区及其可配置宿主平面卡片。
-- [ui-settings-models](../ui-settings-models/README.zh.md)——建立在本底座之上的 Models 页面与 DeepSeek 引导。
+- [ui-settings-models](../ui-settings-models/README.zh.md)——建立在本底座之上的 Models 页面与 AkashX 引导。
 - [settings](../../settings/README.zh.md)——持久化用户设置 seam 及其文件提供方。
 - [ui-sidebar](../ui-sidebar/README.zh.md)——底部席位承载设置触发控件的侧边栏外壳。
 

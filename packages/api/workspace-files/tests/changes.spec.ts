@@ -1,9 +1,9 @@
 /** The `changes` stream: driven by `fs/observed`, filtered by the workspace root, ended by its signal. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { join } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import type { FsObservation } from '@deepseek-ai/dsh-fs'
-import { FsVersion } from '@deepseek-ai/dsh-fs'
+import type { Context } from '@akashx/cordis'
+import type { FsObservation } from '@akashx/akx-fs'
+import { FsVersion } from '@akashx/akx-fs'
 import { WorkspaceFiles } from '../src/index.ts'
 import type { WorkspaceFileWatchFrame } from '../src/types.ts'
 import { openWorkspace, type Harness } from './harness.ts'
@@ -12,7 +12,7 @@ let harness: Harness
 const closeStreams: Array<() => Promise<unknown>> = []
 
 beforeEach(async () => {
-  harness = await openWorkspace('dsh-workspace-files-changes-')
+  harness = await openWorkspace('akx-workspace-files-changes-')
 })
 
 afterEach(async () => {

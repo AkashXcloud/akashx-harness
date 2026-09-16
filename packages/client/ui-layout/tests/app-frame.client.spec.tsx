@@ -1,15 +1,15 @@
 // @vitest-environment jsdom
 /** Frame interactions with a real store and explicitly driven browser measurements. */
-import type { GlobalStandardProps, RenderOpts } from '@deepseek-ai/dsh-client-ui-slots'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
+import type { GlobalStandardProps, RenderOpts } from '@akashx/akx-client-ui-slots'
+import { bindSnapshotSelector } from '@akashx/akx-client-test-runtime'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, render } from '@testing-library/react'
 import { AppFrame } from '../src/client/AppFrame.tsx'
 import type { AppFrameProps } from '../src/client/AppFrame.tsx'
 import type { MainPanelId, RightbarOwnerProps, SidebarOwnerProps } from '../src/client/index.ts'
 import { createLayoutStore } from '../src/client/stores.ts'
-import type { WorkspaceSnapshot } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { WorkspaceSnapshot } from '@akashx/akx-api-workspace-controller/client'
+import type { SessionId } from '@akashx/akx-session/types'
 
 const useResource = (() => ({ status: 'none' as const, value: undefined, failure: undefined })) as GlobalStandardProps['useResource']
 let selectedSession: SessionId | undefined
@@ -146,7 +146,7 @@ beforeEach(() => {
   observers = []
   animationFrames = new Map()
   nextFrame = 1
-  vi.stubEnv('DSH_CLIENT_TITLE', undefined)
+  vi.stubEnv('AKX_CLIENT_TITLE', undefined)
   vi.stubGlobal('ResizeObserver', ResizeObserverStub)
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
     const id = nextFrame++
@@ -185,7 +185,7 @@ describe('AppFrame', () => {
   })
 
   it('follows the selected durable Session title', () => {
-    vi.stubEnv('DSH_CLIENT_TITLE', 'Product')
+    vi.stubEnv('AKX_CLIENT_TITLE', 'Product')
     selectedSessionTitle = 'First'
     const { rerenderFrame } = mountFrame()
     expect(document.title).toBe('First — Product')
@@ -244,7 +244,7 @@ describe('AppFrame', () => {
       expect(instance.getSnapshot().layoutInfo).toBe(layoutInfo)
       expect(tracks(frame)).toEqual([280, 0])
       expect(selectedSession).toBe(sessionId)
-      expect(document.title).toBe(panelId === null ? 'Session title — DSH Local Build' : 'AkashX Harness')
+      expect(document.title).toBe(panelId === null ? 'Session title — AKX Local Build' : 'AkashX Harness')
     }
   })
 })

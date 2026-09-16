@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import CognateRuntime, { type CognateProvider } from '../src/index.ts'
 
 let ctx: Context | undefined

@@ -15,7 +15,7 @@ export const en = {
   unsupported: 'PDF preview requires the complete file contents.',
   retry: 'Retry',
 }
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** PDF page, loading, and failure messages. */
     sidebarPdf: PdfLocaleKey

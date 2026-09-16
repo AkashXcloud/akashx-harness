@@ -7,8 +7,8 @@
  */
 
 import { writeFile } from 'node:fs/promises'
-import { boot, resolveConfigPath } from '@deepseek-ai/dsh-app-boot'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
+import { boot, resolveConfigPath } from '@akashx/akx-app-boot'
+import { ToolCallId } from '@akashx/akx-llm'
 
 const configPath = process.argv[2]
 if (configPath === undefined) throw new Error('tool-pwsh driver requires a config path')

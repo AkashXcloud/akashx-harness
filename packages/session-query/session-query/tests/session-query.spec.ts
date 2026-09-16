@@ -1,28 +1,28 @@
-import { createUserMessage, createMessage } from '@deepseek-ai/dsh-llm'
+import { createUserMessage, createMessage } from '@akashx/akx-llm'
 import { describe, expect, it, vi } from 'vitest'
-import { Context, type Fiber } from '@deepseek-ai/cordis'
-import SessionStore, { SessionLogOffset, SessionSeq, SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@deepseek-ai/dsh-session'
+import { Context, type Fiber } from '@akashx/cordis'
+import SessionStore, { SessionLogOffset, SessionSeq, SESSION_FORMAT_VERSION, SessionId } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import type { SessionEvent, SessionHeader, SessionId as SessionIdType } from '@akashx/akx-session'
 import SessionPersistence, {
   SessionPersistenceCorruptionError,
   SessionPersistenceNotFoundError,
   SessionPersistenceRevision,
   SessionReadOnlyError,
-} from '@deepseek-ai/dsh-session-persistence'
+} from '@akashx/akx-session-persistence'
 import type {
   SessionAccess,
   SessionHandle,
   SessionHandleReadOptions,
   SessionHandleReadResult,
   SessionPersistenceSnapshot,
-} from '@deepseek-ai/dsh-session-persistence'
+} from '@akashx/akx-session-persistence'
 import SessionQueryEngine, {
   SESSION_QUERY_DEFAULT_PERSISTED_INSPECT_CONCURRENCY,
   type SessionEventSurface,
   type SessionQueryErrorCode,
-} from '@deepseek-ai/dsh-session-query'
-import { SessionTitleProviderId, SessionTitleService } from '@deepseek-ai/dsh-session-title'
+} from '@akashx/akx-session-query'
+import { SessionTitleProviderId, SessionTitleService } from '@akashx/akx-session-title'
 import { TestSessionQueryEngine } from './test-service.ts'
 
 const TITLE_SERVICE_CONFIG = { fallbackMaxWords: 8, fallbackMaxBytes: 64, maxTitleBytes: 256 }

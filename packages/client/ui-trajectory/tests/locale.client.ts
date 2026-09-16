@@ -1,4 +1,4 @@
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { en, type TrajectoryTranslate } from '../src/client/locales.ts'
 
 function translator(dictionary: Record<string, string>): TrajectoryTranslate {

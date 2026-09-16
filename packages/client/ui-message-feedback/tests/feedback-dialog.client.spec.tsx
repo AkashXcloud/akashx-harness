@@ -7,12 +7,12 @@
  * and the acknowledgement toast mounts from the toast sequence and retires
  * through dismissToast once its fade completes.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { useSyncExternalStore } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { FEEDBACK_CATEGORIES } from '@deepseek-ai/dsh-command-feedback'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
+import { FEEDBACK_CATEGORIES } from '@akashx/akx-command-feedback'
 import { FeedbackDialog } from '../src/client/FeedbackDialog.tsx'
 import type { FeedbackDialogState } from '../src/client/dialog.ts'
 import { en } from '../src/client/locales.ts'

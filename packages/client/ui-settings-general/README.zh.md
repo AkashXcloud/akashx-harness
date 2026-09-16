@@ -1,15 +1,15 @@
 ---
-description: "dsh Web 客户端的设置外壳、无特定功能归属文案与持久化产品引导命名空间：「通用」分区、触发控件界面框架与引导账本投影。"
+description: "akx Web 客户端的设置外壳、无特定功能归属文案与持久化产品引导命名空间：「通用」分区、触发控件界面框架与引导账本投影。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-settings-general
+# @akashx/akx-client-ui-settings-general
 
 [English](README.md) | 中文
 
 ## 概述
 
-使用本包可为 dsh Web 客户端提供 Settings 面板、连接恢复控件、由功能包贡献的导航，以及依次进行的首次运行引导。用户可以从侧边栏打开面板、立即重试失败的连接，并在宿主为回环浏览器提供本地配置文件时访问该文件。各功能包提供自己的设置行、分区和引导步骤；本包提供共享的界面展示，但不添加引导文案或「通用」分区的内置行。
+使用本包可为 akx Web 客户端提供 Settings 面板、连接恢复控件、由功能包贡献的导航，以及依次进行的首次运行引导。用户可以从侧边栏打开面板、立即重试失败的连接，并在宿主为回环浏览器提供本地配置文件时访问该文件。各功能包提供自己的设置行、分区和引导步骤；本包提供共享的界面展示，但不添加引导文案或「通用」分区的内置行。
 
 ## 目录
 
@@ -76,7 +76,7 @@ kind: "package-reference"
 
 - [ui-settings](../ui-settings/README.zh.md)——本外壳所依赖 slot 类型与 scope 服务所在的领域底座。
 - [ui-sidebar](../ui-sidebar/README.zh.md)——承载 `sidebar.settings` 席位的侧边栏外壳。
-- [ui-settings-models](../ui-settings-models/README.zh.md)——贡献 DeepSeek 引导步骤的功能包。
+- [ui-settings-models](../ui-settings-models/README.zh.md)——贡献 AkashX 引导步骤的功能包。
 - [settings](../../settings/README.zh.md)——持久化用户设置 seam 及其文件提供方。
 - [slot 系统标准](../../../.agents/notes/implemented/architecture/2026-07-22-slot-type-chain-implementation.zh.md)——账本背后的组合模型。
 

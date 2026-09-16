@@ -9,20 +9,20 @@ import { describe, expect, it } from 'vitest'
  * vector the root launcher scripts invoke directly) and assert the
  * required-config diagnostic. The Node compatibility matrix runs this
  * WHOLE file, so a Node release changing module hooks or TypeScript handling
- * breaks this gate instead of every developer's `pnpm dsh`; the built-bin
+ * breaks this gate instead of every developer's `pnpm akx`; the built-bin
  * suite covers the published `lib/` entry, not this source chain.
  */
 
 const repoRoot = fileURLToPath(new URL('../../../', import.meta.url))
-const dshSourceBin = 'apps/cli/src/bin.ts'
+const akxSourceBin = 'apps/cli/src/bin.ts'
 const akashxSourceBin = 'apps/cli/src/akashx.ts'
 
-describe('dsh SOURCE launcher (node --import tsx/esm)', () => {
+describe('akx SOURCE launcher (node --import tsx/esm)', () => {
   it('launches the source CLI without building', async () => {
     const rootPackage = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf8')) as {
       readonly scripts?: Record<string, string>
     }
-    expect(rootPackage.scripts?.dsh).toBe('node --import tsx/esm apps/cli/src/bin.ts')
+    expect(rootPackage.scripts?.akx).toBe('node --import tsx/esm apps/cli/src/bin.ts')
     expect(rootPackage.scripts?.akashx).toBe('node --import tsx/esm apps/cli/src/akashx.ts')
   })
 
@@ -40,7 +40,7 @@ describe('dsh SOURCE launcher (node --import tsx/esm)', () => {
   }, 30_000)
 
   it('boots the source entry and requires a profile', async () => {
-    const result = await execa(process.execPath, ['--import', 'tsx/esm', dshSourceBin], {
+    const result = await execa(process.execPath, ['--import', 'tsx/esm', akxSourceBin], {
       cwd: repoRoot,
       input: '',
       timeout: 25_000,
@@ -48,7 +48,7 @@ describe('dsh SOURCE launcher (node --import tsx/esm)', () => {
       reject: false,
     })
     if (result.timedOut) {
-      throw new Error(`dsh source launch did not exit within 25s. stdout:\n${result.stdout}\nstderr:\n${result.stderr}`)
+      throw new Error(`akx source launch did not exit within 25s. stdout:\n${result.stdout}\nstderr:\n${result.stderr}`)
     }
     expect(result.exitCode).not.toBe(0)
     expect(result.stderr).toContain('--profile <name> is required')

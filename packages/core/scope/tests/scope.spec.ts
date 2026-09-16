@@ -1,9 +1,9 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { bindScopeParent, carrierKeyOf, createScope, isScopeCarrier, scopeChainOf, scopeOf, scopeParentOf, scopeTarget } from '@deepseek-ai/dsh-scope'
-import type { Scope, Scoped } from '@deepseek-ai/dsh-scope'
+import { Context } from '@akashx/cordis'
+import { bindScopeParent, carrierKeyOf, createScope, isScopeCarrier, scopeChainOf, scopeOf, scopeParentOf, scopeTarget } from '@akashx/akx-scope'
+import type { Scope, Scoped } from '@akashx/akx-scope'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Events {
     /**
      * Test-only event for scope-filtered dispatch.

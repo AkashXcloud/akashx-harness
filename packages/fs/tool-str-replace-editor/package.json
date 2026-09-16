@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-tool-str-replace-editor",
+  "name": "@akashx/akx-tool-str-replace-editor",
   "description": "Model-facing view, create, literal replace, and line insert tool over the Harness filesystem service",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/fs/tool-str-replace-editor"
   },
   "type": "module",
@@ -26,29 +26,29 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-fs": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-fs": "workspace:^",
-    "@deepseek-ai/dsh-fs-local": "workspace:^",
-    "@deepseek-ai/dsh-fs-observation-policy": "workspace:^",
-    "@deepseek-ai/dsh-fs-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-loop-testkit": "workspace:^",
+    "@akashx/akx-fs": "workspace:^",
+    "@akashx/akx-fs-local": "workspace:^",
+    "@akashx/akx-fs-observation-policy": "workspace:^",
+    "@akashx/akx-fs-sandbox": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-tools": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^"
   }
 }

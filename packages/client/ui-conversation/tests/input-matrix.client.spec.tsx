@@ -5,20 +5,20 @@
  * hint / pending), edit freedom, and the published currency's claim seat.
  * React over jsdom per the client testing discipline; the machine is real.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import type { Context } from '@akashx/cordis'
+import type { SessionSnapshot } from '@akashx/akx-api-session-controller/client'
+import { createSnapshotStore } from '@akashx/akx-client-store'
 import {
   bindSnapshotSelector, conversationSnapshot, sessionSnapshot,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@akashx/akx-client-test-runtime'
+import type { SessionPendingInteractionSnapshot } from '@akashx/akx-client-ui-session/client'
+import type { SessionId } from '@akashx/akx-session/types'
 import type { SubmitAttachment, SubmitOutcome } from '../src/client/contract/input.ts'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 import type { DraftAttachmentId } from '../src/client/contract/input.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { InputBar } from '../src/client/skeleton/InputBar.tsx'
@@ -144,12 +144,12 @@ describe('matrix row: claimed', () => {
     expect(shell.snapshot.claim).toEqual({ name: 'goal', token: '/goal ', hint: 'Goal' })
     expect(view.container.querySelector('[data-lexical-text][style*="warn-label"]')?.textContent).toBe('/goal ')
     // The en dictionary owns a hint.goal entry, which overrides the raw claim hint (production behavior).
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
     expect(textarea.getAttribute('contenteditable')).toBe('true')
     // Free editing beyond the token: hint drops, claim holds.
     act(() => { shell.setDraft('/goal 发布版本') })
     expect(shell.snapshot.phase).toBe('claimed')
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe('')
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe('')
   })
 
   it('enter routes to claim.submit (command lane, never the queue sink)', async () => {

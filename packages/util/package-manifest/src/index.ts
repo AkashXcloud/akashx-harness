@@ -1,14 +1,14 @@
 /**
  * Public package manifest types, with no runtime exports.
- * @module @deepseek-ai/dsh-package-manifest
+ * @module @akashx/akx-package-manifest
  */
 
 export type {
-  DshBundleManifest,
-  DshClientManifest,
-  DshEnginesManifest,
-  DshManifest,
-  DshPackageManifest,
-  DshProfileManifest,
+  AkxBundleManifest,
+  AkxClientManifest,
+  AkxEnginesManifest,
+  AkxManifest,
+  AkxPackageManifest,
+  AkxProfileManifest,
   ProfilePatchReload,
 } from './types.ts'

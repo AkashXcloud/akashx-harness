@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
+import { Context } from '@akashx/cordis'
+import InvariantRegistry from '@akashx/akx-invariants'
 import { credentialRef } from '../src/index.ts'
 import * as CredentialsInvariant from '../src/invariant.ts'
 import { MemoryCredentials } from './memory.ts'
 
-const REF = credentialRef('DEEPSEEK_API_KEY')
+const REF = credentialRef('AKASHX_API_KEY')
 
 describe('credentials invariant companion', () => {
   it('accepts a committed change emitted by a live service', async () => {
@@ -22,7 +22,7 @@ describe('credentials invariant companion', () => {
     await ctx.plugin(InvariantRegistry)
     await ctx.plugin(CredentialsInvariant)
 
-    expect(() => { ctx.emit('credentials/reference-updated', REF) }).toThrow(/invariant violated by "@deepseek-ai\/dsh-credentials"/)
+    expect(() => { ctx.emit('credentials/reference-updated', REF) }).toThrow(/invariant violated by "@akashx\/akx-credentials"/)
   })
 
   it('reserves the package name against duplicate registration', async () => {
@@ -31,7 +31,7 @@ describe('credentials invariant companion', () => {
     await ctx.plugin(CredentialsInvariant)
 
     expect(() => {
-      ctx.invariants.register('@deepseek-ai/dsh-credentials', () => {})
+      ctx.invariants.register('@akashx/akx-credentials', () => {})
     }).toThrow(/already registered/)
   })
 })

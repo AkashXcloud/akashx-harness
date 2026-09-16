@@ -1,91 +1,91 @@
 import { describe, expect, it } from 'vitest'
 import type { NpmPackageLock, RegistryIndex } from './benchmark-npm-resolution.ts'
 import {
-  assertDualDshInstallLayout,
-  buildDualDshRegistry,
+  assertDualAkxInstallLayout,
+  buildDualAkxRegistry,
 } from './verify-npm-install-layout.ts'
 
 function validLayout(): NpmPackageLock {
   return {
     lockfileVersion: 3,
     packages: {
-      '': { dependencies: { '@deepseek-ai/dsh': '0.2.0', 'dsh-previous': 'npm:@deepseek-ai/dsh@0.1.0' } },
-      'node_modules/@deepseek-ai/cordis': { version: '4.0.1' },
-      'node_modules/@deepseek-ai/dsh': {
+      '': { dependencies: { '@akashx/akx': '0.2.0', 'akx-previous': 'npm:@akashx/akx@0.1.0' } },
+      'node_modules/@akashx/cordis': { version: '4.0.1' },
+      'node_modules/@akashx/akx': {
         version: '0.2.0',
-        dependencies: { '@deepseek-ai/dsh-child': '^0.2.0' },
-        peerDependencies: { '@deepseek-ai/cordis': '^4.0.1' },
+        dependencies: { '@akashx/akx-child': '^0.2.0' },
+        peerDependencies: { '@akashx/cordis': '^4.0.1' },
       },
-      'node_modules/@deepseek-ai/dsh-child': {
+      'node_modules/@akashx/akx-child': {
         version: '0.2.0',
-        dependencies: { '@deepseek-ai/dsh-leaf': '^0.2.0' },
+        dependencies: { '@akashx/akx-leaf': '^0.2.0' },
       },
-      'node_modules/@deepseek-ai/dsh-leaf': { version: '0.2.0' },
-      'node_modules/dsh-previous': {
-        name: '@deepseek-ai/dsh',
+      'node_modules/@akashx/akx-leaf': { version: '0.2.0' },
+      'node_modules/akx-previous': {
+        name: '@akashx/akx',
         version: '0.1.0',
-        dependencies: { '@deepseek-ai/dsh-child': '^0.1.0' },
-        peerDependencies: { '@deepseek-ai/cordis': '^4.0.1' },
+        dependencies: { '@akashx/akx-child': '^0.1.0' },
+        peerDependencies: { '@akashx/cordis': '^4.0.1' },
       },
-      'node_modules/dsh-previous/node_modules/@deepseek-ai/dsh-child': {
+      'node_modules/akx-previous/node_modules/@akashx/akx-child': {
         version: '0.1.0',
-        dependencies: { '@deepseek-ai/dsh-leaf': '^0.1.0' },
+        dependencies: { '@akashx/akx-leaf': '^0.1.0' },
       },
-      'node_modules/dsh-previous/node_modules/@deepseek-ai/dsh-leaf': { version: '0.1.0' },
+      'node_modules/akx-previous/node_modules/@akashx/akx-leaf': { version: '0.1.0' },
     },
   }
 }
 
 describe('npm install layout verifier', () => {
-  it('creates two incompatible versions of every DSH package', () => {
+  it('creates two incompatible versions of every AKX package', () => {
     const index: RegistryIndex = new Map([
-      ['@deepseek-ai/dsh', new Map([['0.1.1-rc.2', {
-        name: '@deepseek-ai/dsh',
+      ['@akashx/akx', new Map([['0.1.1-rc.2', {
+        name: '@akashx/akx',
         version: '0.1.1-rc.2',
-        dependencies: { '@deepseek-ai/dsh-child': '^0.1.1-rc.2' },
-        peerDependencies: { '@deepseek-ai/cordis': '^4.0.1' },
+        dependencies: { '@akashx/akx-child': '^0.1.1-rc.2' },
+        peerDependencies: { '@akashx/cordis': '^4.0.1' },
       }]])],
-      ['@deepseek-ai/dsh-child', new Map([['0.1.1-rc.2', {
-        name: '@deepseek-ai/dsh-child',
+      ['@akashx/akx-child', new Map([['0.1.1-rc.2', {
+        name: '@akashx/akx-child',
         version: '0.1.1-rc.2',
       }]])],
-      ['@deepseek-ai/cordis', new Map([['4.0.1', {
-        name: '@deepseek-ai/cordis',
+      ['@akashx/cordis', new Map([['4.0.1', {
+        name: '@akashx/cordis',
         version: '4.0.1',
       }]])],
     ])
 
-    const dual = buildDualDshRegistry(index, '0.1.1-rc.2')
+    const dual = buildDualAkxRegistry(index, '0.1.1-rc.2')
 
-    expect([...dual.get('@deepseek-ai/dsh')?.keys() ?? []]).toEqual(['0.1.0', '0.2.0'])
-    expect(dual.get('@deepseek-ai/dsh')?.get('0.1.0')).toMatchObject({
+    expect([...dual.get('@akashx/akx')?.keys() ?? []]).toEqual(['0.1.0', '0.2.0'])
+    expect(dual.get('@akashx/akx')?.get('0.1.0')).toMatchObject({
       version: '0.1.0',
-      dependencies: { '@deepseek-ai/dsh-child': '^0.1.0' },
-      peerDependencies: { '@deepseek-ai/cordis': '^4.0.1' },
+      dependencies: { '@akashx/akx-child': '^0.1.0' },
+      peerDependencies: { '@akashx/cordis': '^4.0.1' },
     })
-    expect(dual.get('@deepseek-ai/dsh')?.get('0.2.0')).toMatchObject({
+    expect(dual.get('@akashx/akx')?.get('0.2.0')).toMatchObject({
       version: '0.2.0',
-      dependencies: { '@deepseek-ai/dsh-child': '^0.2.0' },
+      dependencies: { '@akashx/akx-child': '^0.2.0' },
     })
-    expect(dual.get('@deepseek-ai/cordis')).toBe(index.get('@deepseek-ai/cordis'))
+    expect(dual.get('@akashx/cordis')).toBe(index.get('@akashx/cordis'))
   })
 
-  it('accepts isolated DSH releases with one shared Cordis installation', () => {
-    expect(assertDualDshInstallLayout(validLayout())).toEqual({
-      dshPackagesPerVersion: 3,
-      checkedDshEdges: 4,
+  it('accepts isolated AKX releases with one shared Cordis installation', () => {
+    expect(assertDualAkxInstallLayout(validLayout())).toEqual({
+      akxPackagesPerVersion: 3,
+      checkedAkxEdges: 4,
     })
   })
 
   it.each([
     ['react', 'node_modules/react'],
     ['react-dom', 'node_modules/react-dom'],
-    ['react', 'node_modules/dsh-previous/node_modules/react'],
-    ['react-dom', 'node_modules/dsh-previous/node_modules/react-dom'],
-  ])('rejects browser runtime %s installed at %s in the DSH-only consumer', (name, path) => {
+    ['react', 'node_modules/akx-previous/node_modules/react'],
+    ['react-dom', 'node_modules/akx-previous/node_modules/react-dom'],
+  ])('rejects browser runtime %s installed at %s in the AKX-only consumer', (name, path) => {
     const layout = validLayout()
     const packages = { ...layout.packages, [path]: { version: '18.3.1' } }
-    expect(() => assertDualDshInstallLayout({ ...layout, packages })).toThrow(
+    expect(() => assertDualAkxInstallLayout({ ...layout, packages })).toThrow(
       `${path}: ${name} is a browser build input`,
     )
   })
@@ -93,11 +93,11 @@ describe('npm install layout verifier', () => {
   it('rejects an internal edge that crosses release versions', () => {
     const layout = validLayout()
     const packages = { ...layout.packages }
-    Reflect.deleteProperty(packages, 'node_modules/dsh-previous/node_modules/@deepseek-ai/dsh-leaf')
+    Reflect.deleteProperty(packages, 'node_modules/akx-previous/node_modules/@akashx/akx-leaf')
 
-    expect(() => assertDualDshInstallLayout({ ...layout, packages })).toThrow(
-      'node_modules/dsh-previous/node_modules/@deepseek-ai/dsh-child: dependencies '
-      + '@deepseek-ai/dsh-leaf resolves to node_modules/@deepseek-ai/dsh-leaf@0.2.0, expected 0.1.0',
+    expect(() => assertDualAkxInstallLayout({ ...layout, packages })).toThrow(
+      'node_modules/akx-previous/node_modules/@akashx/akx-child: dependencies '
+      + '@akashx/akx-leaf resolves to node_modules/@akashx/akx-leaf@0.2.0, expected 0.1.0',
     )
   })
 
@@ -105,11 +105,11 @@ describe('npm install layout verifier', () => {
     const layout = validLayout()
     const packages = {
       ...layout.packages,
-      'node_modules/dsh-previous/node_modules/@deepseek-ai/cordis': { version: '4.0.1' },
+      'node_modules/akx-previous/node_modules/@akashx/cordis': { version: '4.0.1' },
     }
 
-    expect(() => assertDualDshInstallLayout({ ...layout, packages })).toThrow(
-      'expected one shared @deepseek-ai/cordis',
+    expect(() => assertDualAkxInstallLayout({ ...layout, packages })).toThrow(
+      'expected one shared @akashx/cordis',
     )
   })
 })

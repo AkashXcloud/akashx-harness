@@ -7,7 +7,7 @@
 // command-row surfaces: the seeded manual `/compact` lifecycle folds into its
 // checkpoint, an Access-chip pick later runs `/permission` on the host, and
 // `/feedback` pins its expandable correlation ids. The seed is a recorded
-// fixture under the same record discipline as every other: DSH_SNAPSHOT=record drives the turn
+// fixture under the same record discipline as every other: AKX_SNAPSHOT=record drives the turn
 // live through the composer (real read tool against seeded workspace files)
 // and harvests session.v3.jsonl; replay/refresh seed it cold and only render.
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
@@ -15,11 +15,11 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, Message } from '@deepseek-ai/dsh-llm'
-import { deriveEventMessage, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import type { TokenMeter } from '@deepseek-ai/dsh-token-meter'
+import { createUserMessage } from '@akashx/akx-llm'
+import type { ContentBlock, Message } from '@akashx/akx-llm'
+import { deriveEventMessage, SessionId } from '@akashx/akx-session'
+import type { SessionEvent } from '@akashx/akx-session'
+import type { TokenMeter } from '@akashx/akx-token-meter'
 import { join } from 'node:path'
 import {
   assertFixtureInventory, captureExpandedTurnProcessAria, captureStableAria,
@@ -478,8 +478,8 @@ describe('web e2e: seeded history renders through cold resume', () => {
 
   it.skipIf(MODE === 'record')('reports full feedback correlation ids in an expandable two-line row', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-seeded-feedback-row'))
-    const previousDshHome = process.env.DSH_HOME
-    process.env.DSH_HOME = scaffold.harnessHome
+    const previousAkxHome = process.env.AKX_HOME
+    process.env.AKX_HOME = scaffold.harnessHome
     try {
       const input = page.locator('[data-composer-input]').first()
       await input.fill('/feedback the diff view is unreadable')
@@ -512,8 +512,8 @@ describe('web e2e: seeded history renders through cold resume', () => {
         .split(userId).join('{{userId}}')
       await compareOrRefreshGolden(FEEDBACK_ROW_EXPECTED, snapshot, MODE)
     } finally {
-      if (previousDshHome === undefined) delete process.env.DSH_HOME
-      else process.env.DSH_HOME = previousDshHome
+      if (previousAkxHome === undefined) delete process.env.AKX_HOME
+      else process.env.AKX_HOME = previousAkxHome
     }
   }, 60_000)
 

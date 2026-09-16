@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-cognate-controller",
+  "name": "@akashx/akx-api-cognate-controller",
   "description": "Remote owner for the Cognate database settings surface",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/api/cognate-controller"
   },
   "type": "module",
@@ -45,15 +45,15 @@
   "license": "MIT",
   "dependencies": {
     "zod": "^4.4.3",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "mysql2": "^3.14.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^"
   }
 }

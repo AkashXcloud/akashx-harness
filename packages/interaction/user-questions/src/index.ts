@@ -1,18 +1,18 @@
 /**
  * Service Definition for the user-questions capability seam (`ctx.userQuestions`): a UI-backed service for
  * pausing an agent tool call until the human answers a question. The model-
- * facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages compose
+ * facing tool lives in `@akashx/akx-tool-ask-user`; UI packages compose
  * answerers on the Agent-scoped Cordis waterfall.
  *
- * @module @deepseek-ai/dsh-user-questions
+ * @module @akashx/akx-user-questions
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-agent'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
+import { Context, Service } from '@akashx/cordis'
+import type {} from '@akashx/akx-agent'
+import { HarnessError } from '@akashx/akx-llm'
+import { scopeTarget } from '@akashx/akx-scope'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     userQuestions: UserQuestionService
   }

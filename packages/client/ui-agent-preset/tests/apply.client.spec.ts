@@ -5,15 +5,15 @@
  * that are already showing, so a default set from one converges the other.
  */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { RemoteError, TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-agent-preset/client'
+import { resolveSlotLabel } from '@akashx/akx-client-ui-slots'
+import { SlotRegistry } from '@akashx/akx-client-ui-renderer/client'
+import { LocaleRuntime } from '@akashx/akx-client-locale/client'
+import { RemoteError, TestRemote } from '@akashx/akx-client-test-runtime'
+import { SessionId } from '@akashx/akx-session'
+import { apply as settingsApply, inject as settingsInject } from '@akashx/akx-client-ui-settings/client'
+import { apply, inject } from '@akashx/akx-client-ui-agent-preset/client'
 import { AgentPresetLabel } from '../src/client/AgentPresetLabel.tsx'
 import type { AgentPresetLabelInjected } from '../src/client/AgentPresetLabel.tsx'
 import { AgentPresetSection } from '../src/client/AgentPresetSection.tsx'
@@ -291,7 +291,7 @@ describe('ui-agent-preset apply', () => {
     await vi.waitFor(() => { expect(calls.length).toBe(before + 2) })
     const afterRelevant = calls.length
 
-    remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    remote.emit('settings/document-updated', ['llm-akx', 1])
     await Promise.resolve()
 
     // Both surfaces re-read on their own namespace; an unrelated one moves
@@ -375,7 +375,7 @@ describe('ui-agent-preset apply', () => {
     // An unrelated namespace moves nothing: the chip re-reads on its own
     // setting, not on every settings write in the process.
     moveDefault()
-    remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    remote.emit('settings/document-updated', ['llm-akx', 1])
     await Promise.resolve()
     expect(seat.hooks.agentPresetSeat.getSnapshot().current).toBe('standard')
 
@@ -611,7 +611,7 @@ describe('ui-agent-preset apply', () => {
     // workspace start produces is what the stage lands on — and exactly one
     // new-session flow began.
     expect(section.startCreatorDraft).toBeDefined()
-    expect(seat.hooks.agentPresetSeat.getSnapshot().current).toBe('cordis')
+    expect(seat.hooks.agentPresetSeat.getSnapshot().current).toBe('@akashx/cordis')
     expect(uiWorkspace.starts).toHaveLength(1)
 
     // A cross-screen stage carries the introduce cue; the chip acknowledges
@@ -657,11 +657,11 @@ describe('ui-agent-preset apply', () => {
     // AFTER the stage was consumed; the session's own composition is what
     // the display must keep — not the deployment default.
     state.byId['s1'] = {
-      id: 's1', blank: true, projectionValues: { agentPreset: 'cordis' },
+      id: 's1', blank: true, projectionValues: { agentPreset: '@akashx/cordis' },
     }
     await seat.load()
 
-    expect(seat.hooks.agentPresetSeat.getSnapshot().current).toBe('cordis')
+    expect(seat.hooks.agentPresetSeat.getSnapshot().current).toBe('@akashx/cordis')
     conversation()
   })
 
@@ -733,7 +733,7 @@ describe('AgentPresetSeatController reconciliation', () => {
   })
 
   it('keeps the bare cause of a mount failure, not the frame that names the preset again', async () => {
-    const reason = 'failed to import loader entry ctx (@deepseek-ai/dsh-gone): Cannot find package'
+    const reason = 'failed to import loader entry ctx (@akashx/akx-gone): Cannot find package'
     const controller = new AgentPresetSeatController({
       remote: {
         agentPresets: {

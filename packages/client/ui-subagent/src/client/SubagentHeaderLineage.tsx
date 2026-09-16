@@ -5,16 +5,16 @@ import { createPortal } from 'react-dom'
 import {
   type SessionListState, type SessionProjectionMap, type SessionSummary,
   type SubagentCatalogSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SubagentAddress } from '@deepseek-ai/dsh-subagent/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@akashx/akx-api-session-controller/client'
+import type { SubagentAddress } from '@akashx/akx-subagent/client'
+import type { SessionId } from '@akashx/akx-session/types'
 import {
   IconChevronDownOutline14, IconChevronRightOutline14, IconRefreshOutline14, StateDot,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime, TranslateNS } from '@deepseek-ai/dsh-client-ui-slots'
+} from '@akashx/akx-client-ui-primitives'
+import type { PropsLocale, PropsRuntime, TranslateNS } from '@akashx/akx-client-ui-slots'
 import { NS } from './locales.ts'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-token-meter/client'
+import type {} from '@akashx/akx-client-ui-conversation/client'
+import type {} from '@akashx/akx-token-meter/client'
 import css from './SubagentHeaderLineage.module.css'
 import { indexSubagentDescendants } from './subagent-lineage.ts'
 

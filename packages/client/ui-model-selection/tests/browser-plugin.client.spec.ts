@@ -8,15 +8,15 @@
  * (and the reverse), the one-shared-state contract of the dual entry.
  * Scope disposal drops the directory (HMR safety).
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { createScope } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ModelSelection, ModelSelectionProjection } from '@deepseek-ai/dsh-api-session-controller/types'
-import type { CommandContribution, PopupSelectSpec, SelectOption } from '@deepseek-ai/dsh-client-ui-commands/client'
+import { createScope } from '@akashx/akx-api-session-controller/client'
+import type { SessionId } from '@akashx/akx-session/types'
+import { LocaleRuntime } from '@akashx/akx-client-locale/client'
+import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
+import { TestRemote } from '@akashx/akx-client-test-runtime'
+import type { ModelSelection, ModelSelectionProjection } from '@akashx/akx-api-session-controller/types'
+import type { CommandContribution, PopupSelectSpec, SelectOption } from '@akashx/akx-client-ui-commands/client'
 import type { ModelSelectInjected } from '../src/client/slots.ts'
 import { apply, inject } from '../src/client/index.ts'
 import { en } from '../src/client/locales.ts'
@@ -24,12 +24,12 @@ import { en } from '../src/client/locales.ts'
 const sid = (k: string): SessionId => k as SessionId
 
 const GROUPS = [{
-  id: 'deepseek-official',
-  name: 'DeepSeek',
+  id: 'akashx-official',
+  name: 'AkashX',
   models: [
     {
-      id: 'deepseek-v4-flash',
-      name: 'DeepSeek-V4-Flash',
+      id: 'akashx-v4-flash',
+      name: 'AkashX-V4-Flash',
       description: 'Fast, efficient, and economical; suited to focused, routine, or parallel tasks.',
       reasoning: {
         efforts: [
@@ -41,8 +41,8 @@ const GROUPS = [{
       },
     },
     {
-      id: 'deepseek-v4-pro',
-      name: 'DeepSeek-V4-Pro',
+      id: 'akashx-v4-pro',
+      name: 'AkashX-V4-Pro',
       description: 'Stronger agentic coding, knowledge, and difficult reasoning; suited to complex or quality-critical tasks at higher cost.',
       reasoning: {
         efforts: [
@@ -58,7 +58,7 @@ const GROUPS = [{
   id: 'external',
   name: 'External Provider',
   models: [{
-    id: 'deepseek-v4-flash',
+    id: 'akashx-v4-flash',
     name: 'External Flash',
     description: 'Provider-authored description.',
   }],
@@ -67,7 +67,7 @@ const GROUPS = [{
 /** Boot the plugin over fake faces + a stateful fake host (current moves on selectModel). */
 async function bench(locale: 'en' = 'en') {
   const ctx = new Context()
-  let defaultSelection: ModelSelection = { provider: 'deepseek-official', model: 'deepseek-v4-flash' }
+  let defaultSelection: ModelSelection = { provider: 'akashx-official', model: 'akashx-v4-flash' }
   let selected = defaultSelection
   const calls = { models: 0, select: 0 }
   const projections = new Map<SessionId, SnapshotStore<ModelSelectionProjection | undefined>>()
@@ -81,7 +81,7 @@ async function bench(locale: 'en' = 'en') {
         ok: true as const,
         value: {
           default: defaultSelection,
-          routableProviders: routable ? ['deepseek-official'] : [],
+          routableProviders: routable ? ['akashx-official'] : [],
           groups: GROUPS,
           failures: [],
         },
@@ -198,14 +198,14 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const options = await b.popup().options(projection('s1'), new AbortController().signal)
     expect(options.map((o: SelectOption) => o.label)).toEqual([
-      'DeepSeek-V4-Flash', 'DeepSeek-V4-Pro', 'External Flash',
+      'AkashX-V4-Flash', 'AkashX-V4-Pro', 'External Flash',
     ])
     expect(options[0]).toMatchObject({
       active: true,
-      detail: 'DeepSeek · Fast, efficient, and economical; suited to focused, routine, or parallel tasks.',
+      detail: 'AkashX · Fast, efficient, and economical; suited to focused, routine, or parallel tasks.',
     })
     expect(options[1]?.detail)
-      .toBe('DeepSeek · 更强的自主编码、知识与复杂推理能力；适合复杂或质量优先的任务, 但成本更高。')
+      .toBe('AkashX · 更强的自主编码、知识与复杂推理能力；适合复杂或质量优先的任务, 但成本更高。')
     expect(options[2]?.detail).toBe('External Provider · Provider-authored description.')
     expect(options[1]?.active).toBeUndefined()
   })
@@ -215,9 +215,9 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const options = await b.popup().options(projection('s1'), new AbortController().signal)
     expect(options[0]?.detail)
-      .toBe('DeepSeek · Fast, efficient, and economical; suited to focused, routine, or parallel tasks.')
+      .toBe('AkashX · Fast, efficient, and economical; suited to focused, routine, or parallel tasks.')
     expect(options[1]?.detail)
-      .toBe('DeepSeek · Stronger agentic coding, knowledge, and difficult reasoning; suited to complex or quality-critical tasks at higher cost.')
+      .toBe('AkashX · Stronger agentic coding, knowledge, and difficult reasoning; suited to complex or quality-critical tasks at higher cost.')
   })
 
   it('a seat selection is the current the popup marks active next — one shared state', async () => {
@@ -226,23 +226,23 @@ describe('ui-model-selection dual entry', () => {
     const seatFace = b.seat().inject!(sid('s1'))
     // Switch through the SEAT entry.
     expect(await seatFace.select({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'akashx-official',
+      model: 'akashx-v4-pro',
       reasoningEffort: 'max',
     })).toBe(true)
     expect(b.hostCurrent()).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'akashx-official',
+      model: 'akashx-v4-pro',
       reasoningEffort: 'max',
     })
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'akashx-official',
+      model: 'akashx-v4-pro',
       reasoningEffort: 'max',
     })
     // The POPUP's next options pass reflects it without a seat-side reload.
     const options = await b.popup().options(projection('s1'), new AbortController().signal)
-    expect(options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')).toMatchObject({ active: true })
+    expect(options.find((o: SelectOption) => o.label === 'AkashX-V4-Pro')).toMatchObject({ active: true })
   })
 
   it('a popup selection lands on the seat store — the reverse direction of the same state', async () => {
@@ -250,11 +250,11 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const seatFace = b.seat().inject!(sid('s1'))
     const options = await b.popup().options(projection('s1'), new AbortController().signal)
-    const pro = options.find((o: SelectOption) => o.label === 'DeepSeek-V4-Pro')!
+    const pro = options.find((o: SelectOption) => o.label === 'AkashX-V4-Pro')!
     await b.popup().onSelect(pro, projection('s1'))
     expect(seatFace.directory.getSnapshot().current).toEqual({
-      provider: 'deepseek-official',
-      model: 'deepseek-v4-pro',
+      provider: 'akashx-official',
+      model: 'akashx-v4-pro',
       reasoningEffort: 'high',
     })
   })
@@ -281,17 +281,17 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
-    await face.select({ provider: 'deepseek-official', model: 'deepseek-v4-pro' })
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'deepseek-v4-flash' })
+    await face.select({ provider: 'akashx-official', model: 'akashx-v4-pro' })
+    b.setHostCurrent({ provider: 'akashx-official', model: 'akashx-v4-flash' })
 
     b.ctx.emit('connection/reset')
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+      current: { provider: 'akashx-official', model: 'akashx-v4-pro' },
       status: 'ready',
     })
     face.load()
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+      current: { provider: 'akashx-official', model: 'akashx-v4-pro' },
       status: 'ready',
     })
   })
@@ -301,21 +301,21 @@ describe('ui-model-selection dual entry', () => {
     b.mint('s1')
     const face = b.seat().inject!(sid('s1'))
     face.load()
-    expect(face.directory.getSnapshot().current?.model).toBe('deepseek-v4-flash')
+    expect(face.directory.getSnapshot().current?.model).toBe('akashx-v4-flash')
 
-    b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    b.remote.emit('settings/document-updated', ['llm-akx', 1])
     b.setProjected(sid('s1'), {
-      lastUsed: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
-      next: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+      lastUsed: { provider: 'akashx-official', model: 'akashx-v4-flash' },
+      next: { provider: 'akashx-official', model: 'akashx-v4-pro' },
     })
     expect(face.directory.getSnapshot()).toMatchObject({
-      current: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      current: { provider: 'akashx-official', model: 'akashx-v4-flash' },
       status: 'ready',
     })
 
     await vi.waitFor(() => {
       expect(face.directory.getSnapshot()).toMatchObject({
-        current: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+        current: { provider: 'akashx-official', model: 'akashx-v4-pro' },
         status: 'ready',
       })
     })
@@ -346,7 +346,7 @@ describe('ui-model-selection dual entry', () => {
     expect(b.calls.models).toBe(1)
 
     b.setRoutable(false)
-    b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    b.remote.emit('settings/document-updated', ['llm-akx', 1])
     await Promise.resolve()
     await Promise.resolve()
     expect(b.blockOf('s1')?.reason).toBe(en['blocked.composer'])
@@ -368,7 +368,7 @@ describe('ui-model-selection dual entry', () => {
     // A model the route serves but no longer advertises: the seat prompts for
     // a selection, the composer stays usable. Blocking here would break a
     // supported configuration (a narrowed `models` list over a live route).
-    b.setHostCurrent({ provider: 'deepseek-official', model: 'unlisted' })
+    b.setHostCurrent({ provider: 'akashx-official', model: 'unlisted' })
     face.load()
     await Promise.resolve()
     await Promise.resolve()
@@ -409,12 +409,12 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'deepseek', model: 'deepseek-v4-pro' })).resolves.toBe(false)
+    await expect(face.select({ provider: 'akashx', model: 'akashx-v4-pro' })).resolves.toBe(false)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
-      provider: 'deepseek',
-      model: 'deepseek-v4-pro',
+      provider: 'akashx',
+      model: 'akashx-v4-pro',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')
     await Promise.resolve()

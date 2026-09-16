@@ -1,16 +1,16 @@
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@akashx/cordis'
 import { describe, expect, it } from 'vitest'
 import type {
   SessionEventLikeEntry, SessionLiveEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
+} from '@akashx/akx-api-session-controller/client'
 import type {
   ConversationNodeDefinition, ConversationViewDefinition,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { ConversationNodeAssembler, inspectRequestPrompt } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
+} from '@akashx/akx-client-ui-conversation/client'
+import { ConversationNodeAssembler, inspectRequestPrompt } from '@akashx/akx-client-ui-conversation/client'
+import type { SessionEvent } from '@akashx/akx-session/types'
 import { inspectSystemPrompt } from '../../ui-conversation/src/client/contract/system-prompt.ts'
-import { AssistantStreamAccumulator } from '@deepseek-ai/dsh-llm/assistant-stream'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import { AssistantStreamAccumulator } from '@akashx/akx-llm/assistant-stream'
+import type { StreamChunk } from '@akashx/akx-llm'
 import { registerTrajectoryAssistantDefinition } from '../src/client/trajectory-assistant-definition.ts'
 import { registerTrajectoryCompactionDefinitions } from '../src/client/trajectory-compaction-definition.ts'
 import type { TrajectorySnapshot } from '../src/client/trajectory-contract.ts'
@@ -167,7 +167,7 @@ function systemMessage(text: string) {
     id: `system-${text}`,
     role: 'system',
     content: [{ type: 'text', text }],
-    source: { kind: 'plugin', plugin: '@deepseek-ai/dsh-system-prompt' },
+    source: { kind: 'plugin', plugin: '@akashx/akx-system-prompt' },
   }
 }
 

@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@akashx/akx-session/types'
 import type {
   TeamTaskId, TeamTaskView as TeamTask, TeamView,
-} from '@deepseek-ai/dsh-experimental-agent-team/client'
-import { makeTranslate, RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+} from '@akashx/akx-experimental-agent-team/client'
+import { makeTranslate, RemoteError } from '@akashx/akx-client-test-runtime'
 import {
   TeamAction, type TeamActionInjected, type TeamActionProps, type TeamActionResult,
   type TeamTaskActionResult,

@@ -2,21 +2,21 @@
  * Shared service mounting, real AgentLoop drivers, and structural Inbox stubs
  * for agent-loop tests. Callers retain ownership of their contexts, adapters,
  * optional plugins, agents, and teardown.
- * @module @deepseek-ai/dsh-agent-loop-testkit
+ * @module @akashx/akx-agent-loop-testkit
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentOptions, Inbox, InboxTarget } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { SessionHeader, SessionId, UserMessage } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import type { Config as SystemPromptConfig } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { Config as ToolRuntimeConfig } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@akashx/cordis'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent, AgentOptions, Inbox, InboxTarget } from '@akashx/akx-agent'
+import AgentLoop from '@akashx/akx-agent-loop'
+import LlmRuntime from '@akashx/akx-llm'
+import SessionStore from '@akashx/akx-session'
+import type { SessionHeader, SessionId, UserMessage } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import type { Config as SystemPromptConfig } from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
+import type { Config as ToolRuntimeConfig } from '@akashx/akx-tools'
 
 export { createInboxStub, unsupportedInbox } from './inbox.ts'
 

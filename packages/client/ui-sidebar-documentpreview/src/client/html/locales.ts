@@ -10,7 +10,7 @@ export const en = {
   loading: 'Preparing HTML preview…',
   failed: 'This HTML document could not be previewed.',
 }
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** HTML preview selection and status text. */
     documentHtml: HtmlPreviewKey

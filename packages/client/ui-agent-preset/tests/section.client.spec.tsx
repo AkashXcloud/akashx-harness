@@ -8,8 +8,8 @@
 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { bindSnapshotSelector } from '@akashx/akx-client-test-runtime'
+import { createSnapshotStore } from '@akashx/akx-client-store'
 import { AgentPresetSection } from '../src/client/AgentPresetSection.tsx'
 import type { AgentPresetSectionProps } from '../src/client/AgentPresetSection.tsx'
 import type { AgentPresetSectionState, CopyDraft } from '../src/client/section-store.ts'
@@ -116,7 +116,7 @@ describe('the preset list', () => {
       error: 'settings write disconnected',
       rows: [
         ...READY.rows,
-        { id: 'cordis', trust: 'system', isDefault: false, name: 'Creator mode' },
+        { id: '@akashx/cordis', trust: 'system', isDefault: false, name: 'Creator mode' },
       ],
     })
 
@@ -268,10 +268,10 @@ describe('the preset list', () => {
   })
 
   it('shows a revealed directory on its row', () => {
-    renderSection({ revealedPaths: { mine: '/home/user/.dsh/.agent-presets/mine' } })
+    renderSection({ revealedPaths: { mine: '/home/user/.akx/.agent-presets/mine' } })
 
     const mine = rowFor('mine')
-    expect(within(mine).getByText('/home/user/.dsh/.agent-presets/mine')).toBeTruthy()
+    expect(within(mine).getByText('/home/user/.akx/.agent-presets/mine')).toBeTruthy()
     expect(within(mine).getByText(en.revealedPathLabel)).toBeTruthy()
     // The reveal belongs to its row alone.
     expect(within(rowFor('standard')).queryByText(en.revealedPathLabel)).toBeNull()
@@ -294,7 +294,7 @@ describe('the preset list', () => {
 
   it('starts a creator-mode draft session and leaves settings', () => {
     const actions = renderSection({
-      rows: [...READY.rows, { id: 'cordis', trust: 'system', isDefault: false, name: 'Creator mode' }],
+      rows: [...READY.rows, { id: '@akashx/cordis', trust: 'system', isDefault: false, name: 'Creator mode' }],
     })
 
     fireEvent.click(screen.getByRole('button', { name: en.creatorDraft }))
@@ -309,7 +309,7 @@ describe('the preset list', () => {
     renderSection({
       rows: [
         { id: 'standard', trust: 'system', isDefault: true, name: 'Standard mode' },
-        { id: 'cordis', trust: 'system', isDefault: false, name: 'Creator mode' },
+        { id: '@akashx/cordis', trust: 'system', isDefault: false, name: 'Creator mode' },
       ],
     })
 
@@ -325,14 +325,14 @@ describe('the preset list', () => {
     cleanup()
 
     renderSection({
-      rows: [...READY.rows, { id: 'cordis', trust: 'system', isDefault: false, name: 'Creator mode' }],
+      rows: [...READY.rows, { id: '@akashx/cordis', trust: 'system', isDefault: false, name: 'Creator mode' }],
     }, { creator: false })
     expect(screen.queryByRole('button', { name: en.creatorDraft })).toBeNull()
     cleanup()
 
     const actions = renderSection({
       authorable: false,
-      rows: [...READY.rows, { id: 'cordis', trust: 'system', isDefault: false, name: 'Creator mode' }],
+      rows: [...READY.rows, { id: '@akashx/cordis', trust: 'system', isDefault: false, name: 'Creator mode' }],
     })
     const disabled = screen.getByRole('button', { name: en.creatorDraft })
     expect(disabled).toHaveProperty('disabled', true)

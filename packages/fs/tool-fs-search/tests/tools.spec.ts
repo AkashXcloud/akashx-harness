@@ -11,19 +11,19 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createScope, type Scope } from '@deepseek-ai/dsh-scope'
+import { Context } from '@akashx/cordis'
+import { createScope, type Scope } from '@akashx/akx-scope'
 import { join, sep } from 'node:path'
-import { createUserMessage, ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt, { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecution, type ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
-import type { SubprocessCollectedOutputs, SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessOutputReader, SubprocessSpawnSpec } from '@deepseek-ai/dsh-subprocess'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import { createUserMessage, ToolCallId } from '@akashx/akx-llm'
+import SystemPrompt, { renderPrompt } from '@akashx/akx-system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH, type ToolExecution, type ToolExecutionToken } from '@akashx/akx-tools'
+import { SubprocessRuntime } from '@akashx/akx-subprocess'
+import type { SubprocessCollectedOutputs, SubprocessHandle, SubprocessOutcome, SubprocessOutputRead, SubprocessOutputReader, SubprocessSpawnSpec } from '@akashx/akx-subprocess'
+import { MAX_TIMER_DELAY_MS } from '@akashx/akx-timeout'
 import { rgPath } from '@vscode/ripgrep'
-import { SpillLocator, SpillStore } from '@deepseek-ai/dsh-spill'
-import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
-import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
+import { SpillLocator, SpillStore } from '@akashx/akx-spill'
+import type { SaveTextSpill, SpillRef } from '@akashx/akx-spill'
+import * as ToolFsSearch from '@akashx/akx-tool-fs-search'
 import {
   buildGlobCommand,
   buildGrepCommand,
@@ -38,7 +38,7 @@ import {
   runRipgrep,
   sampleAcrossTopLevel,
   toWorkdirRelative,
-} from '@deepseek-ai/dsh-tool-fs-search'
+} from '@akashx/akx-tool-fs-search'
 
 const testToolSignal = new AbortController().signal
 
@@ -1262,5 +1262,5 @@ describe('scope-aware search guidance', () => {
 
 /** Preserve the default persona and exact section separators in the oracle. */
 function withPersona(...sections: string[]): string {
-  return ['You are an AI agent powered by DeepSeek Harness.', ...sections].join('\n\n')
+  return ['You are an AI agent powered by AkashX Harness.', ...sections].join('\n\n')
 }

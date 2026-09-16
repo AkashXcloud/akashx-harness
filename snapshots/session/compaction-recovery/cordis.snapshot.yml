@@ -1,17 +1,17 @@
 # Keyless context-overflow replay composition.
 
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
+- id: llm-akx
+  name: '@akashx/akx-llm-akx'
   disabled: true
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@akashx/akx-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js akxHomePath('sessions')
     compression: none
 
 - id: compaction-basic
-  name: '@deepseek-ai/dsh-compaction-basic'
+  name: '@akashx/akx-compaction-basic'
   config:
     thresholdRatio: 0.99
     retainTokens: 20
@@ -19,11 +19,11 @@
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@akashx/akx-llm-replay'
       config:
         providers:
-          - id: deepseek-official
-            name: DeepSeek
+          - id: akashx-official
+            name: AkashX
             models:
-              - id: deepseek-v4-flash
+              - id: akashx-v4-flash
                 contextWindow: 128000

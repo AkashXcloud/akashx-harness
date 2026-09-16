@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionJob as JobView } from '@deepseek-ai/dsh-api-session-controller/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
+import type { SessionListState } from '@akashx/akx-api-session-controller/client'
+import type { SessionJob as JobView } from '@akashx/akx-api-session-controller/types'
+import type { SessionId } from '@akashx/akx-session/types'
 import { JobListAction, type JobListActionProps } from '../src/client/JobListAction.tsx'
 import { en } from '../src/client/locales.ts'
 

@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-commands",
-  "description": "Plugin-owned human command registry for DeepSeek Harness UIs",
+  "name": "@akashx/akx-commands",
+  "description": "Plugin-owned human command registry for AkashX Harness UIs",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/interaction/commands"
   },
   "type": "module",
@@ -53,29 +53,29 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-attachment": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-crypto": "workspace:^",
+    "@akashx/akx-util-crypto": "workspace:^",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-attachment": "workspace:^",
-    "@deepseek-ai/dsh-brand": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-attachment": "workspace:^",
+    "@akashx/akx-brand": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   }
 }

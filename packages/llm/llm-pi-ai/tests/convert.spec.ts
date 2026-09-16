@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
-import { AttachmentId, ImageVariantId } from '@deepseek-ai/dsh-attachment'
-import type { AttachmentStore, ImageAttachmentRef, ImageRequestPolicy, RequestImageAttachment } from '@deepseek-ai/dsh-attachment'
-import { createUserMessage, ToolCallId, CONTEXT_WINDOW_EXCEEDED_CODE, EMPTY_RESPONSE_CODE, createMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, StreamChunk } from '@deepseek-ai/dsh-llm'
+import { AttachmentId, ImageVariantId } from '@akashx/akx-attachment'
+import type { AttachmentStore, ImageAttachmentRef, ImageRequestPolicy, RequestImageAttachment } from '@akashx/akx-attachment'
+import { createUserMessage, ToolCallId, CONTEXT_WINDOW_EXCEEDED_CODE, EMPTY_RESPONSE_CODE, createMessage } from '@akashx/akx-llm'
+import type { ContentBlock, StreamChunk } from '@akashx/akx-llm'
 import type { AssistantMessage, AssistantMessageEvent, Usage } from '@earendil-works/pi-ai'
 import { transformMessages } from '@earendil-works/pi-ai/api/transform-messages'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
@@ -27,7 +27,7 @@ function assistant(overrides: Partial<AssistantMessage> = {}): AssistantMessage 
     content: [],
     api: 'openai-completions',
     provider: 'deepseek',
-    model: 'deepseek-v4-flash',
+    model: 'akashx-v4-flash',
     usage: usage(),
     stopReason: 'stop',
     timestamp: 0,
@@ -76,7 +76,7 @@ describe('toPiContext', () => {
   it('maps system prompt, user text, and tools', () => {
     const context = toPiContext({
       provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      model: 'akashx-v4-flash',
       system: 'be helpful',
       messages: [createUserMessage({
         content: [{ type: 'text', text: 'hi' }],
@@ -249,7 +249,7 @@ describe('toPiContext', () => {
     })
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
-      api: 'dsh-foreign',
+      api: 'akx-foreign',
       provider: 'deepseek',
       model: 'old-model',
     })
@@ -477,7 +477,7 @@ describe('toPiContext', () => {
         ],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
+          ...{ provider: 'deepseek', model: 'akashx-v4-flash', replayState: state },
         },
       })],
     })
@@ -516,7 +516,7 @@ describe('toPiContext', () => {
     }, undefined, onDegrade)
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
-      api: 'dsh-foreign',
+      api: 'akx-foreign',
       provider: 'deepseek',
       model: 'old',
       content: [{ type: 'text', text: 'done' }],
@@ -536,13 +536,13 @@ describe('toPiContext', () => {
           kind: 'model',
           ...{
             provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            model: 'akashx-v4-flash',
             replayState: {
               kind: 'pi-ai',
               version: 1,
               api: 'openai-completions',
               provider: 'deepseek',
-              model: 'deepseek-v4-flash',
+              model: 'akashx-v4-flash',
               stopReason: 'stop',
               blocks: [{ type: 'text' }],
             },
@@ -550,7 +550,7 @@ describe('toPiContext', () => {
         },
       })],
     }, undefined, onDegrade)
-    expect(context.messages[0]).toMatchObject({ role: 'assistant', api: 'dsh-foreign' })
+    expect(context.messages[0]).toMatchObject({ role: 'assistant', api: 'akx-foreign' })
     expect(onDegrade).toHaveBeenCalledWith(expect.stringContaining('expected a response object'))
   })
 
@@ -565,13 +565,13 @@ describe('toPiContext', () => {
         content: [{ type: 'reasoning', text: 'done' }],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
+          ...{ provider: 'deepseek', model: 'akashx-v4-flash', replayState: state },
         },
       })],
     }, undefined, onDegrade)
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
-      api: 'dsh-foreign',
+      api: 'akx-foreign',
       content: [{ type: 'thinking', thinking: 'done' }],
     })
     expect(onDegrade).toHaveBeenCalledWith(expect.stringContaining('block 0 does not match assistant content'))
@@ -588,15 +588,15 @@ describe('toPiContext', () => {
         content: [{ type: 'text', text: 'done' }],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState: state },
+          ...{ provider: 'deepseek', model: 'akashx-v4-flash', replayState: state },
         },
       })],
     }, undefined, onDegrade)
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
-      api: 'dsh-foreign',
+      api: 'akx-foreign',
       provider: 'deepseek',
-      model: 'deepseek-v4-flash',
+      model: 'akashx-v4-flash',
       content: [{ type: 'text', text: 'done' }],
       stopReason: 'stop',
     })
@@ -608,7 +608,7 @@ describe('toPiContext', () => {
     version: 2,
     api: 'openai-completions',
     provider: 'deepseek',
-    model: 'deepseek-v4-flash',
+    model: 'akashx-v4-flash',
     stopReason: 'stop',
   }
   const validReplay = { response: validResponse, blocks: [{ type: 'text' }] }
@@ -624,13 +624,13 @@ describe('toPiContext', () => {
         content: [{ type: 'text', text: 'done' }],
         source: {
           kind: 'model',
-          ...{ provider: 'deepseek', model: 'deepseek-v4-flash', replayState },
+          ...{ provider: 'deepseek', model: 'akashx-v4-flash', replayState },
         },
       })],
     }, undefined, onDegrade)
     expect(context.messages[0]).toMatchObject({
       role: 'assistant',
-      api: 'dsh-foreign',
+      api: 'akx-foreign',
       content: [{ type: 'text', text: 'done' }],
     })
     expect(onDegrade).toHaveBeenCalledWith(expect.stringContaining(message))
@@ -638,7 +638,7 @@ describe('toPiContext', () => {
 
   it.each([
     ['provider', { ...validReplay, response: { ...validResponse, provider: 'openai' } }],
-    ['model', { ...validReplay, response: { ...validResponse, model: 'deepseek-v4-pro' } }],
+    ['model', { ...validReplay, response: { ...validResponse, model: 'akashx-v4-pro' } }],
   ])('degrades replay metadata whose %s differs from assistant source', (field, replayState) => {
     expectDegraded(replayState, `${field} does not match assistant source`)
   })
@@ -741,7 +741,7 @@ describe('toStreamChunks', () => {
             version: 2,
             api: 'openai-completions',
             provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            model: 'akashx-v4-flash',
             stopReason: 'stop',
           },
           blocks: [{ type: 'text' }],
@@ -792,7 +792,7 @@ describe('toStreamChunks', () => {
             version: 2,
             api: 'openai-completions',
             provider: 'deepseek',
-            model: 'deepseek-v4-flash',
+            model: 'akashx-v4-flash',
             stopReason: 'toolUse',
           },
           blocks: [{ type: 'tool-call' }],
@@ -852,11 +852,11 @@ describe('mapStopReason / mapUsage', () => {
     ['toolUse', { kind: 'tool-calls' }],
     ['pending', {
       kind: 'error',
-      failure: { message: 'pi-ai stream for model "deepseek-v4-flash" ended pending', code: 'PI_AI_ERROR' },
+      failure: { message: 'pi-ai stream for model "akashx-v4-flash" ended pending', code: 'PI_AI_ERROR' },
     }],
     ['deferred', {
       kind: 'error',
-      failure: { message: 'pi-ai deferred response for model "deepseek-v4-flash" is not supported', code: 'PI_AI_ERROR' },
+      failure: { message: 'pi-ai deferred response for model "akashx-v4-flash" is not supported', code: 'PI_AI_ERROR' },
     }],
     ['aborted', { kind: 'aborted', failure: { message: 'pi-ai stream aborted', code: 'ABORTED' } }],
   ] as const)('maps %s', (stopReason, expected) => {
@@ -867,7 +867,7 @@ describe('mapStopReason / mapUsage', () => {
     expect(mapStopReason(assistant({ stopReason: 'stop' }))).toEqual({
       kind: 'error',
       failure: {
-        message: 'model "deepseek-v4-flash" returned a completed response with no content',
+        message: 'model "akashx-v4-flash" returned a completed response with no content',
         code: EMPTY_RESPONSE_CODE,
       },
     })
@@ -961,7 +961,7 @@ describe('mapStopReason / mapUsage', () => {
     expect(mapStopReason(silent, 100)).toEqual({
       kind: 'error',
       failure: {
-        message: 'pi-ai detected context overflow for model "deepseek-v4-flash"',
+        message: 'pi-ai detected context overflow for model "akashx-v4-flash"',
         code: CONTEXT_WINDOW_EXCEEDED_CODE,
       },
     })

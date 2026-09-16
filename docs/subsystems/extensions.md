@@ -290,7 +290,7 @@ One exact Plugin/Package activation is now live in the Host.
  * @param pkg - stable plugin, immutable package, run identity, and label.
  * @mode emit
  */
-'cordis/dynamic-package'(pkg: DynamicCordisPackage): void
+'@akashx/cordis/dynamic-package'(pkg: DynamicCordisPackage): void
 ```
 
 Source: [`packages/extensions/cordis-host-runner/src/types.ts`](../../packages/extensions/cordis-host-runner/src/types.ts)
@@ -307,7 +307,7 @@ One exact activation was withdrawn.
  * @param retracted - plugin, package, and run identity.
  * @mode emit
  */
-'cordis/dynamic-retract'(retracted: DynamicCordisRetracted): void
+'@akashx/cordis/dynamic-retract'(retracted: DynamicCordisRetracted): void
 ```
 
 Source: [`packages/extensions/cordis-host-runner/src/types.ts`](../../packages/extensions/cordis-host-runner/src/types.ts)
@@ -324,7 +324,7 @@ Request a live read-only query from the Client inspect registry.
  * @param request - correlation, Session, provider, method, and JSON input.
  * @mode emit
  */
-'cordis/inspect-query'(request: CordisInspectQueryRequest): void
+'@akashx/cordis/inspect-query'(request: CordisInspectQueryRequest): void
 ```
 
 Source: [`packages/extensions/cordis-host-runner/src/types.ts`](../../packages/extensions/cordis-host-runner/src/types.ts)
@@ -341,7 +341,7 @@ Notify every Client that an inspect query has settled or been cancelled.
  * @param resolved - exact query identity that is no longer answerable.
  * @mode emit
  */
-'cordis/inspect-query-resolved'(resolved: CordisInspectQueryResolved): void
+'@akashx/cordis/inspect-query-resolved'(resolved: CordisInspectQueryResolved): void
 ```
 
 Source: [`packages/extensions/cordis-host-runner/src/types.ts`](../../packages/extensions/cordis-host-runner/src/types.ts)
@@ -358,7 +358,7 @@ A Client-bearing activation needs a browser page, and may require a user decisio
  * @param request - correlation identity, owner, target version, mode, and approval requirement.
  * @mode emit
  */
-'cordis/request-run'(request: DynamicCordisRunRequest): void
+'@akashx/cordis/request-run'(request: DynamicCordisRunRequest): void
 ```
 
 Source: [`packages/extensions/cordis-host-runner/src/types.ts`](../../packages/extensions/cordis-host-runner/src/types.ts)
@@ -375,7 +375,7 @@ A pending Client activation request left the answerable state.
  * @param resolved - request identity and outcome.
  * @mode emit
  */
-'cordis/request-run-resolved'(resolved: DynamicCordisRequestResolved): void
+'@akashx/cordis/request-run-resolved'(resolved: DynamicCordisRequestResolved): void
 ```
 
 Source: [`packages/extensions/cordis-host-runner/src/types.ts`](../../packages/extensions/cordis-host-runner/src/types.ts)

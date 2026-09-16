@@ -81,12 +81,12 @@ describe('tierExternalDeps', () => {
     const { manifests, names } = workspace({
       // Root tooling and test infrastructure never ship, whichever section declares them.
       'package.json': { dependencies: { 'root-runtime-looking': '^1' }, devDependencies: { 'lint-tool': '^1' } },
-      'packages/test-support/loader-smoke/package.json': { name: '@deepseek-ai/dsh-loader-smoke', dependencies: { 'smoke-helper': '^1' } },
-      'packages/test-support/client-runtime/package.json': { name: '@deepseek-ai/dsh-client-test-runtime', dependencies: { 'test-lib': '^1' } },
+      'packages/test-support/loader-smoke/package.json': { name: '@akashx/akx-loader-smoke', dependencies: { 'smoke-helper': '^1' } },
+      'packages/test-support/client-runtime/package.json': { name: '@akashx/akx-client-test-runtime', dependencies: { 'test-lib': '^1' } },
       'website/package.json': { devDependencies: { 'site-tool': '^1' } },
       // A plugin package's runtime dependency ships even when no app mounts it by default.
-      'packages/mcp/mcp-client/package.json': { name: '@deepseek-ai/dsh-mcp-client', dependencies: { 'protocol-sdk': '^1' }, devDependencies: { 'protocol-fixture-server': '^1' } },
-      'apps/cli/package.json': { name: '@deepseek-ai/dsh-cli', dependencies: { 'cli-lib': '^1', '@deepseek-ai/dsh-mcp-client': 'workspace:^' } },
+      'packages/mcp/mcp-client/package.json': { name: '@akashx/akx-mcp-client', dependencies: { 'protocol-sdk': '^1' }, devDependencies: { 'protocol-fixture-server': '^1' } },
+      'apps/cli/package.json': { name: '@akashx/akx-cli', dependencies: { 'cli-lib': '^1', '@akashx/akx-mcp-client': 'workspace:^' } },
     })
 
     expect(tierExternalDeps(manifests, names)).toEqual(new Map([
@@ -105,18 +105,18 @@ describe('tierExternalDeps', () => {
   it('keeps a package runtime when any shipping area declares it, and excludes workspace links', () => {
     const { manifests, names } = workspace({
       'package.json': { devDependencies: { shared: '^1' } },
-      'packages/interaction/tui/package.json': { name: '@deepseek-ai/dsh-tui', dependencies: { shared: '^1', '@deepseek-ai/dsh-cli': 'workspace:^' } },
-      'apps/cli/package.json': { name: '@deepseek-ai/dsh-cli' },
+      'packages/interaction/tui/package.json': { name: '@akashx/akx-tui', dependencies: { shared: '^1', '@akashx/akx-cli': 'workspace:^' } },
+      'apps/cli/package.json': { name: '@akashx/akx-cli' },
     })
 
     expect(tierExternalDeps(manifests, names).get('shared')).toBe(true)
-    expect(tierExternalDeps(manifests, names).has('@deepseek-ai/dsh-cli')).toBe(false)
+    expect(tierExternalDeps(manifests, names).has('@akashx/akx-cli')).toBe(false)
   })
 })
 
 describe('virtualManifest', () => {
   it('resolves a manifest from an ordinary prefix-matching store directory', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-notices-prefix-'))
+    const root = mkdtempSync(join(tmpdir(), 'akx-notices-prefix-'))
     try {
       const name = '@scope/pkg'
       const version = '1.0.0'
@@ -132,7 +132,7 @@ describe('virtualManifest', () => {
   })
 
   it('falls back to a content scan when pnpm 11 truncates the store directory name', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-notices-truncated-'))
+    const root = mkdtempSync(join(tmpdir(), 'akx-notices-truncated-'))
     try {
       const name = '@scope/pkg'
       const version = '2.0.0'
@@ -150,7 +150,7 @@ describe('virtualManifest', () => {
   })
 
   it('selects the requested version when the store retains historical copies', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-notices-version-'))
+    const root = mkdtempSync(join(tmpdir(), 'akx-notices-version-'))
     try {
       const name = '@scope/pkg'
       const store = join(root, 'store')
@@ -168,7 +168,7 @@ describe('virtualManifest', () => {
   })
 
   it('returns undefined when neither the prefix nor the content scan finds the package', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-notices-miss-'))
+    const root = mkdtempSync(join(tmpdir(), 'akx-notices-miss-'))
     try {
       const store = join(root, 'store')
       const other = join(store, 'other-pkg@1.0.0', 'node_modules', 'other-pkg')
@@ -187,17 +187,13 @@ describe('parseVendoredRows', () => {
     const rows = parseVendoredRows(readFileSync(resolve(root, 'vendor/README.md'), 'utf8'))
 
     expect(rows.length).toBeGreaterThan(0)
-    expect(rows).toContainEqual({
-      npmName: '@deepseek-ai/cordis',
-      upstreamName: 'cordis',
-      upstream: 'https://github.com/cordiverse/cordis',
-    })
+    expect(rows).toContainEqual({ npmName: '@akashx/cordis', upstream: 'https://github.com/cordiverse/cordis' })
     // The upstream column carries a trailing package path for some rows; it is not part of the URL.
     expect(rows.every(row => /^https:\/\/\S+$/.test(row.upstream))).toBe(true)
   })
 
   it('yields nothing when the table columns change, so the generator fails loud', () => {
-    expect(parseVendoredRows('| `cordis/` | `@deepseek-ai/cordis` | cordis | 4.0.0 | https://example.com | `abc123` |\n')).toEqual([])
+    expect(parseVendoredRows('| `cordis/` | cordis | 4.0.0 | https://example.com | `abc123` |\n')).toEqual([])
   })
 
   it('covers every vendored directory, so no package can drop out of the notices', () => {
@@ -231,7 +227,7 @@ describe('parsePyprojectRequirements', () => {
       'docs = ["sphinx>=7"]',
       '',
       '[tool.hatch.build.targets.wheel]',
-      'packages = ["src/deepseek_harness"]',
+      'packages = ["src/akx_harness"]',
       '',
       '[tool.pytest.ini_options]',
       'testpaths = ["tests"]',
@@ -283,11 +279,11 @@ describe('parsePyprojectRequirements', () => {
 describe('collectPythonDependencies', () => {
   it('excludes normalized local project names without exempting a third-party prefix', () => {
     const pyprojects = [
-      '[project]\nname = "deepseek-harness-runtime-bin"\ndependencies = ["pydantic"]\n',
-      '[project]\nname = "deepseek-harness-sdk"\ndependencies = ["DeepSeek.Harness_Runtime-Bin", "deepseek-unrelated"]\n',
+      '[project]\nname = "akx-harness-runtime-bin"\ndependencies = ["pydantic"]\n',
+      '[project]\nname = "akx-harness-sdk"\ndependencies = ["AkashX.Harness_Runtime-Bin", "akashx-unrelated"]\n',
     ]
     expect(() => collectPythonDependencies(pyprojects)).toThrow(
-      'python dependency deepseek-unrelated is missing from PYTHON_METADATA',
+      'python dependency akashx-unrelated is missing from PYTHON_METADATA',
     )
   })
 })

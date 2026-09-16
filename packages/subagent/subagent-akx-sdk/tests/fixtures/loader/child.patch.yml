@@ -1,0 +1,29 @@
+# SDK-profile patch for the child runtime in the cwd-inheritance proof.
+
+- id: llm-akx
+  name: '@akashx/akx-llm-akx'
+  disabled: true
+
+- id: system-prompt
+  name: '@akashx/akx-system-prompt'
+  config:
+    personaPrefix: 'Echo where you run.'
+
+- id: agent-instructions
+  name: '@akashx/akx-agent-instructions'
+  disabled: true
+
+- id: skill-filesystem
+  name: '@akashx/akx-skill-filesystem'
+  config:
+    includeDefaultRoots: false
+
+- id: session-persistence-jsonl
+  name: '@akashx/akx-session-persistence-jsonl'
+  config:
+    root: !!js akxHomePath('sessions')
+    compression: none
+
+- insert:
+    - id: child-mock-llm
+      name: './child-mock-llm.ts'

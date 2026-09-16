@@ -3,21 +3,21 @@
  * QueueDock rendering and operations: authoritative rows, inline editing,
  * collapse state, removal, QueueDock Steer, failure notices, and live retirement.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react'
 import { useSyncExternalStore } from 'react'
 import type {
   QueuedMessage, SessionListState, SessionSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SnapshotSelectorHook } from '@deepseek-ai/dsh-client-ui-slots'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+} from '@akashx/akx-api-session-controller/client'
+import type { SessionId } from '@akashx/akx-session/types'
+import type { SnapshotSelectorHook } from '@akashx/akx-client-ui-slots'
+import { createSnapshotStore } from '@akashx/akx-client-store'
 import {
   bindSnapshotSelector, conversationSnapshot, makeTranslate,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
+} from '@akashx/akx-client-test-runtime'
+import type { SessionPendingInteractionSnapshot } from '@akashx/akx-client-ui-session/client'
 import type { QueueItemId } from '../src/client/contract/queue.ts'
 import type { InputState } from '../src/client/contract/input.ts'
 import { en } from '../src/client/locales.ts'

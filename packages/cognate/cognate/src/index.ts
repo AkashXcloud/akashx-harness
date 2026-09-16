@@ -1,15 +1,15 @@
-/** AkashXDB/Cognate service definition, provider selection, and SQL policy. @module @deepseek-ai/dsh-cognate */
+/** AkashXDB/Cognate service definition, provider selection, and SQL policy. @module @akashx/akx-cognate */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { snapshotJsonValue, type JsonValue } from '@deepseek-ai/dsh-util-values'
+import { Context, Service } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { snapshotJsonValue, type JsonValue } from '@akashx/akx-util-values'
 import { authorizeSql, classifySql } from './policy.ts'
 import type { CognateCapabilityProbe, CognateProbeResult, CognateProvider, CognateQueryResult, CognateSemanticContext } from './types.ts'
 
 export type * from './types.ts'
 export { authorizeSql, classifySql, redactSqlForPolicy, statementCount } from './policy.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context { cognate: CognateRuntime }
 }
 

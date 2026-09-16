@@ -8,24 +8,24 @@
  * itself is not a dependency of this package; the source below is the
  * decision-table contract at the `InputTriggerSource` boundary.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { InputTriggerService } from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+import type { SessionSnapshot } from '@akashx/akx-api-session-controller/client'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import { InputTriggerService } from '@akashx/akx-client-ui-input-trigger/client'
 import type {
   ClientSessionContext, SubmitEnvelope,
-} from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+} from '@akashx/akx-client-ui-input-trigger/client'
 import type {
   CommandClaim, PickOutcome, SubmitAttachment, SubmitOutcome,
 } from '../src/client/contract/input.ts'
 import {
   bindSnapshotSelector, conversationSnapshot, makeTranslate, sessionSnapshot, SlotTestRuntime,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionPendingInteractionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@akashx/akx-client-test-runtime'
+import type { SessionPendingInteractionSnapshot } from '@akashx/akx-client-ui-session/client'
+import type { SessionId } from '@akashx/akx-session/types'
 import type { DraftAttachmentId } from '../src/client/contract/input.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { $replaceDetectSpanWithText } from '../src/client/input/editor/span-map.ts'
@@ -223,7 +223,7 @@ describe('scenario A: menu-pick /goal, type args, enter submits', () => {
     act(() => { b.shell.editor.update(() => {}, { discrete: true }) }) // flush the queued decoration refresh
     expect(b.view.container.querySelector('[data-lexical-text][style*="warn-label"]')?.textContent).toBe('/goal ')
     // The en dictionary owns a hint.goal entry, which overrides the machine's raw hint (production behavior).
-    expect(b.textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
+    expect(b.textarea.style.getPropertyValue('--akx-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
     // Continue typing args; hint drops; claim holds.
     b.type('/goal 发布 v1')
     expect(b.shell.snapshot.phase).toBe('claimed')

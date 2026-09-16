@@ -5,12 +5,12 @@
  * the target, the chip executes /plan off and remains visible through failures
  * until the projection confirms the exit.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { PlanProjection } from '@deepseek-ai/dsh-plan-mode/client'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import { bindSnapshotSelector, makeTranslate } from '@akashx/akx-client-test-runtime'
+import type { PlanProjection } from '@akashx/akx-plan-mode/client'
 import { PlanChip, type PlanChipProps } from '../src/client/PlanModeControl.tsx'
 import { en } from '../src/client/locales.ts'
 

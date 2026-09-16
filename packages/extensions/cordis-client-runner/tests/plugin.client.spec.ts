@@ -8,15 +8,15 @@
  */
 /* oxlint-disable typescript/no-unsafe-assignment -- Vitest asymmetric matchers are typed as any. */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { describe, expect, it, vi } from 'vitest'
 import type {
   ApprovalRequestId, CordisDynamicPackageId, CordisDynamicPluginId, CordisDynamicPluginRunId,
   DynamicCordisInvokeResult, SessionId,
-} from '@deepseek-ai/dsh-api-remotes/client'
+} from '@akashx/akx-api-remotes/client'
 // Type-only: resolves the `ctx.remote.$on` surface.
-import type {} from '@deepseek-ai/dsh-api-gateway/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type {} from '@akashx/akx-api-gateway/client'
+import { SlotRegistry } from '@akashx/akx-client-ui-renderer/client'
 import * as NodeHalf from '../src/index.ts'
 import * as ClientHalf from '../src/client/index.ts'
 
@@ -204,7 +204,7 @@ describe('browser half', () => {
     const bench = await boot()
     await bench.ctx.dynamicCordisRunner.startUserRun(USER_RUN)
     expect(bench.ctx.dynamicCordisRunner.isLoaded(PLUGIN)).toBe(true)
-    bench.forward('cordis/dynamic-retract', {
+    bench.forward('@akashx/cordis/dynamic-retract', {
       pluginId: PLUGIN, packageId: PACKAGE, pluginRunId: RUN,
     })
     await bench.settle()
@@ -341,7 +341,7 @@ describe('browser half', () => {
   it('answers a run request after the surface approves it', async () => {
     const bench = await boot()
     const request = 'rr-1' as ApprovalRequestId
-    bench.forward('cordis/request-run', {
+    bench.forward('@akashx/cordis/request-run', {
       requestId: request,
       agentId: AGENT,
       pluginId: PLUGIN,
@@ -374,7 +374,7 @@ describe('browser half', () => {
   it('drops the affordance when another page answers the request', async () => {
     const bench = await boot()
     const request = 'rr-2' as ApprovalRequestId
-    bench.forward('cordis/request-run', {
+    bench.forward('@akashx/cordis/request-run', {
       requestId: request,
       agentId: AGENT,
       pluginId: PLUGIN,
@@ -385,7 +385,7 @@ describe('browser half', () => {
       requiresApproval: true,
     })
     await bench.settle()
-    bench.forward('cordis/request-run-resolved', {
+    bench.forward('@akashx/cordis/request-run-resolved', {
       requestId: request, outcome: 'approved',
     })
     await bench.settle()
@@ -398,7 +398,7 @@ describe('browser half', () => {
   it('exposes the refusal and the load observer on the face', async () => {
     const bench = await boot()
     const request = 'rr-3' as ApprovalRequestId
-    bench.forward('cordis/request-run', {
+    bench.forward('@akashx/cordis/request-run', {
       requestId: request,
       agentId: AGENT,
       pluginId: PLUGIN,

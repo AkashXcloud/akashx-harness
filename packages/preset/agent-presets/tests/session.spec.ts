@@ -1,8 +1,8 @@
 /** The Session projection that records which preset a Session runs. */
 
 import { describe, expect, it } from 'vitest'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@akashx/akx-session'
+import type { SessionEvent, SessionHeader } from '@akashx/akx-session'
 import { agentPresetProjectionDefinition } from '../src/session.ts'
 
 /** A header carrying the creation-time preset, if any. */
@@ -37,9 +37,9 @@ describe('agent preset selection projection', () => {
     state = definition.apply(state, {
       type: 'turn/end', seq: SessionSeq(1), time: 1, data: { turn: 1, reason: { kind: 'completed' } },
     })
-    state = definition.apply(state, selected('cordis', SessionSeq(2)))
+    state = definition.apply(state, selected('@akashx/cordis', SessionSeq(2)))
 
-    expect(definition.wire.view(state)).toBe('cordis')
-    expect(definition.stateSchema.parse(state)).toBe('cordis')
+    expect(definition.wire.view(state)).toBe('@akashx/cordis')
+    expect(definition.stateSchema.parse(state)).toBe('@akashx/cordis')
   })
 })

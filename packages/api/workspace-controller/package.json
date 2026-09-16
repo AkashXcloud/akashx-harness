@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-workspace-controller",
+  "name": "@akashx/akx-api-workspace-controller",
   "description": "Workspace Remote commands and reconnect-safe state transport",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/api/workspace-controller"
   },
   "type": "module",
@@ -37,14 +37,14 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "akx": {
     "client": {
       "external": [
-        "@deepseek-ai/dsh-api-gateway/client"
+        "@akashx/akx-api-gateway/client"
       ],
       "inject": [
-        "@deepseek-ai/dsh-api-gateway",
-        "@deepseek-ai/dsh-client-connection"
+        "@akashx/akx-api-gateway",
+        "@akashx/akx-client-connection"
       ],
       "platform": "web"
     }
@@ -65,30 +65,30 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-deque": "workspace:^",
+    "@akashx/akx-deque": "workspace:^",
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-storage-domain": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-workspace": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-api-gateway": "workspace:^",
+    "@akashx/akx-client-connection": "workspace:^",
+    "@akashx/akx-host-directory-picker": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-storage-domain": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-workspace": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-api-gateway": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-client-store": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-host-directory-picker": "workspace:^",
-    "@deepseek-ai/dsh-remote-mock": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-storage-domain": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-workspace": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-api-gateway": "workspace:^",
+    "@akashx/akx-client-connection": "workspace:^",
+    "@akashx/akx-client-store": "workspace:^",
+    "@akashx/akx-client-test-runtime": "workspace:^",
+    "@akashx/akx-host-directory-picker": "workspace:^",
+    "@akashx/akx-remote-mock": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-storage-domain": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-workspace": "workspace:^"
   }
 }

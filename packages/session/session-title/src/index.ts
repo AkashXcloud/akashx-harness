@@ -1,24 +1,24 @@
 /**
  * Log-backed session title service, deterministic fallback, and provider contract.
- * @module @deepseek-ai/dsh-session-title
+ * @module @akashx/akx-session-title
  */
 
-import { Context, FiberState, Service, type Fiber } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context, FiberState, Service, type Fiber } from '@akashx/cordis'
+import z from '@akashx/schemastery'
 import { z as zod } from 'zod'
 import type { ZodType } from 'zod'
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import { isAgentLoopRequest } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions } from '@deepseek-ai/dsh-llm'
-import { assertNever, deepFreeze } from '@deepseek-ai/dsh-util-values'
+import type { Branded } from '@akashx/akx-brand'
+import { isAgentLoopRequest } from '@akashx/akx-llm'
+import type { GenerateOptions } from '@akashx/akx-llm'
+import { assertNever, deepFreeze } from '@akashx/akx-util-values'
 import type {
   Session,
   SessionEvent,
-} from '@deepseek-ai/dsh-session'
-import { SessionSeq } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-projection'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-agent'
+} from '@akashx/akx-session'
+import { SessionSeq } from '@akashx/akx-session'
+import type {} from '@akashx/akx-session-projection'
+import type { ProjectionDefinition } from '@akashx/akx-session-projection'
+import type {} from '@akashx/akx-agent'
 export type {
   SessionTitleEventData,
   SessionTitleModelProvenance,
@@ -62,13 +62,13 @@ export interface Config {
   readonly maxTitleBytes: number
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     sessionTitle: SessionTitleService
   }
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@akashx/akx-session/types' {
   interface SessionEventMap {
     /**
      * Latest-wins session title snapshot. Log-only: it never enters the model

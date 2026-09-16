@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/feature/2026-08-27-continuable-subagent-human-inbox-control.md
-2026-08-27-continuable-subagent-human-inbox-control.md: cf5dfd070dfd600fb64bc529b4a1476a258c1181
-2026-08-27-continuable-subagent-human-inbox-control.zh.md: 081fb84f75afcc94339ae3bf627480081bc56d89
+2026-08-27-continuable-subagent-human-inbox-control.md: ca86b9c44fc576a130ac284f62e1539424744d2a
+2026-08-27-continuable-subagent-human-inbox-control.zh.md: 6099f1a9affa142d2628bcae9dd1c296d861b423

@@ -7,20 +7,20 @@
  * through one property read; assignment through the tracker proxy and `#`
  * private fields bypass that rebinding.
  */
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import { randomUUID } from '@deepseek-ai/dsh-util-crypto'
+import { Service } from '@akashx/cordis'
+import type { Context } from '@akashx/cordis'
+import { randomUUID } from '@akashx/akx-util-crypto'
 // Type-only imports: a plugin-to-plugin value import is a bundle purity
 // error, so scope resolution goes through the sessions service (scopeOf
 // method) instead of the standalone helper.
 import type {
   ISessions, PendingSubmissionRetirement, SessionFace,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type {} from '@deepseek-ai/dsh-client-file-upload/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { ImageMediaType } from '@deepseek-ai/dsh-attachment'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
+} from '@akashx/akx-api-session-controller/client'
+import type {} from '@akashx/akx-client-file-upload/client'
+import type { SessionId } from '@akashx/akx-session/types'
+import type { ImageMediaType } from '@akashx/akx-attachment'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import type { SnapshotStore } from '@akashx/akx-client-store'
 import type {
   ComposerAttachment, ComposerFileAttachment, ComposerImageAttachment, DraftFileUpload,
 } from './contract/slots.ts'

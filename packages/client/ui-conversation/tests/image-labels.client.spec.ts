@@ -1,6 +1,6 @@
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { describe, expect, it } from 'vitest'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 import { attachmentErrorText, imageSizeText } from '../src/client/image-labels.ts'
 import { en } from '../src/client/locales.ts'
 

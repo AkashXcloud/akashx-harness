@@ -20,10 +20,10 @@
 - button "Thought for a while" [expanded]:
   - text: Thought for a while
   - img
-- button "Context injection @deepseek-ai/dsh-system-prompt":
+- button "Context injection @akashx/akx-system-prompt":
   - img
   - img
-  - text: Context injection @deepseek-ai/dsh-system-prompt
+  - text: Context injection @akashx/akx-system-prompt
 - paragraph: partial
 - text: Stopped
 - button "Copy":
@@ -42,8 +42,8 @@
 - button "Add files or run commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash":
-  - text: DeepSeek-V4-Flash
+- button "Select model, current AkashX-V4-Flash":
+  - text: AkashX-V4-Flash
   - img
 - button "Send message" [disabled]
 - button "1 turns 1 steps":

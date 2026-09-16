@@ -3,7 +3,7 @@ description: "Whole-log conversation counts and wall times for clients and maint
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-session-stats
+# @akashx/akx-session-stats
 
 English | [中文](README.zh.md)
 
@@ -30,9 +30,9 @@ Mount the plugin beside the session store and the projection registry when clien
 ### Composition
 
 ```yaml
-- name: '@deepseek-ai/dsh-session'
-- name: '@deepseek-ai/dsh-session-projection'
-- name: '@deepseek-ai/dsh-session-stats'
+- name: '@akashx/akx-session'
+- name: '@akashx/akx-session-projection'
+- name: '@akashx/akx-session-stats'
 ```
 
 ### What the figures mean
@@ -131,4 +131,4 @@ None.
 
 </details>
 
-**Runtime invariant:** No companion is published. The package owns a single pure projection fold whose wire payload is schema-validated by the projection registry at every snapshot and change-feed emission, and the event relations the fold relies on (`step/end` exactly once per entered step, monotonic host-assigned turn numbers, chunk and tool events carrying their step coordinates and call ids) are owned and runtime-checked by dsh-agent-loop and the session surface, not here.
+**Runtime invariant:** No companion is published. The package owns a single pure projection fold whose wire payload is schema-validated by the projection registry at every snapshot and change-feed emission, and the event relations the fold relies on (`step/end` exactly once per entered step, monotonic host-assigned turn numbers, chunk and tool events carrying their step coordinates and call ids) are owned and runtime-checked by akx-agent-loop and the session surface, not here.

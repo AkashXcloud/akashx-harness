@@ -10,7 +10,7 @@ Cognate needs structured AkashXDB queries, document retrieval, semantic-model co
 
 ## Decision
 
-Cognate is an additive Harness capability. `@deepseek-ai/dsh-cognate` owns `ctx.cognate`, provider selection, SQL classification, external-operation authorization, result bounds, and provider-supplied semantic context. `@deepseek-ai/dsh-cognate-mysql` supplies direct MySQL-wire execution and destroys its active connection on cancellation. `@deepseek-ai/dsh-cognate-local` supplies deterministic heading-aware Markdown retrieval for offline development and tests; it is not mounted by the shipped production preset. `@deepseek-ai/dsh-tool-cognate` owns the model-facing `run_sql` and deterministic `render_chart` tools plus Cognate source-selection guidance.
+Cognate is an additive Harness capability. `@akashx/akx-cognate` owns `ctx.cognate`, provider selection, SQL classification, external-operation authorization, result bounds, and provider-supplied semantic context. `@akashx/akx-cognate-mysql` supplies direct MySQL-wire execution and destroys its active connection on cancellation. `@akashx/akx-cognate-local` supplies deterministic heading-aware Markdown retrieval for offline development and tests; it is not mounted by the shipped production preset. `@akashx/akx-tool-cognate` owns the model-facing `run_sql` and deterministic `render_chart` tools plus Cognate source-selection guidance.
 
 The `cognate` agent preset copies the Standard tool composition and adds the Cognate service, MySQL provider, and tools in an agent-local realm. Bash, filesystem, web, skills, sessions, goals, planning, workflows, subagents, and MCP remain separate Harness capabilities.
 

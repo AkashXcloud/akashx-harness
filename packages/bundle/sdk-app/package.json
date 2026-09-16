@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-sdk-app",
-  "description": "The dsh SDK profile bundle: stdio JSON-RPC serving and process lifecycle over dsh-base",
+  "name": "@akashx/akx-sdk-app",
+  "description": "The akx SDK profile bundle: stdio JSON-RPC serving and process lifecycle over akx-base",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/bundle/sdk-app"
   },
   "type": "module",
@@ -28,22 +28,22 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "akx": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-cmdline": "workspace:^",
-    "@deepseek-ai/dsh-sdk-jsonrpc-server": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/akx-cmdline": "workspace:^",
+    "@akashx/akx-sdk-jsonrpc-server": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "commander": "^15.0.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis-plugin-include": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   }
 }

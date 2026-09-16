@@ -3,14 +3,14 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import CognateRuntime from '@deepseek-ai/dsh-cognate'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import * as toolCognate from '@deepseek-ai/dsh-tool-cognate'
+import { Context } from '@akashx/cordis'
+import Include from '@akashx/cordis-plugin-include'
+import Loader from '@akashx/cordis-plugin-loader'
+import { ToolCallId } from '@akashx/akx-llm'
+import CognateRuntime from '@akashx/akx-cognate'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
+import * as toolCognate from '@akashx/akx-tool-cognate'
 import * as localCognate from '../src/index.ts'
 
 let root: string | undefined
@@ -25,22 +25,22 @@ afterEach(async () => {
 
 describe('cognate-local through a real Loader composition', () => {
   it('feeds offline cited knowledge through the model-facing run_sql tool', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-cognate-local-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'akx-cognate-local-loader-'))
     await writeFile(join(root, 'policy.md'), '# Policy\n\nRevenue is recognized on delivery.')
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-system-prompt'",
-      "- name: '@deepseek-ai/dsh-tools'",
-      "- name: '@deepseek-ai/dsh-cognate'",
+      "- name: '@akashx/akx-system-prompt'",
+      "- name: '@akashx/akx-tools'",
+      "- name: '@akashx/akx-cognate'",
       '  config:',
       '    provider: local-markdown',
       '    allowExternalOperations: true',
-      "- name: '@deepseek-ai/dsh-cognate-local'",
+      "- name: '@akashx/akx-cognate-local'",
       '  config:',
       `    knowledgeDir: ${JSON.stringify(root)}`,
       '    bucket: docs',
       '    maxResults: 1',
-      "- name: '@deepseek-ai/dsh-tool-cognate'",
+      "- name: '@akashx/akx-tool-cognate'",
       '',
     ].join('\n'))
 
@@ -53,11 +53,11 @@ describe('cognate-local through a real Loader composition', () => {
       version: 'v2',
       async import(specifier: string) {
         const modules = new Map<string, unknown>([
-          ['@deepseek-ai/dsh-system-prompt', SystemPrompt],
-          ['@deepseek-ai/dsh-tools', ToolRuntime],
-          ['@deepseek-ai/dsh-cognate', CognateRuntime],
-          ['@deepseek-ai/dsh-cognate-local', localCognate],
-          ['@deepseek-ai/dsh-tool-cognate', toolCognate],
+          ['@akashx/akx-system-prompt', SystemPrompt],
+          ['@akashx/akx-tools', ToolRuntime],
+          ['@akashx/akx-cognate', CognateRuntime],
+          ['@akashx/akx-cognate-local', localCognate],
+          ['@akashx/akx-tool-cognate', toolCognate],
         ])
         if (!modules.has(specifier)) throw new Error(`unexpected Loader import: ${specifier}`)
         return modules.get(specifier)

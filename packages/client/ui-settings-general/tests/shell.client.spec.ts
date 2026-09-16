@@ -6,14 +6,14 @@
  * roster's Connection, and it survives a Loader rebuild of the declarer.
  */
 import { describe, expect, vi } from 'vitest'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { createClientTest, type TestClient, webApp } from '@deepseek-ai/dsh-client-test-runtime/src/assembly/index.ts'
+import type {} from '@akashx/akx-client-ui-renderer/client'
+import { createClientTest, type TestClient, webApp } from '@akashx/akx-client-test-runtime/src/assembly/index.ts'
 import { inject } from '../src/client/index.ts'
 import type { SettingsRootInjected } from '../src/client/shell-contract.ts'
 import { SettingsRoot } from '../src/client/SettingsRoot.tsx'
 
-const SELF = '@deepseek-ai/dsh-client-ui-settings-general'
-const SIDEBAR = '@deepseek-ai/dsh-client-ui-sidebar'
+const SELF = '@akashx/akx-client-ui-settings-general'
+const SIDEBAR = '@akashx/akx-client-ui-sidebar'
 const it = createClientTest({ roster: webApp })
 /** The whole roster's first boot pays the cold module transform of every plugin package. */
 const COLD_BOOT_TIMEOUT_MS = 60_000
@@ -43,7 +43,7 @@ const PRODUCT_SECTIONS: readonly string[] = ['general', 'models', 'database', 'p
 /** Onboarding steps the web-app roster registers, in coordinator order; both come from ui-settings-models. */
 const PRODUCT_ONBOARDING: readonly { id: string; order: number }[] = [
   { id: 'welcome-notice', order: -100 },
-  { id: 'deepseek-official', order: 0 },
+  { id: 'akashx-official', order: 0 },
 ]
 
 describe('ui-settings-general shell', () => {

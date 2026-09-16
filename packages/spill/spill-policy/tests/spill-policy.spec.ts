@@ -9,19 +9,19 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { createUserMessage, ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
-import type { ToolDefinition } from '@deepseek-ai/dsh-tools'
-import type { PostToolDecision, ToolExecution, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import { SpillLocator, SpillStore } from '@deepseek-ai/dsh-spill'
-import type { SaveTextSpill, SpillRef } from '@deepseek-ai/dsh-spill'
-import * as SpillPolicy from '@deepseek-ai/dsh-spill-policy'
-import { WorkerThreadCodeRuntime } from '@deepseek-ai/dsh-code-runtime-worker-thread'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import { createUserMessage, ToolCallId } from '@akashx/akx-llm'
+import type { ContentBlock } from '@akashx/akx-llm'
+import { SessionId } from '@akashx/akx-session'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime, { defineContentToolFixture } from '@akashx/akx-tools'
+import type { ToolDefinition } from '@akashx/akx-tools'
+import type { PostToolDecision, ToolExecution, ToolExecutionToken } from '@akashx/akx-tools'
+import { SpillLocator, SpillStore } from '@akashx/akx-spill'
+import type { SaveTextSpill, SpillRef } from '@akashx/akx-spill'
+import * as SpillPolicy from '@akashx/akx-spill-policy'
+import { WorkerThreadCodeRuntime } from '@akashx/akx-code-runtime-worker-thread'
 
 const testToolSignal = new AbortController().signal
 

@@ -5,14 +5,14 @@
  * patch overlays to apply, and the config dumps — and hands **everything after
  * its own flags** to the booted tree verbatim, where injected app plugins parse
  * their own flag families and print their own `--help` (see
- * `@deepseek-ai/dsh-cmdline`). Launcher flags therefore come first: the first
+ * `@akashx/akx-cmdline`). Launcher flags therefore come first: the first
  * token this parser does not recognize starts the inner arguments, so
  * `akashx --profile tui --resume abc` boots the tui profile with `--resume abc`,
  * and `akashx --profile web -h` prints the web app's help, not this one's.
  *
  * `web` is a hardcoded alias for `--profile web`; `plugin` manages a profile's
  * plugin dependencies by forwarding to pnpm.
- * @module @deepseek-ai/dsh/args
+ * @module @akashx/akx/args
  */
 
 import { Command, CommanderError } from 'commander'
@@ -48,8 +48,8 @@ interface PluginInvocation {
   args: string[]
 }
 
-/** The resolved public invocation. Help, version, and errors exit inside {@link parseDshArgs}. */
-export type DshInvocation = ProfileInvocation | DumpConfigInvocation | PluginInvocation
+/** The resolved public invocation. Help, version, and errors exit inside {@link parseAkxArgs}. */
+export type AkxInvocation = ProfileInvocation | DumpConfigInvocation | PluginInvocation
 
 /** Launcher flags shared by the default command and the `web` alias. */
 interface BootOptions {
@@ -95,7 +95,7 @@ Examples:
  * @param args - the leftover arguments, in argv order.
  * @returns the resolved invocation.
  */
-function resolveBoot(program: Command, profile: string, options: BootOptions, args: string[]): DshInvocation {
+function resolveBoot(program: Command, profile: string, options: BootOptions, args: string[]): AkxInvocation {
   const patches = options.patch ?? []
   if (patches.includes('')) program.error('error: --patch needs a path')
   if (options.fromDefaultProfile === '') program.error('error: --from-default-profile needs a name')
@@ -126,8 +126,8 @@ function resolveBoot(program: Command, profile: string, options: BootOptions, ar
  * @param commandName - executable name used in help and diagnostics.
  * @returns the resolved invocation.
  */
-export function parseDshArgs(argv: readonly string[], version: string, commandName = 'dsh'): DshInvocation {
-  let resolved: DshInvocation | undefined
+export function parseAkxArgs(argv: readonly string[], version: string, commandName = 'akx'): AkxInvocation {
+  let resolved: AkxInvocation | undefined
   // Annotated, not inferred: the actions below call back into `program`, and an
   // inferred type would be circular through its own chain.
   const program: Command = new Command()
@@ -145,7 +145,7 @@ export function parseDshArgs(argv: readonly string[], version: string, commandNa
     .passThroughOptions()
     .enablePositionalOptions()
     .argument('[args...]', `arguments for the booted profile's app (see: ${commandName} --profile <name> --help)`)
-    .option('--profile <name>', 'the profile under $DSH_HOME/profiles to boot')
+    .option('--profile <name>', 'the profile under $AKX_HOME/profiles to boot')
     .option('--from-default-profile <name>', 'initialize a new custom profile from a shipped profile template')
     .option('--patch <path>', 'extra patch-list overlay applied after the profile layer (repeatable)', collect)
     .option('--dump-config', 'print the composed profile tree and exit')

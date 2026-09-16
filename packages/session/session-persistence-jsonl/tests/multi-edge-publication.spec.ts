@@ -1,16 +1,16 @@
 /** Durable composition of historical chunk collapse and V3 system/reference migration. */
 
-import { Context } from '@deepseek-ai/cordis'
-import { Session, SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import { createSessionFormatCatalog } from '@deepseek-ai/dsh-session-format'
-import { releasedV0SessionFormatCodec, releasedV1SessionFormatCodec, sessionFormatV0ToV1 } from '@deepseek-ai/dsh-session-format-v0-to-v1'
+import { Context } from '@akashx/cordis'
+import { Session, SessionId, SessionLogOffset, SessionSeq } from '@akashx/akx-session'
+import type { SessionEvent, SessionHeader } from '@akashx/akx-session'
+import { createSessionFormatCatalog } from '@akashx/akx-session-format'
+import { releasedV0SessionFormatCodec, releasedV1SessionFormatCodec, sessionFormatV0ToV1 } from '@akashx/akx-session-format-v0-to-v1'
 import {
   assertReleasedV2Header, RELEASED_V2_EVENT_TYPES, releasedV2SessionFormatCodec,
   restoreReleasedV2Artifact, sessionFormatV1ToV2,
-} from '@deepseek-ai/dsh-session-format-v1-to-v2'
-import { SessionFormatUnsupportedError } from '@deepseek-ai/dsh-session-persistence'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+} from '@akashx/akx-session-format-v1-to-v2'
+import { SessionFormatUnsupportedError } from '@akashx/akx-session-persistence'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
 import { appendFile, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, join } from 'node:path'
@@ -97,7 +97,7 @@ async function mount(root: string, compression: JsonlCompression) {
 }
 
 async function seed(version: 0 | 1, compression: JsonlCompression, refuse = false) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-multi-edge-publication-'))
+  const root = await mkdtemp(join(tmpdir(), 'akx-multi-edge-publication-'))
   roots.push(root)
   const path = generationLogPath(root, undefined, id, version, compression)
   await mkdir(dirname(path), { recursive: true })

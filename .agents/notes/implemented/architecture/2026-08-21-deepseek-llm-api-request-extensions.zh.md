@@ -1,26 +1,26 @@
-# Agent Note: DeepSeek LLM API 会话日志与插件包请求扩展
+# Agent Note: AkashX LLM API 会话日志与插件包请求扩展
 
 Status: implemented
 
-[English](2026-08-21-deepseek-llm-api-request-extensions.md) | 中文
+[English](2026-08-21-akashx-llm-api-request-extensions.md) | 中文
 
 ## 问题
 
-权威会话日志包含请求边界、原始响应分片、组装后消息、工具活动、插件事件与失败事实，模型消息列表无法保留全部内容。OTel 会话遥测路径独立于模型请求投影和批处理该日志，使用部署方选择的共享模式，并刻意丢弃大多数 assistant 分片。因此，DeepSeek 官方 API 无法从普通请求消息或遥测流重建完整 harness 轨迹。
+权威会话日志包含请求边界、原始响应分片、组装后消息、工具活动、插件事件与失败事实，模型消息列表无法保留全部内容。OTel 会话遥测路径独立于模型请求投影和批处理该日志，使用部署方选择的共享模式，并刻意丢弃大多数 assistant 分片。因此，AkashX 官方 API 无法从普通请求消息或遥测流重建完整 harness 轨迹。
 
 提供方侧诊断还需要产生当前请求的确切存活插件包版本。现有面向浏览器的插件清单会报告已配置 Loader 配置项与生命周期阶段，但既不拥有包 manifest（元数据清单）解析，也不拥有请求 Agent 的 standing preset 组合。
 
-两个值都只属于 DeepSeek 官方适配器路径。把它们加入 `GenerateOptions` 或提供方无关的 LLM seam，会让 pi-ai 与未来每个适配器接触 DeepSeek 协议概念。
+两个值都只属于 AkashX 官方适配器路径。把它们加入 `GenerateOptions` 或提供方无关的 LLM seam，会让 pi-ai 与未来每个适配器接触 AkashX 协议概念。
 
 ## 决策
 
-`@deepseek-ai/dsh-deepseek-llm-api-extensions` 注册 `ctx.deepseekLlmApiExtensions`，即 `deepseek-official` 请求正文顶层字段的增量注册表。贡献方通过 `register()` 认领一个经声明合并的字段。适配器在序列化确切协议消息后调用 `prepare()`、传入请求取消信号，在 HTTP 前拒绝准备失败或基础字段冲突，合并分离字段，并在 HTTP 2xx 后调用捕获的 `accept()` 事务。即使贡献方忽略信号，注册表也会在取消后停止等待准备。接受失败仍以 `REQUEST_EXTENSION` 使请求失败；传输失败与非 2xx 失败绝不会接受贡献。未挂载注册表的组合会保留可复用基础适配器。随附组合会挂载注册表与两个贡献方：插件包元数据默认开启，会话日志上传默认关闭，需要设置 `session-log-deepseek.enabled: true`。无密钥 `deepseek-official` 回放会使用合成的空基础正文执行准备，并在第一个已记录分片前调用同一接受事务；它保持的是 2xx 后扩展副作用，而非字段字节。
+`@akashx/akx-akashx-llm-api-extensions` 注册 `ctx.akashxLlmApiExtensions`，即 `akashx-official` 请求正文顶层字段的增量注册表。贡献方通过 `register()` 认领一个经声明合并的字段。适配器在序列化确切协议消息后调用 `prepare()`、传入请求取消信号，在 HTTP 前拒绝准备失败或基础字段冲突，合并分离字段，并在 HTTP 2xx 后调用捕获的 `accept()` 事务。即使贡献方忽略信号，注册表也会在取消后停止等待准备。接受失败仍以 `REQUEST_EXTENSION` 使请求失败；传输失败与非 2xx 失败绝不会接受贡献。未挂载注册表的组合会保留可复用基础适配器。随附组合会挂载注册表与两个贡献方：插件包元数据默认开启，会话日志上传默认关闭，需要设置 `session-log-akashx.enabled: true`。无密钥 `akashx-official` 回放会使用合成的空基础正文执行准备，并在第一个已记录分片前调用同一接受事务；它保持的是 2xx 后扩展副作用，而非字段字节。
 
 提供方无关的 `llm` 包与 `llm-pi-ai` 不包含任何扩展类型、服务查找、字段合并或接受调用。
 
 ## 增量会话日志字段
 
-`@deepseek-ai/dsh-session-log-deepseek` 以显式选择启用的方式拥有 `dsh_session_log`。启用后，每个携带存活会话 id 的请求都会发送该确切会话身份最大持久 `session-log-deepseek/delivery-accepted` 水位之后的连续权威事件后缀。该字段包含不可变会话 header 与完整事件信封。2xx 会为已发送的 `throughSeq` 追加新水位；该事件会进入下一次请求的后缀。Fork 日志会保留父级水位 id，因此子会话会在自己的身份下从序列零开始。并发接受可能乱序到达，最大水位仍保持权威。进程内 fold 会让每条会话事件只被扫描一次，并增量消费后续追加；新的会话对象或 HMR generation 会从持久历史重建该 fold。
+`@akashx/akx-session-log-akashx` 以显式选择启用的方式拥有 `akx_session_log`。启用后，每个携带存活会话 id 的请求都会发送该确切会话身份最大持久 `session-log-akashx/delivery-accepted` 水位之后的连续权威事件后缀。该字段包含不可变会话 header 与完整事件信封。2xx 会为已发送的 `throughSeq` 追加新水位；该事件会进入下一次请求的后缀。Fork 日志会保留父级水位 id，因此子会话会在自己的身份下从序列零开始。并发接受可能乱序到达，最大水位仍保持权威。进程内 fold 会让每条会话事件只被扫描一次，并增量消费后续追加；新的会话对象或 HMR generation 会从持久历史重建该 fold。
 
 失败方向为至少一次。传输失败或提供方拒绝不会记录水位。远端接受后、水位持久化前发生崩溃，会在恢复后触发重放，绝不会跳过序列。现有会话检查点会持久化该事件；上传插件不拥有第二份存储。
 
@@ -28,7 +28,7 @@ Status: implemented
 
 ## 插件包字段
 
-`@deepseek-ai/dsh-plugin-package-inventory-deepseek` 从 `llm` 包家族中拥有默认开启的 `dsh_plugin_packages` 字段。它会读取宿主 Loader 树的存活非 group 配置项，并为存活请求 Agent 读取其 standing preset 树。Node 包解析会定位所属 manifest，无需导出 `./package.json`。普通配置项从其所属树解析；standing preset 根会复现 Loader 对宿主基址的显式覆写，嵌套 include 则保留自身基址。最近的匿名 manifest 会标记松散模块；具名 manifest 必须带有版本。系统以确定性顺序按确切名称／版本对去重，同时存活的不同版本仍会分开保留。
+`@akashx/akx-plugin-package-inventory-akashx` 从 `llm` 包家族中拥有默认开启的 `akx_plugin_packages` 字段。它会读取宿主 Loader 树的存活非 group 配置项，并为存活请求 Agent 读取其 standing preset 树。Node 包解析会定位所属 manifest，无需导出 `./package.json`。普通配置项从其所属树解析；standing preset 根会复现 Loader 对宿主基址的显式覆写，嵌套 include 则保留自身基址。最近的匿名 manifest 会标记松散模块；具名 manifest 必须带有版本。系统以确定性顺序按确切名称／版本对去重，同时存活的不同版本仍会分开保留。
 
 禁用、pending、failed、unloading、disposed、结构性、松散非包、普通依赖、编程式子 fiber 与内存动态插件配置项都不属于该包清单。这个定义会报告运行时可以证明的包支撑组合事实，而不会为任意回调发明来源。
 
@@ -54,13 +54,13 @@ Status: implemented
 
 ## 考虑过的替代方案
 
-**向 `GenerateOptions` 或 `ctx.llm` 添加通用元数据。** 已否决，因为这些值与接受时点属于 DeepSeek 协议语义；提供方无关请求会迫使每个适配器理解或忽略外来字段。
+**向 `GenerateOptions` 或 `ctx.llm` 添加通用元数据。** 已否决，因为这些值与接受时点属于 AkashX 协议语义；提供方无关请求会迫使每个适配器理解或忽略外来字段。
 
-**把两个提供方硬编码进 `llm-deepseek`。** 已否决，因为适配器将导入会话、Loader、preset、包 manifest 与游标逻辑。注册表让传输只负责字段合并与 HTTP 接受。
+**把两个提供方硬编码进 `llm-akashx`。** 已否决，因为适配器将导入会话、Loader、preset、包 manifest 与游标逻辑。注册表让传输只负责字段合并与 HTTP 接受。
 
 ### 为什么不使用请求相对消息引用？
 
-一种递归的带标签表示可以用所属请求 `messages` 中的路径与 UTF-8 字节偏移，替换事件字符串的确切范围。测量使用 Node v24.16.0、macOS arm64 与可用的三份最大本地 Zstandard 会话产物；其压缩产物大小分别为 2,437,052、572,602 与 118,811 字节。延迟启用回放使用各会话最后一个已完成请求边界；稳态回放覆盖 411 个已完成边界。字节数覆盖完整且最小化的 DeepSeek 请求。
+一种递归的带标签表示可以用所属请求 `messages` 中的路径与 UTF-8 字节偏移，替换事件字符串的确切范围。测量使用 Node v24.16.0、macOS arm64 与可用的三份最大本地 Zstandard 会话产物；其压缩产物大小分别为 2,437,052、572,602 与 118,811 字节。延迟启用回放使用各会话最后一个已完成请求边界；稳态回放覆盖 411 个已完成边界。字节数覆盖完整且最小化的 AkashX 请求。
 
 | 回放方式 | 原始 JSON | 引用 JSON | 节省比例 | 同步编码器耗时 |
 |---|---:|---:|---:|---:|
@@ -73,7 +73,7 @@ Status: implemented
 
 ### 为什么不省略 assistant 分片或重叠事件数据？
 
-实测 v1 真实 Session event 中约 98% 为 `assistant/chunk`。在引用编码后省略它们，会让完整 identity JSON 在延迟启用场景进一步减少 84.79%，在稳态场景进一步减少 6.49%，但会阻止无损重建并让 message provenance 悬空。V2 把紧凑 stream 嵌入 attempt settlement；`dsh_session_log` 仍会完整发送每个当前规范 event，且不会省略这些嵌入式 record。模糊或规范化替换也有相同重建缺陷。
+实测 v1 真实 Session event 中约 98% 为 `assistant/chunk`。在引用编码后省略它们，会让完整 identity JSON 在延迟启用场景进一步减少 84.79%，在稳态场景进一步减少 6.49%，但会阻止无损重建并让 message provenance 悬空。V2 把紧凑 stream 嵌入 attempt settlement；`akx_session_log` 仍会完整发送每个当前规范 event，且不会省略这些嵌入式 record。模糊或规范化替换也有相同重建缺陷。
 
 **只在内存中保留上传游标。** 已否决，因为普通进程重启会重发完整会话。权威接受事件让重启恢复获得尽力而为的持久性，无需另一存储后端；剩余崩溃窗口只会产生允许的重复。
 
@@ -85,8 +85,8 @@ Status: implemented
 
 ## 后果
 
-DeepSeek 官方请求会把存活包版本发送到解析后的 `baseURL`，包括已配置 gateway。显式选择启用会话日志后，请求还会携带完整的未接受会话新后缀。这些字段对模型不可见，不增加提示词 token，也不改变 KV Cache，但可能显著增大 HTTP 正文。Manifest 解析、字段冲突、接受记录或提供方 schema 拒绝会使模型请求失败，而不会静默丢弃元数据。
+AkashX 官方请求会把存活包版本发送到解析后的 `baseURL`，包括已配置 gateway。显式选择启用会话日志后，请求还会携带完整的未接受会话新后缀。这些字段对模型不可见，不增加提示词 token，也不改变 KV Cache，但可能显著增大 HTTP 正文。Manifest 解析、字段冲突、接受记录或提供方 schema 拒绝会使模型请求失败，而不会静默丢弃元数据。
 
 `delivery-accepted` 事件会成为权威日志的一部分，并在后续请求中自行交付。崩溃恢复可能重复后缀，但不会根据 assistant 输出推断接受，也不会创建第二份本地游标存储。缺少存活会话的直接调用会省略会话字段；宿主包清单仍然可用。
 
-[DeepSeek 请求身份决策](../feature/2026-08-11-deepseek-request-user-id-header.zh.md)继续拥有 user／session header，且这些 header 仍位于正文之外。[会话遥测决策](../feature/2026-07-23-session-telemetry-otel-revival.zh.md)在另一项变更删除该 seam 与后端之前仍保持当前有效；本请求路径不改变 OTel 捕获或共享模式。
+[AkashX 请求身份决策](../feature/2026-08-11-akashx-request-user-id-header.zh.md)继续拥有 user／session header，且这些 header 仍位于正文之外。[会话遥测决策](../feature/2026-07-23-session-telemetry-otel-revival.zh.md)在另一项变更删除该 seam 与后端之前仍保持当前有效；本请求路径不改变 OTel 捕获或共享模式。

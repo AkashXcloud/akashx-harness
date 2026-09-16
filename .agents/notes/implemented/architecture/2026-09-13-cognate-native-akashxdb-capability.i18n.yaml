@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-09-13-cognate-native-akashxdb-capability.md
-2026-09-13-cognate-native-akashxdb-capability.md: c9822349fd97daaa0345478732f7ddc80aaed308
-2026-09-13-cognate-native-akashxdb-capability.zh.md: 881b11c528803241574e3af6ad71bdf64db2ca23
+2026-09-13-cognate-native-akashxdb-capability.md: 960e8663fd30ebbf4c16d1d726f6f5c4e446c33c
+2026-09-13-cognate-native-akashxdb-capability.zh.md: 9c71605fcfb1b462904a59dbb46819ba16edce48

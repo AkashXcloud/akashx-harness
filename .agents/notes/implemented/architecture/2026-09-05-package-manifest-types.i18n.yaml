@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-09-05-package-manifest-types.md
-2026-09-05-package-manifest-types.md: dc018ba019028b942a17cd016c8670f2405c3bc7
-2026-09-05-package-manifest-types.zh.md: 8fd323bfe6058a6a062e3834a8630c0181a203fc
+2026-09-05-package-manifest-types.md: 7f13adde78a0f3ac9b53c0b979b1363e56827791
+2026-09-05-package-manifest-types.zh.md: aa1c12737e76fcbf8da1fef99dda953a8c955ce3

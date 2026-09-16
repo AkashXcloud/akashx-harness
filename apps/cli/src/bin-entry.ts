@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Executable entry for the DeepSeek-compatible launcher.
- * @module @deepseek-ai/dsh/bin-entry
+ * Executable entry for the AkashX-compatible launcher.
+ * @module @akashx/akx/bin-entry
  */
 
 import { runCli } from './bin.ts'

@@ -6,14 +6,14 @@
  * shared ToolRow state semantics for interrupted/failed calls, and generic
  * fallbacks on malformed results.
  */
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import type { ToolResultNode } from '@akashx/akx-client-ui-chat/client'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 // Export discipline: packages/client/AGENTS.md.
 import { AskQuestionRow, askQuestionToolview } from '../src/client/tool/toolviews/ask-question-row.tsx'
-import { en } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
+import { en } from '@akashx/akx-client-ui-conversation/src/client/locales.ts'
 
 afterEach(cleanup)
 
@@ -66,7 +66,7 @@ describe('AskQuestionRow', () => {
 
   it('expands a successful result as paired questions and readable answer lines', () => {
     render(<AskQuestionRow {...rowProps(resultNode(READABLE_ARGS, answers([
-      { id: 'scope', selected: ['deepseek-harness'] },
+      { id: 'scope', selected: ['akx-harness'] },
       { id: 'goal', selected: ['Develop a feature'], custom: 'Keep the API small' },
       { id: 'notes', selected: [] },
     ])))} />)
@@ -77,7 +77,7 @@ describe('AskQuestionRow', () => {
     expect(screen.getByText('Develop a feature')).toBeTruthy()
     expect(screen.getByText('Keep the API small')).toBeTruthy()
     expect(screen.getByText('Which project should this apply to?')).toBeTruthy()
-    expect(screen.getByText('deepseek-harness')).toBeTruthy()
+    expect(screen.getByText('akx-harness')).toBeTruthy()
     expect(screen.getByText('Anything else?')).toBeTruthy()
     expect(screen.getByText('Not answered')).toBeTruthy()
     expect(screen.queryByText(/"questions"/)).toBeNull()
@@ -87,7 +87,7 @@ describe('AskQuestionRow', () => {
   it('keeps generic diagnostics when a valid answer result includes a non-text block', () => {
     const resultText = answers([
       { id: 'goal', selected: ['Develop a feature'] },
-      { id: 'scope', selected: ['deepseek-harness'] },
+      { id: 'scope', selected: ['akx-harness'] },
       { id: 'notes', selected: [] },
     ])
     const view = render(<AskQuestionRow {...rowProps(resultNode(READABLE_ARGS, resultText, {

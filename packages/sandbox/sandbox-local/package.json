@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-sandbox-local",
-  "description": "Local process-sandbox backends for the DeepSeek Harness sandbox seam: bwrap, the npm-distributed landlock-run launcher, macOS Seatbelt, or the Windows ACL restricted-token runner — functionally probed, fail-closed",
+  "name": "@akashx/akx-sandbox-local",
+  "description": "Local process-sandbox backends for the AkashX Harness sandbox seam: bwrap, the npm-distributed landlock-run launcher, macOS Seatbelt, or the Windows ACL restricted-token runner — functionally probed, fail-closed",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/sandbox/sandbox-local"
   },
   "type": "module",
@@ -27,21 +27,21 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-sandbox-windows-acl": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/node-addon-system": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/akx-sandbox-windows-acl": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/node-addon-system": "workspace:^",
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-sandbox": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-sandbox": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
   }
 }

@@ -24,9 +24,9 @@
   - paragraph: 填入各提供方的 API 密钥即可使用其模型。
   - list:
     - listitem:
-      - text: DeepSeek
+      - text: AkashX
       - img "API 密钥缺失"
-      - button "编辑 DeepSeek (deepseek-official)": 编辑
+      - button "编辑 AkashX (akashx-official)": 编辑
   - text: 提供方
   - combobox "提供方":
     - option "amazon-bedrock"
@@ -37,7 +37,7 @@
     - option "cerebras"
     - option "cloudflare-ai-gateway"
     - option "cloudflare-workers-ai"
-    - option "deepseek"
+    - option "akashx"
     - option "fireworks"
     - option "github-copilot"
     - option "google"

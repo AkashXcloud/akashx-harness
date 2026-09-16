@@ -1,18 +1,18 @@
 # SDK-profile patch for the deterministic diagnostic child runtime.
 
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek'
+- id: llm-akx
+  name: '@akashx/akx-llm-akx'
   disabled: true
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@akashx/akx-agent-instructions'
   disabled: true
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@akashx/akx-system-prompt'
   config:
-    personaPrefix: 'Return the scripted DSH SDK failure.'
+    personaPrefix: 'Return the scripted AKX SDK failure.'
 
 - insert:
     - id: child-mock-llm
-      name: '../../../packages/subagent/subagent-dsh-sdk/tests/fixtures/loader/child-mock-llm.ts'
+      name: '../../../packages/subagent/subagent-akx-sdk/tests/fixtures/loader/child-mock-llm.ts'

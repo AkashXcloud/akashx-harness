@@ -10,14 +10,14 @@
  */
 
 import { describe, expect, expectTypeOf, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as SessionTurnOutlinePlugin from '@deepseek-ai/dsh-session-turn-outline'
-import { turnOutlineProjectionDefinition } from '@deepseek-ai/dsh-session-turn-outline/src/projection.ts'
-import type { TurnOutlineEntry, TurnOutlineState } from '@deepseek-ai/dsh-session-turn-outline/types'
+import { Context } from '@akashx/cordis'
+import { createAssistantMessage, createUserMessage } from '@akashx/akx-llm'
+import SessionStore, { SessionId, SessionLogOffset, SessionSeq } from '@akashx/akx-session'
+import type { Session, SessionEvent } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import * as SessionTurnOutlinePlugin from '@akashx/akx-session-turn-outline'
+import { turnOutlineProjectionDefinition } from '@akashx/akx-session-turn-outline/src/projection.ts'
+import type { TurnOutlineEntry, TurnOutlineState } from '@akashx/akx-session-turn-outline/types'
 
 async function harness(withOutlinePlugin: boolean): Promise<{ ctx: Context; session: Session }> {
   const ctx = new Context()
@@ -43,7 +43,7 @@ function appendAssistant(session: Session, turn: number, step: number, text: str
     step,
     message: createAssistantMessage({
       content: [{ type: 'text', text }],
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'akashx-official', model: 'akashx-v4-flash' },
     }),
   }, { surfaceOp: 'append' })
 }

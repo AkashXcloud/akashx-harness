@@ -4,13 +4,13 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { launcherPath } from '@deepseek-ai/node-addon-system/landlock-run'
-import { LocalSandboxProvider } from '@deepseek-ai/dsh-sandbox-local'
-import { SandboxPolicyService } from '@deepseek-ai/dsh-sandbox-policy'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { SandboxBashExecutor } from '@deepseek-ai/dsh-bash-sandbox'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
+import { Context } from '@akashx/cordis'
+import { launcherPath } from '@akashx/node-addon-system/landlock-run'
+import { LocalSandboxProvider } from '@akashx/akx-sandbox-local'
+import { SandboxPolicyService } from '@akashx/akx-sandbox-policy'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import { SandboxBashExecutor } from '@akashx/akx-bash-sandbox'
+import LocalSubprocessRuntime from '@akashx/akx-subprocess-local'
 
 /**
  * KEYLESS consumer-integration proof: the REAL `LocalSandboxProvider` (bwrap
@@ -18,7 +18,7 @@ import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
  * REAL `SandboxBashExecutor`, driven through the executor's public run/start
  * paths. Verifies the WORLD (files exist or don't) plus the stamped result
  * facts; the backend-only confinement proofs live with
- * `@deepseek-ai/dsh-sandbox-local`.
+ * `@akashx/akx-sandbox-local`.
  *
  * Self-skips when the running kernel does not enforce Landlock. CI builds the launcher from
  * `native/system` before running this file.
@@ -39,7 +39,7 @@ afterEach(async () => {
 })
 
 async function tempDir(base: string): Promise<string> {
-  const dir = await mkdtemp(join(base, 'dsh-landlock-e2e-'))
+  const dir = await mkdtemp(join(base, 'akx-landlock-e2e-'))
   tempDirs.push(dir)
   return dir
 }

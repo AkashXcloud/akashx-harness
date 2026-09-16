@@ -3,12 +3,12 @@
  * per-namespace sections; plugins register a namespace schema and read the
  * resolved value, which layers schema defaults, the registrant's composition
  * `base`, and the user document section, in that order.
- * @module @deepseek-ai/dsh-settings
+ * @module @akashx/akx-settings
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import type z from '@deepseek-ai/schemastery'
-import { deepEqualJson, deepFreeze } from '@deepseek-ai/dsh-util-values'
+import { Context, Service } from '@akashx/cordis'
+import type z from '@akashx/schemastery'
+import { deepEqualJson, deepFreeze } from '@akashx/akx-util-values'
 import { redactSecrets } from './redact.ts'
 import type { RedactedSecret } from './redact.ts'
 import type { SettingsNamespace, SettingsUpdateSource } from './types.ts'
@@ -140,7 +140,7 @@ export interface SettingsScope<T> {
   replace(section: object): Promise<void>
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     settings: SettingsProvider
   }

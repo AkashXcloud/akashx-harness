@@ -5,17 +5,17 @@
 import { mkdtempSync, rmSync, statSync, unlinkSync, utimesSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ClientArtifactBaseline, ClientModuleRegistry, WebBootGraph } from '@deepseek-ai/dsh-client-modules'
-import type { WebRoute, WebServer } from '@deepseek-ai/dsh-host-webserver'
+import type { ClientArtifactBaseline, ClientModuleRegistry, WebBootGraph } from '@akashx/akx-client-modules'
+import type { WebRoute, WebServer } from '@akashx/akx-host-webserver'
 import { apply, Config, EVENTS_ENDPOINT, inject } from '../src/index.ts'
 
 const POLL_MS = 20
 
 let dir: string
 
-beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'dsh-hmr-')) })
+beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'akx-hmr-')) })
 afterEach(() => { rmSync(dir, { recursive: true, force: true }) })
 
 /**

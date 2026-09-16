@@ -3,13 +3,13 @@ description: "Cognate 能力使用的直接 MySQL 协议 AkashXDB Provider。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cognate-mysql
+# @akashx/akx-cognate-mysql
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-cognate-mysql` 将 `MysqlCognateProvider` 注册到 `ctx.cognate`。它直接连接 AkashXDB/StarRocks MySQL 端点，将驱动值转换为无损 JSON，并在调用信号取消时销毁当前连接。上下文和结果中不会返回 URL 凭据。
+`akx-cognate-mysql` 将 `MysqlCognateProvider` 注册到 `ctx.cognate`。它直接连接 AkashXDB/StarRocks MySQL 端点，将驱动值转换为无损 JSON，并在调用信号取消时销毁当前连接。上下文和结果中不会返回 URL 凭据。
 
 ## 目录
 

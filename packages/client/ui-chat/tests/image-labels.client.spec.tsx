@@ -1,11 +1,11 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { afterEach, describe, expect, it } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { RenderMessageImages } from '@deepseek-ai/dsh-client-ui-conversation/client'
+import { AttachmentId } from '@akashx/akx-attachment'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
+import type { RenderMessageImages } from '@akashx/akx-client-ui-conversation/client'
 import { AssistantMarkdown } from '../src/client/chat/AssistantMarkdown.tsx'
 import { en } from '../src/client/locale.ts'
 

@@ -1,11 +1,11 @@
 /** Host registry for model-visible, read-only Cordis capability queries. */
 
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { snapshotJsonValue, type JsonValue } from '@deepseek-ai/dsh-util-values'
-import { assertSupportedJsonSchema, validateJsonSchemaValue } from '@deepseek-ai/dsh-tools'
-import type { JsonSchemaNode } from '@deepseek-ai/dsh-tools'
+import { Service } from '@akashx/cordis'
+import type { Context } from '@akashx/cordis'
+import type { Agent } from '@akashx/akx-agent'
+import { snapshotJsonValue, type JsonValue } from '@akashx/akx-util-values'
+import { assertSupportedJsonSchema, validateJsonSchemaValue } from '@akashx/akx-tools'
+import type { JsonSchemaNode } from '@akashx/akx-tools'
 import type {
   CordisInspectMethodManifest, CordisInspectPlatform, CordisInspectProviderManifest,
   CordisInspectProviderView, CordisInspectQueryRequest, CordisInspectQueryResolution,
@@ -34,7 +34,7 @@ interface PendingClientQuery {
   settle(resolution: CordisInspectQueryResolution): void
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     /** Host registry for Cordis inspect providers and Client manifest/query routing. */
     cordisInspect: CordisInspectRegistryService
@@ -150,7 +150,7 @@ export class CordisInspectRegistryService extends Service {
     }
     this.pending.delete(requestId)
     pending.settle(resolution)
-    this.ctx.emit('cordis/inspect-query-resolved', { requestId })
+    this.ctx.emit('@akashx/cordis/inspect-query-resolved', { requestId })
     return { accepted: true }
   }
 
@@ -182,11 +182,11 @@ export class CordisInspectRegistryService extends Service {
       if (pending === undefined) return
       this.pending.delete(requestId)
       pending.settle({ ok: false, reason: 'cancelled', message: `Client inspect query ${providerId}.${methodName} was cancelled` })
-      this.ctx.emit('cordis/inspect-query-resolved', { requestId })
+      this.ctx.emit('@akashx/cordis/inspect-query-resolved', { requestId })
     }
     signal.addEventListener('abort', onAbort, { once: true })
     if (signal.aborted) onAbort()
-    else this.ctx.emit('cordis/inspect-query', request)
+    else this.ctx.emit('@akashx/cordis/inspect-query', request)
     try {
       const resolution = await result
       if (!resolution.ok) throw new Error(`${providerId}.${methodName}: ${resolution.message}`)

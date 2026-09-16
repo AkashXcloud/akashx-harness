@@ -2,15 +2,15 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import Storage from '@deepseek-ai/dsh-storage'
-import type { StorageBackend } from '@deepseek-ai/dsh-storage'
-import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
-import type { DomainChanged } from '@deepseek-ai/dsh-storage-domain'
-import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionHeader } from '@deepseek-ai/dsh-session'
-import { SessionPersistenceRevision } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionPersistenceSnapshot } from '@deepseek-ai/dsh-session-persistence'
+import { Context } from '@akashx/cordis'
+import Storage from '@akashx/akx-storage'
+import type { StorageBackend } from '@akashx/akx-storage'
+import { DomainFacility } from '@akashx/akx-storage-domain'
+import type { DomainChanged } from '@akashx/akx-storage-domain'
+import SessionStore, { SESSION_FORMAT_VERSION, SessionId } from '@akashx/akx-session'
+import type { SessionHeader } from '@akashx/akx-session'
+import { SessionPersistenceRevision } from '@akashx/akx-session-persistence'
+import type { SessionPersistenceSnapshot } from '@akashx/akx-session-persistence'
 import { MemoryMediaPool, MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import WorkspaceRegistry, {
   WorkspaceId,
@@ -176,7 +176,7 @@ let base: string
 const tempDirs: string[] = []
 
 async function makeDir(name: string): Promise<string> {
-  base ??= await realpath(await mkdtemp(join(tmpdir(), 'dsh-workspace-')))
+  base ??= await realpath(await mkdtemp(join(tmpdir(), 'akx-workspace-')))
   if (tempDirs.length === 0) tempDirs.push(base)
   const dir = join(base, name)
   await mkdir(dir, { recursive: true })

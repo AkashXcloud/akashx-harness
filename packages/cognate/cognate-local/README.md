@@ -3,13 +3,13 @@ description: "Offline Markdown provider for Cognate development and tests."
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cognate-local
+# @akashx/akx-cognate-local
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-cognate-local` preserves offline Cognate knowledge retrieval without adding a second agent, tool registry, or orchestration loop. It loads heading-aware Markdown sections and answers the existing `run_sql` path for one local `ASK` statement with bounded rows and citations. The shipped `cognate` preset does not mount this provider; production retrieval remains AkashXDB-backed.
+`akx-cognate-local` preserves offline Cognate knowledge retrieval without adding a second agent, tool registry, or orchestration loop. It loads heading-aware Markdown sections and answers the existing `run_sql` path for one local `ASK` statement with bounded rows and citations. The shipped `cognate` preset does not mount this provider; production retrieval remains AkashXDB-backed.
 
 ## Table of Contents
 

@@ -3,7 +3,7 @@
 import { prerelease, valid } from 'semver'
 
 /** Environment variable that selects the Desktop update deployment. */
-export const DESKTOP_AUTO_UPDATE_ENV = 'DSH_DESKTOP_AUTO_UPDATE_ENV'
+export const DESKTOP_AUTO_UPDATE_ENV = 'AKX_DESKTOP_AUTO_UPDATE_ENV'
 
 const UPDATE_ENVIRONMENTS = {
   test: {
@@ -15,7 +15,7 @@ const UPDATE_ENVIRONMENTS = {
   },
   production: {
     originEnvName: undefined,
-    fixedOrigin: 'https://download.deepseek.com',
+    fixedOrigin: 'https://download.akashx.com',
     bucketEnvName: 'DOWNLOAD_PROD_COS_BUCKET',
     secretIdEnvName: 'DOWNLOAD_PROD_COS_SECRET_ID',
     secretKeyEnvName: 'DOWNLOAD_PROD_COS_SECRET_KEY',

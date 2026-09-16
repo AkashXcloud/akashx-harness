@@ -6,7 +6,7 @@ import type {
   SessionId, SessionSearchItem,
   SubagentCatalog, SubagentInterruptReceipt, SubagentPromptReceipt,
   WorkspaceId, WorkspaceView,
-} from '@deepseek-ai/dsh-api-remotes/client'
+} from '@akashx/akx-api-remotes/client'
 import type {
   SessionAddress,
   SessionAssistantStreamBaseline,
@@ -19,14 +19,14 @@ import type {
   SessionProjectionBaseline,
   SessionSelectModelRequest,
   SessionSelectModelValue,
-} from '@deepseek-ai/dsh-api-session-controller/types'
-import type { WorkspaceRemote } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { WorkspaceFollowFrame } from '@deepseek-ai/dsh-api-workspace-controller/types'
-import type { RemoteFailure, RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+} from '@akashx/akx-api-session-controller/types'
+import type { WorkspaceRemote } from '@akashx/akx-api-workspace-controller/client'
+import type { WorkspaceFollowFrame } from '@akashx/akx-api-workspace-controller/types'
+import type { RemoteFailure, RemoteResult } from '@akashx/akx-typert-protocol'
 import {
   RemoteStream,
   type RemoteStreamOptions,
-} from '@deepseek-ai/dsh-api-gateway/client'
+} from '@akashx/akx-api-gateway/client'
 import type { SessionRemotes } from '../src/client/sessions/remotes.ts'
 import { followSnapshot, pageThrough } from './remote/history.client.ts'
 

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-llm-replay",
+  "name": "@akashx/akx-llm-replay",
   "description": "Replay LLM plugin: short-circuits llm/stream with model chunks reconstructed from a recorded session JSONL (keyless snapshot tests)",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/test-support/llm-replay"
   },
   "type": "module",
@@ -27,26 +27,26 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-deepseek-llm-api-extensions": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-compaction": "workspace:^",
+    "@akashx/akx-llm-api-extensions": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-deepseek-llm-api-extensions": {
+    "@akashx/akx-llm-api-extensions": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-compaction": "workspace:^",
-    "@deepseek-ai/dsh-deepseek-llm-api-extensions": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-compaction": "workspace:^",
+    "@akashx/akx-llm-api-extensions": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-session-format-catalog": "workspace:^",
-    "@deepseek-ai/dsh-util-values": "workspace:^"
+    "@akashx/akx-session-format-catalog": "workspace:^",
+    "@akashx/akx-util-values": "workspace:^"
   }
 }

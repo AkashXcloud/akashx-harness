@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage, ToolCallId  } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import { STRUCTURED_OUTPUT_TOOL } from '@deepseek-ai/dsh-subagent-in-process-driver'
-import * as spawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import WorkerThreadWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
+import { Context } from '@akashx/cordis'
+import type { Agent } from '@akashx/akx-agent'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import { createUserMessage, ToolCallId  } from '@akashx/akx-llm'
+import { SessionId } from '@akashx/akx-session'
+import SubagentRuntime from '@akashx/akx-subagent'
+import { STRUCTURED_OUTPUT_TOOL } from '@akashx/akx-subagent-in-process-driver'
+import * as spawn from '@akashx/akx-subagent-spawn-in-process'
+import WorkerThreadWorkflowEngine from '@akashx/akx-workflow-worker-thread'
 import { MockAdapter, maxTokensResponse, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as toolRalph from '../src/index.ts'
 
@@ -34,7 +34,7 @@ async function mountRalph(script: MockScript, config: toolRalph.Config) {
   return { ctx, adapter, parentHandle, parent: parentHandle.agent }
 }
 
-describe('dsh-tool-ralph over the real spawn and worker-thread stack', () => {
+describe('akx-tool-ralph over the real spawn and worker-thread stack', () => {
   it('uses distinct empty-seed children, shared cwd, and only the prior bounded handoff', { timeout: 90_000 }, async () => {
     const firstReport = {
       status: 'continue',

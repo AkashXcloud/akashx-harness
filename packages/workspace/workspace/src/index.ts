@@ -2,15 +2,15 @@
  * Workspace entity registry (`ctx.workspaceRegistry`): durable workspace records,
  * stable registry order, and header-validated session membership over the
  * domain data form.
- * @module @deepseek-ai/dsh-workspace
+ * @module @akashx/akx-workspace
  */
 
 import { randomUUID } from 'node:crypto'
 import { stat } from 'node:fs/promises'
-import { Context, Service } from '@deepseek-ai/cordis'
-import type { SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-persistence'
-import type { DomainGlobal, KvTable } from '@deepseek-ai/dsh-storage-domain'
+import { Context, Service } from '@akashx/cordis'
+import type { SessionHeader, SessionId } from '@akashx/akx-session'
+import type {} from '@akashx/akx-session-persistence'
+import type { DomainGlobal, KvTable } from '@akashx/akx-storage-domain'
 import { WorkspaceEntity } from './entity.ts'
 import type { WorkspaceEntityHost } from './entity.ts'
 
@@ -63,7 +63,7 @@ export class WorkspaceOrderInvalidError extends Error {
 }
 
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     workspaceRegistry: WorkspaceRegistry
   }

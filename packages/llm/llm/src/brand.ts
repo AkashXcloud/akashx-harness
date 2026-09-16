@@ -1,16 +1,16 @@
 /**
- * dsh-llm's owned branded ids: tool-call correlation and provider request
+ * akx-llm's owned branded ids: tool-call correlation and provider request
  * diagnostics.
  *
  * The `Branded<B>` primitive and stateless constructor live in
- * `@deepseek-ai/dsh-brand` so every owner of a cross-boundary id can brand it
- * without depending on dsh-llm; see that package's README for the
+ * `@akashx/akx-brand` so every owner of a cross-boundary id can brand it
+ * without depending on akx-llm; see that package's README for the
  * nominal-typing policy.
  *
- * @module @deepseek-ai/dsh-llm/brand
+ * @module @akashx/akx-llm/brand
  */
 
-import { brandString, type Branded } from '@deepseek-ai/dsh-brand'
+import { brandString, type Branded } from '@akashx/akx-brand'
 
 /** Stable identity carried by one message across inbox, log, and model-request boundaries. */
 export type MessageId = Branded<'MessageId'>

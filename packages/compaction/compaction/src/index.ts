@@ -4,12 +4,12 @@
  * {@link CompactionEngine}. This interface necessarily depends on session and LLM
  * vocabulary; the rationale is in the
  * [compaction Agent Note](../../../../.agents/notes/implemented/feature/2026-06-18-compaction-capability-seam.md).
- * @module @deepseek-ai/dsh-compaction
+ * @module @akashx/akx-compaction
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import type { Session, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { CommandId } from '@deepseek-ai/dsh-commands/brand'
+import { Context, Service } from '@akashx/cordis'
+import type { Session, SessionSeq } from '@akashx/akx-session'
+import type { CommandId } from '@akashx/akx-commands/brand'
 import type { CompactionResult } from './types.ts'
 
 export type { CompactionResult } from './types.ts'
@@ -78,7 +78,7 @@ export interface ManualCompactAgentContext extends CompactionAgentContext {
   runMaintenance<T>(task: (signal: AbortSignal) => Promise<T>): Promise<T>
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     compaction: CompactionEngine
   }

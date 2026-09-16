@@ -1,7 +1,7 @@
 /**
  * Default Agent driver over queued turns and step-boundary input. Every request
  * is derived from the session log.
- * @module dsh-agent-loop/agent
+ * @module akx-agent-loop/agent
  */
 
 import type {
@@ -14,24 +14,24 @@ import type {
   InboxTarget,
   PreStepDecision,
   RequestErrorAction,
-} from '@deepseek-ai/dsh-agent'
-import { agentEvents, assembleContextFor } from '@deepseek-ai/dsh-agent'
-import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@deepseek-ai/dsh-llm'
+} from '@akashx/akx-agent'
+import { agentEvents, assembleContextFor } from '@akashx/akx-agent'
+import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@akashx/akx-llm'
 import {
   LlmError,
   createAssistantMessage,
   errorChain,
   markAgentLoopRequest,
-} from '@deepseek-ai/dsh-llm'
-import { deepFreeze } from '@deepseek-ai/dsh-util-values'
-import type { Scope } from '@deepseek-ai/dsh-scope'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { EpochHeader, RequestContext, Session, SessionId, TurnEndReason, UserMessage } from '@deepseek-ai/dsh-session'
-import { canonicalHeader, headerEquals } from '@deepseek-ai/dsh-session'
-import { joinContextSections, renderContextSections, renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import type { PromptAssembly } from '@deepseek-ai/dsh-system-prompt'
-import type {} from '@deepseek-ai/dsh-session-projection'
-import type { Context } from '@deepseek-ai/cordis'
+} from '@akashx/akx-llm'
+import { deepFreeze } from '@akashx/akx-util-values'
+import type { Scope } from '@akashx/akx-scope'
+import { createScope } from '@akashx/akx-scope'
+import type { EpochHeader, RequestContext, Session, SessionId, TurnEndReason, UserMessage } from '@akashx/akx-session'
+import { canonicalHeader, headerEquals } from '@akashx/akx-session'
+import { joinContextSections, renderContextSections, renderPrompt } from '@akashx/akx-system-prompt'
+import type { PromptAssembly } from '@akashx/akx-system-prompt'
+import type {} from '@akashx/akx-session-projection'
+import type { Context } from '@akashx/cordis'
 import { ReactLoopInbox } from './inbox.ts'
 import { RuntimeContextProjection } from './runtime-context.ts'
 import { AssistantStreamAttempt } from './assistant-stream.ts'

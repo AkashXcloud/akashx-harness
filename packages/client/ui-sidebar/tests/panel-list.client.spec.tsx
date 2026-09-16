@@ -1,17 +1,17 @@
 // @vitest-environment jsdom
 /** Global panel rows and DOM focus through the production slot renderer. */
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@akashx/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, waitFor, within } from '@testing-library/react'
-import { SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import { IconGlobeOutline14 } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { ILayout, MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
-import type { PropsRenderSlots, PropsRuntime, SlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
+import { SlotTestRuntime } from '@akashx/akx-client-test-runtime'
+import { LocaleRuntime } from '@akashx/akx-client-locale/client'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import { IconGlobeOutline14 } from '@akashx/akx-client-ui-primitives'
+import type { ILayout, MainPanelId } from '@akashx/akx-client-ui-layout/client'
+import type { PropsRenderSlots, PropsRuntime, SlotLabel } from '@akashx/akx-client-ui-slots'
 import { apply, inject } from '../src/client/index.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@akashx/akx-client-ui-slots' {
   interface LocaleNamespaceMap {
     'sidebar-panel-test': 'alpha'
   }

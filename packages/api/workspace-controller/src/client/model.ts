@@ -1,9 +1,9 @@
 /** Client-side Workspace state model shared by Remote transport and UI projection. */
 
-import { notifySubscribers } from '@deepseek-ai/dsh-client-store'
-import type {} from '@deepseek-ai/dsh-api-workspace-controller/remote'
-import { isRemoteFailure } from '@deepseek-ai/dsh-api-gateway/client'
-import type { RemoteFailure, RemoteResult, TypertClientRemote } from '@deepseek-ai/dsh-typert-protocol'
+import { notifySubscribers } from '@akashx/akx-client-store'
+import type {} from '@akashx/akx-api-workspace-controller/remote'
+import { isRemoteFailure } from '@akashx/akx-api-gateway/client'
+import type { RemoteFailure, RemoteResult, TypertClientRemote } from '@akashx/akx-typert-protocol'
 import type {
   WorkspaceArchiveSessionRequest,
   WorkspaceArchiveValue,

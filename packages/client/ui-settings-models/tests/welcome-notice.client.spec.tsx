@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { bindSnapshotSelector, RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
-import { Context } from '@deepseek-ai/cordis'
-import { SettingsSchemaService } from '@deepseek-ai/dsh-client-ui-settings/src/client/schema.ts'
-import { SettingsDescribeMirror } from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-mirror.ts'
-import { SettingsScopeController } from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-scope.ts'
+import { bindSnapshotSelector, RemoteError } from '@akashx/akx-client-test-runtime'
+import { Context } from '@akashx/cordis'
+import { SettingsSchemaService } from '@akashx/akx-client-ui-settings/src/client/schema.ts'
+import { SettingsDescribeMirror } from '@akashx/akx-client-ui-settings/src/client/settings-mirror.ts'
+import { SettingsScopeController } from '@akashx/akx-client-ui-settings/src/client/settings-scope.ts'
 
 // Every fixture carries the resource hook the resources plugin merges into GlobalStandardProps.
 const useResource = (() => ({ status: 'none' as const, value: undefined, failure: undefined, reload: () => {} })) as GlobalStandardProps['useResource']
@@ -104,7 +104,7 @@ describe('WelcomeNotice', () => {
   it('uses the exact owner copy', () => {
     expect(WELCOME_NOTICE_COPY).toEqual({
       title: 'Internal Testing Notice',
-      body: "DeepSeek Harness 0.1 remains in testing for Harness developers. Many areas need further improvement, and we welcome feedback from the developer community. DeepSeek Harness's core plugins and foundational APIs will continue to evolve rapidly over the coming months.\n\nWe look forward to exploring the limits of intelligence with developers around the world, building on open-source, open, reusable, and composable infrastructure. We welcome Harness developers everywhere to join the DSH plugin ecosystem.",
+      body: "AkashX Harness 0.1 remains in testing for Harness developers. Many areas need further improvement, and we welcome feedback from the developer community. AkashX Harness's core plugins and foundational APIs will continue to evolve rapidly over the coming months.\n\nWe look forward to exploring the limits of intelligence with developers around the world, building on open-source, open, reusable, and composable infrastructure. We welcome Harness developers everywhere to join the AKX plugin ecosystem.",
       continueLabel: 'Continue',
     })
     expect(en.welcomeBody).toBe(WELCOME_NOTICE_COPY.body)

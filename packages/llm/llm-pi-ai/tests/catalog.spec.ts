@@ -2,12 +2,12 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { createUserMessage, ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
-import FileSettingsProvider from '@deepseek-ai/dsh-settings-file'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import { PiAiAdapter } from '@deepseek-ai/dsh-llm-pi-ai'
+import { Context } from '@akashx/cordis'
+import LlmRuntime, { createUserMessage, ReasoningEffortId } from '@akashx/akx-llm'
+import type { StreamChunk } from '@akashx/akx-llm'
+import FileSettingsProvider from '@akashx/akx-settings-file'
+import * as LlmPiAi from '@akashx/akx-llm-pi-ai'
+import { PiAiAdapter } from '@akashx/akx-llm-pi-ai'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
 import { createModels, getSupportedThinkingLevels } from '@earendil-works/pi-ai'
 import type { Api, Model, OpenAICompletionsCompat, Provider } from '@earendil-works/pi-ai'
@@ -34,9 +34,9 @@ afterEach(async () => {
   await Promise.all(homes.splice(0).map(dir => rm(dir, { recursive: true, force: true })))
 })
 
-/** A throwaway $DSH_HOME with an empty settings document. */
+/** A throwaway $AKX_HOME with an empty settings document. */
 async function home(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-pi-catalog-'))
+  const dir = await mkdtemp(join(tmpdir(), 'akx-pi-catalog-'))
   homes.push(dir)
   await writeFile(join(dir, 'settings.yaml'), '')
   return dir
@@ -125,9 +125,9 @@ describe('hand-declared providers', () => {
 
     // A catalog route is unaffected: its models carry the metadata that makes
     // `off` actually disable thinking.
-    const withCatalog = await harness({ providers: { deepseek: { baseURL: server.url } } })
+    const withCatalog = await harness({ providers: { akashx: { baseURL: server.url } } })
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     expect((await withCatalog.llm.resolveModelInfo('deepseek', catalogModel.id)).reasoning?.efforts.map(e => e.id))
       .toContain('off')
   })
@@ -264,7 +264,7 @@ describe('hand-declared providers', () => {
     // model without declaring modalities must keep the catalog's rather than
     // describe a model that accepts nothing.
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     const resolved = resolveProfiles({
       'deepseek': { baseURL: 'https://catalog.test', models: [{ id: catalogModel.id, input: [] }] },
       'acme-gateway': {
@@ -425,7 +425,7 @@ describe('hand-declared providers', () => {
 describe('catalog routes with per-model configuration', () => {
   it('serves the installed catalog untouched when the profile lists no models', async () => {
     const server = await mockServer([])
-    const ctx = await harness({ providers: { deepseek: { baseURL: server.url } } })
+    const ctx = await harness({ providers: { akashx: { baseURL: server.url } } })
 
     const listed = await ctx.llm.listModels('deepseek')
     expect(listed.map(model => model.id).sort())
@@ -435,10 +435,10 @@ describe('catalog routes with per-model configuration', () => {
   it('overrides one catalog model field and defaults the rest from the catalog', async () => {
     const server = await mockServer([])
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     const ctx = await harness({
       providers: {
-        deepseek: {
+        akashx: {
           baseURL: server.url,
           models: [{ id: catalogModel.id, contextWindow: 4096 }],
         },
@@ -459,10 +459,10 @@ describe('catalog routes with per-model configuration', () => {
   it('materializes a request default only from a configured output cap', async () => {
     const server = await mockServer([])
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     const ctx = await harness({
       providers: {
-        deepseek: {
+        akashx: {
           baseURL: server.url,
           models: [{ id: catalogModel.id, maxTokens: 4096 }],
         },
@@ -478,15 +478,15 @@ describe('catalog routes with per-model configuration', () => {
     const server = await mockServer([{ events: textEvents }])
     const ctx = await harness({
       providers: {
-        deepseek: {
+        akashx: {
           apiKeyEnv: KEY_ENV,
           baseURL: `${server.url}/v1`,
-          models: [{ id: 'deepseek-preview', contextWindow: 200_000, maxTokens: 8192 }],
+          models: [{ id: 'akashx-preview', contextWindow: 200_000, maxTokens: 8192 }],
         },
       },
     })
 
-    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-preview', messages: [] })
+    const result = await assemble(ctx, { provider: 'deepseek', model: 'akashx-preview', messages: [] })
     expect(result.finish).toEqual({ kind: 'stop' })
     // The catalog route keeps its catalog protocol, so the new model reaches
     // the same endpoint shape the shipped models use.
@@ -497,7 +497,7 @@ describe('catalog routes with per-model configuration', () => {
     const server = await mockServer([])
     const ctx = await harness({
       providers: {
-        deepseek: { baseURL: server.url, models: [{ id: 'deepseek-preview', contextWindow: 1, maxTokens: 1 }] },
+        akashx: { baseURL: server.url, models: [{ id: 'akashx-preview', contextWindow: 1, maxTokens: 1 }] },
       },
     })
 
@@ -525,11 +525,11 @@ describe('catalog routes with per-model configuration', () => {
 
   it('delegates both stream methods back to the reused catalog provider', async () => {
     const server = await mockServer([{ events: textEvents }, { events: textEvents }])
-    const resolved = resolveProfiles({ deepseek: { baseURL: `${server.url}/v1` } })
+    const resolved = resolveProfiles({ akashx: { baseURL: `${server.url}/v1` } })
     const built = resolved.get('deepseek')?.piProvider
-    if (built === undefined) throw new Error('the deepseek route built no provider')
+    if (built === undefined) throw new Error('the akashx route built no provider')
     const [model] = built.getModels()
-    if (model === undefined) throw new Error('the deepseek route resolved no models')
+    if (model === undefined) throw new Error('the akashx route resolved no models')
     const context = { messages: [{ role: 'user' as const, content: 'hi', timestamp: 0 }] }
 
     // `stream` is interface-required and unused by the harness adapter, which
@@ -659,11 +659,11 @@ describe('per-model reasoning efforts', () => {
 
   it('narrows a catalog model’s levels in place', () => {
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     expect(getSupportedThinkingLevels(catalogModel as Model<Api>)).toEqual(['off', 'low', 'high', 'max'])
 
     const model = modelOf({
-      deepseek: { models: [{ id: catalogModel.id, reasoningEfforts: { off: null, high: 'high' } }] },
+      akashx: { models: [{ id: catalogModel.id, reasoningEfforts: { off: null, high: 'high' } }] },
     }, 'deepseek')
 
     expect(getSupportedThinkingLevels(model)).toEqual(['off', 'high'])
@@ -674,10 +674,10 @@ describe('per-model reasoning efforts', () => {
 
   it('strips reasoning from a catalog model with false', () => {
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     expect(catalogModel.reasoning).toBe(true)
 
-    const model = modelOf({ deepseek: { models: [{ id: catalogModel.id, reasoningEfforts: false }] } }, 'deepseek')
+    const model = modelOf({ akashx: { models: [{ id: catalogModel.id, reasoningEfforts: false }] } }, 'deepseek')
 
     expect(model.reasoning).toBe(false)
     expect(getSupportedThinkingLevels(model)).toEqual(['off'])
@@ -685,9 +685,9 @@ describe('per-model reasoning efforts', () => {
 
   it('inherits the catalog capability when the field is absent', () => {
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
 
-    const model = modelOf({ deepseek: { models: [{ id: catalogModel.id }] } }, 'deepseek')
+    const model = modelOf({ akashx: { models: [{ id: catalogModel.id }] } }, 'deepseek')
 
     expect(model.reasoning).toBe(catalogModel.reasoning)
     expect(model.thinkingLevelMap).toEqual(catalogModel.thinkingLevelMap)
@@ -709,20 +709,20 @@ describe('per-model reasoning efforts', () => {
 })
 
 describe('modelOverrides', () => {
-  const deepseekModel = (): Model<Api> => {
+  const akashxModel = (): Model<Api> => {
     const [model] = getBuiltinModels('deepseek')
-    if (model === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (model === undefined) throw new Error('the installed catalog ships no akashx model')
     return model
   }
 
   it('reshapes one catalog model while the rest of the catalog keeps serving', () => {
     const catalogSize = getBuiltinModels('deepseek').length
-    const target = deepseekModel()
+    const target = akashxModel()
     const resolved = resolveProfiles({
-      deepseek: {
+      akashx: {
         modelOverrides: {
           [target.id]: {
-            name: 'DeepSeek (proxied)',
+            name: 'AkashX (proxied)',
             maxTokens: 4096,
             reasoningEfforts: { off: null, high: 'high' },
           },
@@ -736,7 +736,7 @@ describe('modelOverrides', () => {
     // The whole catalog still serves — that is the difference from `models`,
     // which replaces it.
     expect(models).toHaveLength(catalogSize)
-    expect(reshaped.name).toBe('DeepSeek (proxied)')
+    expect(reshaped.name).toBe('AkashX (proxied)')
     expect(getSupportedThinkingLevels(reshaped)).toEqual(['off', 'high'])
     // An override's cap is explicit configuration, so it becomes the request
     // default exactly as a models entry's would.
@@ -748,7 +748,7 @@ describe('modelOverrides', () => {
 
   it('refuses every override that lands nowhere instead of skipping it', () => {
     expect(() => resolveProfiles({
-      deepseek: { modelOverrides: { 'no-such-model': { name: 'ghost' } } },
+      akashx: { modelOverrides: { 'no-such-model': { name: 'ghost' } } },
     })).toThrow(/which the installed catalog does not describe/)
     expect(() => resolveProfiles({
       'acme-gateway': {
@@ -758,15 +758,15 @@ describe('modelOverrides', () => {
         modelOverrides: { m: { name: 'renamed' } },
       },
     })).toThrow(/a declared route spells every model out/)
-    const declaredOnly = deepseekModel()
+    const declaredOnly = akashxModel()
     expect(() => resolveProfiles({
-      deepseek: {
+      akashx: {
         models: [{ id: declaredOnly.id }],
         modelOverrides: { [declaredOnly.id]: { name: 'renamed' } },
       },
     })).toThrow(/models already replaces the served catalog/)
     expect(() => resolveProfiles({
-      deepseek: { modelOverrides: { '': { name: 'nameless' } } },
+      akashx: { modelOverrides: { '': { name: 'nameless' } } },
     })).toThrow(/empty model id/)
     // The dict key is the id; a value smuggling its own would quietly rename
     // the model it meant to customize. The schema passes unknown keys
@@ -774,7 +774,7 @@ describe('modelOverrides', () => {
     // indirection mirrors that boundary by sidestepping the literal check.
     const smuggled = { name: 'x', id: 'other' }
     expect(() => resolveProfiles({
-      deepseek: { modelOverrides: { [deepseekModel().id]: smuggled } },
+      akashx: { modelOverrides: { [akashxModel().id]: smuggled } },
     })).toThrow(/sets "id", which is the dict key/)
   })
 })
@@ -805,12 +805,12 @@ describe('compat switches', () => {
 
   it('merges the switches over the catalog entry’s own compat instead of replacing it', () => {
     const [catalogModel] = getBuiltinModels('deepseek')
-    if (catalogModel === undefined) throw new Error('the installed catalog ships no deepseek model')
+    if (catalogModel === undefined) throw new Error('the installed catalog ships no akashx model')
     const inherited = catalogModel.compat as OpenAICompletionsCompat
     expect(inherited.requiresReasoningContentOnAssistantMessages).toBe(true)
 
     const models = modelsOf({
-      deepseek: { models: [{ id: catalogModel.id, compat: { thinkingFormat: 'openai' } }] },
+      akashx: { models: [{ id: catalogModel.id, compat: { thinkingFormat: 'openai' } }] },
     }, 'deepseek')
 
     // The one switched field changes; the catalog's other quirks survive,
@@ -1055,10 +1055,10 @@ describe('compat switches', () => {
 
   it('refuses a valueless compat key on a model entry too', () => {
     expect(() => resolveProfiles({
-      deepseek: {
-        modelOverrides: { 'deepseek-v4-flash': { compat: { requiresReasoningContentOnAssistantMessages: null } } as never },
+      akashx: {
+        modelOverrides: { 'akashx-v4-flash': { compat: { requiresReasoningContentOnAssistantMessages: null } } as never },
       },
-    })).toThrow(/model "deepseek-v4-flash" sets compat "requiresReasoningContentOnAssistantMessages" with no value/)
+    })).toThrow(/model "akashx-v4-flash" sets compat "requiresReasoningContentOnAssistantMessages" with no value/)
   })
 
   it('serves the Responses compat type on every protocol pi-ai gives it to', () => {
@@ -1106,7 +1106,7 @@ describe('compat switches', () => {
 describe('resolution snapshots', () => {
   it('finishes an in-flight request under the configuration it started with', async () => {
     const server = await mockServer([{ events: textEvents }])
-    let current = resolveProfiles({ deepseek: { baseURL: `${server.url}/v1` } })
+    let current = resolveProfiles({ akashx: { baseURL: `${server.url}/v1` } })
     let release: () => void = () => {}
     const held = new Promise<void>((resolve) => { release = resolve })
     const adapter = new PiAiAdapter({
@@ -1121,7 +1121,7 @@ describe('resolution snapshots', () => {
     const inFlight = (async () => {
       for await (const chunk of adapter.stream({
         provider: 'deepseek',
-        model: 'deepseek-v4-flash',
+        model: 'akashx-v4-flash',
         messages: [],
       })) chunks.push(chunk)
     })()
@@ -1142,7 +1142,7 @@ describe('resolution snapshots', () => {
   it('serves the next request from the new configuration', async () => {
     const first = await mockServer([{ events: textEvents }])
     const second = await mockServer([{ events: textEvents }])
-    let current = resolveProfiles({ deepseek: { baseURL: `${first.url}/v1` } })
+    let current = resolveProfiles({ akashx: { baseURL: `${first.url}/v1` } })
     const adapter = new PiAiAdapter({
       profiles: () => current,
       resolveApiKey: () => Promise.resolve('k'),
@@ -1150,12 +1150,12 @@ describe('resolution snapshots', () => {
     })
     const drain = async (): Promise<void> => {
       for await (const _chunk of adapter.stream({
-        provider: 'deepseek', model: 'deepseek-v4-flash', messages: [],
+        provider: 'deepseek', model: 'akashx-v4-flash', messages: [],
       })) { /* drain */ }
     }
 
     await drain()
-    current = resolveProfiles({ deepseek: { baseURL: `${second.url}/v1` } })
+    current = resolveProfiles({ akashx: { baseURL: `${second.url}/v1` } })
     await drain()
 
     expect(first.paths).toHaveLength(1)
@@ -1168,14 +1168,14 @@ describe('configurable-provider directory', () => {
     const dir = await home()
     const ctx = await bootWithSettings(dir, {})
     ctx.llm.registerConfigurableProviders([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'akashx-official', displayName: 'AkashX', settingsNs: 'llm-akx', settingsPath: [] },
     ])
     const before = ctx.llm.listConfigurableProviders().length
     expect(before).toBeGreaterThan(30)
 
     await ctx.settings.update('llm-pi-ai', {
       providers: {
-        'deepseek-official': {
+        'akashx-official': {
           api: 'openai-completions',
           baseURL: 'https://acme.test/v1',
           models: [{ id: 'm', contextWindow: 1, maxTokens: 1 }],
@@ -1186,8 +1186,8 @@ describe('configurable-provider directory', () => {
     // The refused swap costs a diagnostic, not the directory: every entry the
     // page needs is still declared.
     expect(ctx.llm.listConfigurableProviders()).toHaveLength(before)
-    expect(ctx.llm.listConfigurableProviders().find(entry => entry.provider === 'deepseek-official')?.settingsNs)
-      .toBe('llm-deepseek')
+    expect(ctx.llm.listConfigurableProviders().find(entry => entry.provider === 'akashx-official')?.settingsNs)
+      .toBe('llm-akx')
   })
 
   it('replaces its entries atomically as declared routes come and go', async () => {

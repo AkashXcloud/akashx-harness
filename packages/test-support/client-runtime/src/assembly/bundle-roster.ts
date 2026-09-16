@@ -1,9 +1,9 @@
 /**
- * The browser roster of a `dsh --profile`, read from its bundle patch files
- * the way the launcher composes them: each bundle's `dsh.bundle.patch` list is
+ * The browser roster of a `akx --profile`, read from its bundle patch files
+ * the way the launcher composes them: each bundle's `akx.bundle.patch` list is
  * parsed with the include plugin's YAML dialect (`entryListSchema`) and
  * composed by its `applyEntryPatches`; every enabled row whose package
- * declares `dsh.client.platform === 'web'` becomes a roster row carrying that
+ * declares `akx.client.platform === 'web'` becomes a roster row carrying that
  * declaration's `inject` and `immediately`; rows nested in Loader groups count
  * like the Loader counts them, a disabled group disabling every row beneath
  * it. A patch that matches nothing
@@ -11,24 +11,24 @@
  * bundle change is visible at the next import. Node only — the
  * whole-client tier runs under vitest, and this is the one place it reads the
  * repository.
- * @module @deepseek-ai/dsh-client-test-runtime/src/assembly/bundle-roster
+ * @module @akashx/akx-client-test-runtime/src/assembly/bundle-roster
  */
 import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { EntryOptions } from '@deepseek-ai/cordis-plugin-loader'
-import { applyEntryPatches, entryListSchema, type PatchOptions } from '@deepseek-ai/cordis-plugin-include'
-import { exactPackageSpecifier, parseDshClient } from '@deepseek-ai/dsh-client-modules/client'
+import type { EntryOptions } from '@akashx/cordis-plugin-loader'
+import { applyEntryPatches, entryListSchema, type PatchOptions } from '@akashx/cordis-plugin-include'
+import { exactPackageSpecifier, parseAkxClient } from '@akashx/akx-client-modules/client'
 import * as yaml from 'js-yaml'
 import { ClientRoster, type ClientRosterRow } from './roster.ts'
 
-/** The `web` profile's bundle layers, in the order `dsh --profile web` applies them (app-boot `PROFILE_TEMPLATES.web`). */
-export const WEB_PROFILE_BUNDLES: readonly string[] = ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app']
+/** The `web` profile's bundle layers, in the order `akx --profile web` applies them (app-boot `PROFILE_TEMPLATES.web`). */
+export const WEB_PROFILE_BUNDLES: readonly string[] = ['@akashx/akx-base', '@akashx/akx-web-app']
 
 interface PackageManifest {
   name?: unknown
-  dsh?: { bundle?: { patch?: unknown }; client?: unknown }
+  akx?: { bundle?: { patch?: unknown }; client?: unknown }
 }
 
 /** One bundle: where its package.json is (plugin names resolve from there) and its parsed patch list. */
@@ -65,7 +65,7 @@ export function bundleRoster(bundles: readonly string[], anchor: string = fileUR
     if (manifest.name !== name) {
       throw new Error(`client-test-runtime: ${manifestPath} names ${JSON.stringify(manifest.name)}, expected ${name}`)
     }
-    const declaration = parseDshClient(name, manifest.dsh?.client)
+    const declaration = parseAkxClient(name, manifest.akx?.client)
     if (declaration === undefined || declaration.platform !== 'web') continue
     if (disabled !== undefined && disabled !== null && typeof disabled !== 'boolean') {
       throw new Error(`client-test-runtime: browser row ${name} has a \`disabled\` value this reader cannot evaluate (a !!js expression)`)
@@ -78,8 +78,8 @@ export function bundleRoster(bundles: readonly string[], anchor: string = fileUR
 function readLayer(bundle: string, anchor: string): BundleLayer {
   const manifestPath = locateManifest([anchor], bundle)
   if (manifestPath === undefined) throw new Error(`client-test-runtime: cannot resolve bundle ${bundle} from ${anchor}`)
-  const patch = readManifest(manifestPath).dsh?.bundle?.patch
-  if (typeof patch !== 'string') throw new Error(`client-test-runtime: bundle ${bundle} declares no dsh.bundle.patch in ${manifestPath}`)
+  const patch = readManifest(manifestPath).akx?.bundle?.patch
+  if (typeof patch !== 'string') throw new Error(`client-test-runtime: bundle ${bundle} declares no akx.bundle.patch in ${manifestPath}`)
   const file = join(dirname(manifestPath), patch)
   const parsed: unknown = yaml.load(readFileSync(file, 'utf8'), { schema: entryListSchema })
   if (!Array.isArray(parsed)) throw new Error(`client-test-runtime: ${file} must be a top-level list of patches`)

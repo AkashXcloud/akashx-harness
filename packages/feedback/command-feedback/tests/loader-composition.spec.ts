@@ -3,16 +3,16 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentStatus } from '@deepseek-ai/dsh-agent'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import * as CommandFeedback from '@deepseek-ai/dsh-command-feedback'
-import { getOrCreateAnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
-import { unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import Include from '@akashx/cordis-plugin-include'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent, AgentStatus } from '@akashx/akx-agent'
+import CommandRuntime from '@akashx/akx-commands'
+import SessionStore, { SessionId } from '@akashx/akx-session'
+import * as CommandFeedback from '@akashx/akx-command-feedback'
+import { getOrCreateAnonymousUserId } from '@akashx/akx-anonymous-user-id'
+import { unsupportedInbox } from '@akashx/akx-agent-loop-testkit'
 
 let root: string | undefined
 let context: Context | undefined
@@ -52,14 +52,14 @@ function agent(ctx: Context): Agent {
 
 describe('/feedback real Loader composition through cordis.yml', () => {
   it('boots cordis.yml and records feedback without model-visible output', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-command-feedback-loader-'))
-    vi.stubEnv('DSH_HOME', root)
+    root = await mkdtemp(join(tmpdir(), 'akx-command-feedback-loader-'))
+    vi.stubEnv('AKX_HOME', root)
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-agent'",
-      "- name: '@deepseek-ai/dsh-session'",
-      "- name: '@deepseek-ai/dsh-commands'",
-      "- name: '@deepseek-ai/dsh-command-feedback'",
+      "- name: '@akashx/akx-agent'",
+      "- name: '@akashx/akx-session'",
+      "- name: '@akashx/akx-commands'",
+      "- name: '@akashx/akx-command-feedback'",
       '',
     ].join('\n'))
 
@@ -68,10 +68,10 @@ describe('/feedback real Loader composition through cordis.yml', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-agent', AgentRegistry],
-      ['@deepseek-ai/dsh-session', SessionStore],
-      ['@deepseek-ai/dsh-commands', CommandRuntime],
-      ['@deepseek-ai/dsh-command-feedback', CommandFeedback],
+      ['@akashx/akx-agent', AgentRegistry],
+      ['@akashx/akx-session', SessionStore],
+      ['@akashx/akx-commands', CommandRuntime],
+      ['@akashx/akx-command-feedback', CommandFeedback],
     ])
     context.loader.internal = {
       version: 'v2',
@@ -90,7 +90,7 @@ describe('/feedback real Loader composition through cordis.yml', () => {
     expect(context.commands.list(owner).map(command => command.name)).toContain('feedback')
 
     const accepted = await context.commands.execute(owner, '/feedback the diff view is unreadable', [], signal)
-    const userId = getOrCreateAnonymousUserId({ env: { DSH_HOME: root } })
+    const userId = getOrCreateAnonymousUserId({ env: { AKX_HOME: root } })
     expect(accepted?.result).toEqual({
       kind: 'success',
       text: `Feedback recorded for session feedback-loader-agent\nAnonymous user: ${userId}.`,

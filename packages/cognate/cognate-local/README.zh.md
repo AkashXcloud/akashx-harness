@@ -3,13 +3,13 @@ description: "面向 Cognate 开发和测试的离线 Markdown Provider。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cognate-local
+# @akashx/akx-cognate-local
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-cognate-local` 在不增加第二个 Agent、工具注册表或编排循环的前提下保留离线 Cognate 知识检索。它加载按标题划分的 Markdown 段落，并通过现有 `run_sql` 路径回答单条本地 `ASK` 语句，返回有界行和引用。已发布的 `cognate` preset 不挂载此 Provider；生产检索仍使用 AkashXDB。
+`akx-cognate-local` 在不增加第二个 Agent、工具注册表或编排循环的前提下保留离线 Cognate 知识检索。它加载按标题划分的 Markdown 段落，并通过现有 `run_sql` 路径回答单条本地 `ASK` 语句，返回有界行和引用。已发布的 `cognate` preset 不挂载此 Provider；生产检索仍使用 AkashXDB。
 
 ## 目录
 

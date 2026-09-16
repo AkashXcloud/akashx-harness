@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-e2b",
-  "description": "Shared E2B sandbox lifecycle for DeepSeek Harness provider adapters",
+  "name": "@akashx/akx-e2b",
+  "description": "Shared E2B sandbox lifecycle for AkashX Harness provider adapters",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/e2b/e2b"
   },
   "type": "module",
@@ -27,30 +27,30 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-http-proxy": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-http-proxy": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
     "e2b": "2.29.1"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:^",
-    "@deepseek-ai/dsh-app-boot": "workspace:^",
-    "@deepseek-ai/dsh-bash-local": "workspace:^",
-    "@deepseek-ai/dsh-fs-e2b": "workspace:^",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:^",
-    "@deepseek-ai/dsh-lsp": "workspace:^",
-    "@deepseek-ai/dsh-lsp-stdio": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-e2b": "workspace:^",
-    "@deepseek-ai/dsh-terminal": "workspace:^",
-    "@deepseek-ai/dsh-terminal-bash": "workspace:^",
-    "@deepseek-ai/dsh-http-proxy": "workspace:^",
-    "@deepseek-ai/dsh-launch-environment": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-loop-testkit": "workspace:^",
+    "@akashx/akx-app-boot": "workspace:^",
+    "@akashx/akx-bash-local": "workspace:^",
+    "@akashx/akx-fs-e2b": "workspace:^",
+    "@akashx/akx-loader-smoke": "workspace:^",
+    "@akashx/akx-lsp": "workspace:^",
+    "@akashx/akx-lsp-stdio": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-subprocess-e2b": "workspace:^",
+    "@akashx/akx-terminal": "workspace:^",
+    "@akashx/akx-terminal-bash": "workspace:^",
+    "@akashx/akx-http-proxy": "workspace:^",
+    "@akashx/akx-launch-environment": "workspace:^"
   }
 }

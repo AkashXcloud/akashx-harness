@@ -5,9 +5,9 @@ import {
   Session,
   SessionId,
   SessionLogOffset,
-} from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import type { SessionFormatArtifact, SessionFormatHeader } from '@deepseek-ai/dsh-session-format'
+} from '@akashx/akx-session'
+import type { SessionEvent, SessionHeader } from '@akashx/akx-session'
+import type { SessionFormatArtifact, SessionFormatHeader } from '@akashx/akx-session-format'
 
 /**
  * Validate current logical metadata through the installed Session package.

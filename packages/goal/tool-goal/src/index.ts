@@ -1,16 +1,16 @@
 /**
  * Model-facing `get_goal`, `create_goal`, and `update_goal` tools over the
  * persisted same-session goal domain.
- * @module @deepseek-ai/dsh-tool-goal
+ * @module @akashx/akx-tool-goal
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { GoalId } from '@deepseek-ai/dsh-goal'
-import type { GoalRef, GoalView } from '@deepseek-ai/dsh-goal'
-import { boundContextSummary, createUserMessage, HarnessError } from '@deepseek-ai/dsh-llm'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { GoalId } from '@akashx/akx-goal'
+import type { GoalRef, GoalView } from '@akashx/akx-goal'
+import { boundContextSummary, createUserMessage, HarnessError } from '@akashx/akx-llm'
+import { defineTool } from '@akashx/akx-tools'
+import type { GenericCallView } from '@akashx/akx-tools'
 import {
   completionAuthority,
   goalToolExecution,

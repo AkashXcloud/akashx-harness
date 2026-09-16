@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { LlmAdapter, LlmError } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, LlmConfigurableProvider, StreamChunk } from '@deepseek-ai/dsh-llm'
+import { Context } from '@akashx/cordis'
+import LlmRuntime, { LlmAdapter, LlmError } from '@akashx/akx-llm'
+import type { GenerateOptions, LlmConfigurableProvider, StreamChunk } from '@akashx/akx-llm'
 
 class NoopAdapter extends LlmAdapter {
 
@@ -77,7 +77,7 @@ describe('llm/adapters-updated', () => {
   })
 
   it('replaces a route set in one event, never publishing an empty registry between the two', async () => {
-    // The retry-policy swap in llm-deepseek: disposing and re-registering
+    // The retry-policy swap in llm-akx: disposing and re-registering
     // would let an observer see the provider disappear and come back.
     const ctx = await setup()
     const observed: string[][] = []
@@ -107,18 +107,18 @@ describe('configurable-provider directory', () => {
     const events = vi.fn()
     ctx.on('llm/adapters-updated', events)
     ctx.llm.registerConfigurableProviders([
-      entry({ provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] }),
+      entry({ provider: 'akashx-official', displayName: 'AkashX', settingsNs: 'llm-akx', settingsPath: [] }),
       entry(),
     ])
     expect(events).toHaveBeenCalledTimes(1)
     const listed = ctx.llm.listConfigurableProviders()
     expect(listed).toEqual([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'akashx-official', displayName: 'AkashX', settingsNs: 'llm-akx', settingsPath: [] },
       { provider: 'openai', displayName: 'OpenAI', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'] },
     ])
     listed[0]!.displayName = 'mutated'
     ;(listed[1]!.settingsPath as string[]).push('mutated')
-    expect(ctx.llm.listConfigurableProviders()[0]!.displayName).toBe('DeepSeek')
+    expect(ctx.llm.listConfigurableProviders()[0]!.displayName).toBe('AkashX')
     expect(ctx.llm.listConfigurableProviders()[1]!.settingsPath).toEqual(['providers', 'openai'])
   })
 

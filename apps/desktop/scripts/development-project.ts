@@ -85,9 +85,9 @@ function mirrorDependencyLinks(sourceRoot: string, destinationRoot: string): voi
  */
 export function prepareDevelopmentProject(options: DevelopmentProjectOptions): string {
   const cliManifest = readManifest(join(options.cliDir, 'package.json'))
-  if (cliManifest.name !== '@deepseek-ai/dsh' || cliManifest.version !== options.release.version) {
+  if (cliManifest.name !== '@akashx/akx' || cliManifest.version !== options.release.version) {
     throw new Error(
-      `desktop development: apps/cli must be @deepseek-ai/dsh@${options.release.version}, found `
+      `desktop development: apps/cli must be @akashx/akx@${options.release.version}, found `
       + `${String(cliManifest.name)}@${String(cliManifest.version)}`,
     )
   }
@@ -95,9 +95,9 @@ export function prepareDevelopmentProject(options: DevelopmentProjectOptions): s
     throw new Error('desktop development: workspace dependency links are missing; run pnpm install')
   }
   const hostManifest = readManifest(join(options.hostDir, 'package.json'))
-  if (hostManifest.name !== '@deepseek-ai/dsh-desktop-host' || hostManifest.version !== options.release.version) {
+  if (hostManifest.name !== '@akashx/akx-desktop-host' || hostManifest.version !== options.release.version) {
     throw new Error(
-      `desktop development: apps/desktop-host must be @deepseek-ai/dsh-desktop-host@${options.release.version}, found `
+      `desktop development: apps/desktop-host must be @akashx/akx-desktop-host@${options.release.version}, found `
       + `${String(hostManifest.name)}@${String(hostManifest.version)}`,
     )
   }
@@ -110,10 +110,10 @@ export function prepareDevelopmentProject(options: DevelopmentProjectOptions): s
   const destinationModules = join(options.projectDir, 'node_modules')
   mkdirSync(destinationModules, { recursive: true })
   mirrorDependencyLinks(options.dependencyDir, destinationModules)
-  const dshLink = join(destinationModules, '@deepseek-ai', 'dsh')
-  removeOwnedPath(dshLink)
-  linkDirectory(options.cliDir, dshLink)
-  const hostLink = join(destinationModules, '@deepseek-ai', 'dsh-desktop-host')
+  const akxLink = join(destinationModules, '@akashx', 'akx')
+  removeOwnedPath(akxLink)
+  linkDirectory(options.cliDir, akxLink)
+  const hostLink = join(destinationModules, '@akashx', 'akx-desktop-host')
   removeOwnedPath(hostLink)
   linkDirectory(options.hostDir, hostLink)
   return options.projectDir

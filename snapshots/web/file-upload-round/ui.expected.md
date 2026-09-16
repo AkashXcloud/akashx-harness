@@ -43,8 +43,8 @@
 - button "Add files or run commands":
   - img
 - 'button "Access mode, current: Workspace Write"': Workspace Write
-- button "Select model, current DeepSeek-V4-Flash-Vision-Exp, reasoning effort high":
-  - text: DeepSeek-V4-Flash-Vision-Exp high
+- button "Select model, current AkashX-V4-Flash-Vision-Exp, reasoning effort high":
+  - text: AkashX-V4-Flash-Vision-Exp high
   - img
 - button "1% of context used"
 - button "Send message" [disabled]

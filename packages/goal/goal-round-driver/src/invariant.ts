@@ -1,13 +1,13 @@
-/** Package-owned goal-round prompt invariants. @module @deepseek-ai/dsh-goal-round-driver/invariant */
+/** Package-owned goal-round prompt invariants. @module @akashx/akx-goal-round-driver/invariant */
 
 import { isDeepStrictEqual } from 'node:util'
-import type { Context } from '@deepseek-ai/cordis'
-import { foldGoal, type FoldedGoal, type GoalMessageSource, type GoalView } from '@deepseek-ai/dsh-goal'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
+import type { Context } from '@akashx/cordis'
+import { foldGoal, type FoldedGoal, type GoalMessageSource, type GoalView } from '@akashx/akx-goal'
+import type { InvariantFailure, InvariantInstaller } from '@akashx/akx-invariants'
+import type { Session, SessionEvent } from '@akashx/akx-session'
 import { renderGoalRoundPrompt } from './prompt.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-goal-round-driver'
+const PACKAGE_NAME = '@akashx/akx-goal-round-driver'
 
 /** Cordis companion plugin name. */
 export const name = 'goal-round-driver-invariant'

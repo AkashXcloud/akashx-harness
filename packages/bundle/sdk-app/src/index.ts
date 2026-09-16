@@ -2,13 +2,13 @@
  * The SDK profile's command-line and stdin-lifetime provider. A successful
  * parse publishes {@link SDK_APP_STARTUP_SERVICE}; the JSON-RPC server waits
  * for that service, so help starts no transport.
- * @module @deepseek-ai/dsh-sdk-app
+ * @module @akashx/akx-sdk-app
  */
 
 import { Command } from 'commander'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { exitOnStdinEnd, parseCmdline } from '@deepseek-ai/dsh-cmdline'
+import type { Context } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import { exitOnStdinEnd, parseCmdline } from '@akashx/akx-cmdline'
 
 /** Stable Cordis plugin name. */
 export const name = 'sdk-app-startup'
@@ -36,10 +36,10 @@ export const Config: z<Config> = z.object({
  * @returns a fresh program for one invocation.
  */
 function sdkCommand(profile: string): Command {
-  const commandName = process.env.DSH_CLI_NAME ?? 'dsh'
+  const commandName = process.env.AKX_CLI_NAME ?? 'akx'
   return new Command()
     .name(`${commandName} --profile ${profile}`)
-    .description('Serve DeepSeek Harness SDK clients over stdio JSON-RPC.')
+    .description('Serve AkashX Harness SDK clients over stdio JSON-RPC.')
     .helpOption('-h, --help', 'show this help')
     .addHelpText('after', `
 Example:

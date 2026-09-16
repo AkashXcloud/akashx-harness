@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write docs/postmortem/0003-web-agent-gui-feedback-loop.md
-0003-web-agent-gui-feedback-loop.md: 3b836764dcf47758a6a0b472d92484f39b9ff510
-0003-web-agent-gui-feedback-loop.zh.md: 402fe05341f9ab568329c30e9db0ebde97a5753b
+0003-web-agent-gui-feedback-loop.md: 56ceeed80bbd71b638854e2d15c3d825d1dae4c3
+0003-web-agent-gui-feedback-loop.zh.md: c7fc3f96b4e51805e0ef1f2f196aceff8f35464b

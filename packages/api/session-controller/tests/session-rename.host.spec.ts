@@ -8,14 +8,14 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentHandle, CreateAgentOptions } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionTitleService from '@deepseek-ai/dsh-session-title'
-import type { Session, SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@akashx/cordis'
+import SessionStore from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent, AgentHandle, CreateAgentOptions } from '@akashx/akx-agent'
+import { createUserMessage } from '@akashx/akx-llm'
+import SessionTitleService from '@akashx/akx-session-title'
+import type { Session, SessionId } from '@akashx/akx-session'
 import { createSessionTestRemote } from './test-remote.ts'
 
 const sid = (id: string): SessionId => id as SessionId

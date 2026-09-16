@@ -3,26 +3,26 @@ import { mkdir, mkdtemp, readFile, stat, symlink, writeFile } from 'node:fs/prom
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { boot, healProfilesModuleFallback, loadOverlayPatches, loadProfile } from '@deepseek-ai/dsh-app-boot'
-import { provideCmdline } from '@deepseek-ai/dsh-cmdline'
-import { SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { PatchOptions } from '@deepseek-ai/cordis-plugin-include'
+import { Context } from '@akashx/cordis'
+import { boot, healProfilesModuleFallback, loadOverlayPatches, loadProfile } from '@akashx/akx-app-boot'
+import { provideCmdline } from '@akashx/akx-cmdline'
+import { SessionId, SessionLogOffset } from '@akashx/akx-session'
+import type { Agent } from '@akashx/akx-agent'
+import type { PatchOptions } from '@akashx/cordis-plugin-include'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
-import { SUBAGENT_MODEL_SELECTION_SETTINGS_NAMESPACE } from '@deepseek-ai/dsh-tool-subagent/model-selection-settings'
-import { SETTINGS_NAMESPACE, SHIPPED_PRESET_ROOT } from '@deepseek-ai/dsh-agent-presets'
-import { applyChildComposition, childSessionMeta } from '@deepseek-ai/dsh-subagent'
-import { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-compaction-basic'
-import type {} from '@deepseek-ai/dsh-skill'
-import type {} from '@deepseek-ai/dsh-tools'
+import { SUBAGENT_MODEL_SELECTION_SETTINGS_NAMESPACE } from '@akashx/akx-tool-subagent/model-selection-settings'
+import { SETTINGS_NAMESPACE, SHIPPED_PRESET_ROOT } from '@akashx/akx-agent-presets'
+import { applyChildComposition, childSessionMeta } from '@akashx/akx-subagent'
+import { ToolCallId } from '@akashx/akx-llm'
+import type {} from '@akashx/akx-compaction-basic'
+import type {} from '@akashx/akx-skill'
+import type {} from '@akashx/akx-tools'
 // Type-only: resolves `ctx.get('sessionProjections')` and `ctx.get('tokenMeter')`.
-import type {} from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-token-meter'
+import type {} from '@akashx/akx-session-projection'
+import type {} from '@akashx/akx-token-meter'
 
 const REPO_ROOT = fileURLToPath(new URL('../../..', import.meta.url))
-/** The shipped Web surface: the dsh-base and dsh-web-app bundle patches over an empty preset root. */
+/** The shipped Web surface: the akx-base and akx-web-app bundle patches over an empty preset root. */
 const BASE_PATCH = join(REPO_ROOT, 'packages/bundle/base/cordis.patch.yml')
 const WEB_PATCH = join(REPO_ROOT, 'packages/bundle/web-app/cordis.patch.yml')
 const CODEX_PACKAGE_DIR = join(REPO_ROOT, 'packages/subagent/subagent-codex')
@@ -51,14 +51,14 @@ async function bootWeb(
 ): Promise<Context> {
   const storageRoot = join(dirname(settingsFile), 'storages')
   const overrides: PatchOptions[] = [
-    // The settings row defaults to `$DSH_HOME/settings.yaml`. Left alone it
+    // The settings row defaults to `$AKX_HOME/settings.yaml`. Left alone it
     // reads the developer's own document — and since the default preset is a
     // setting, a stored `agent-presets.default` would decide this file's
     // outcome. Point it at a temp file for the same reason the roster row
     // below pins `includeUserRoot` off.
     { id: 'settings', config: { path: settingsFile, watch: false } },
-    // storage-json's root is anchored to the real $DSH_HOME. Unpinned, this
-    // file writes the developer's own `~/.dsh/storages/` — and then reads it
+    // storage-json's root is anchored to the real $AKX_HOME. Unpinned, this
+    // file writes the developer's own `~/.akx/storages/` — and then reads it
     // back on the next run, so a stored document from any other build decides
     // this test's boot. Same reason the settings row above is pinned.
     { id: 'storage-json', config: { root: storageRoot } },
@@ -81,7 +81,6 @@ async function bootWeb(
     // A deployment-level skill on the host registry's GLOBAL layer — the same
     // registration shape a repository plugin's skill root uses. The layered
     // skills test below proves it reaches preset-composed agents.
-    { id: 'skill-badge', disabled: false },
     { id: 'modules', disabled: true },
     // The physical Connection row owns the disabled HTTP server. bootWeb
     // supplies only its in-process registries so Host services still prove
@@ -101,11 +100,11 @@ async function bootWeb(
     // supplies `directoryPicker` without one.
     { id: 'directory-picker', disabled: true },
     { insert: [
-      { id: 'directory-picker-browse', name: '@deepseek-ai/dsh-host-directory-picker-browse' },
-      { id: 'ui-directory-picker-browse', name: '@deepseek-ai/dsh-client-ui-directory-picker-browse' },
+      { id: 'directory-picker-browse', name: '@akashx/akx-host-directory-picker-browse' },
+      { id: 'ui-directory-picker-browse', name: '@akashx/akx-client-ui-directory-picker-browse' },
     ] },
     // Pin the roster away from the developer's machine: `includeUserRoot`
-    // false keeps `~/.dsh/.agent-presets` from changing a test's outcome.
+    // false keeps `~/.akx/.agent-presets` from changing a test's outcome.
     // `default` here is the COMPOSITION default — the base layer the settings
     // document overrides. No `roots` entry: the plugin bundles the shipped
     // presets itself and prepends their root.
@@ -120,7 +119,7 @@ async function bootWeb(
   await healProfilesModuleFallback({ installAnchor: INSTALL_ANCHOR, home })
   const profileDir = join(home, 'profiles', 'spec')
   await mkdir(profileDir, { recursive: true })
-  // Product Bundles are installed into the Profile, not the dsh app. Model
+  // Product Bundles are installed into the Profile, not the akx app. Model
   // pnpm's package link for only the selected products; their own production
   // dependencies resolve from the linked workspace packages, while shared
   // peers still resolve through the installation fallback above.
@@ -131,21 +130,21 @@ async function bootWeb(
     await symlink(packageDir, link, 'junction')
   }
   let bundlePatches: PatchOptions[] = [
-    ...loadOverlayPatches('dsh-test', BASE_PATCH),
-    ...loadOverlayPatches('dsh-test', WEB_PATCH),
+    ...loadOverlayPatches('akx-test', BASE_PATCH),
+    ...loadOverlayPatches('akx-test', WEB_PATCH),
   ]
   if (profileBundles !== undefined) {
     await writeFile(join(profileDir, 'package.json'), JSON.stringify({
       private: true,
       dependencies: Object.fromEntries(profileBundles.map(name => [name, 'workspace:*'])),
-      dsh: { profile: { bundles: profileBundles } },
+      akx: { profile: { bundles: profileBundles } },
     }, null, 2) + '\n')
-    const profile = loadProfile('dsh-test', 'spec', INSTALL_ANCHOR, home, { userLayer: false })
+    const profile = loadProfile('akx-test', 'spec', INSTALL_ANCHOR, home, { userLayer: false })
     bundlePatches = profile.layers.flatMap(layer => layer.patches)
   }
   const rootConfig = join(profileDir, 'cordis.yml')
   await writeFile(rootConfig, '[]\n')
-  return await boot('dsh-test', rootConfig, [...bundlePatches, ...overrides], (bootCtx) => {
+  return await boot('akx-test', rootConfig, [...bundlePatches, ...overrides], (bootCtx) => {
     bootCtx.provide('connection', {
       fetch: { register: () => () => {} },
       rpc: { intercept: () => () => {} },
@@ -181,7 +180,7 @@ function enablePresetTool(composition: string, id: string): string {
 
 let ctx: Context
 beforeAll(async () => {
-  const settingsFile = join(await mkdtemp(join(tmpdir(), 'dsh-web-presets-')), 'settings.yaml')
+  const settingsFile = join(await mkdtemp(join(tmpdir(), 'akx-web-presets-')), 'settings.yaml')
   await writeFile(settingsFile, '{}\n')
   ctx = await bootWeb(settingsFile)
 }, 120_000)
@@ -224,7 +223,7 @@ describe('the shipped Web composition', () => {
   it('supplies both shipped presets, and only those, from the system root', async () => {
     const listed = await ctx.agentPresets.list()
 
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', 'cordis', 'minimal', 'ptc', 'standard'])
+    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', '@akashx/cordis', 'minimal', 'ptc', 'standard'])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
     expect(ctx.agentPresets.defaultId).toBe('standard')
   })
@@ -286,7 +285,7 @@ describe('the shipped Web composition', () => {
     })
     await ctx.settings.update(SUBAGENT_MODEL_SELECTION_SETTINGS_NAMESPACE, {
       enabled: true,
-      allowedModels: [{ provider: 'deepseek-official', model: 'deepseek-v4-flash' }],
+      allowedModels: [{ provider: 'akashx-official', model: 'akashx-v4-flash' }],
     })
     const enabled = await ctx.agents.create({
       sessionId: SessionId('preset-model-selection-enabled'),
@@ -359,7 +358,7 @@ describe('the shipped Web composition', () => {
   it('composes the cordis agent with its own toolset', async () => {
     const handle = await ctx.agents.create({
       sessionId: SessionId('preset-cordis'),
-      setup: agentCtx => ctx.agentPresets.mount(agentCtx, 'cordis').then(() => undefined),
+      setup: agentCtx => ctx.agentPresets.mount(agentCtx, '@akashx/cordis').then(() => undefined),
     })
     try {
       const tools = toolNames(ctx, handle.agent)
@@ -433,16 +432,16 @@ describe('the shipped Web composition', () => {
     // The preset's skill root is derived from its own `baseUrl`, so the skill
     // travels with the directory wherever the preset is installed.
     const skill = join(
-      SHIPPED_PRESET_ROOT, 'cordis', 'skills', 'editing-cordis-compositions', 'SKILL.md',
+      SHIPPED_PRESET_ROOT, '@akashx/cordis', 'skills', 'editing-cordis-compositions', 'SKILL.md',
     )
 
     expect((await readFile(skill, 'utf8')).startsWith('---\nname: editing-cordis-compositions')).toBe(true)
   })
 
   it('merges the global skill layer into a preset agent\'s catalog, keeping local discovery preset-side', async () => {
-    const proj = await mkdtemp(join(tmpdir(), 'dsh-preset-skill-proj-'))
-    await mkdir(join(proj, '.dsh', 'skills', 'project-proof'), { recursive: true })
-    await writeFile(join(proj, '.dsh', 'skills', 'project-proof', 'SKILL.md'), [
+    const proj = await mkdtemp(join(tmpdir(), 'akx-preset-skill-proj-'))
+    await mkdir(join(proj, '.akx', 'skills', 'project-proof'), { recursive: true })
+    await writeFile(join(proj, '.akx', 'skills', 'project-proof', 'SKILL.md'), [
       '---',
       'name: project-proof',
       'description: Proves the preset layer discovers project skills beside global ones.',
@@ -453,7 +452,7 @@ describe('the shipped Web composition', () => {
     ].join('\n'))
 
     const handle = await ctx.agents.create({
-      // Unique per run: the composition persists into the ambient DSH home,
+      // Unique per run: the composition persists into the ambient AKX home,
       // and a fixed id would collide with a log an earlier run left there.
       sessionId: SessionId(`preset-skills-standard-${randomUUID()}`),
       setup: agentCtx => ctx.agentPresets.mount(agentCtx, 'standard').then(() => undefined),
@@ -461,24 +460,24 @@ describe('the shipped Web composition', () => {
     try {
       // The host (global) view carries the deployment-level provider alone:
       // local discovery moved behind the presets with `skill-filesystem`.
-      expect((await ctx.skills.list({ cwd: proj })).map(skill => skill.name)).toEqual(['dsh-badge'])
+      expect((await ctx.skills.list({ cwd: proj })).map(skill => skill.name)).toEqual(['akx-badge'])
 
       // The standard agent's view merges the global layer with its preset's
       // own local discovery over the session cwd.
       const scoped = (await ctx.skills.list({ cwd: proj, scope: handle.agent })).map(skill => skill.name)
-      expect(scoped).toContain('dsh-badge')
+      expect(scoped).toContain('akx-badge')
       expect(scoped).toContain('project-proof')
 
       // The preset's own loader tool resolves the global-layer skill.
       const loaded = await ctx.tools.execute({
         callId: ToolCallId('preset-skills-load'),
         name: 'skill',
-        arguments: { name: 'dsh-badge' },
+        arguments: { name: 'akx-badge' },
         signal: new AbortController().signal,
         agent: handle.agent,
       })
       expect(loaded.isError).toBe(false)
-      expect(JSON.stringify(loaded.content)).toContain('powered by dsh')
+      expect(JSON.stringify(loaded.content)).toContain('powered by akx')
     } finally {
       await handle.dispose()
     }
@@ -493,7 +492,7 @@ describe('the shipped Web composition', () => {
       // Layer visibility is the registry's; whether an agent can USE skills
       // stays the preset's choice — minimal mounts no `tool-skill`, so its
       // tool table has no loader even though the global layer is readable.
-      expect((await ctx.skills.list({ scope: handle.agent })).map(skill => skill.name)).toContain('dsh-badge')
+      expect((await ctx.skills.list({ scope: handle.agent })).map(skill => skill.name)).toContain('akx-badge')
       expect(toolNames(ctx, handle.agent)).toEqual(['bash'])
     } finally {
       await handle.dispose()
@@ -530,7 +529,7 @@ describe('product Bundle and user-preset intersection', () => {
   type PresetId = typeof presetIds[number]
 
   async function bootProducts(installed: readonly Product[]): Promise<Context> {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-product-presets-'))
+    const root = await mkdtemp(join(tmpdir(), 'akx-product-presets-'))
     const userRoot = join(root, 'presets')
     const settingsFile = join(root, 'settings.yaml')
     const standard = await readFile(join(SHIPPED_PRESET_ROOT, 'standard', 'agent.cordis.yml'), 'utf8')
@@ -552,8 +551,8 @@ describe('product Bundle and user-preset intersection', () => {
     )
     const packageName = (product: Product): string => (
       product === 'codex'
-        ? '@deepseek-ai/dsh-subagent-codex'
-        : '@deepseek-ai/dsh-subagent-claude-code'
+        ? '@akashx/akx-subagent-codex'
+        : '@akashx/akx-subagent-claude-code'
     )
     return await bootWeb(settingsFile, [
       {
@@ -566,8 +565,8 @@ describe('product Bundle and user-preset intersection', () => {
         },
       },
     ], installed.map(packageDir), [
-      '@deepseek-ai/dsh-base',
-      '@deepseek-ai/dsh-web-app',
+      '@akashx/akx-base',
+      '@akashx/akx-web-app',
       ...installed.map(packageName),
     ])
   }
@@ -768,22 +767,22 @@ describe('a launcher that configures no writable root', () => {
   // The claim this default exists for, asserted through the real shipped
   // bundles rather than a hand-built context: `apps/cli` patches in only the
   // system root, and a person's own presets are found anyway because the
-  // roster derives `<dshHome>/.agent-presets` itself. `$DSH_HOME` is pointed
+  // roster derives `<akxHome>/.agent-presets` itself. `$AKX_HOME` is pointed
   // at a temp home BEFORE boot — the derived root is resolved when the plugin
   // is constructed, and an unpinned run would read the developer's own.
   let derivedCtx: Context
   let previousHome: string | undefined
 
   beforeAll(async () => {
-    const home = await mkdtemp(join(tmpdir(), 'dsh-preset-derived-'))
-    previousHome = process.env.DSH_HOME
-    process.env.DSH_HOME = home
+    const home = await mkdtemp(join(tmpdir(), 'akx-preset-derived-'))
+    previousHome = process.env.AKX_HOME
+    process.env.AKX_HOME = home
     await mkdir(join(home, '.agent-presets', 'derived-mine'), { recursive: true })
     await writeFile(
       join(home, '.agent-presets', 'derived-mine', 'agent.cordis.yml'),
-      '- id: tool-todo\n  name: \'@deepseek-ai/dsh-tool-todo\'\n  config:\n    allowParallelInProgress: true\n',
+      '- id: tool-todo\n  name: \'@akashx/akx-tool-todo\'\n  config:\n    allowParallelInProgress: true\n',
     )
-    const settingsFile = join(await mkdtemp(join(tmpdir(), 'dsh-preset-derived-settings-')), 'settings.yaml')
+    const settingsFile = join(await mkdtemp(join(tmpdir(), 'akx-preset-derived-settings-')), 'settings.yaml')
     await writeFile(settingsFile, '{}\n')
     // No configured roots: the shipped one is the plugin's own, and the
     // writable one is the roster's own default rather than this patch's job.
@@ -794,8 +793,8 @@ describe('a launcher that configures no writable root', () => {
   }, 120_000)
 
   afterAll(async () => {
-    if (previousHome === undefined) delete process.env.DSH_HOME
-    else process.env.DSH_HOME = previousHome
+    if (previousHome === undefined) delete process.env.AKX_HOME
+    else process.env.AKX_HOME = previousHome
     await derivedCtx.fiber.dispose()
   })
 
@@ -825,8 +824,8 @@ describe('authoring a preset on the shipped composition', () => {
   let userRoot: string
 
   beforeAll(async () => {
-    userRoot = join(await mkdtemp(join(tmpdir(), 'dsh-preset-authoring-')), 'profiles')
-    const settingsFile = join(await mkdtemp(join(tmpdir(), 'dsh-preset-authoring-settings-')), 'settings.yaml')
+    userRoot = join(await mkdtemp(join(tmpdir(), 'akx-preset-authoring-')), 'profiles')
+    const settingsFile = join(await mkdtemp(join(tmpdir(), 'akx-preset-authoring-settings-')), 'settings.yaml')
     await writeFile(settingsFile, '{}\n')
     authorCtx = await bootWeb(settingsFile, [{
       id: 'agent-presets',
@@ -949,7 +948,7 @@ describe('a composition that configures its own preset roots', () => {
   let teamRoot: string
 
   beforeAll(async () => {
-    const home = await mkdtemp(join(tmpdir(), 'dsh-preset-roots-'))
+    const home = await mkdtemp(join(tmpdir(), 'akx-preset-roots-'))
     const settingsFile = join(home, 'settings.yaml')
     await writeFile(settingsFile, '{}\n')
     // A workspace-shared root beside the deployment: one preset of its own,
@@ -984,7 +983,7 @@ describe('a composition that configures its own preset roots', () => {
     ])
 
     const listed = await rootsCtx.agentPresets.list()
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', 'cordis', 'minimal', 'ptc', 'standard', 'team-spec'])
+    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate', '@akashx/cordis', 'minimal', 'ptc', 'standard', 'team-spec'])
     expect(listed.every(preset => preset.broken === undefined)).toBe(true)
     // The shipped root comes first: a configured directory claiming a shipped
     // id is shadowed, never the other way around.

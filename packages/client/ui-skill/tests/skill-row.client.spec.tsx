@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { RunningToolCall, ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import type { RunningToolCall, ToolResultNode } from '@akashx/akx-client-ui-chat/client'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
 import { SkillRow } from '../src/client/SkillRow.tsx'
 import { en } from '../src/client/locales.ts'
 
@@ -20,7 +20,7 @@ function settled(over: Partial<ToolResultNode> = {}): ToolResultNode {
     seq: 3,
     time: 3_000,
     callId: 'call-skill',
-    call: { name: 'skill', argsRaw: '{"name":"dsh-manage-issues"}' },
+    call: { name: 'skill', argsRaw: '{"name":"akx-manage-issues"}' },
     callTime: 2_000,
     content: [{ type: 'text', text: 'Follow the issue workflow.\nKeep project fields in sync.' }],
     isError: false,
@@ -29,7 +29,7 @@ function settled(over: Partial<ToolResultNode> = {}): ToolResultNode {
   }
 }
 
-function running(argsRaw = '{"name":"dsh-manage-issues"}'): RunningToolCall {
+function running(argsRaw = '{"name":"akx-manage-issues"}'): RunningToolCall {
   return {
     callId: 'call-skill', name: 'skill', argsRaw, turn: 1, step: 1, time: 2_000, subCalls: [],
   }
@@ -61,7 +61,7 @@ describe('SkillRow', () => {
     expect(row.getAttribute('aria-expanded')).toBe('true')
     const card = screen.getByLabelText('Instructions')
     expect(card.textContent).toBe('InstructionsFollow the issue workflow.\nKeep project fields in sync.')
-    expect(view.container.textContent).not.toContain('{"name":"dsh-manage-issues"}')
+    expect(view.container.textContent).not.toContain('{"name":"akx-manage-issues"}')
     fireEvent.click(screen.getByRole('button', { name: 'Inspect' }))
     expect(inspect).toHaveBeenCalledTimes(1)
 
@@ -85,7 +85,7 @@ describe('SkillRow', () => {
     const row = view.container.querySelector('[data-tool="skill"] > div')!
     expect(row.getAttribute('role')).toBeNull()
     expect(view.container.textContent).toContain('Loading skill')
-    expect(view.container.textContent).toContain('dsh-manage-issues')
+    expect(view.container.textContent).toContain('akx-manage-issues')
     expect(view.container.querySelector('svg [fill="currentColor"]')).not.toBeNull()
   })
 

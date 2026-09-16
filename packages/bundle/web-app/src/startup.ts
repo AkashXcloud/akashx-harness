@@ -3,12 +3,12 @@
  * family (`--host`, `--port`, `--trusted-host`, `--no-open`) and its `--help`
  * text, then provides the immutable values as {@link WEB_STARTUP_SERVICE}.
  * Ordinary rows inject that service before reading it from lazy config.
- * @module @deepseek-ai/dsh-web-app/startup
+ * @module @akashx/akx-web-app/startup
  */
 
 import { Command } from 'commander'
-import type { Context } from '@deepseek-ai/cordis'
-import { parseCmdline } from '@deepseek-ai/dsh-cmdline'
+import type { Context } from '@akashx/cordis'
+import { parseCmdline } from '@akashx/akx-cmdline'
 
 /** Stable Cordis plugin name. */
 export const name = 'web-startup'
@@ -44,10 +44,10 @@ interface WebOptions {
  * @returns a fresh program, so one process can parse more than once (tests).
  */
 function webCommand(): Command {
-  const commandName = process.env.DSH_CLI_NAME ?? 'dsh'
+  const commandName = process.env.AKX_CLI_NAME ?? 'akx'
   return new Command()
     .name(`${commandName} --profile web`)
-    .description('Serve the DeepSeek Harness browser UI.')
+    .description('Serve the AkashX Harness browser UI.')
     .helpOption('-h, --help', 'show this help')
     .option('--host <host>', 'bind host')
     .option('--no-open', 'do not open the Web UI in the default browser')

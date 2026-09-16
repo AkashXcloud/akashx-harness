@@ -3,13 +3,13 @@ description: "Service definition for provider-backed AkashXDB execution used by 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cognate
+# @akashx/akx-cognate
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-cognate` provides `ctx.cognate`, a provider registry that classifies and authorizes one SQL statement before execution. It bounds SQL length, rows, and serialized results, and exposes only provider-supplied semantic metadata. The service does not execute SQL itself and does not expose credentials.
+`akx-cognate` provides `ctx.cognate`, a provider registry that classifies and authorizes one SQL statement before execution. It bounds SQL length, rows, and serialized results, and exposes only provider-supplied semantic metadata. The service does not execute SQL itself and does not expose credentials.
 
 ## Table of Contents
 

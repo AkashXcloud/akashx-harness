@@ -6,25 +6,25 @@
 - id: headless-runner
   disabled: true
 
-- id: llm-deepseek
+- id: llm-akx
   config:
     thinking: enabled
     reasoningEffort: max
     models:
-      - id: deepseek-v4-pro
+      - id: akashx-v4-pro
         contextWindow: 128000
-      - id: deepseek-v4-flash
+      - id: akashx-v4-flash
         contextWindow: 128000
 
 - id: agent-loop
   config:
     agents:
       - id: main
-        provider: deepseek-official
-        model: deepseek-v4-flash
+        provider: akashx-official
+        model: akashx-v4-flash
         cwd: !!js process.cwd()
 
 - id: session-persistence-jsonl
   config:
     root: './.sessions'
-    compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    compression: !!js "process.env.AKX_SNAPSHOT === undefined ? 'zstd' : 'none'"

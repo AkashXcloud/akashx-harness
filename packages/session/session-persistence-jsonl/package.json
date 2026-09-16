@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-session-persistence-jsonl",
-  "description": "JSONL durable session persistence backend for the DeepSeek Harness",
+  "name": "@akashx/akx-session-persistence-jsonl",
+  "description": "JSONL durable session persistence backend for the AkashX Harness",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/session/session-persistence-jsonl"
   },
   "type": "module",
@@ -28,23 +28,23 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-persistence": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-session-format": "workspace:^",
-    "@deepseek-ai/dsh-session-format-catalog": "workspace:^",
-    "@deepseek-ai/dsh-session-format-v2-to-v3": "workspace:^",
-    "@deepseek-ai/node-addon-system": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-session-format": "workspace:^",
+    "@akashx/akx-session-format-catalog": "workspace:^",
+    "@akashx/akx-session-format-v2-to-v3": "workspace:^",
+    "@akashx/node-addon-system": "workspace:^",
     "koffi": "^3.1.0",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-format-v0-to-v1": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-format-v0-to-v1": "workspace:^",
+    "@akashx/akx-session-persistence": "workspace:^",
+    "@akashx/cordis": "workspace:^"
   }
 }

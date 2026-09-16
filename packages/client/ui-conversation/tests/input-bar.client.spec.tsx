@@ -8,19 +8,19 @@
 // root listener routes them through the keymap commands); draft writes drive
 // the shell (jsdom's beforeinput lacks the ranges Lexical needs).
 
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import type { GlobalStandardProps } from '@akashx/akx-client-ui-slots'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { $getRoot, $isTextNode } from 'lexical'
 import {
   bindSnapshotSelector, conversationSnapshot as conversationFixture, makeTranslate, RemoteError,
   sessionSnapshot as sessionFixture,
-} from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SessionListState, SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@akashx/akx-client-test-runtime'
+import { createSnapshotStore } from '@akashx/akx-client-store'
+import type { SessionListState, SessionSnapshot } from '@akashx/akx-api-session-controller/client'
+import type { Context } from '@akashx/cordis'
+import type { SessionId } from '@akashx/akx-session/types'
 import type { SubmitOutcome } from '../src/client/contract/input.ts'
 import { SessionInputShell } from '../src/client/input/facade.ts'
 import { $replaceDetectSpanWithText, $selectDetectSpan } from '../src/client/input/editor/span-map.ts'
@@ -1305,11 +1305,11 @@ describe('decorations', () => {
       shell.editor.update(() => {}, { discrete: true }) // flush the queued decoration refresh
     })
     expect(tokenSpanOf(view.container)?.textContent).toBe('/goal ')
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('Goal objective'))
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe(JSON.stringify('Goal objective'))
     // Args typed: the hint disappears, the token style stays.
     act(() => { shell.setDraft('/goal 发布') })
     act(() => { shell.editor.update(() => {}, { discrete: true }) }) // flush the queued decoration refresh
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe('')
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe('')
     expect(tokenSpanOf(view.container)).not.toBeNull()
   })
 
@@ -1322,7 +1322,7 @@ describe('decorations', () => {
         { start: 0, end: 6, draftRev: shell.snapshot.draftRev },
       )
     })
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
   })
 
   it('the hint lookup keys on the claim name, so a localized claim token keeps the locale entry', () => {
@@ -1336,7 +1336,7 @@ describe('decorations', () => {
         { start: 0, end: 5, draftRev: shell.snapshot.draftRev },
       )
     })
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
   })
 
   it('suppresses placeholders throughout native composition, including a temporarily empty draft', async () => {
@@ -1367,7 +1367,7 @@ describe('decorations', () => {
     act(() => { shell.setDraft(' of 目标 这') })
     await act(async () => {})
     expect(textarea.hasAttribute('data-composer-composing')).toBe(false)
-    expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe('')
+    expect(textarea.style.getPropertyValue('--akx-composer-hint')).toBe('')
   })
 
   it('an inserted reference renders a real chip capsule with its icon and label', () => {

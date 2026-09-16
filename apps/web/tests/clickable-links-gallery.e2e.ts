@@ -20,10 +20,10 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type {} from '@deepseek-ai/dsh-session-title'
+import { ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@akashx/akx-llm'
+import { SESSION_FORMAT_VERSION, Session, SessionId } from '@akashx/akx-session'
+import type { JsonValue } from '@akashx/akx-util-values'
+import type {} from '@akashx/akx-session-title'
 import {
   assertFixtureInventory,
   captureStableAria,
@@ -220,7 +220,7 @@ function galleryFixture(imageUrl: string): string {
         name: call.name,
         arguments: call.argsJson,
       })),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'akashx-official', model: 'akashx-v4-flash' },
     }),
   }, { surfaceOp: 'append' })
   for (const call of calls) {
@@ -271,7 +271,7 @@ function galleryFixture(imageUrl: string): string {
         '',
         '[^1]: Footnote references stay inert superscripts.',
       ].join('\n')),
-      source: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
+      source: { provider: 'akashx-official', model: 'akashx-v4-flash' },
     }),
   }, { surfaceOp: 'append' })
   session.append('step/end', { turn: 1, step: 2 })

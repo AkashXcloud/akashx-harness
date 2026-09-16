@@ -1,19 +1,19 @@
 // @vitest-environment jsdom
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
 import { cleanup, render, within } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import type { SessionLiveEventEntry } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { SessionLiveEventEntry } from '@akashx/akx-api-session-controller/client'
 import type {
   ConversationNodeDefinition, ConversationViewDefinition,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { ConversationNodeAssembler } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@akashx/akx-client-ui-conversation/client'
+import { ConversationNodeAssembler } from '@akashx/akx-client-ui-conversation/client'
 import type {
   ChatConversationViewNode, ChatSnapshot,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
-import { commandDefinition } from '@deepseek-ai/dsh-client-ui-chat/src/client/conversation-nodes/command.ts'
-import { chatViewDefinition } from '@deepseek-ai/dsh-client-ui-chat/src/client/conversation-nodes/chat-snapshot-builder.ts'
+} from '@akashx/akx-client-ui-chat/client'
+import { makeTranslate } from '@akashx/akx-client-test-runtime'
+import type { SessionEvent } from '@akashx/akx-session/types'
+import { commandDefinition } from '@akashx/akx-client-ui-chat/src/client/conversation-nodes/command.ts'
+import { chatViewDefinition } from '@akashx/akx-client-ui-chat/src/client/conversation-nodes/chat-snapshot-builder.ts'
 import { GoalCommandInputView } from '../src/client/GoalCommandInputView.tsx'
 import {
   goalCommandInputDefinition, goalCommandText,

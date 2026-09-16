@@ -8,18 +8,18 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type { TodoItem } from '@deepseek-ai/dsh-tool-todo'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import * as ToolTodo from '@deepseek-ai/dsh-tool-todo'
+import { Context } from '@akashx/cordis'
+import AgentRegistry from '@akashx/akx-agent'
+import type { Agent } from '@akashx/akx-agent'
+import { createUserMessage } from '@akashx/akx-llm'
+import SessionStore from '@akashx/akx-session'
+import type { Session } from '@akashx/akx-session'
+import type { TodoItem } from '@akashx/akx-tool-todo'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import UserQuestionService from '@akashx/akx-user-questions'
+import * as ToolTodo from '@akashx/akx-tool-todo'
 
 interface Bench {
   ctx: Context

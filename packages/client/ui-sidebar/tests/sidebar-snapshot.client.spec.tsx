@@ -10,19 +10,19 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, waitFor } from '@testing-library/react'
-import { SlotTestRuntime, usePinnedBrowserLanguages } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-sidebar/client'
+import { SlotTestRuntime, usePinnedBrowserLanguages } from '@akashx/akx-client-test-runtime'
+import { LocaleRuntime } from '@akashx/akx-client-locale/client'
+import { en as commonEn } from '@akashx/akx-client-locale/src/locales/en.ts'
+import { apply, inject } from '@akashx/akx-client-ui-sidebar/client'
 
 // The service reads its initial locale from the browser; these specs assert
 // the shipped Chinese copy, so they state the browser they assume.
 usePinnedBrowserLanguages('zh-CN')
 
 beforeEach(() => {
-  vi.stubEnv('DSH_CLIENT_COMMIT_HASH', 'abc1234')
-  vi.stubEnv('DSH_CLIENT_GIT_DIRTY', 'true')
-  vi.stubEnv('DSH_CLIENT_VERSION', '1.2.3-rc.4')
+  vi.stubEnv('AKX_CLIENT_COMMIT_HASH', 'abc1234')
+  vi.stubEnv('AKX_CLIENT_GIT_DIRTY', 'true')
+  vi.stubEnv('AKX_CLIENT_VERSION', '1.2.3-rc.4')
 })
 
 afterEach(() => {

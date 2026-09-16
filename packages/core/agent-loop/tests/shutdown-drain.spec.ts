@@ -1,19 +1,19 @@
 /** Root-fiber shutdown drains buffered session events durably (both mount orders). */
 
 import { describe, expect, it, afterEach } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
+import { createUserMessage } from '@akashx/akx-llm'
+import LlmRuntime from '@akashx/akx-llm'
+import SessionStore, { SessionId } from '@akashx/akx-session'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime from '@akashx/akx-tools'
+import AgentRegistry, { type Agent } from '@akashx/akx-agent'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
+import AgentLoop from '@akashx/akx-agent-loop'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
 
 const dirs: string[] = []
@@ -28,7 +28,7 @@ function waitForIdle(ctx: Context, agent: Agent): Promise<void> {
 }
 
 async function mount(order: 'backend-first' | 'loop-first'): Promise<{ ctx: Context; root: string }> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-shutdown-drain-'))
+  const root = await mkdtemp(join(tmpdir(), 'akx-shutdown-drain-'))
   dirs.push(root)
   const ctx = new Context()
   await ctx.plugin(LlmRuntime)

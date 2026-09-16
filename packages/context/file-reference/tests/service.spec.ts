@@ -1,7 +1,7 @@
 /** The abstract service preserves the provider's discovery contract. */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { Agent } from '@akashx/akx-agent'
 import { FileReferenceService } from '../src/index.ts'
 import type { FileReferenceCandidate } from '../src/types.ts'
 

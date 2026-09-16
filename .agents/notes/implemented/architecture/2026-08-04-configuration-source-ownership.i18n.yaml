@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-04-configuration-source-ownership.md
-2026-08-04-configuration-source-ownership.md: 6dea1f08a9f2a0319f894a504082ff70bbe1118f
-2026-08-04-configuration-source-ownership.zh.md: 1ccf2c266c3e52f2f10d3bceb3b1505ae6266b15
+2026-08-04-configuration-source-ownership.md: ff942142dd93e4896bf69238b5c1a6735bd16149
+2026-08-04-configuration-source-ownership.zh.md: a86674c3700d5f6eafee452e113e403fd6973b6a

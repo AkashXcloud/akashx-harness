@@ -5,11 +5,11 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import {
   IconCheckOutline16, IconCloseOutline16, IconCordisPluginOutline14, IconPlayOutline16,
   IconStopFill16, IconTrashOutline16, Tooltip, useDismissOnOutsidePointer,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type { CordisRunActivity } from '@deepseek-ai/dsh-cordis-client-runner/client'
-import type { SessionId } from '@deepseek-ai/dsh-api-remotes/client'
+} from '@akashx/akx-client-ui-primitives'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@akashx/akx-client-ui-slots'
+import type {} from '@akashx/akx-client-ui-sidebar/client'
+import type { CordisRunActivity } from '@akashx/akx-cordis-client-runner/client'
+import type { SessionId } from '@akashx/akx-api-remotes/client'
 import type { CordisInventoryRow } from './dynamic-port.ts'
 import type { CordisPanelFace } from './slots.ts'
 import type { CordisKey } from './locales.ts'
@@ -21,7 +21,7 @@ import css from './CordisPanel.module.css'
 
 /** Full panel props composed by the sidebar footer-action slot. */
 export type CordisPanelProps =
-  PropsRuntime<'sidebar.footer.action'> & InjectFace<CordisPanelFace> & PropsLocale<'cordis'>
+  PropsRuntime<'sidebar.footer.action'> & InjectFace<CordisPanelFace> & PropsLocale<'@akashx/cordis'>
 
 type PanelStatus = CordisVisibleStatus | 'awaiting-approval' | 'failed'
 

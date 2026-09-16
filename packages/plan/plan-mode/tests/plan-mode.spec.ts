@@ -1,18 +1,18 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage, ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { RUN_CODE_NAME, defineContentToolFixture } from '@deepseek-ai/dsh-tools'
-import { Session, SessionId, type SessionEvent, type UserMessage } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
-import { createScope } from '@deepseek-ai/dsh-scope'
+import { Context } from '@akashx/cordis'
+import { createUserMessage, ToolCallId } from '@akashx/akx-llm'
+import SystemPrompt from '@akashx/akx-system-prompt'
+import ToolRuntime, { RUN_CODE_NAME, defineContentToolFixture } from '@akashx/akx-tools'
+import { Session, SessionId, type SessionEvent, type UserMessage } from '@akashx/akx-session'
+import AgentRegistry, { agentEvents, type Agent } from '@akashx/akx-agent'
+import { createScope } from '@akashx/akx-scope'
 import UserQuestionService, {
   UserQuestionError, type AskUserQuestionAnswer, type AskUserQuestionRequest,
-} from '@deepseek-ai/dsh-user-questions'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import { CodeRuntime, type CodeRunRequest, type CodeRunResult } from '@deepseek-ai/dsh-code-runtime'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { turnBoundaryProjectionDefinition } from '@deepseek-ai/dsh-agent-loop'
+} from '@akashx/akx-user-questions'
+import CommandRuntime from '@akashx/akx-commands'
+import { CodeRuntime, type CodeRunRequest, type CodeRunResult } from '@akashx/akx-code-runtime'
+import SessionProjectionRegistry from '@akashx/akx-session-projection'
+import { turnBoundaryProjectionDefinition } from '@akashx/akx-agent-loop'
 import PlanModeController, { EXIT_PLAN_MODE, planProjectionDefinition, resolveConfig } from '../src/index.ts'
 import type { PlanModeConfig } from '../src/index.ts'
 import type { PlanUnitState } from '../src/types.ts'
@@ -29,7 +29,7 @@ function registerQuestionAnswerer(ctx: Context, answerer: QuestionAnswerer): () 
 }
 
 /**
- * Drives the REAL plugin: mounts `dsh-plan-mode` beside real `SystemPrompt` and
+ * Drives the REAL plugin: mounts `akx-plan-mode` beside real `SystemPrompt` and
  * `ToolRuntime` services, with fake Agents carrying real `Session`s and a
  * real scoped `agent.ctx` minted through `createScope`.
  * Request boundaries are simulated by dispatching the real pre-step waterfall
@@ -620,7 +620,7 @@ describe('/plan', () => {
     const plainSteer = vi.fn()
     ;(plainAgent as unknown as { steer: typeof plainSteer }).steer = plainSteer
     expect(ctx.commands.list(plainAgent)).toEqual([
-      { definitionId: '@deepseek-ai/dsh-plan-mode', name: 'plan', description: 'Enter or leave plan mode', input: { hint: '[off|message]', attachments: true } },
+      { definitionId: '@akashx/akx-plan-mode', name: 'plan', description: 'Enter or leave plan mode', input: { hint: '[off|message]', attachments: true } },
     ])
 
     const signal = new AbortController().signal

@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-code-runtime-worker-thread",
-  "description": "Worker-thread implementation of the DeepSeek Harness code-execution seam",
+  "name": "@akashx/akx-code-runtime-worker-thread",
+  "description": "Worker-thread implementation of the AkashX Harness code-execution seam",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/code-runtime/code-runtime-worker-thread"
   },
   "type": "module",
@@ -31,19 +31,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-code-runtime": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-code-runtime": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-timeout": "workspace:^"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-values": "workspace:^",
-    "@deepseek-ai/schemastery": "workspace:^"
+    "@akashx/akx-util-values": "workspace:^",
+    "@akashx/schemastery": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-code-runtime": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-timeout": "workspace:^"
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-code-runtime": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-timeout": "workspace:^"
   }
 }

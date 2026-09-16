@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-reference",
+  "name": "@akashx/akx-client-ui-reference",
   "description": "Unified Web @file and @session reference source",
   "version": "0.1.5-rc.2",
   "publishConfig": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/client/ui-reference"
   },
   "type": "module",
@@ -25,15 +25,15 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "akx": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-api-session-controller",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-input-trigger",
-        "@deepseek-ai/dsh-client-ui-sidebar-right"
+        "@akashx/akx-api-remotes",
+        "@akashx/akx-api-session-controller",
+        "@akashx/akx-client-connection",
+        "@akashx/akx-client-locale",
+        "@akashx/akx-client-ui-input-trigger",
+        "@akashx/akx-client-ui-sidebar-right"
       ],
       "platform": "web"
     }
@@ -44,23 +44,23 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-api-remotes": "workspace:^",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:^",
-    "@deepseek-ai/dsh-client-connection": "workspace:^",
-    "@deepseek-ai/dsh-client-locale": "workspace:^",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-input-trigger": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:^",
-    "@deepseek-ai/dsh-file-reference": "workspace:^",
-    "@deepseek-ai/dsh-session-reference": "workspace:^",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:^",
-    "@deepseek-ai/dsh-util-workspace-path": "workspace:^",
-    "@deepseek-ai/cordis": "workspace:^",
-    "@deepseek-ai/dsh-client-ui-sidebar-right": "workspace:^"
+    "@akashx/akx-api-remotes": "workspace:^",
+    "@akashx/akx-api-session-controller": "workspace:^",
+    "@akashx/akx-client-connection": "workspace:^",
+    "@akashx/akx-client-locale": "workspace:^",
+    "@akashx/akx-client-test-runtime": "workspace:^",
+    "@akashx/akx-client-ui-input-trigger": "workspace:^",
+    "@akashx/akx-client-ui-primitives": "workspace:^",
+    "@akashx/akx-client-ui-slots": "workspace:^",
+    "@akashx/akx-file-reference": "workspace:^",
+    "@akashx/akx-session-reference": "workspace:^",
+    "@akashx/akx-typert-protocol": "workspace:^",
+    "@akashx/akx-util-workspace-path": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@akashx/akx-client-ui-sidebar-right": "workspace:^"
   },
   "files": [
     "lib/index.js",

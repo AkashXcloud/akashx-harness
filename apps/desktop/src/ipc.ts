@@ -6,21 +6,21 @@ import type { DesktopBackendState } from './backend-controller.ts'
 
 /** IPC channel names kept private to the desktop application bundle. */
 export const DESKTOP_IPC = {
-  localeGet: 'dsh-desktop:locale-get',
-  pluginsList: 'dsh-desktop:plugins-list',
-  pluginsAdd: 'dsh-desktop:plugins-add',
-  pluginsRemove: 'dsh-desktop:plugins-remove',
-  pluginsUpdate: 'dsh-desktop:plugins-update',
-  pluginsToggle: 'dsh-desktop:plugins-toggle',
-  pluginsDisableAll: 'dsh-desktop:plugins-disable-all',
-  backendStatus: 'dsh-desktop:backend-status',
-  backendRetry: 'dsh-desktop:backend-retry',
-  applicationRestart: 'dsh-desktop:application-restart',
-  configurationReset: 'dsh-desktop:configuration-reset',
-  backendState: 'dsh-desktop:backend-state',
-  updatesCheck: 'dsh-desktop:updates-check',
-  updatesInstall: 'dsh-desktop:updates-install',
-  updatesState: 'dsh-desktop:updates-state',
+  localeGet: 'akx-desktop:locale-get',
+  pluginsList: 'akx-desktop:plugins-list',
+  pluginsAdd: 'akx-desktop:plugins-add',
+  pluginsRemove: 'akx-desktop:plugins-remove',
+  pluginsUpdate: 'akx-desktop:plugins-update',
+  pluginsToggle: 'akx-desktop:plugins-toggle',
+  pluginsDisableAll: 'akx-desktop:plugins-disable-all',
+  backendStatus: 'akx-desktop:backend-status',
+  backendRetry: 'akx-desktop:backend-retry',
+  applicationRestart: 'akx-desktop:application-restart',
+  configurationReset: 'akx-desktop:configuration-reset',
+  backendState: 'akx-desktop:backend-state',
+  updatesCheck: 'akx-desktop:updates-check',
+  updatesInstall: 'akx-desktop:updates-install',
+  updatesState: 'akx-desktop:updates-state',
 } as const
 
 /** Desktop release update state rendered by desktop-owned UI. */
@@ -31,7 +31,7 @@ export interface DesktopUpdateState {
 }
 
 /** Narrow bridge exposed through context isolation. */
-export interface DshDesktopApi {
+export interface AkxDesktopApi {
   readonly protocolVersion: 1
   locale(): Promise<DesktopLocale>
   readonly plugins: {
@@ -55,8 +55,8 @@ export interface DshDesktopApi {
 }
 
 /** Startup-page controls, unavailable to backend-provided application documents. */
-export interface DshDesktopStartupApi extends Pick<DshDesktopApi, 'protocolVersion' | 'locale'> {
-  readonly backend: Omit<DshDesktopApi['backend'], 'retry'>
+export interface AkxDesktopStartupApi extends Pick<AkxDesktopApi, 'protocolVersion' | 'locale'> {
+  readonly backend: Omit<AkxDesktopApi['backend'], 'retry'>
   disablePlugins(): Promise<void>
   restart(): Promise<void>
   resetConfiguration(): Promise<void>

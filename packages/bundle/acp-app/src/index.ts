@@ -2,12 +2,12 @@
  * The ACP profile's command-line and stdin-lifetime provider. A successful
  * parse publishes {@link ACP_APP_STARTUP_SERVICE}; the ACP bridge waits for
  * that service, so help starts no transport.
- * @module @deepseek-ai/dsh-acp-app
+ * @module @akashx/akx-acp-app
  */
 
 import { Command } from 'commander'
-import type { Context } from '@deepseek-ai/cordis'
-import { exitOnStdinEnd, parseCmdline } from '@deepseek-ai/dsh-cmdline'
+import type { Context } from '@akashx/cordis'
+import { exitOnStdinEnd, parseCmdline } from '@akashx/akx-cmdline'
 
 /** Stable Cordis plugin name. */
 export const name = 'acp-app-startup'
@@ -23,7 +23,7 @@ export const ACP_APP_STARTUP_SERVICE = 'acpAppStartup'
  * @returns a fresh program for one invocation.
  */
 function acpCommand(): Command {
-  const commandName = process.env.DSH_CLI_NAME ?? 'dsh'
+  const commandName = process.env.AKX_CLI_NAME ?? 'akx'
   return new Command()
     .name(`${commandName} --profile acp`)
     .description('Serve automation clients over Agent Client Protocol stdio.')

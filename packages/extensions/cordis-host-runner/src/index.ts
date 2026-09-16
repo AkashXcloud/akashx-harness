@@ -1,16 +1,16 @@
 /**
  * Dynamic Cordis Plugin service: immutable package definitions, one active run
  * per Plugin, human-approved Client activation, and Host/Client invocation.
- * @module @deepseek-ai/dsh-cordis-host-runner
+ * @module @akashx/akx-cordis-host-runner
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import type { Fiber } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import { Context } from '@akashx/cordis'
+import type { Fiber } from '@akashx/cordis'
+import z from '@akashx/schemastery'
+import type { Agent } from '@akashx/akx-agent'
+import { createUserMessage } from '@akashx/akx-llm'
+import { TypertRemoteService, Remote } from '@akashx/akx-typert-protocol'
+import type { JsonValue } from '@akashx/akx-util-values'
 import { isPlugin, normalizeHandler } from './guard.ts'
 import { CordisInspectRegistryService } from './inspect-registry.ts'
 import { missingServices, startHostHalf } from './lifecycle.ts'
@@ -77,7 +77,7 @@ export function ApprovalRequestId(id: string): ApprovalRequestId {
   return id as ApprovalRequestId
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@akashx/cordis' {
   interface Context {
     /** Process-local dynamic Plugin registry and lifecycle service. */
     dynamicCordisRunner: DynamicCordisRunnerService
@@ -288,7 +288,7 @@ export class DynamicCordisRunnerService extends TypertRemoteService {
       mode,
       requiresApproval,
     })
-    this.ctx.emit('cordis/request-run', {
+    this.ctx.emit('@akashx/cordis/request-run', {
       requestId,
       agentId: agent.id,
       pluginId,
@@ -854,7 +854,7 @@ export class DynamicCordisRunnerService extends TypertRemoteService {
       if (failure !== undefined) return { ok: false, ...failure }
     }
     plugin.run = run
-    this.ctx.emit('cordis/dynamic-package', {
+    this.ctx.emit('@akashx/cordis/dynamic-package', {
       pluginId: plugin.pluginId,
       packageId: definition.packageId,
       pluginRunId: run.pluginRunId,
@@ -1013,7 +1013,7 @@ export class DynamicCordisRunnerService extends TypertRemoteService {
     override?: RequestRunOutcome,
   ): void {
     const outcome = override ?? (resolution.ok ? 'approved' : resolution.reason === 'rejected' ? 'rejected' : 'failed')
-    this.ctx.emit('cordis/request-run-resolved', { requestId, outcome })
+    this.ctx.emit('@akashx/cordis/request-run-resolved', { requestId, outcome })
   }
 
   private steerRunOutcome(
@@ -1222,7 +1222,7 @@ export class DynamicCordisRunnerService extends TypertRemoteService {
     delete plugin.run
     for (const dispose of run.handlerDisposers.splice(0)) dispose()
     if (run.fiber !== undefined) await run.fiber.dispose()
-    this.ctx.emit('cordis/dynamic-retract', {
+    this.ctx.emit('@akashx/cordis/dynamic-retract', {
       pluginId: plugin.pluginId,
       packageId: run.packageId,
       pluginRunId: run.pluginRunId,
@@ -1245,7 +1245,7 @@ function missingFor(ctx: Context, run: DynamicCordisRun): string[] {
 }
 
 function missingPluginMessage(id: CordisDynamicPluginId): string {
-  return `no dynamic plugin "${id}" in this process — it may have been removed or lost on DSH restart`
+  return `no dynamic plugin "${id}" in this process — it may have been removed or lost on AKX restart`
 }
 
 function errorDetails(error: unknown): CordisErrorDetails {

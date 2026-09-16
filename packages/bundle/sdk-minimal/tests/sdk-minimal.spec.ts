@@ -5,73 +5,73 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import * as yaml from 'js-yaml'
 import { describe, expect, it } from 'vitest'
-import { entryListSchema } from '@deepseek-ai/cordis-plugin-include'
+import { entryListSchema } from '@akashx/cordis-plugin-include'
 
 function packageName(specifier: string): string {
   return specifier.startsWith('@') ? specifier.split('/').slice(0, 2).join('/') : specifier.split('/')[0]!
 }
 
-describe('dsh-sdk-minimal bundle', () => {
+describe('akx-sdk-minimal bundle', () => {
   it('declares one standalone allowlisted tree with every row dependency', () => {
     const root = fileURLToPath(new URL('..', import.meta.url))
     const manifest = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as {
       dependencies?: Record<string, string>
-      dsh?: { bundle?: { patch?: string } }
+      akx?: { bundle?: { patch?: string } }
     }
-    expect(manifest.dsh?.bundle?.patch).toBe('./cordis.patch.yml')
+    expect(manifest.akx?.bundle?.patch).toBe('./cordis.patch.yml')
     const patches = yaml.load(
-      readFileSync(resolve(root, manifest.dsh!.bundle!.patch!), 'utf8'),
+      readFileSync(resolve(root, manifest.akx!.bundle!.patch!), 'utf8'),
       { schema: entryListSchema },
     ) as Array<{ insert?: Array<{ id?: string; inject?: string[]; name?: string; config?: Record<string, unknown>; disabled?: unknown }> }>
     expect(patches).toHaveLength(1)
     const rows = patches[0]?.insert ?? []
     expect(rows.map(row => [row.id, row.name])).toEqual([
-      ['sdk-app-startup', '@deepseek-ai/dsh-sdk-app'],
-      ['sdk-jsonrpc-server', '@deepseek-ai/dsh-sdk-jsonrpc-server'],
-      ['deepseek-llm-api-extensions', '@deepseek-ai/dsh-deepseek-llm-api-extensions'],
-      ['session-log-deepseek', '@deepseek-ai/dsh-session-log-deepseek'],
-      ['plugin-package-inventory-deepseek', '@deepseek-ai/dsh-plugin-package-inventory-deepseek'],
-      ['llm-deepseek', '@deepseek-ai/dsh-llm-deepseek'],
-      ['sandbox', '@deepseek-ai/dsh-sandbox-local'],
-      ['session-projection', '@deepseek-ai/dsh-session-projection'],
-      ['sandbox-policy', '@deepseek-ai/dsh-sandbox-policy'],
-      ['subprocess', '@deepseek-ai/dsh-subprocess-local'],
-      ['pty', '@deepseek-ai/dsh-terminal'],
-      ['terminal-bash', '@deepseek-ai/dsh-terminal-bash'],
-      ['terminal-pwsh', '@deepseek-ai/dsh-terminal-bash'],
-      ['timer', '@deepseek-ai/cordis-plugin-timer'],
-      ['llm', '@deepseek-ai/dsh-llm'],
-      ['session', '@deepseek-ai/dsh-session'],
-      ['session-title', '@deepseek-ai/dsh-session-title'],
-      ['system-prompt', '@deepseek-ai/dsh-system-prompt'],
-      ['tools', '@deepseek-ai/dsh-tools'],
-      ['agent', '@deepseek-ai/dsh-agent'],
-      ['llm-retry', '@deepseek-ai/dsh-llm-retry'],
-      ['jobs', '@deepseek-ai/dsh-jobs-local'],
-      ['invariants', '@deepseek-ai/dsh-invariants'],
-      ['session-invariant', '@deepseek-ai/dsh-session/invariant'],
-      ['agent-invariant', '@deepseek-ai/dsh-agent/invariant'],
-      ['scope-invariant', '@deepseek-ai/dsh-scope/invariant'],
-      ['agent-loop-invariant', '@deepseek-ai/dsh-agent-loop/invariant'],
-      ['agent-loop', '@deepseek-ai/dsh-agent-loop'],
-      ['persistent-bash', '@deepseek-ai/dsh-tool-bash-persistent'],
-      ['persistent-pwsh', '@deepseek-ai/dsh-tool-pwsh-persistent'],
-      ['sessions', '@deepseek-ai/dsh-session-persistence-jsonl'],
+      ['sdk-app-startup', '@akashx/akx-sdk-app'],
+      ['sdk-jsonrpc-server', '@akashx/akx-sdk-jsonrpc-server'],
+      ['llm-api-extensions', '@akashx/akx-llm-api-extensions'],
+      ['session-log-akx', '@akashx/akx-session-log-akx'],
+      ['plugin-package-inventory', '@akashx/akx-plugin-package-inventory'],
+      ['llm-akx', '@akashx/akx-llm-akx'],
+      ['sandbox', '@akashx/akx-sandbox-local'],
+      ['session-projection', '@akashx/akx-session-projection'],
+      ['sandbox-policy', '@akashx/akx-sandbox-policy'],
+      ['subprocess', '@akashx/akx-subprocess-local'],
+      ['pty', '@akashx/akx-terminal'],
+      ['terminal-bash', '@akashx/akx-terminal-bash'],
+      ['terminal-pwsh', '@akashx/akx-terminal-bash'],
+      ['timer', '@akashx/cordis-plugin-timer'],
+      ['llm', '@akashx/akx-llm'],
+      ['session', '@akashx/akx-session'],
+      ['session-title', '@akashx/akx-session-title'],
+      ['system-prompt', '@akashx/akx-system-prompt'],
+      ['tools', '@akashx/akx-tools'],
+      ['agent', '@akashx/akx-agent'],
+      ['llm-retry', '@akashx/akx-llm-retry'],
+      ['jobs', '@akashx/akx-jobs-local'],
+      ['invariants', '@akashx/akx-invariants'],
+      ['session-invariant', '@akashx/akx-session/invariant'],
+      ['agent-invariant', '@akashx/akx-agent/invariant'],
+      ['scope-invariant', '@akashx/akx-scope/invariant'],
+      ['agent-loop-invariant', '@akashx/akx-agent-loop/invariant'],
+      ['agent-loop', '@akashx/akx-agent-loop'],
+      ['persistent-bash', '@akashx/akx-tool-bash-persistent'],
+      ['persistent-pwsh', '@akashx/akx-tool-pwsh-persistent'],
+      ['sessions', '@akashx/akx-session-persistence-jsonl'],
     ])
     expect(rows.find(row => row.id === 'sdk-app-startup')?.config).toEqual({ profile: 'sdk-minimal' })
     expect(rows.find(row => row.id === 'sdk-jsonrpc-server')).toMatchObject({
       inject: ['sdkAppStartup', 'loader'],
       config: { maxTokensAsSuccess: false },
     })
-    expect(rows.find(row => row.id === 'llm-deepseek')?.config).toEqual({
-      apiKeyEnv: 'DEEPSEEK_API_KEY',
-      defaultContextWindow: { __jsExpr: 'Number(process.env.DSH_CONTEXT_WINDOW ?? 1000000)' },
+    expect(rows.find(row => row.id === 'llm-akx')?.config).toEqual({
+      apiKeyEnv: 'AKASHX_API_KEY',
+      defaultContextWindow: { __jsExpr: 'Number(process.env.AKX_CONTEXT_WINDOW ?? 1000000)' },
       streamIdleTimeoutMs: 172800000,
     })
     expect(rows.find(row => row.id === 'system-prompt')?.config).toEqual({
       includeHarnessIdentity: false,
       includeRuntimeContext: false,
-      personaPrefix: { __jsExpr: "process.env.DSH_SYSTEM_PROMPT ?? 'You are a helpful software engineer assistant.'" },
+      personaPrefix: { __jsExpr: "process.env.AKX_SYSTEM_PROMPT ?? 'You are a helpful software engineer assistant.'" },
     })
     expect(rows.find(row => row.id === 'agent-loop')?.config).toEqual({ agents: [] })
     expect(rows.find(row => row.id === 'terminal-bash')).toMatchObject({

@@ -1,15 +1,15 @@
 /** Agent Teams runtime invariant companion. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
-import type { Session, SessionEvent } from '@deepseek-ai/dsh-session'
+import type { Context } from '@akashx/cordis'
+import type { InvariantFailure, InvariantInstaller } from '@akashx/akx-invariants'
+import type { Session, SessionEvent } from '@akashx/akx-session'
 import {
   isTeamEvent,
   teamProjectionDefinition,
   type TeamProjectionState,
 } from './projection.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-experimental-agent-team'
+const PACKAGE_NAME = '@akashx/akx-experimental-agent-team'
 
 /** Cordis companion plugin name. */
 export const name = 'team-invariant'

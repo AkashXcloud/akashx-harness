@@ -1,6 +1,6 @@
 /** Host-driven Cordis query integration. */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@akashx/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createCordisRuntimeTreeReader } from '../src/shared/cordis/reader.ts'
 import {
@@ -28,7 +28,7 @@ describe('consumer-neutral Cordis tree', () => {
     store.replace(source, [{
       sequence: 1,
       monotonicMs: 1,
-      topic: 'cordis/tree',
+      topic: '@akashx/cordis/tree',
       payload: asJson({
         schemaVersion: 0,
         revision: 3,
@@ -72,7 +72,7 @@ describe('consumer-neutral Cordis tree', () => {
     store.replace(reconnected, [{
       sequence: 1,
       monotonicMs: 2,
-      topic: 'cordis/tree',
+      topic: '@akashx/cordis/tree',
       payload: asJson({
         schemaVersion: 0,
         revision: 4,

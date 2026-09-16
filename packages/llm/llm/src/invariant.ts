@@ -1,10 +1,10 @@
-/** Package-owned LLM stream-protocol invariants. @module @deepseek-ai/dsh-llm/invariant */
+/** Package-owned LLM stream-protocol invariants. @module @akashx/akx-llm/invariant */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { InvariantFailure, InvariantInstaller } from '@deepseek-ai/dsh-invariants'
+import type { Context } from '@akashx/cordis'
+import type { InvariantFailure, InvariantInstaller } from '@akashx/akx-invariants'
 import type { ContentBlockType, StreamChunk } from './types.ts'
 
-const PACKAGE_NAME = '@deepseek-ai/dsh-llm'
+const PACKAGE_NAME = '@akashx/akx-llm'
 
 /** Cordis companion plugin name. */
 export const name = 'llm-invariant'

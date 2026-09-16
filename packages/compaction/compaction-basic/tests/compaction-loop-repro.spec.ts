@@ -1,21 +1,21 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@deepseek-ai/dsh-compaction'
-import { createUserMessage, createSystemMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, resolveRetryPolicy , createMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, GenerateOptions, LlmResolvedModelInfo, ResolvedRetryPolicy, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { ToolCallId, LlmAdapter } from '@deepseek-ai/dsh-llm'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tools'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import InvariantRegistry from '@deepseek-ai/dsh-invariants'
-import * as SessionInvariant from '@deepseek-ai/dsh-session/invariant'
-import * as AgentInvariant from '@deepseek-ai/dsh-agent/invariant'
-import * as AgentLoopInvariant from '@deepseek-ai/dsh-agent-loop/invariant'
-import { BasicCompactionEngine } from '@deepseek-ai/dsh-compaction-basic'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import * as LlmRetry from '@deepseek-ai/dsh-llm-retry'
-import { Session, SessionId, type SessionEvent, type SurfaceEvent } from '@deepseek-ai/dsh-session'
+import { Context } from '@akashx/cordis'
+import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@akashx/akx-compaction'
+import { createUserMessage, createSystemMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, resolveRetryPolicy , createMessage } from '@akashx/akx-llm'
+import type { ContentBlock, GenerateOptions, LlmResolvedModelInfo, ResolvedRetryPolicy, StreamChunk } from '@akashx/akx-llm'
+import { ToolCallId, LlmAdapter } from '@akashx/akx-llm'
+import { defineContentToolFixture } from '@akashx/akx-tools'
+import type { Agent } from '@akashx/akx-agent'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import InvariantRegistry from '@akashx/akx-invariants'
+import * as SessionInvariant from '@akashx/akx-session/invariant'
+import * as AgentInvariant from '@akashx/akx-agent/invariant'
+import * as AgentLoopInvariant from '@akashx/akx-agent-loop/invariant'
+import { BasicCompactionEngine } from '@akashx/akx-compaction-basic'
+import TokenMeter from '@akashx/akx-token-meter'
+import * as LlmRetry from '@akashx/akx-llm-retry'
+import { Session, SessionId, type SessionEvent, type SurfaceEvent } from '@akashx/akx-session'
 
 /**
  * CBR-001 regression through the real loop. A replacement checkpoint has a high
@@ -336,7 +336,7 @@ describe('token pressure after loop-admitted system prompts', () => {
         agent.session.append('system/message', {
           turn,
           step,
-          message: createSystemMessage('retry guidance', '@deepseek-ai/dsh-system-prompt'),
+          message: createSystemMessage('retry guidance', '@akashx/akx-system-prompt'),
         }, { surfaceOp: { op: 'replace', startSeq: node, endSeq: node }, sourceEventSeqs: [node] })
         return { kind: 'retry' }
       })

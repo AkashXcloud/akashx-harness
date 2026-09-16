@@ -5,21 +5,21 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, ToolCallId } from '@deepseek-ai/dsh-llm'
-import * as systemPromptPlugin from '@deepseek-ai/dsh-system-prompt'
-import * as toolsPlugin from '@deepseek-ai/dsh-tools'
-import * as fsPlugin from '@deepseek-ai/dsh-fs-local'
-import * as toolFsPlugin from '@deepseek-ai/dsh-tool-fs'
-import * as sessionPlugin from '@deepseek-ai/dsh-session'
-import { Session, SessionId } from '@deepseek-ai/dsh-session'
-import * as queryPlugin from '@deepseek-ai/dsh-session-query-sqlite'
-import * as referencePlugin from '@deepseek-ai/dsh-session-reference'
-import * as spillPlugin from '@deepseek-ai/dsh-spill-local'
-import { sessionDir } from '@deepseek-ai/dsh-spill-local'
+import { Context } from '@akashx/cordis'
+import Loader from '@akashx/cordis-plugin-loader'
+import Include from '@akashx/cordis-plugin-include'
+import { agentEvents, type Agent } from '@akashx/akx-agent'
+import { createUserMessage, ToolCallId } from '@akashx/akx-llm'
+import * as systemPromptPlugin from '@akashx/akx-system-prompt'
+import * as toolsPlugin from '@akashx/akx-tools'
+import * as fsPlugin from '@akashx/akx-fs-local'
+import * as toolFsPlugin from '@akashx/akx-tool-fs'
+import * as sessionPlugin from '@akashx/akx-session'
+import { Session, SessionId } from '@akashx/akx-session'
+import * as queryPlugin from '@akashx/akx-session-query-sqlite'
+import * as referencePlugin from '@akashx/akx-session-reference'
+import * as spillPlugin from '@akashx/akx-spill-local'
+import { sessionDir } from '@akashx/akx-spill-local'
 import * as sourcePlugin from './fixtures/source-session.ts'
 
 let context: Context | undefined
@@ -44,14 +44,14 @@ describe('session-reference real Loader composition', () => {
     await ctx.plugin(Loader)
     ctx.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-session', sessionPlugin],
-      ['@deepseek-ai/dsh-system-prompt', systemPromptPlugin],
-      ['@deepseek-ai/dsh-tools', toolsPlugin],
-      ['@deepseek-ai/dsh-fs-local', fsPlugin],
-      ['@deepseek-ai/dsh-tool-fs', toolFsPlugin],
-      ['@deepseek-ai/dsh-session-query-sqlite', queryPlugin],
-      ['@deepseek-ai/dsh-session-reference', referencePlugin],
-      ['@deepseek-ai/dsh-spill-local', spillPlugin],
+      ['@akashx/akx-session', sessionPlugin],
+      ['@akashx/akx-system-prompt', systemPromptPlugin],
+      ['@akashx/akx-tools', toolsPlugin],
+      ['@akashx/akx-fs-local', fsPlugin],
+      ['@akashx/akx-tool-fs', toolFsPlugin],
+      ['@akashx/akx-session-query-sqlite', queryPlugin],
+      ['@akashx/akx-session-reference', referencePlugin],
+      ['@akashx/akx-spill-local', spillPlugin],
       ['./source-session.ts', sourcePlugin],
     ])
     ctx.loader.internal = {

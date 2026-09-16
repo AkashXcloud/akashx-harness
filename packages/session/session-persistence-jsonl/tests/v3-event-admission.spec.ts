@@ -1,7 +1,7 @@
-import { Context } from '@deepseek-ai/cordis'
-import { SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import { SessionFormatUnsupportedError } from '@deepseek-ai/dsh-session-persistence'
-import JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@akashx/cordis'
+import { SessionId, SessionSeq } from '@akashx/akx-session'
+import { SessionFormatUnsupportedError } from '@akashx/akx-session-persistence'
+import JsonlSessionPersistence from '@akashx/akx-session-persistence-jsonl'
 import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -27,7 +27,7 @@ describe('native V3 event admission at EOF', () => {
   let ctx: Context
 
   beforeEach(async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-v3-admission-'))
+    root = await mkdtemp(join(tmpdir(), 'akx-v3-admission-'))
     ctx = new Context()
     await ctx.plugin(JsonlSessionPersistence, { root, compression: 'none' })
   })

@@ -1,16 +1,16 @@
 /**
  * Safe HTTP(S) retrieval for `ctx.web`: validates and pins public IP destinations, follows
  * only same-origin redirects, enforces time and size limits, classifies and decodes text,
- * and leaves presentation to `@deepseek-ai/dsh-tool-web`. Requests carry no browser cookies
+ * and leaves presentation to `@akashx/akx-tool-web`. Requests carry no browser cookies
  * or ambient credentials.
- * @module @deepseek-ai/dsh-web-fetch-http/provider
+ * @module @akashx/akx-web-fetch-http/provider
  */
 
-import { WebError } from '@deepseek-ai/dsh-web'
-import type { WebFetchBody, WebFetchProvider, WebFetchRequest, WebFetchResult } from '@deepseek-ai/dsh-web'
-import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
+import { WebError } from '@akashx/akx-web'
+import type { WebFetchBody, WebFetchProvider, WebFetchRequest, WebFetchResult } from '@akashx/akx-web'
+import { deadline, timeoutOf } from '@akashx/akx-timeout'
 import type { Response } from 'undici'
-import { proxyRouteFor } from '@deepseek-ai/dsh-http-proxy'
+import { proxyRouteFor } from '@akashx/akx-http-proxy'
 import { isNonPublicIpLiteral, publicHttpNetwork } from './network.ts'
 import type { PublicAddress } from './network.ts'
 import { classifyContentType, decoderForCharset, isSameOrigin, parseCharset, validateFetchUrl } from './policy.ts'

@@ -1,17 +1,17 @@
 /** Browser availability/choice state and the launch carrier for the split button. */
 
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
 import {
   OPEN_IN_APP_APPS_ROUTE, OPEN_IN_APP_OPEN_ROUTE,
   type OpenInAppAppsPayload, type OpenInAppOpenPayload,
-} from '@deepseek-ai/dsh-host-open-in-app/shared'
+} from '@akashx/akx-host-open-in-app/shared'
 
 type Fetch = (input: string | URL, init?: RequestInit) => Promise<Response>
 
 /** Resolve the browser's Host base with the connection carrier's null-origin fallback. */
 function hostBase(): string {
   const origin = (globalThis as { location?: { origin?: string } }).location?.origin
-  return origin !== undefined && origin !== 'null' ? origin : 'http://dsh.internal'
+  return origin !== undefined && origin !== 'null' ? origin : 'http://akx.internal'
 }
 
 /**
@@ -24,7 +24,7 @@ export class OpenInAppController {
   readonly apps: SnapshotStore<readonly string[] | null> = createSnapshotStore<readonly string[] | null>(null)
   /** Last chosen app id, or empty before the first choice, shared across sessions and browser restarts. */
   readonly choice: SnapshotStore<string> = createSnapshotStore<string>('', {
-    persist: { name: 'dsh.open-in-app.choice' },
+    persist: { name: 'akx.open-in-app.choice' },
   })
 
   private loading: Promise<void> | undefined

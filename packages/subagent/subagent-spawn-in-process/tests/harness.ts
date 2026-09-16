@@ -1,18 +1,18 @@
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
+import { Context } from '@akashx/cordis'
+import type { Agent } from '@akashx/akx-agent'
+import AgentLoop from '@akashx/akx-agent-loop'
+import { mountAgentLoopTestDependencies } from '@akashx/akx-agent-loop-testkit'
+import { LocalBashExecutor } from '@akashx/akx-bash-local'
+import * as BashEnvPlugin from '@akashx/akx-shell-env'
+import LocalSubprocessRuntime from '@akashx/akx-subprocess-local'
+import * as ToolBash from '@akashx/akx-tool-bash'
+import * as LlmAkashX from '@akashx/akx-llm-akx'
+import SubagentRuntime from '@akashx/akx-subagent'
 import * as Spawn from '../src/index.ts'
-import * as ToolSubagent from '@deepseek-ai/dsh-tool-subagent'
+import * as ToolSubagent from '@akashx/akx-tool-subagent'
 
 /**
- * Shared harness for the spawn-backend e2e: the full real stack (DeepSeek
+ * Shared harness for the spawn-backend e2e: the full real stack (AkashX
  * adapter + real bash tool + the subagent tool bound to the spawn backend), so
  * a real parent agent can delegate to a real in-process child that does real
  * work (writes a file). Lives outside the *.e2e.ts pattern so importing it never
@@ -28,7 +28,7 @@ export async function spawnHarness(workdir: string): Promise<Context> {
     systemPrompt: { personaPrefix: 'You are a coding agent. Report only when the requested work is done.' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(LlmDeepSeek)
+  await ctx.plugin(LlmAkashX)
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)
   await ctx.plugin(LocalBashExecutor, { cwd: workdir, timeoutMs: 30_000 })

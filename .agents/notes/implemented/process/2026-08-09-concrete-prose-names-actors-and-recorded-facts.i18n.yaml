@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/process/2026-08-09-concrete-prose-names-actors-and-recorded-facts.md
-2026-08-09-concrete-prose-names-actors-and-recorded-facts.md: 887a3666501a97e0930fe7eb4282603f537c17e8
-2026-08-09-concrete-prose-names-actors-and-recorded-facts.zh.md: 0202be5c22c75ff4feec225cdff12b772d64d1cf
+2026-08-09-concrete-prose-names-actors-and-recorded-facts.md: 8592bb07d242f26e7e387287a9b231e1041cab7e
+2026-08-09-concrete-prose-names-actors-and-recorded-facts.zh.md: 4f556f12359d2b9a0e60607e51d860551b949a9c

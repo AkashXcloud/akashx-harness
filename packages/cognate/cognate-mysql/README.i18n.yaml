@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write packages/cognate/cognate-mysql/README.md
-README.md: a0159b2b03f7a5821a6813d3f80b595b3153f48e
-README.zh.md: ebb245ad593a0fb0208c0ac77edc9743679e1895
+README.md: 7938aad6b4dbcbebe31c85180dd1620d47ec14e8
+README.zh.md: c405662d7c097d3236ec2504d80c5e9eae30a8fd

@@ -3,11 +3,11 @@
  * lets the browser half recognize final-response file references and serves
  * authenticated native opens of declared files. The browser
  * half ships via exports["./client"], discovered through the package.json
- * dsh.client declaration.
+ * akx.client declaration.
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@akashx/cordis'
+import type {} from '@akashx/akx-system-prompt'
 import { registerPresentOpen } from './present-open.ts'
 
 /** Services required for file-reference guidance and authenticated native opens of declared files. */

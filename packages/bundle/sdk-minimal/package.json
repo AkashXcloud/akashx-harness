@@ -1,13 +1,13 @@
 {
-  "name": "@deepseek-ai/dsh-sdk-minimal",
-  "description": "The standalone minimal SDK profile bundle: JSON-RPC, one DeepSeek adapter, persistent shell, and JSONL sessions",
+  "name": "@akashx/akx-sdk-minimal",
+  "description": "The standalone minimal SDK profile bundle: JSON-RPC, one AkashX adapter, persistent shell, and JSONL sessions",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
     "directory": "packages/bundle/sdk-minimal"
   },
   "type": "module",
@@ -28,44 +28,44 @@
     "lib/types/**/*.d.ts"
   ],
   "license": "MIT",
-  "dsh": {
+  "akx": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/cordis-plugin-timer": "workspace:^",
-    "@deepseek-ai/dsh-agent": "workspace:^",
-    "@deepseek-ai/dsh-agent-loop": "workspace:^",
-    "@deepseek-ai/dsh-deepseek-llm-api-extensions": "workspace:^",
-    "@deepseek-ai/dsh-invariants": "workspace:^",
-    "@deepseek-ai/dsh-jobs-local": "workspace:^",
-    "@deepseek-ai/dsh-llm": "workspace:^",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-llm-retry": "workspace:^",
-    "@deepseek-ai/dsh-plugin-package-inventory-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-local": "workspace:^",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:^",
-    "@deepseek-ai/dsh-scope": "workspace:^",
-    "@deepseek-ai/dsh-sdk-app": "workspace:^",
-    "@deepseek-ai/dsh-sdk-jsonrpc-server": "workspace:^",
-    "@deepseek-ai/dsh-session": "workspace:^",
-    "@deepseek-ai/dsh-session-log-deepseek": "workspace:^",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:^",
-    "@deepseek-ai/dsh-session-projection": "workspace:^",
-    "@deepseek-ai/dsh-session-title": "workspace:^",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:^",
-    "@deepseek-ai/dsh-system-prompt": "workspace:^",
-    "@deepseek-ai/dsh-terminal": "workspace:^",
-    "@deepseek-ai/dsh-terminal-bash": "workspace:^",
-    "@deepseek-ai/dsh-tool-bash-persistent": "workspace:^",
-    "@deepseek-ai/dsh-tool-pwsh-persistent": "workspace:^",
-    "@deepseek-ai/dsh-tools": "workspace:^"
+    "@akashx/cordis-plugin-timer": "workspace:^",
+    "@akashx/akx-agent": "workspace:^",
+    "@akashx/akx-agent-loop": "workspace:^",
+    "@akashx/akx-llm-api-extensions": "workspace:^",
+    "@akashx/akx-invariants": "workspace:^",
+    "@akashx/akx-jobs-local": "workspace:^",
+    "@akashx/akx-llm": "workspace:^",
+    "@akashx/akx-llm-akx": "workspace:^",
+    "@akashx/akx-llm-retry": "workspace:^",
+    "@akashx/akx-plugin-package-inventory": "workspace:^",
+    "@akashx/akx-sandbox-local": "workspace:^",
+    "@akashx/akx-sandbox-policy": "workspace:^",
+    "@akashx/akx-scope": "workspace:^",
+    "@akashx/akx-sdk-app": "workspace:^",
+    "@akashx/akx-sdk-jsonrpc-server": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-session-log-akx": "workspace:^",
+    "@akashx/akx-session-persistence-jsonl": "workspace:^",
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/akx-session-title": "workspace:^",
+    "@akashx/akx-subprocess-local": "workspace:^",
+    "@akashx/akx-system-prompt": "workspace:^",
+    "@akashx/akx-terminal": "workspace:^",
+    "@akashx/akx-terminal-bash": "workspace:^",
+    "@akashx/akx-tool-bash-persistent": "workspace:^",
+    "@akashx/akx-tool-pwsh-persistent": "workspace:^",
+    "@akashx/akx-tools": "workspace:^"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:^"
+    "@akashx/cordis": "workspace:^"
   }
 }

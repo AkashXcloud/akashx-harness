@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Command-line entry for the DeepSeek-compatible and AkashX launchers.
- * @module @deepseek-ai/dsh/bin
+ * Command-line entry for the AkashX-compatible and AkashX launchers.
+ * @module @akashx/akx/bin
  */
 
 /* v8 ignore file -- built-bin acceptance exercises this self-executing dispatch. */
@@ -10,8 +10,8 @@ import { readFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { loadLayeredEnv } from '@deepseek-ai/dsh-app-boot'
-import { parseDshArgs } from './args.ts'
+import { loadLayeredEnv } from '@akashx/akx-app-boot'
+import { parseAkxArgs } from './args.ts'
 
 // Both the source tree (apps/cli/src) and the bundled bin (apps/cli/lib) sit
 // one directory under apps/cli, so the checked-in manifest resolves with the
@@ -28,12 +28,12 @@ function readVersion(): string {
  * @param commandName - the executable name shown in help and diagnostics.
  * @returns a promise that settles when the selected command mode finishes.
  */
-export async function runCli(commandName = 'dsh'): Promise<void> {
-  process.env.DSH_CLI_NAME = commandName
-  if (commandName === 'akashx' && (process.env.DSH_HOME ?? '').trim() === '') {
-    process.env.DSH_HOME = join(homedir(), '.akashx')
+export async function runCli(commandName = 'akx'): Promise<void> {
+  process.env.AKX_CLI_NAME = commandName
+  if (commandName === 'akashx' && (process.env.__AKX_AKX_HOME__ ?? '').trim() === '') {
+    process.env.__AKX_AKX_HOME__ = join(homedir(), '.akashx')
   }
-  const invocation = parseDshArgs(process.argv.slice(2), readVersion(), commandName)
+  const invocation = parseAkxArgs(process.argv.slice(2), readVersion(), commandName)
 
   switch (invocation.mode) {
     case 'profile': {
