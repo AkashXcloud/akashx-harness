@@ -60,6 +60,14 @@ function styleInjectionModule(
  */
 export const INLINE_SAFE = /^(?:@akashx\/akx-(?:file-reference|session|llm|tools|brand|deque|output-retention|typert-protocol|util-crypto|util-values|util-workspace-path)(?:\/|$)|@akashx\/akx-token-meter\/client$|@akashx\/akx-host-open-in-app\/shared$|@akashx\/akx-agent-presets\/display$|@akashx\/akx-spill-policy\/notice$)/
 
+/**
+ * Vendored framework libraries: rescoped into @akashx, so the gate below
+ * would read them as plugin packages. They carry no cross-plugin runtime
+ * identity to share — the framework itself is a requested module-table row
+ * (external), while these are ordinary libraries a browser bundle inlines.
+ */
+const VENDORED_LIBRARY = /^@akashx\/(cosmokit|schemastery)(\/|$)/
+
 /** Generated descriptor/codec contribution with no shared runtime identity. */
 const GENERATED_REMOTE = /^@akashx\/akx-[a-z0-9]+(?:-[a-z0-9]+)*\/remote$/
 
@@ -483,6 +491,7 @@ function clientConfig(id: string, entry: string): UserConfig {
         if (!source.startsWith('@akashx/')) return null
         if (isRequested(source)) return null // requested module-table row: external wins
         if (INLINE_SAFE.test(source) || GENERATED_REMOTE.test(source)) return null // wire contribution: inline is the point
+        if (VENDORED_LIBRARY.test(source)) return null // vendored library: inline, no shared identity
         throw new Error(
           `client bundle purity: "${source}" is not in the default client externals or ${id}'s akx.client.external, an inline-safe wire layer, or a generated /remote contribution — `
           + 'cross-plugin value imports are forbidden; declare a non-default module request or collaborate through cordis services '

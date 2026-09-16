@@ -1,6 +1,6 @@
 /** Cordis dynamic-plugin UI dictionaries. */
 
-export const NS = '@akashx/cordis'
+export const NS = 'cordis'
 
 /** Simplified Chinese Cordis UI messages. */
 

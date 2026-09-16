@@ -343,7 +343,6 @@ export function AgentPresetSection(props: AgentPresetSectionProps): ReactNode {
                 ))}
               </ul>
             )}
-            {tail}
           </section>
         )
       })}
