@@ -169,7 +169,7 @@ describe('directory-picker-browse client half', () => {
     const injected = (entry.inject as () => { t: (key: string) => string })()
     // en is the shipped default locale.
     expect(injected.t('browser.title')).toBe('Select Workspace Directory')
-    expect(injected.t('browser.newFolder')).toBe('新建文件夹')
+    expect(injected.t('browser.newFolder')).toBe('New folder')
     expect(injected.t('browser.showHidden')).toBe('显示隐藏文件')
   })
 

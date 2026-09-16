@@ -160,7 +160,7 @@ describe('JobListAction duration', () => {
       job({ id: 'bash-3' as JobView['id'], label: 'skew', status: 'completed', startedAt: START + 5_000, finishedAt: START }),
     ])} />)
     fireEvent.click(screen.getByRole('button'))
-    expect(rowCells().map(cells => cells[3])).toEqual(['2h 3m', '2分5s', '0s'])
+    expect(rowCells().map(cells => cells[3])).toEqual(['2h 3m', '2m 5s', '0s'])
   })
 
   it('runs no clock while the list is closed', () => {

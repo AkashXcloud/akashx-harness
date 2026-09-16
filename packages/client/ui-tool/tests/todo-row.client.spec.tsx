@@ -81,12 +81,12 @@ describe('TodoRow', () => {
   it('summarizes counts and the active item from the call args', () => {
     render(<TodoRow {...rowProps(resultNode(ARGS))} />)
     expect(screen.getByText('Update to-do list')).toBeTruthy()
-    expect(screen.getByText('1 of 3 已完成 · 写组件')).toBeTruthy()
+    expect(screen.getByText('1/3 completed · 写组件')).toBeTruthy()
   })
 
   it('reports the extra active count outside the ellipsized summary text', () => {
     const { container } = render(<TodoRow {...rowProps(resultNode(JSON.stringify({ todos: PARALLEL })))} />)
-    const text = screen.getByText('1 of 5 已完成 · 写组件')
+    const text = screen.getByText('1/5 completed · 写组件')
     const extra = screen.getByText('+2')
     expect(text.contains(extra)).toBe(false)
     expect(container.textContent).toContain('1 of 5 已完成 · 写组件+2')

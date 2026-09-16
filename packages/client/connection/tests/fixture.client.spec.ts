@@ -630,7 +630,7 @@ describe('createFixtureApi', () => {
   it('searches current message text with literal unicode61-style token phrases', async () => {
     const api = createFixtureApi()
     const signal = new AbortController().signal
-    const phrase = await api.sessions.search(req({ query: 'FIXTURE 历史消息' }), signal)
+    const phrase = await api.sessions.search(req({ query: 'FIXTURE history' }), signal)
     expect(phrase.result).toMatchObject({
       ok: true,
       value: {
@@ -639,7 +639,7 @@ describe('createFixtureApi', () => {
       },
     })
     if (!phrase.result.ok) throw new Error('search failed')
-    expect(phrase.result.value.items[0]?.snippet).toContain('fixture 历史消息')
+    expect(phrase.result.value.items[0]?.snippet).toContain('fixture history message')
 
     timing().appendUser(
       'fx-alpha',
@@ -668,7 +668,7 @@ describe('createFixtureApi', () => {
       ok: true,
       value: { items: [], hasMore: false },
     })
-    const reasoningOnly = await api.sessions.search(req({ query: '思考过程' }), signal)
+    const reasoningOnly = await api.sessions.search(req({ query: 'Reasoning process' }), signal)
     expect(reasoningOnly.result).toEqual({
       ok: true,
       value: { items: [], hasMore: false },
@@ -941,11 +941,11 @@ describe('createFixtureApi', () => {
     const framesPromise = collectValues(api.sessionRemote.follow(id, abort.signal), abort,
       frames => frames.some(frame => frame.type === 'event' && frame.event.type === 'turn/end'))
     await new Promise(resolve => setTimeout(resolve, 10))
-    await api.sessions.prompt(req({ sessionId: id, mode: 'queue' as const, content: [{ type: 'text' as const, text: '短' }] }))
-    await api.sessions.prompt(req({ sessionId: id, mode: 'steer' as const, content: [{ type: 'text' as const, text: '插话' }] }))
+    await api.sessions.prompt(req({ sessionId: id, mode: 'queue' as const, content: [{ type: 'text' as const, text: 'short' }] }))
+    await api.sessions.prompt(req({ sessionId: id, mode: 'steer' as const, content: [{ type: 'text' as const, text: 'steer' }] }))
     const frames = await framesPromise
     const types = frames.flatMap(frame => frame.type === 'event' ? [frame.event.type] : [])
-    expect(JSON.stringify(frames)).toContain('插话')
+    expect(JSON.stringify(frames)).toContain('steer')
     expect(types.at(-1)).toBe('turn/end') // steer did not restart the turn
   })
 
@@ -958,7 +958,7 @@ describe('createFixtureApi', () => {
     const alpha = first.value.projections['fx-alpha']
     expect(alpha?.asOfSeq).toBeGreaterThan(0)
     expect(alpha?.values).toMatchObject({
-      title: 'Fixture 历史会话',
+      title: 'Fixture history session',
       plan: { active: false, pending: false },
       goal: null,
       imageLimits: { maxImagesPerMessage: 20, maxImageBytes: 5 * 1024 * 1024 },
@@ -1005,7 +1005,7 @@ describe('createFixtureApi', () => {
     // steer while idle + a non-text content block (covers the '' arm of the text join).
     await api.sessions.prompt(req({
       sessionId: created.result.value.sessionId, mode: 'steer' as const,
-      content: [{ type: 'text' as const, text: '短' }, { type: 'image', data: 'x' } as never],
+      content: [{ type: 'text' as const, text: 'short' }, { type: 'image', data: 'x' } as never],
     }))
     const frames = await framesPromise
     const types = frames.flatMap(frame => frame.type === 'event' ? [frame.event.type] : [])
@@ -1530,8 +1530,8 @@ describe('createFixtureApi', () => {
     const gapIterator = api.sessionRemote.follow(sid('fx-alpha'), gapAbort.signal)[Symbol.asyncIterator]()
     const opening = await gapIterator.next()
     if (opening.done || opening.value.type !== 'snapshot') throw new Error('follow opening snapshot missing')
-    hooks.appendSilent('fx-alpha', '静默丢帧')
-    hooks.appendUser('fx-alpha', '正常直播')
+    hooks.appendSilent('fx-alpha', 'dropped frame')
+    hooks.appendUser('fx-alpha', 'live frame')
     await expect(gapIterator.next()).rejects.toThrow(/stream skipped seq/)
 
     // Reopening replaces the window with a complete snapshot containing both durable events.
@@ -1551,10 +1551,10 @@ describe('createFixtureApi', () => {
     await vi.waitFor(() => {
       const snapshot = followed.find(frame => frame.type === 'snapshot')
       const events = snapshot === undefined ? [] : historyEvents(snapshot.records)
-      expect(events.some(event => JSON.stringify(event.data).includes('静默丢帧'))).toBe(true)
-      expect(events.some(event => JSON.stringify(event.data).includes('正常直播'))).toBe(true)
+      expect(events.some(event => JSON.stringify(event.data).includes('dropped frame'))).toBe(true)
+      expect(events.some(event => JSON.stringify(event.data).includes('live frame'))).toBe(true)
     })
-    hooks.appendTitle('fx-alpha', 'Fixture 修订标题')
+    hooks.appendTitle('fx-alpha', 'Fixture revised title')
     hooks.beginModelRetry('fx-alpha')
     hooks.scheduleModelRetry('fx-alpha')
     hooks.completeModelRetry('fx-alpha')
@@ -1562,19 +1562,19 @@ describe('createFixtureApi', () => {
     hooks.cancelModelRetryDuringBackoff('fx-alpha')
     await vi.waitFor(() => {
       expect(followed.some(frame => frame.type === 'event' && (frame.event as { type: string }).type === 'llm/retry')).toBe(true)
-      expect(followed.some(frame => frame.type === 'event' && JSON.stringify(frame.event.data).includes('重试后的完整回复'))).toBe(true)
+      expect(followed.some(frame => frame.type === 'event' && JSON.stringify(frame.event.data).includes('Complete reply after the retry'))).toBe(true)
       expect(followed.some(frame => frame.type === 'event'
         && frame.event.type === 'turn/end'
         && frame.event.data.reason.kind === 'aborted')).toBe(true)
       expect(controlled.some(frame => frame.type === 'projection'
         && frame.key === 'title'
-        && frame.value === 'Fixture 修订标题')).toBe(true)
+        && frame.value === 'Fixture revised title')).toBe(true)
     })
     expect(followed.some(frame => frame.type === 'event' && (frame.event as { type: string }).type === 'session/title')).toBe(true)
     // Paging and resumed follow agree on the recovered durable event.
     const repull = await api.sessions.history(req({ sessionId: sid('fx-alpha'), maxMessages: 5 }))
     if (!repull.result.ok) throw new Error('repull failed')
-    expect(JSON.stringify(repull.result.value.records)).toContain('静默丢帧')
+    expect(JSON.stringify(repull.result.value.records)).toContain('dropped frame')
     // breakStreams force-ends follow and control without client aborts.
     await new Promise(resolve => setTimeout(resolve, 10))
     hooks.breakStreams()
@@ -1647,7 +1647,7 @@ describe('fixture Connection RPC', () => {
     if (!created.result.ok) throw new Error('create failed')
     const id = created.result.value.sessionId
     expect((await sessions.history({ sessionId: id })).result.ok).toBe(true)
-    expect((await sessions.prompt({ sessionId: id, mode: 'queue', content: [{ type: 'text', text: '嗨' }] })).result.ok).toBe(true)
+    expect((await sessions.prompt({ sessionId: id, mode: 'queue', content: [{ type: 'text', text: 'hi' }] })).result.ok).toBe(true)
     expect((await sessions.cancel({ sessionId: id })).result.ok).toBe(true)
     expect((await readWorkspaceBaseline(createWorkspaceRemote(rpc))).items).not.toHaveLength(0)
     const workspace = await workspaces.create({ path: '/tmp/fixture-workspaces/via-client' })

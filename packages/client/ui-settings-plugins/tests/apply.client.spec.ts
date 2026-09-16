@@ -88,7 +88,7 @@ describe('ui-settings-plugins apply', () => {
     expect(slots.spec('settings.plugins.tab')).toMatchObject({ kind: 'list', scope: 'root' })
     const tab = slots.entries('settings.plugins.tab')[0]!
     expect(tab.options).toMatchObject({ id: 'configurable', order: 0 })
-    expect(resolveSlotLabel(tab.options.label)).toBe('Plugins配置')
+    expect(resolveSlotLabel(tab.options.label)).toBe('Plugin configuration')
     expect(slots.spec('settings.plugin.item')).toMatchObject({ kind: 'keyed', scope: 'root' })
   })
 
@@ -102,7 +102,7 @@ describe('ui-settings-plugins apply', () => {
     const sectionFace = (section.inject as unknown as () => PluginsSettingsSectionInjected)()
     const initialTabs = sectionFace.hooks.tabs.getSnapshot()
     expect(initialTabs).toEqual([
-      { id: 'configurable', order: 0, label: 'Plugins配置' },
+      { id: 'configurable', order: 0, label: 'Plugin configuration' },
     ])
     expect(sectionFace.hooks.tabs.getSnapshot()).toBe(initialTabs)
 
@@ -110,7 +110,7 @@ describe('ui-settings-plugins apply', () => {
     const unsubscribe = sectionFace.hooks.tabs.subscribe(listener)
     slots.register({ name: 'settings.plugins.tab', id: 'plain' } as never, () => null)
     expect(sectionFace.hooks.tabs.getSnapshot()).toEqual([
-      { id: 'configurable', order: 0, label: 'Plugins配置' },
+      { id: 'configurable', order: 0, label: 'Plugin configuration' },
       { id: 'plain', order: 0, label: '' },
     ])
     unsubscribe()
