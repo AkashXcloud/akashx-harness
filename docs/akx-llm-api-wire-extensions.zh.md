@@ -1,6 +1,6 @@
 # AkashX 官方 LLM API 协议扩展
 
-[English](akashx-llm-api-wire-extensions.md) | 中文
+[English](akx-llm-api-wire-extensions.md) | 中文
 
 本参考文档定义 [`@akashx/akx-llm-akx`](../packages/llm/llm-akx/README.zh.md) 在 `akashx-official` 聊天补全请求中发送的全部 AkashX Harness 特有 HTTP 标头和附加 JSON 字段。本文不重复定义 AkashX 上游 API 持有的字段。提供方无关的 LLM（大语言模型）接口与 `llm-pi-ai` 均不实现这些扩展。
 

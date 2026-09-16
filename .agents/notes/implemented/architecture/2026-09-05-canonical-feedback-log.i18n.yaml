@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-09-05-canonical-feedback-log.md
-2026-09-05-canonical-feedback-log.md: 76ac117edad466028d580c3e3153c0d44da941f2
-2026-09-05-canonical-feedback-log.zh.md: ce897d562c71a269ab8a40de4a2f6376760389ed
+2026-09-05-canonical-feedback-log.md: 2d7d0603595a8e56d941d5461b071e4975d1d14d
+2026-09-05-canonical-feedback-log.zh.md: f6d19bee1d3706af814f607a20c26e6f0d42e6f5

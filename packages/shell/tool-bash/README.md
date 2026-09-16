@@ -47,7 +47,7 @@ The single config field toggles background support.
 |---|---|---|
 | `enableRunInBackground` | `true` | Expose `run_in_background`; when `false`, forced background calls are rejected |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#akashx-akx-tool-bash) is the exhaustive source for every accepted field and its JSDoc; the generated [tool catalog](../../../docs/tool-catalog.md#akashx-akx-tool-bash) carries the full argument schema.
+The generated [configuration catalog](../../../docs/config-catalog.md#akashxakx-tool-bash) is the exhaustive source for every accepted field and its JSDoc; the generated [tool catalog](../../../docs/tool-catalog.md#akashxakx-tool-bash) carries the full argument schema.
 
 ### Running a command
 
@@ -113,8 +113,8 @@ Read these pages when the package-level contract is not enough. They move from t
 - [shell-env](../shell-env/README.md) — the managed `AKX_*` environment every call receives.
 - [tool-jobs](../../jobs/tool-jobs/README.md) — `job_output`, `job_list`, and `job_kill` controls for background runs.
 - [sandbox Agent Note](../../../.agents/notes/implemented/feature/2026-07-06-sandbox.md) — escalation and mode-switching rationale.
-- [Generated tool catalog](../../../docs/tool-catalog.md#akashx-akx-tool-bash) — the exact `bash` argument schema.
-- [Generated configuration catalog](../../../docs/config-catalog.md#akashx-akx-tool-bash) — every accepted config field and its source declaration.
+- [Generated tool catalog](../../../docs/tool-catalog.md#akashxakx-tool-bash) — the exact `bash` argument schema.
+- [Generated configuration catalog](../../../docs/config-catalog.md#akashxakx-tool-bash) — every accepted config field and its source declaration.
 
 -----
 
@@ -145,7 +145,7 @@ Prefix-stable while the registration scope and prompt text are unchanged. Plugin
 
 #### What the model sees
 
-The model sees the generated [`bash` schema](../../../docs/tool-catalog.md#akashx-akx-tool-bash). `run_in_background` appears only when this producer enables it; `sandbox_permissions` and `justification` appear only when the mounted executor advertises sandboxing. Agent-scoped tool restrictions can remove the definition for that agent.
+The model sees the generated [`bash` schema](../../../docs/tool-catalog.md#akashxakx-tool-bash). `run_in_background` appears only when this producer enables it; `sandbox_permissions` and `justification` appear only when the mounted executor advertises sandboxing. Agent-scoped tool restrictions can remove the definition for that agent.
 
 #### Token effect
 

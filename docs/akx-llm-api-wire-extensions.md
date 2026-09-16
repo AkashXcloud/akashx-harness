@@ -1,6 +1,6 @@
 # Official AkashX LLM API wire extensions
 
-English | [中文](akashx-llm-api-wire-extensions.zh.md)
+English | [中文](akx-llm-api-wire-extensions.zh.md)
 
 This reference defines every AkashX Harness-specific HTTP header and additive JSON field sent by [`@akashx/akx-llm-akx`](../packages/llm/llm-akx/README.md) on `akashx-official` chat-completion requests. It does not redefine fields owned by the upstream AkashX API. The provider-neutral LLM interface and `llm-pi-ai` do not implement these additions.
 

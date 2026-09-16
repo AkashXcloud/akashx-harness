@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-08-22-single-akx-application-launcher.md
+2026-08-22-single-akx-application-launcher.md: b2e0a17c5de7ff5da6fdeb4c5164008fb17f81c3
+2026-08-22-single-akx-application-launcher.zh.md: 7335b2082fe0b584bec4e559f8aa7dbad1ee6658

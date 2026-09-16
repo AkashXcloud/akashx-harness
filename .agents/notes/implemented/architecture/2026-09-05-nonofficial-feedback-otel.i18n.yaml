@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/architecture/2026-09-05-nonofficial-feedback-otel.md
-2026-09-05-nonofficial-feedback-otel.md: d0b1c9f70d65eaa46b61d699114ecaca8e0ea298
-2026-09-05-nonofficial-feedback-otel.zh.md: 593f9914b6d235158b9156c3f44506a4c6afc7b9
+2026-09-05-nonofficial-feedback-otel.md: 12d12dfe451ccd5b7709cb0df9e1399044877433
+2026-09-05-nonofficial-feedback-otel.zh.md: 93befddb6172025c898ddff7a6dce6f7b0637f14

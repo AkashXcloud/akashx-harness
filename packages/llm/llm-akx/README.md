@@ -70,7 +70,7 @@ A request selects the route with `provider: akashx-official`; the model id passe
 | `fileQuotaCleanupBatch` | `100` | Oldest harness-owned files removed before one quota retry |
 | `retryPolicy` | normal, 5 retries | Provider-owned retry policy executed by `akx-llm-retry` |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#akashx-akx-llm-akx) is the exhaustive source for every accepted field and its JSDoc.
+The generated [configuration catalog](../../../docs/config-catalog.md#akashxakx-llm-akx) is the exhaustive source for every accepted field and its JSDoc.
 
 ### Streaming with thinking and images
 

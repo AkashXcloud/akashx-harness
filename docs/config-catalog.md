@@ -9,7 +9,7 @@ This file is GENERATED from source (`scripts/gen-config-catalog.ts`) and verifie
 
 A `Requires:` line lists the service keys the plugin `inject`s: its `cordis.yml` tree must also load providers for those services. Scope is the harness tier (`packages/`); the vendored cordis plugins a config tree may also load (`hmr`, the console logger, …) are pinned upstream source ([vendoring policy](../vendor/README.md)) and not catalogued here.
 
-<a id="akashx-akx-acp"></a>
+<a id="akashxakx-acp"></a>
 
 ## `@akashx/akx-acp`
 
@@ -33,7 +33,7 @@ Depends on: `Stream` (`@agentclientprotocol/sdk`)
 
 Source: [`packages/acp/acp/src/index.ts:75`](../packages/acp/acp/src/index.ts)
 
-<a id="akashx-akx-agent-default-model"></a>
+<a id="akashxakx-agent-default-model"></a>
 
 ## `@akashx/akx-agent-default-model`
 
@@ -49,7 +49,7 @@ export interface Config {
 
 Source: [`packages/core/agent-default-model/src/index.ts:41`](../packages/core/agent-default-model/src/index.ts)
 
-<a id="akashx-akx-agent-instructions"></a>
+<a id="akashxakx-agent-instructions"></a>
 
 ## `@akashx/akx-agent-instructions`
 
@@ -81,7 +81,7 @@ export interface Config {
 
 Source: [`packages/context/agent-instructions/src/config.ts:18`](../packages/context/agent-instructions/src/config.ts)
 
-<a id="akashx-akx-agent-loop"></a>
+<a id="akashxakx-agent-loop"></a>
 
 ## `@akashx/akx-agent-loop`
 
@@ -113,7 +113,7 @@ Depends on: [`AgentOptions`](subsystems/core.md) · [`SessionId`](subsystems/cor
 
 Source: [`packages/core/agent-loop/src/index.ts:318`](../packages/core/agent-loop/src/index.ts)
 
-<a id="akashx-akx-agent-presets"></a>
+<a id="akashxakx-agent-presets"></a>
 
 ## `@akashx/akx-agent-presets`
 
@@ -159,7 +159,7 @@ export type PresetTrust = 'system' | 'user'
 
 Source: [`packages/preset/agent-presets/src/preset.ts:52`](../packages/preset/agent-presets/src/preset.ts)
 
-<a id="akashx-akx-agent-tool-presentation"></a>
+<a id="akashxakx-agent-tool-presentation"></a>
 
 ## `@akashx/akx-agent-tool-presentation`
 
@@ -183,7 +183,23 @@ Depends on: [`ToolPresentationMode`](subsystems/tools.md)
 
 Source: [`packages/core/agent-tool-presentation/src/index.ts:38`](../packages/core/agent-tool-presentation/src/index.ts)
 
-<a id="akashx-akx-api-gateway"></a>
+<a id="akashxakx-api-cognate-controller"></a>
+
+## `@akashx/akx-api-cognate-controller`
+
+```ts config-catalog
+/** Probe configuration. */
+export interface Config {
+  /** MySQL or MariaDB connection URL; falls back to `AKASHXDB_URL`. */
+  readonly url?: string
+  /** Connect timeout in milliseconds. */
+  readonly connectTimeoutMs?: number
+}
+```
+
+Source: [`packages/api/cognate-controller/src/index.ts:57`](../packages/api/cognate-controller/src/index.ts)
+
+<a id="akashxakx-api-gateway"></a>
 
 ## `@akashx/akx-api-gateway`
 
@@ -199,7 +215,7 @@ export interface Config {
 
 Source: [`packages/api/gateway/src/index.ts:119`](../packages/api/gateway/src/index.ts)
 
-<a id="akashx-akx-api-session-controller"></a>
+<a id="akashxakx-api-session-controller"></a>
 
 ## `@akashx/akx-api-session-controller`
 
@@ -215,7 +231,7 @@ export interface Config {
 
 Source: [`packages/api/session-controller/src/index.ts:73`](../packages/api/session-controller/src/index.ts)
 
-<a id="akashx-akx-api-settings-controller"></a>
+<a id="akashxakx-api-settings-controller"></a>
 
 ## `@akashx/akx-api-settings-controller`
 
@@ -229,7 +245,7 @@ export interface Config {
 
 Source: [`packages/api/settings-controller/src/index.ts:36`](../packages/api/settings-controller/src/index.ts)
 
-<a id="akashx-akx-api-workspace-files"></a>
+<a id="akashxakx-api-workspace-files"></a>
 
 ## `@akashx/akx-api-workspace-files`
 
@@ -257,7 +273,7 @@ export interface Config {
 
 Source: [`packages/api/workspace-files/src/index.ts:69`](../packages/api/workspace-files/src/index.ts)
 
-<a id="akashx-akx-attachment-local"></a>
+<a id="akashxakx-attachment-local"></a>
 
 ## `@akashx/akx-attachment-local`
 
@@ -292,7 +308,7 @@ export interface Config {
 
 Source: [`packages/attachment/attachment-local/src/index.ts:61`](../packages/attachment/attachment-local/src/index.ts)
 
-<a id="akashx-akx-bash-local"></a>
+<a id="akashxakx-bash-local"></a>
 
 ## `@akashx/akx-bash-local`
 
@@ -318,7 +334,7 @@ export interface Config {
 
 Source: [`packages/shell/bash-local/src/index.ts:41`](../packages/shell/bash-local/src/index.ts)
 
-<a id="akashx-akx-bash-sandbox"></a>
+<a id="akashxakx-bash-sandbox"></a>
 
 ## `@akashx/akx-bash-sandbox`
 
@@ -335,11 +351,11 @@ Requires: `subprocess` · `sandbox` · `sandboxPolicy`
 export type Config = LocalConfig
 ```
 
-Depends on: [`LocalConfig`](#akashx-akx-bash-local)
+Depends on: [`LocalConfig`](#akashxakx-bash-local)
 
 Source: [`packages/shell/bash-sandbox/src/index.ts:36`](../packages/shell/bash-sandbox/src/index.ts)
 
-<a id="akashx-akx-client-connection"></a>
+<a id="akashxakx-client-connection"></a>
 
 ## `@akashx/akx-client-connection`
 
@@ -385,7 +401,7 @@ export interface ConnectionRecoveryConfig {
 
 Source: [`packages/client/connection/src/index.ts:72`](../packages/client/connection/src/index.ts)
 
-<a id="akashx-akx-client-hmr"></a>
+<a id="akashxakx-client-hmr"></a>
 
 ## `@akashx/akx-client-hmr`
 
@@ -401,7 +417,7 @@ export interface Config {
 
 Source: [`packages/client/hmr/src/index.ts:31`](../packages/client/hmr/src/index.ts)
 
-<a id="akashx-akx-code-runtime-worker-thread"></a>
+<a id="akashxakx-code-runtime-worker-thread"></a>
 
 ## `@akashx/akx-code-runtime-worker-thread`
 
@@ -438,7 +454,7 @@ export interface Config {
 
 Source: [`packages/code-runtime/code-runtime-worker-thread/src/index.ts:25`](../packages/code-runtime/code-runtime-worker-thread/src/index.ts)
 
-<a id="akashx-akx-cognate"></a>
+<a id="akashxakx-cognate"></a>
 
 ## `@akashx/akx-cognate`
 
@@ -504,7 +520,7 @@ export interface CognateMetric {
 
 Source: [`packages/cognate/cognate/src/index.ts:17`](../packages/cognate/cognate/src/index.ts)
 
-<a id="akashx-akx-cognate-local"></a>
+<a id="akashxakx-cognate-local"></a>
 
 ## `@akashx/akx-cognate-local`
 
@@ -524,7 +540,7 @@ export interface Config {
 
 Source: [`packages/cognate/cognate-local/src/index.ts:12`](../packages/cognate/cognate-local/src/index.ts)
 
-<a id="akashx-akx-cognate-mysql"></a>
+<a id="akashxakx-cognate-mysql"></a>
 
 ## `@akashx/akx-cognate-mysql`
 
@@ -556,7 +572,7 @@ Depends on: [`CognateSemanticContext`](subsystems/cognate.md)
 
 Source: [`packages/cognate/cognate-mysql/src/index.ts:30`](../packages/cognate/cognate-mysql/src/index.ts)
 
-<a id="akashx-akx-compaction-basic"></a>
+<a id="akashxakx-compaction-basic"></a>
 
 ## `@akashx/akx-compaction-basic`
 
@@ -602,7 +618,7 @@ export interface ModelCompactPolicyConfig extends CompactionPolicyConfig {
 
 Source: [`packages/compaction/compaction-basic/src/types.ts:38`](../packages/compaction/compaction-basic/src/types.ts)
 
-<a id="akashx-akx-compaction-tool-result-pruner"></a>
+<a id="akashxakx-compaction-tool-result-pruner"></a>
 
 ## `@akashx/akx-compaction-tool-result-pruner`
 
@@ -622,7 +638,7 @@ export interface ToolResultPruneConfig {
 
 Source: [`packages/compaction/compaction-tool-result-pruner/src/types.ts:5`](../packages/compaction/compaction-tool-result-pruner/src/types.ts)
 
-<a id="akashx-akx-cordis-host-runner"></a>
+<a id="akashxakx-cordis-host-runner"></a>
 
 ## `@akashx/akx-cordis-host-runner`
 
@@ -638,7 +654,7 @@ export interface Config {
 
 Source: [`packages/extensions/cordis-host-runner/src/index.ts:88`](../packages/extensions/cordis-host-runner/src/index.ts)
 
-<a id="akashx-akx-credentials-local"></a>
+<a id="akashxakx-credentials-local"></a>
 
 ## `@akashx/akx-credentials-local`
 
@@ -658,7 +674,7 @@ export interface Config {
 
 Source: [`packages/credentials/credentials-local/src/index.ts:64`](../packages/credentials/credentials-local/src/index.ts)
 
-<a id="akashx-akx-e2b"></a>
+<a id="akashxakx-e2b"></a>
 
 ## `@akashx/akx-e2b`
 
@@ -676,7 +692,7 @@ export interface Config {
 
 Source: [`packages/e2b/e2b/src/index.ts:45`](../packages/e2b/e2b/src/index.ts)
 
-<a id="akashx-akx-experimental-agent-team"></a>
+<a id="akashxakx-experimental-agent-team"></a>
 
 ## `@akashx/akx-experimental-agent-team`
 
@@ -700,7 +716,7 @@ export interface Config {
 
 Source: [`packages/experimental/agent-team/src/types.ts:130`](../packages/experimental/agent-team/src/types.ts)
 
-<a id="akashx-akx-experimental-code-runtime-python"></a>
+<a id="akashxakx-experimental-code-runtime-python"></a>
 
 ## `@akashx/akx-experimental-code-runtime-python`
 
@@ -767,7 +783,7 @@ export interface Config {
 
 Source: [`packages/experimental/code-runtime-python/src/index.ts:42`](../packages/experimental/code-runtime-python/src/index.ts)
 
-<a id="akashx-akx-experimental-inspector"></a>
+<a id="akashxakx-experimental-inspector"></a>
 
 ## `@akashx/akx-experimental-inspector`
 
@@ -835,7 +851,7 @@ export interface InspectorOptions {
 
 Source: [`packages/experimental/inspector/src/index.ts:66`](../packages/experimental/inspector/src/index.ts)
 
-<a id="akashx-akx-experimental-tool-agent-team"></a>
+<a id="akashxakx-experimental-tool-agent-team"></a>
 
 ## `@akashx/akx-experimental-tool-agent-team`
 
@@ -853,7 +869,7 @@ export interface Config {
 
 Source: [`packages/experimental/tool-agent-team/src/index.ts:17`](../packages/experimental/tool-agent-team/src/index.ts)
 
-<a id="akashx-akx-file-reference-local"></a>
+<a id="akashxakx-file-reference-local"></a>
 
 ## `@akashx/akx-file-reference-local`
 
@@ -873,7 +889,7 @@ export interface Config {
 
 Source: [`packages/context/file-reference-local/src/index.ts:34`](../packages/context/file-reference-local/src/index.ts)
 
-<a id="akashx-akx-fs-local"></a>
+<a id="akashxakx-fs-local"></a>
 
 ## `@akashx/akx-fs-local`
 
@@ -892,7 +908,7 @@ export interface Config {
 
 Source: [`packages/fs/fs-local/src/index.ts:42`](../packages/fs/fs-local/src/index.ts)
 
-<a id="akashx-akx-fs-sandbox"></a>
+<a id="akashxakx-fs-sandbox"></a>
 
 ## `@akashx/akx-fs-sandbox`
 
@@ -908,11 +924,11 @@ Requires: `sandboxPolicy`
 export type Config = LocalConfig
 ```
 
-Depends on: [`LocalConfig`](#akashx-akx-fs-local)
+Depends on: [`LocalConfig`](#akashxakx-fs-local)
 
 Source: [`packages/fs/fs-sandbox/src/index.ts:45`](../packages/fs/fs-sandbox/src/index.ts)
 
-<a id="akashx-akx-goal"></a>
+<a id="akashxakx-goal"></a>
 
 ## `@akashx/akx-goal`
 
@@ -928,7 +944,7 @@ export interface Config {
 
 Source: [`packages/goal/goal/src/index.ts:172`](../packages/goal/goal/src/index.ts)
 
-<a id="akashx-akx-headless"></a>
+<a id="akashxakx-headless"></a>
 
 ## `@akashx/akx-headless`
 
@@ -944,7 +960,7 @@ export interface Config {
 
 Source: [`packages/bundle/headless/src/index.ts:34`](../packages/bundle/headless/src/index.ts)
 
-<a id="akashx-akx-hooks-claude-code"></a>
+<a id="akashxakx-hooks-claude-code"></a>
 
 ## `@akashx/akx-hooks-claude-code`
 
@@ -982,7 +998,7 @@ export interface Config {
 
 Source: [`packages/hooks/hooks-claude-code/src/index.ts:44`](../packages/hooks/hooks-claude-code/src/index.ts)
 
-<a id="akashx-akx-hooks-codex"></a>
+<a id="akashxakx-hooks-codex"></a>
 
 ## `@akashx/akx-hooks-codex`
 
@@ -1009,7 +1025,7 @@ export interface Config {
 
 Source: [`packages/hooks/hooks-codex/src/index.ts:43`](../packages/hooks/hooks-codex/src/index.ts)
 
-<a id="akashx-akx-host-directory-picker-browse"></a>
+<a id="akashxakx-host-directory-picker-browse"></a>
 
 ## `@akashx/akx-host-directory-picker-browse`
 
@@ -1023,7 +1039,7 @@ export interface Config {
 
 Source: [`packages/host/directory-picker-browse/src/index.ts:181`](../packages/host/directory-picker-browse/src/index.ts)
 
-<a id="akashx-akx-host-frontend-static"></a>
+<a id="akashxakx-host-frontend-static"></a>
 
 ## `@akashx/akx-host-frontend-static`
 
@@ -1039,7 +1055,7 @@ export interface Config {
 
 Source: [`packages/host/frontend-static/src/index.ts:30`](../packages/host/frontend-static/src/index.ts)
 
-<a id="akashx-akx-host-open-in-app"></a>
+<a id="akashxakx-host-open-in-app"></a>
 
 ## `@akashx/akx-host-open-in-app`
 
@@ -1070,7 +1086,7 @@ export interface Config {
 
 Source: [`packages/host/open-in-app/src/index.ts:50`](../packages/host/open-in-app/src/index.ts)
 
-<a id="akashx-akx-host-webserver"></a>
+<a id="akashxakx-host-webserver"></a>
 
 ## `@akashx/akx-host-webserver`
 
@@ -1092,7 +1108,7 @@ export interface Config {
 
 Source: [`packages/host/webserver/src/index.ts:59`](../packages/host/webserver/src/index.ts)
 
-<a id="akashx-akx-invariants"></a>
+<a id="akashxakx-invariants"></a>
 
 ## `@akashx/akx-invariants`
 
@@ -1110,7 +1126,7 @@ export interface Config {
 
 Source: [`packages/runtime-diagnostics/invariants/src/index.ts:15`](../packages/runtime-diagnostics/invariants/src/index.ts)
 
-<a id="akashx-akx-jobs-local"></a>
+<a id="akashxakx-jobs-local"></a>
 
 ## `@akashx/akx-jobs-local`
 
@@ -1127,7 +1143,7 @@ export interface Config {
 
 Source: [`packages/jobs/jobs-local/src/index.ts:31`](../packages/jobs/jobs-local/src/index.ts)
 
-<a id="akashx-akx-llm-akx"></a>
+<a id="akashxakx-llm-akx"></a>
 
 ## `@akashx/akx-llm-akx`
 
@@ -1214,7 +1230,7 @@ Depends on: [`ModelModality`](../packages/llm/llm/src/index.ts) · [`RetryPolicy
 
 Source: [`packages/llm/llm-akx/src/index.ts:134`](../packages/llm/llm-akx/src/index.ts)
 
-<a id="akashx-akx-llm-pi-ai"></a>
+<a id="akashxakx-llm-pi-ai"></a>
 
 ## `@akashx/akx-llm-pi-ai`
 
@@ -1489,7 +1505,7 @@ Depends on: `Api` (`@earendil-works/pi-ai`) · `CacheRetention` (`@earendil-work
 
 Source: [`packages/llm/llm-pi-ai/src/config.ts:221`](../packages/llm/llm-pi-ai/src/config.ts)
 
-<a id="akashx-akx-llm-replay"></a>
+<a id="akashxakx-llm-replay"></a>
 
 ## `@akashx/akx-llm-replay`
 
@@ -1568,7 +1584,7 @@ Depends on: [`ModelModality`](../packages/llm/llm/src/index.ts) · [`RetryPolicy
 
 Source: [`packages/test-support/llm-replay/src/index.ts:1123`](../packages/test-support/llm-replay/src/index.ts)
 
-<a id="akashx-akx-llm-retry"></a>
+<a id="akashxakx-llm-retry"></a>
 
 ## `@akashx/akx-llm-retry`
 
@@ -1581,7 +1597,7 @@ export type Config = Readonly<Record<string, never>>
 
 Source: [`packages/llm/llm-retry/src/index.ts:25`](../packages/llm/llm-retry/src/index.ts)
 
-<a id="akashx-akx-lsp-stdio"></a>
+<a id="akashxakx-lsp-stdio"></a>
 
 ## `@akashx/akx-lsp-stdio`
 
@@ -1623,7 +1639,7 @@ export interface LspLocalServerConfig {
 
 Source: [`packages/lsp/lsp-stdio/src/index.ts:82`](../packages/lsp/lsp-stdio/src/index.ts)
 
-<a id="akashx-akx-mcp-client"></a>
+<a id="akashxakx-mcp-client"></a>
 
 ## `@akashx/akx-mcp-client`
 
@@ -1696,7 +1712,7 @@ export interface ReconnectConfig {
 
 Source: [`packages/mcp/mcp-client/src/index.ts:98`](../packages/mcp/mcp-client/src/index.ts)
 
-<a id="akashx-akx-message-feedback"></a>
+<a id="akashxakx-message-feedback"></a>
 
 ## `@akashx/akx-message-feedback`
 
@@ -1712,7 +1728,7 @@ export interface Config {
 
 Source: [`packages/feedback/message-feedback/src/index.ts:40`](../packages/feedback/message-feedback/src/index.ts)
 
-<a id="akashx-akx-permission-presets"></a>
+<a id="akashxakx-permission-presets"></a>
 
 ## `@akashx/akx-permission-presets`
 
@@ -1751,7 +1767,7 @@ Depends on: [`ApprovalPolicy`](subsystems/approval.md) · [`SandboxMode`](subsys
 
 Source: [`packages/interaction/permission-presets/src/index.ts:144`](../packages/interaction/permission-presets/src/index.ts)
 
-<a id="akashx-akx-persona"></a>
+<a id="akashxakx-persona"></a>
 
 ## `@akashx/akx-persona`
 
@@ -1780,7 +1796,7 @@ export interface Config {
 
 Source: [`packages/preset/persona/src/index.ts:30`](../packages/preset/persona/src/index.ts)
 
-<a id="akashx-akx-plan-mode"></a>
+<a id="akashxakx-plan-mode"></a>
 
 ## `@akashx/akx-plan-mode`
 
@@ -1796,7 +1812,7 @@ export interface PlanModeConfig {
 
 Source: [`packages/plan/plan-mode/src/index.ts:64`](../packages/plan/plan-mode/src/index.ts)
 
-<a id="akashx-akx-plugin-package-inventory"></a>
+<a id="akashxakx-plugin-package-inventory"></a>
 
 ## `@akashx/akx-plugin-package-inventory`
 
@@ -1812,7 +1828,7 @@ export interface Config {
 
 Source: [`packages/llm/plugin-package-inventory/src/index.ts:31`](../packages/llm/plugin-package-inventory/src/index.ts)
 
-<a id="akashx-akx-pwsh-local"></a>
+<a id="akashxakx-pwsh-local"></a>
 
 ## `@akashx/akx-pwsh-local`
 
@@ -1845,7 +1861,7 @@ export interface Config {
 
 Source: [`packages/shell/pwsh-local/src/index.ts:58`](../packages/shell/pwsh-local/src/index.ts)
 
-<a id="akashx-akx-pwsh-sandbox"></a>
+<a id="akashxakx-pwsh-sandbox"></a>
 
 ## `@akashx/akx-pwsh-sandbox`
 
@@ -1863,11 +1879,11 @@ Requires: `subprocess` · `sandbox` · `sandboxPolicy`
 export type Config = LocalConfig
 ```
 
-Depends on: [`LocalConfig`](#akashx-akx-pwsh-local)
+Depends on: [`LocalConfig`](#akashxakx-pwsh-local)
 
 Source: [`packages/shell/pwsh-sandbox/src/index.ts:40`](../packages/shell/pwsh-sandbox/src/index.ts)
 
-<a id="akashx-akx-repeat-tool-reminder"></a>
+<a id="akashxakx-repeat-tool-reminder"></a>
 
 ## `@akashx/akx-repeat-tool-reminder`
 
@@ -1901,7 +1917,7 @@ export interface Config {
 
 Source: [`packages/guard/repeat-tool-reminder/src/index.ts:28`](../packages/guard/repeat-tool-reminder/src/index.ts)
 
-<a id="akashx-akx-sandbox-local"></a>
+<a id="akashxakx-sandbox-local"></a>
 
 ## `@akashx/akx-sandbox-local`
 
@@ -1933,7 +1949,7 @@ export interface Config {
 
 Source: [`packages/sandbox/sandbox-local/src/index.ts:44`](../packages/sandbox/sandbox-local/src/index.ts)
 
-<a id="akashx-akx-sandbox-policy"></a>
+<a id="akashxakx-sandbox-policy"></a>
 
 ## `@akashx/akx-sandbox-policy`
 
@@ -1962,7 +1978,7 @@ Depends on: [`SandboxMode`](subsystems/sandbox.md)
 
 Source: [`packages/sandbox/sandbox-policy/src/index.ts:70`](../packages/sandbox/sandbox-policy/src/index.ts)
 
-<a id="akashx-akx-sdk-app"></a>
+<a id="akashxakx-sdk-app"></a>
 
 ## `@akashx/akx-sdk-app`
 
@@ -1978,7 +1994,7 @@ export interface Config {
 
 Source: [`packages/bundle/sdk-app/src/index.ts:23`](../packages/bundle/sdk-app/src/index.ts)
 
-<a id="akashx-akx-sdk-jsonrpc-server"></a>
+<a id="akashxakx-sdk-jsonrpc-server"></a>
 
 ## `@akashx/akx-sdk-jsonrpc-server`
 
@@ -2002,7 +2018,7 @@ Depends on: `Readable` (`node:stream`) · `Writable` (`node:stream`)
 
 Source: [`packages/sdk/server/src/index.ts:25`](../packages/sdk/server/src/index.ts)
 
-<a id="akashx-akx-session-log-akx"></a>
+<a id="akashxakx-session-log-akx"></a>
 
 ## `@akashx/akx-session-log-akx`
 
@@ -2018,7 +2034,7 @@ export interface Config {
 
 Source: [`packages/session/session-log-akx/src/index.ts:38`](../packages/session/session-log-akx/src/index.ts)
 
-<a id="akashx-akx-session-log-export"></a>
+<a id="akashxakx-session-log-export"></a>
 
 ## `@akashx/akx-session-log-export`
 
@@ -2037,7 +2053,7 @@ export type SessionLogCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
 Source: [`packages/session-query/session-log-export/src/index.ts:46`](../packages/session-query/session-log-export/src/index.ts)
 
-<a id="akashx-akx-session-persistence-jsonl"></a>
+<a id="akashxakx-session-persistence-jsonl"></a>
 
 ## `@akashx/akx-session-persistence-jsonl`
 
@@ -2062,7 +2078,7 @@ export type JsonlCompression = 'zstd' | 'none'
 
 Source: [`packages/session/session-persistence-jsonl/src/index.ts:88`](../packages/session/session-persistence-jsonl/src/index.ts)
 
-<a id="akashx-akx-session-projection-cache"></a>
+<a id="akashxakx-session-projection-cache"></a>
 
 ## `@akashx/akx-session-projection-cache`
 
@@ -2086,7 +2102,7 @@ export interface Config {
 
 Source: [`packages/session/session-projection-cache/src/index.ts:63`](../packages/session/session-projection-cache/src/index.ts)
 
-<a id="akashx-akx-session-query-sqlite"></a>
+<a id="akashxakx-session-query-sqlite"></a>
 
 ## `@akashx/akx-session-query-sqlite`
 
@@ -2134,7 +2150,7 @@ Depends on: [`SessionQueryConfig`](../packages/session-query/session-query/src/i
 
 Source: [`packages/session-query/session-query-sqlite/src/index.ts:92`](../packages/session-query/session-query-sqlite/src/index.ts)
 
-<a id="akashx-akx-session-reference"></a>
+<a id="akashxakx-session-reference"></a>
 
 ## `@akashx/akx-session-reference`
 
@@ -2156,7 +2172,7 @@ export interface Config {
 
 Source: [`packages/context/session-reference/src/config.ts:11`](../packages/context/session-reference/src/config.ts)
 
-<a id="akashx-akx-session-telemetry-otel"></a>
+<a id="akashxakx-session-telemetry-otel"></a>
 
 ## `@akashx/akx-session-telemetry-otel`
 
@@ -2201,7 +2217,7 @@ Depends on: `BatchLogRecordProcessorOptions` (`@opentelemetry/sdk-logs`) · `OTL
 
 Source: [`packages/session/session-telemetry-otel/src/index.ts:100`](../packages/session/session-telemetry-otel/src/index.ts)
 
-<a id="akashx-akx-session-title"></a>
+<a id="akashxakx-session-title"></a>
 
 ## `@akashx/akx-session-title`
 
@@ -2221,7 +2237,7 @@ export interface Config {
 
 Source: [`packages/session/session-title/src/index.ts:56`](../packages/session/session-title/src/index.ts)
 
-<a id="akashx-akx-session-title-all-prompts-llm"></a>
+<a id="akashxakx-session-title-all-prompts-llm"></a>
 
 ## `@akashx/akx-session-title-all-prompts-llm`
 
@@ -2236,7 +2252,7 @@ Depends on: [`SessionTitleLlmConfig`](../packages/session/session-title-llm/src/
 
 Source: [`packages/session/session-title-all-prompts-llm/src/index.ts:15`](../packages/session/session-title-all-prompts-llm/src/index.ts)
 
-<a id="akashx-akx-session-title-first-prompt-llm"></a>
+<a id="akashxakx-session-title-first-prompt-llm"></a>
 
 ## `@akashx/akx-session-title-first-prompt-llm`
 
@@ -2251,7 +2267,7 @@ Depends on: [`SessionTitleLlmConfig`](../packages/session/session-title-llm/src/
 
 Source: [`packages/session/session-title-first-prompt-llm/src/index.ts:15`](../packages/session/session-title-first-prompt-llm/src/index.ts)
 
-<a id="akashx-akx-settings-file"></a>
+<a id="akashxakx-settings-file"></a>
 
 ## `@akashx/akx-settings-file`
 
@@ -2271,7 +2287,7 @@ export interface Config {
 
 Source: [`packages/settings/settings-file/src/index.ts:22`](../packages/settings/settings-file/src/index.ts)
 
-<a id="akashx-akx-shell-env"></a>
+<a id="akashxakx-shell-env"></a>
 
 ## `@akashx/akx-shell-env`
 
@@ -2285,7 +2301,7 @@ export interface Config {
 
 Source: [`packages/shell/shell-env/src/index.ts:28`](../packages/shell/shell-env/src/index.ts)
 
-<a id="akashx-akx-skill"></a>
+<a id="akashxakx-skill"></a>
 
 ## `@akashx/akx-skill`
 
@@ -2299,7 +2315,7 @@ export interface Config {
 
 Source: [`packages/skill/skill/src/index.ts:278`](../packages/skill/skill/src/index.ts)
 
-<a id="akashx-akx-skill-filesystem"></a>
+<a id="akashxakx-skill-filesystem"></a>
 
 ## `@akashx/akx-skill-filesystem`
 
@@ -2337,7 +2353,7 @@ export interface Config {
 
 Source: [`packages/skill/skill-filesystem/src/index.ts:49`](../packages/skill/skill-filesystem/src/index.ts)
 
-<a id="akashx-akx-spill-local"></a>
+<a id="akashxakx-spill-local"></a>
 
 ## `@akashx/akx-spill-local`
 
@@ -2366,7 +2382,7 @@ export interface Config {
 
 Source: [`packages/spill/spill-local/src/index.ts:31`](../packages/spill/spill-local/src/index.ts)
 
-<a id="akashx-akx-spill-policy"></a>
+<a id="akashxakx-spill-policy"></a>
 
 ## `@akashx/akx-spill-policy`
 
@@ -2386,7 +2402,7 @@ export interface Config {
 
 Source: [`packages/spill/spill-policy/src/index.ts:61`](../packages/spill/spill-policy/src/index.ts)
 
-<a id="akashx-akx-storage-domain"></a>
+<a id="akashxakx-storage-domain"></a>
 
 ## `@akashx/akx-storage-domain`
 
@@ -2409,7 +2425,7 @@ export interface Config {
 
 Source: [`packages/storage/storage-domain/src/index.ts:52`](../packages/storage/storage-domain/src/index.ts)
 
-<a id="akashx-akx-storage-json"></a>
+<a id="akashxakx-storage-json"></a>
 
 ## `@akashx/akx-storage-json`
 
@@ -2430,7 +2446,7 @@ export interface Config {
 
 Source: [`packages/storage/storage-json/src/index.ts:28`](../packages/storage/storage-json/src/index.ts)
 
-<a id="akashx-akx-storage-sqlite"></a>
+<a id="akashxakx-storage-sqlite"></a>
 
 ## `@akashx/akx-storage-sqlite`
 
@@ -2470,7 +2486,7 @@ export type JournalMode = 'wal' | 'delete' | 'truncate' | 'persist'
 
 Source: [`packages/storage/storage-sqlite/src/index.ts:24`](../packages/storage/storage-sqlite/src/index.ts)
 
-<a id="akashx-akx-subagent-acp"></a>
+<a id="akashxakx-subagent-acp"></a>
 
 ## `@akashx/akx-subagent-acp`
 
@@ -2523,75 +2539,7 @@ export type PermissionPolicy = 'allow' | 'reject'
 
 Source: [`packages/subagent/subagent-acp/src/index.ts:27`](../packages/subagent/subagent-acp/src/index.ts)
 
-<a id="akashx-akx-subagent-claude-code"></a>
-
-## `@akashx/akx-subagent-claude-code`
-
-Requires: `subagents` · `subprocess`
-
-```ts config-catalog
-/** Deployment-owned model, permission, environment, and process-release settings. */
-export interface Config {
-  /** Provider name on `ctx.subagents` (default `claude-code`). */
-  providerName?: string
-  /** Native Claude model fixed for this instance; omitted to inherit Claude settings. */
-  model?: string
-  /**
-   * Explicit environment entries layered over the subprocess seam's
-   * credential-scrubbed parent environment.
-   */
-  env?: Record<string, string>
-  /**
-   * Native non-interactive mode fixed for this Provider instance. Defaults to
-   * `dontAsk`; `acceptEdits` accepts edits, `auto` uses the native classifier,
-   * `plan` returns a plan without approving execution, and
-   * `bypassPermissions` explicitly skips permission checks.
-   */
-  permissionMode?: ClaudeCodePermissionMode
-  /** Grace in milliseconds between Claude Code managed-range termination tiers. */
-  disposeGraceMs?: number
-}
-
-/** Profile-selectable non-interactive Claude Code permission mode. */
-export type ClaudeCodePermissionMode = typeof CLAUDE_CODE_PERMISSION_MODES[number]
-```
-
-Source: [`packages/subagent/subagent-claude-code/src/index.ts:38`](../packages/subagent/subagent-claude-code/src/index.ts)
-
-<a id="akashx-akx-subagent-codex"></a>
-
-## `@akashx/akx-subagent-codex`
-
-Requires: `subagents` · `subprocess`
-
-```ts config-catalog
-/** Deployment-owned model, permission, environment, and process-release settings. */
-export interface Config {
-  /** Provider name on `ctx.subagents` (default `codex`). */
-  providerName?: string
-  /** Native Codex model fixed for this instance; omitted to inherit Codex settings. */
-  model?: string
-  /**
-   * Explicit environment entries layered over the subprocess seam's
-   * credential-scrubbed parent environment.
-   */
-  env?: Record<string, string>
-  /** Native non-interactive permission mode fixed for this Provider instance. */
-  permissionMode?: CodexPermissionMode
-  /** Grace in milliseconds between app-server managed-range termination tiers. */
-  disposeGraceMs?: number
-}
-
-/** Profile-selectable non-interactive Codex permission mode. */
-export type CodexPermissionMode =
-  | 'never'
-  | 'approve-for-me'
-  | 'dangerously-bypass-approvals-and-sandbox'
-```
-
-Source: [`packages/subagent/subagent-codex/src/index.ts:36`](../packages/subagent/subagent-codex/src/index.ts)
-
-<a id="akashx-akx-subagent-akx-sdk"></a>
+<a id="akashxakx-subagent-akx-sdk"></a>
 
 ## `@akashx/akx-subagent-akx-sdk`
 
@@ -2647,7 +2595,75 @@ export interface Config {
 
 Source: [`packages/subagent/subagent-akx-sdk/src/index.ts:34`](../packages/subagent/subagent-akx-sdk/src/index.ts)
 
-<a id="akashx-akx-subagent-fork-in-process"></a>
+<a id="akashxakx-subagent-claude-code"></a>
+
+## `@akashx/akx-subagent-claude-code`
+
+Requires: `subagents` · `subprocess`
+
+```ts config-catalog
+/** Deployment-owned model, permission, environment, and process-release settings. */
+export interface Config {
+  /** Provider name on `ctx.subagents` (default `claude-code`). */
+  providerName?: string
+  /** Native Claude model fixed for this instance; omitted to inherit Claude settings. */
+  model?: string
+  /**
+   * Explicit environment entries layered over the subprocess seam's
+   * credential-scrubbed parent environment.
+   */
+  env?: Record<string, string>
+  /**
+   * Native non-interactive mode fixed for this Provider instance. Defaults to
+   * `dontAsk`; `acceptEdits` accepts edits, `auto` uses the native classifier,
+   * `plan` returns a plan without approving execution, and
+   * `bypassPermissions` explicitly skips permission checks.
+   */
+  permissionMode?: ClaudeCodePermissionMode
+  /** Grace in milliseconds between Claude Code managed-range termination tiers. */
+  disposeGraceMs?: number
+}
+
+/** Profile-selectable non-interactive Claude Code permission mode. */
+export type ClaudeCodePermissionMode = typeof CLAUDE_CODE_PERMISSION_MODES[number]
+```
+
+Source: [`packages/subagent/subagent-claude-code/src/index.ts:38`](../packages/subagent/subagent-claude-code/src/index.ts)
+
+<a id="akashxakx-subagent-codex"></a>
+
+## `@akashx/akx-subagent-codex`
+
+Requires: `subagents` · `subprocess`
+
+```ts config-catalog
+/** Deployment-owned model, permission, environment, and process-release settings. */
+export interface Config {
+  /** Provider name on `ctx.subagents` (default `codex`). */
+  providerName?: string
+  /** Native Codex model fixed for this instance; omitted to inherit Codex settings. */
+  model?: string
+  /**
+   * Explicit environment entries layered over the subprocess seam's
+   * credential-scrubbed parent environment.
+   */
+  env?: Record<string, string>
+  /** Native non-interactive permission mode fixed for this Provider instance. */
+  permissionMode?: CodexPermissionMode
+  /** Grace in milliseconds between app-server managed-range termination tiers. */
+  disposeGraceMs?: number
+}
+
+/** Profile-selectable non-interactive Codex permission mode. */
+export type CodexPermissionMode =
+  | 'never'
+  | 'approve-for-me'
+  | 'dangerously-bypass-approvals-and-sandbox'
+```
+
+Source: [`packages/subagent/subagent-codex/src/index.ts:36`](../packages/subagent/subagent-codex/src/index.ts)
+
+<a id="akashxakx-subagent-fork-in-process"></a>
 
 ## `@akashx/akx-subagent-fork-in-process`
 
@@ -2663,7 +2679,7 @@ export interface Config {
 
 Source: [`packages/subagent/subagent-fork-in-process/src/index.ts:31`](../packages/subagent/subagent-fork-in-process/src/index.ts)
 
-<a id="akashx-akx-subagent-spawn-in-process"></a>
+<a id="akashxakx-subagent-spawn-in-process"></a>
 
 ## `@akashx/akx-subagent-spawn-in-process`
 
@@ -2679,7 +2695,7 @@ export interface Config {
 
 Source: [`packages/subagent/subagent-spawn-in-process/src/index.ts:25`](../packages/subagent/subagent-spawn-in-process/src/index.ts)
 
-<a id="akashx-akx-subprocess-e2b"></a>
+<a id="akashxakx-subprocess-e2b"></a>
 
 ## `@akashx/akx-subprocess-e2b`
 
@@ -2695,7 +2711,7 @@ export interface Config {
 
 Source: [`packages/e2b/subprocess-e2b/src/index.ts:26`](../packages/e2b/subprocess-e2b/src/index.ts)
 
-<a id="akashx-akx-system-prompt"></a>
+<a id="akashxakx-system-prompt"></a>
 
 ## `@akashx/akx-system-prompt`
 
@@ -2727,7 +2743,7 @@ export interface Config {
 
 Source: [`packages/core/system-prompt/src/index.ts:244`](../packages/core/system-prompt/src/index.ts)
 
-<a id="akashx-akx-terminal-bash"></a>
+<a id="akashxakx-terminal-bash"></a>
 
 ## `@akashx/akx-terminal-bash`
 
@@ -2777,7 +2793,7 @@ export type ShellDialect = 'bash' | 'pwsh'
 
 Source: [`packages/terminal/terminal-bash/src/config.ts:10`](../packages/terminal/terminal-bash/src/config.ts)
 
-<a id="akashx-akx-time-context"></a>
+<a id="akashxakx-time-context"></a>
 
 ## `@akashx/akx-time-context`
 
@@ -2795,7 +2811,7 @@ export interface Config {
 
 Source: [`packages/context/time-context/src/index.ts:49`](../packages/context/time-context/src/index.ts)
 
-<a id="akashx-akx-tmux-context"></a>
+<a id="akashxakx-tmux-context"></a>
 
 ## `@akashx/akx-tmux-context`
 
@@ -2811,7 +2827,7 @@ export interface Config {
 
 Source: [`packages/context/tmux-context/src/index.ts:36`](../packages/context/tmux-context/src/index.ts)
 
-<a id="akashx-akx-token-meter"></a>
+<a id="akashxakx-token-meter"></a>
 
 ## `@akashx/akx-token-meter`
 
@@ -2824,7 +2840,7 @@ export type TokenMeterConfig = Record<string, never>
 
 Source: [`packages/llm/token-meter/src/types.ts:13`](../packages/llm/token-meter/src/types.ts)
 
-<a id="akashx-akx-tool-bash"></a>
+<a id="akashxakx-tool-bash"></a>
 
 ## `@akashx/akx-tool-bash`
 
@@ -2840,7 +2856,7 @@ export interface Config {
 
 Source: [`packages/shell/tool-bash/src/index.ts:33`](../packages/shell/tool-bash/src/index.ts)
 
-<a id="akashx-akx-tool-bash-persistent"></a>
+<a id="akashxakx-tool-bash-persistent"></a>
 
 ## `@akashx/akx-tool-bash-persistent`
 
@@ -2862,7 +2878,7 @@ export interface Config {
 
 Source: [`packages/shell/tool-bash-persistent/src/index.ts:435`](../packages/shell/tool-bash-persistent/src/index.ts)
 
-<a id="akashx-akx-tool-cognate"></a>
+<a id="akashxakx-tool-cognate"></a>
 
 ## `@akashx/akx-tool-cognate`
 
@@ -2880,7 +2896,7 @@ export interface Config {
 
 Source: [`packages/cognate/tool-cognate/src/index.ts:17`](../packages/cognate/tool-cognate/src/index.ts)
 
-<a id="akashx-akx-tool-fs"></a>
+<a id="akashxakx-tool-fs"></a>
 
 ## `@akashx/akx-tool-fs`
 
@@ -2902,7 +2918,7 @@ export interface Config {
 
 Source: [`packages/fs/tool-fs/src/index.ts:25`](../packages/fs/tool-fs/src/index.ts)
 
-<a id="akashx-akx-tool-fs-search"></a>
+<a id="akashxakx-tool-fs-search"></a>
 
 ## `@akashx/akx-tool-fs-search`
 
@@ -2937,7 +2953,7 @@ export interface Config {
 
 Source: [`packages/fs/tool-fs-search/src/index.ts:73`](../packages/fs/tool-fs-search/src/index.ts)
 
-<a id="akashx-akx-tool-goal"></a>
+<a id="akashxakx-tool-goal"></a>
 
 ## `@akashx/akx-tool-goal`
 
@@ -2953,7 +2969,7 @@ export interface Config {
 
 Source: [`packages/goal/tool-goal/src/index.ts:25`](../packages/goal/tool-goal/src/index.ts)
 
-<a id="akashx-akx-tool-jobs"></a>
+<a id="akashxakx-tool-jobs"></a>
 
 ## `@akashx/akx-tool-jobs`
 
@@ -2987,7 +3003,7 @@ export type CompletionDelivery = 'quiet' | 'wakeup'
 
 Source: [`packages/jobs/tool-jobs/src/index.ts:31`](../packages/jobs/tool-jobs/src/index.ts)
 
-<a id="akashx-akx-tool-lsp"></a>
+<a id="akashxakx-tool-lsp"></a>
 
 ## `@akashx/akx-tool-lsp`
 
@@ -3007,7 +3023,7 @@ export interface Config {
 
 Source: [`packages/lsp/tool-lsp/src/index.ts:57`](../packages/lsp/tool-lsp/src/index.ts)
 
-<a id="akashx-akx-tool-present"></a>
+<a id="akashxakx-tool-present"></a>
 
 ## `@akashx/akx-tool-present`
 
@@ -3023,7 +3039,7 @@ export interface Config {
 
 Source: [`packages/fs/tool-present/src/index.ts:15`](../packages/fs/tool-present/src/index.ts)
 
-<a id="akashx-akx-tool-pwsh"></a>
+<a id="akashxakx-tool-pwsh"></a>
 
 ## `@akashx/akx-tool-pwsh`
 
@@ -3039,7 +3055,7 @@ export interface Config {
 
 Source: [`packages/shell/tool-pwsh/src/index.ts:51`](../packages/shell/tool-pwsh/src/index.ts)
 
-<a id="akashx-akx-tool-pwsh-persistent"></a>
+<a id="akashxakx-tool-pwsh-persistent"></a>
 
 ## `@akashx/akx-tool-pwsh-persistent`
 
@@ -3061,7 +3077,7 @@ export interface Config {
 
 Source: [`packages/shell/tool-pwsh-persistent/src/index.ts:472`](../packages/shell/tool-pwsh-persistent/src/index.ts)
 
-<a id="akashx-akx-tool-ralph"></a>
+<a id="akashxakx-tool-ralph"></a>
 
 ## `@akashx/akx-tool-ralph`
 
@@ -3083,7 +3099,7 @@ export interface Config {
 
 Source: [`packages/workflow/tool-ralph/src/index.ts:21`](../packages/workflow/tool-ralph/src/index.ts)
 
-<a id="akashx-akx-tool-session-query"></a>
+<a id="akashxakx-tool-session-query"></a>
 
 ## `@akashx/akx-tool-session-query`
 
@@ -3101,7 +3117,7 @@ export interface Config {
 
 Source: [`packages/session-query/tool-session-query/src/index.ts:28`](../packages/session-query/tool-session-query/src/index.ts)
 
-<a id="akashx-akx-tool-skill"></a>
+<a id="akashxakx-tool-skill"></a>
 
 ## `@akashx/akx-tool-skill`
 
@@ -3117,7 +3133,7 @@ export interface Config {
 
 Source: [`packages/skill/tool-skill/src/index.ts:61`](../packages/skill/tool-skill/src/index.ts)
 
-<a id="akashx-akx-tool-str-replace-editor"></a>
+<a id="akashxakx-tool-str-replace-editor"></a>
 
 ## `@akashx/akx-tool-str-replace-editor`
 
@@ -3135,7 +3151,7 @@ export interface Config {
 
 Source: [`packages/fs/tool-str-replace-editor/src/index.ts:505`](../packages/fs/tool-str-replace-editor/src/index.ts)
 
-<a id="akashx-akx-tool-subagent"></a>
+<a id="akashxakx-tool-subagent"></a>
 
 ## `@akashx/akx-tool-subagent`
 
@@ -3205,7 +3221,7 @@ Depends on: [`AgentOptions`](subsystems/core.md)
 
 Source: [`packages/subagent/tool-subagent/src/index.ts:48`](../packages/subagent/tool-subagent/src/index.ts)
 
-<a id="akashx-akx-tool-terminal"></a>
+<a id="akashxakx-tool-terminal"></a>
 
 ## `@akashx/akx-tool-terminal`
 
@@ -3223,7 +3239,7 @@ export interface Config {
 
 Source: [`packages/terminal/tool-terminal/src/index.ts:35`](../packages/terminal/tool-terminal/src/index.ts)
 
-<a id="akashx-akx-tool-todo"></a>
+<a id="akashxakx-tool-todo"></a>
 
 ## `@akashx/akx-tool-todo`
 
@@ -3245,7 +3261,7 @@ export interface Config {
 
 Source: [`packages/todo/tool-todo/src/index.ts:29`](../packages/todo/tool-todo/src/index.ts)
 
-<a id="akashx-akx-tool-web"></a>
+<a id="akashxakx-tool-web"></a>
 
 ## `@akashx/akx-tool-web`
 
@@ -3273,7 +3289,7 @@ export interface Config {
 
 Source: [`packages/web/tool-web/src/index.ts:37`](../packages/web/tool-web/src/index.ts)
 
-<a id="akashx-akx-tool-workflow"></a>
+<a id="akashxakx-tool-workflow"></a>
 
 ## `@akashx/akx-tool-workflow`
 
@@ -3291,7 +3307,7 @@ export interface Config {
 
 Source: [`packages/workflow/tool-workflow/src/index.ts:32`](../packages/workflow/tool-workflow/src/index.ts)
 
-<a id="akashx-akx-tools"></a>
+<a id="akashxakx-tools"></a>
 
 ## `@akashx/akx-tools`
 
@@ -3327,7 +3343,7 @@ export type ToolPresentationMode = 'native' | 'ptc' | 'both'
 
 Source: [`packages/core/tools/src/index.ts:647`](../packages/core/tools/src/index.ts)
 
-<a id="akashx-akx-typert-loader"></a>
+<a id="akashxakx-typert-loader"></a>
 
 ## `@akashx/akx-typert-loader`
 
@@ -3343,7 +3359,7 @@ export interface Config {
 
 Source: [`packages/typert/loader/src/index.ts:47`](../packages/typert/loader/src/index.ts)
 
-<a id="akashx-akx-user-approval"></a>
+<a id="akashxakx-user-approval"></a>
 
 ## `@akashx/akx-user-approval`
 
@@ -3374,7 +3390,7 @@ export type ApprovalPolicy = 'ask' | 'never'
 
 Source: [`packages/interaction/user-approval/src/index.ts:128`](../packages/interaction/user-approval/src/index.ts)
 
-<a id="akashx-akx-web"></a>
+<a id="akashxakx-web"></a>
 
 ## `@akashx/akx-web`
 
@@ -3395,7 +3411,7 @@ export interface WebRuntimeConfig {
 
 Source: [`packages/web/web/src/index.ts:55`](../packages/web/web/src/index.ts)
 
-<a id="akashx-akx-web-app"></a>
+<a id="akashxakx-web-app"></a>
 
 ## `@akashx/akx-web-app`
 
@@ -3422,7 +3438,7 @@ export interface Config {
 
 Source: [`packages/bundle/web-app/src/index.ts:44`](../packages/bundle/web-app/src/index.ts)
 
-<a id="akashx-akx-web-fetch-http"></a>
+<a id="akashxakx-web-fetch-http"></a>
 
 ## `@akashx/akx-web-fetch-http`
 
@@ -3446,7 +3462,7 @@ export interface Config {
 
 Source: [`packages/web/web-fetch-http/src/index.ts:32`](../packages/web/web-fetch-http/src/index.ts)
 
-<a id="akashx-akx-web-search-akx"></a>
+<a id="akashxakx-web-search-akx"></a>
 
 ## `@akashx/akx-web-search-akx`
 
@@ -3474,7 +3490,7 @@ export interface Config {
 
 Source: [`packages/web/web-search-akx/src/index.ts:46`](../packages/web/web-search-akx/src/index.ts)
 
-<a id="akashx-akx-web-search-exa"></a>
+<a id="akashxakx-web-search-exa"></a>
 
 ## `@akashx/akx-web-search-exa`
 
@@ -3498,7 +3514,7 @@ export interface Config {
 
 Source: [`packages/web/web-search-exa/src/index.ts:35`](../packages/web/web-search-exa/src/index.ts)
 
-<a id="akashx-akx-web-search-perplexity"></a>
+<a id="akashxakx-web-search-perplexity"></a>
 
 ## `@akashx/akx-web-search-perplexity`
 
@@ -3522,7 +3538,7 @@ export interface Config {
 
 Source: [`packages/web/web-search-perplexity/src/index.ts:30`](../packages/web/web-search-perplexity/src/index.ts)
 
-<a id="akashx-akx-webhook-github"></a>
+<a id="akashxakx-webhook-github"></a>
 
 ## `@akashx/akx-webhook-github`
 
@@ -3544,7 +3560,7 @@ export interface Config {
 
 Source: [`packages/webhook/webhook-github/src/index.ts:17`](../packages/webhook/webhook-github/src/index.ts)
 
-<a id="akashx-akx-workflow-worker-thread"></a>
+<a id="akashxakx-workflow-worker-thread"></a>
 
 ## `@akashx/akx-workflow-worker-thread`
 
@@ -3633,7 +3649,6 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 - `@akashx/akx-command-goal` — requires `commands` · `goals` ([`packages/goal/command-goal/src/index.ts`](../packages/goal/command-goal/src/index.ts))
 - `@akashx/akx-commands` ([`packages/interaction/commands/src/index.ts`](../packages/interaction/commands/src/index.ts))
 - `@akashx/akx-cordis-client-runner` ([`packages/extensions/cordis-client-runner/src/index.ts`](../packages/extensions/cordis-client-runner/src/index.ts))
-- `@akashx/akx-llm-api-extensions` ([`packages/llm/llm-api-extensions/src/index.ts`](../packages/llm/llm-api-extensions/src/index.ts))
 - `@akashx/akx-experimental-client-ui-agent-team` ([`packages/experimental/client-ui-agent-team/src/index.ts`](../packages/experimental/client-ui-agent-team/src/index.ts))
 - `@akashx/akx-fs-e2b` — requires `e2b` ([`packages/e2b/fs-e2b/src/index.ts`](../packages/e2b/fs-e2b/src/index.ts))
 - `@akashx/akx-fs-observation-policy` ([`packages/fs/fs-observation-policy/src/index.ts`](../packages/fs/fs-observation-policy/src/index.ts))
@@ -3642,6 +3657,7 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 - `@akashx/akx-host-directory-picker-native` ([`packages/host/directory-picker-native/src/index.ts`](../packages/host/directory-picker-native/src/index.ts))
 - `@akashx/akx-host-plugin-inventory` — requires `loader` ([`packages/host/plugin-inventory/src/index.ts`](../packages/host/plugin-inventory/src/index.ts))
 - `@akashx/akx-llm` ([`packages/llm/llm/src/index.ts`](../packages/llm/llm/src/index.ts))
+- `@akashx/akx-llm-api-extensions` ([`packages/llm/llm-api-extensions/src/index.ts`](../packages/llm/llm-api-extensions/src/index.ts))
 - `@akashx/akx-lsp` ([`packages/lsp/lsp/src/index.ts`](../packages/lsp/lsp/src/index.ts))
 - `@akashx/akx-schedule` — requires `agents` · `sessions` · `tools` · `sessionPersistence` ([`packages/schedule/schedule/src/index.ts`](../packages/schedule/schedule/src/index.ts))
 - `@akashx/akx-session` ([`packages/core/session/src/index.ts`](../packages/core/session/src/index.ts))
@@ -3649,7 +3665,6 @@ These load from a `cordis.yml` entry with no `config:` block; they declare no co
 - `@akashx/akx-session-projection` ([`packages/session/session-projection/src/index.ts`](../packages/session/session-projection/src/index.ts))
 - `@akashx/akx-session-stats` — requires `sessionProjections` ([`packages/session/session-stats/src/index.ts`](../packages/session/session-stats/src/index.ts))
 - `@akashx/akx-session-turn-outline` — requires `sessionProjections` ([`packages/session/session-turn-outline/src/index.ts`](../packages/session/session-turn-outline/src/index.ts))
-- `@akashx/akx-skill-badge` — requires `skills` ([`packages/skill/skill-badge/src/index.ts`](../packages/skill/skill-badge/src/index.ts))
 - `@akashx/akx-storage` ([`packages/storage/storage/src/index.ts`](../packages/storage/storage/src/index.ts))
 - `@akashx/akx-subagent` ([`packages/subagent/subagent/src/index.ts`](../packages/subagent/subagent/src/index.ts))
 - `@akashx/akx-subprocess-local` ([`packages/subprocess/subprocess-local/src/index.ts`](../packages/subprocess/subprocess-local/src/index.ts))

@@ -185,6 +185,22 @@ export interface Config {
 
 来源：[`packages/core/agent-tool-presentation/src/index.ts:38`](../packages/core/agent-tool-presentation/src/index.ts)
 
+<a id="akashx-akx-api-cognate-controller"></a>
+
+## `@akashx/akx-api-cognate-controller`
+
+```ts config-catalog
+/** Probe configuration. */
+export interface Config {
+  /** MySQL or MariaDB connection URL; falls back to `AKASHXDB_URL`. */
+  readonly url?: string
+  /** Connect timeout in milliseconds. */
+  readonly connectTimeoutMs?: number
+}
+```
+
+来源：[`packages/api/cognate-controller/src/index.ts:57`](../packages/api/cognate-controller/src/index.ts)
+
 <a id="akashx-akx-api-gateway"></a>
 
 ## `@akashx/akx-api-gateway`
@@ -337,7 +353,7 @@ export interface Config {
 export type Config = LocalConfig
 ```
 
-依赖：[`LocalConfig`](#akashx-akx-bash-local)
+依赖：[`LocalConfig`](#akashxakx-bash-local)
 
 来源：[`packages/shell/bash-sandbox/src/index.ts:36`](../packages/shell/bash-sandbox/src/index.ts)
 
@@ -910,7 +926,7 @@ export interface Config {
 export type Config = LocalConfig
 ```
 
-依赖：[`LocalConfig`](#akashx-akx-fs-local)
+依赖：[`LocalConfig`](#akashxakx-fs-local)
 
 来源：[`packages/fs/fs-sandbox/src/index.ts:45`](../packages/fs/fs-sandbox/src/index.ts)
 
@@ -1865,7 +1881,7 @@ export interface Config {
 export type Config = LocalConfig
 ```
 
-依赖：[`LocalConfig`](#akashx-akx-pwsh-local)
+依赖：[`LocalConfig`](#akashxakx-pwsh-local)
 
 来源：[`packages/shell/pwsh-sandbox/src/index.ts:40`](../packages/shell/pwsh-sandbox/src/index.ts)
 
@@ -2524,6 +2540,63 @@ export type PermissionPolicy = 'allow' | 'reject'
 ```
 
 来源：[`packages/subagent/subagent-acp/src/index.ts:27`](../packages/subagent/subagent-acp/src/index.ts)
+<a id="akashx-akx-subagent-akx-sdk"></a>
+
+## `@akashx/akx-subagent-akx-sdk`
+
+需要：`subagents`
+
+```ts config-catalog
+/** Config: how to spawn and drive the child SDK runtime process. */
+export interface Config {
+  /** Provider name on `ctx.subagents` (default `akx-sdk`). */
+  providerName: string
+  /** Explicit akx CLI module, resolved and checked at plugin load; omission uses the SDK dependency. */
+  akxBin?: string
+  /** Named child profile (default `sdk`). */
+  profile: string
+  /** Ordered per-launch profile patch files, resolved and checked at plugin load. */
+  patches: string[]
+  /** Absolute isolated Harness home for every nested child process. */
+  akxHome: string
+  /**
+   * Working directory override for the child process and its SDK session
+   * workspace. Must be non-empty; a relative path resolves against the
+   * harness launch directory at load, and the result must be an existing
+   * directory. When omitted, each child inherits its delegating parent
+   * session's cwd — and starting one from a parent session that has no cwd
+   * fails.
+   */
+  cwd?: string
+  /** Provider route the child runtime initializes with (default `akashx-official`). */
+  provider: string
+  /** Model the child runtime initializes with (default `akashx-v4-flash`). */
+  model: string
+  /** Optional per-request output-token cap for the child runtime. */
+  maxTokens?: number
+  /**
+   * Extra environment variables for the child process — e.g. the child
+   * runtime's own `AKASHX_API_KEY`. Forwarded on top of a credential-scrubbed copy of the parent
+   * env, so an explicit key here reaches the child while ambient secrets do
+   * not leak implicitly.
+   */
+  env: Record<string, string>
+  /** Bound (ms) on the protocol `shutdown` exchange during dispose. */
+  shutdownTimeoutMs?: number
+  /**
+   * Grace period (ms) for the child's EOF-driven quiesce on dispose — its
+   * window to flush persistence and tear down its own nested subprocesses
+   * before the parent escalates to a signal.
+   */
+  disposeEofGraceMs?: number
+  /** Termination confirmation window (ms), including forced exit on every platform. */
+  disposeGraceMs?: number
+}
+```
+
+来源：[`packages/subagent/subagent-akx-sdk/src/index.ts:34`](../packages/subagent/subagent-akx-sdk/src/index.ts)
+
+<a id="akashx-akx-subagent-fork-in-process"></a>
 
 <a id="akashx-akx-subagent-claude-code"></a>
 
@@ -2593,63 +2666,6 @@ export type CodexPermissionMode =
 
 来源：[`packages/subagent/subagent-codex/src/index.ts:36`](../packages/subagent/subagent-codex/src/index.ts)
 
-<a id="akashx-akx-subagent-akx-sdk"></a>
-
-## `@akashx/akx-subagent-akx-sdk`
-
-需要：`subagents`
-
-```ts config-catalog
-/** Config: how to spawn and drive the child SDK runtime process. */
-export interface Config {
-  /** Provider name on `ctx.subagents` (default `akx-sdk`). */
-  providerName: string
-  /** Explicit akx CLI module, resolved and checked at plugin load; omission uses the SDK dependency. */
-  akxBin?: string
-  /** Named child profile (default `sdk`). */
-  profile: string
-  /** Ordered per-launch profile patch files, resolved and checked at plugin load. */
-  patches: string[]
-  /** Absolute isolated Harness home for every nested child process. */
-  akxHome: string
-  /**
-   * Working directory override for the child process and its SDK session
-   * workspace. Must be non-empty; a relative path resolves against the
-   * harness launch directory at load, and the result must be an existing
-   * directory. When omitted, each child inherits its delegating parent
-   * session's cwd — and starting one from a parent session that has no cwd
-   * fails.
-   */
-  cwd?: string
-  /** Provider route the child runtime initializes with (default `akashx-official`). */
-  provider: string
-  /** Model the child runtime initializes with (default `akashx-v4-flash`). */
-  model: string
-  /** Optional per-request output-token cap for the child runtime. */
-  maxTokens?: number
-  /**
-   * Extra environment variables for the child process — e.g. the child
-   * runtime's own `AKASHX_API_KEY`. Forwarded on top of a credential-scrubbed copy of the parent
-   * env, so an explicit key here reaches the child while ambient secrets do
-   * not leak implicitly.
-   */
-  env: Record<string, string>
-  /** Bound (ms) on the protocol `shutdown` exchange during dispose. */
-  shutdownTimeoutMs?: number
-  /**
-   * Grace period (ms) for the child's EOF-driven quiesce on dispose — its
-   * window to flush persistence and tear down its own nested subprocesses
-   * before the parent escalates to a signal.
-   */
-  disposeEofGraceMs?: number
-  /** Termination confirmation window (ms), including forced exit on every platform. */
-  disposeGraceMs?: number
-}
-```
-
-来源：[`packages/subagent/subagent-akx-sdk/src/index.ts:34`](../packages/subagent/subagent-akx-sdk/src/index.ts)
-
-<a id="akashx-akx-subagent-fork-in-process"></a>
 
 ## `@akashx/akx-subagent-fork-in-process`
 
@@ -3635,7 +3651,6 @@ export interface Config {
 - `@akashx/akx-command-goal` — 需要 `commands` · `goals`（[`packages/goal/command-goal/src/index.ts`](../packages/goal/command-goal/src/index.ts)）
 - `@akashx/akx-commands`（[`packages/interaction/commands/src/index.ts`](../packages/interaction/commands/src/index.ts)）
 - `@akashx/akx-cordis-client-runner`（[`packages/extensions/cordis-client-runner/src/index.ts`](../packages/extensions/cordis-client-runner/src/index.ts)）
-- `@akashx/akx-llm-api-extensions`（[`packages/llm/llm-api-extensions/src/index.ts`](../packages/llm/llm-api-extensions/src/index.ts)）
 - `@akashx/akx-experimental-client-ui-agent-team`（[`packages/experimental/client-ui-agent-team/src/index.ts`](../packages/experimental/client-ui-agent-team/src/index.ts)）
 - `@akashx/akx-fs-e2b` — 需要 `e2b`（[`packages/e2b/fs-e2b/src/index.ts`](../packages/e2b/fs-e2b/src/index.ts)）
 - `@akashx/akx-fs-observation-policy`（[`packages/fs/fs-observation-policy/src/index.ts`](../packages/fs/fs-observation-policy/src/index.ts)）
@@ -3644,6 +3659,7 @@ export interface Config {
 - `@akashx/akx-host-directory-picker-native`（[`packages/host/directory-picker-native/src/index.ts`](../packages/host/directory-picker-native/src/index.ts)）
 - `@akashx/akx-host-plugin-inventory` — 需要 `loader`（[`packages/host/plugin-inventory/src/index.ts`](../packages/host/plugin-inventory/src/index.ts)）
 - `@akashx/akx-llm`（[`packages/llm/llm/src/index.ts`](../packages/llm/llm/src/index.ts)）
+- `@akashx/akx-llm-api-extensions`（[`packages/llm/llm-api-extensions/src/index.ts`](../packages/llm/llm-api-extensions/src/index.ts)）
 - `@akashx/akx-lsp`（[`packages/lsp/lsp/src/index.ts`](../packages/lsp/lsp/src/index.ts)）
 - `@akashx/akx-schedule` — 需要 `agents` · `sessions` · `tools` · `sessionPersistence`（[`packages/schedule/schedule/src/index.ts`](../packages/schedule/schedule/src/index.ts)）
 - `@akashx/akx-session`（[`packages/core/session/src/index.ts`](../packages/core/session/src/index.ts)）
@@ -3651,7 +3667,6 @@ export interface Config {
 - `@akashx/akx-session-projection`（[`packages/session/session-projection/src/index.ts`](../packages/session/session-projection/src/index.ts)）
 - `@akashx/akx-session-stats` — 需要 `sessionProjections`（[`packages/session/session-stats/src/index.ts`](../packages/session/session-stats/src/index.ts)）
 - `@akashx/akx-session-turn-outline` — 需要 `sessionProjections`（[`packages/session/session-turn-outline/src/index.ts`](../packages/session/session-turn-outline/src/index.ts)）
-- `@akashx/akx-skill-badge` — 需要 `skills`（[`packages/skill/skill-badge/src/index.ts`](../packages/skill/skill-badge/src/index.ts)）
 - `@akashx/akx-storage`（[`packages/storage/storage/src/index.ts`](../packages/storage/storage/src/index.ts)）
 - `@akashx/akx-subagent`（[`packages/subagent/subagent/src/index.ts`](../packages/subagent/subagent/src/index.ts)）
 - `@akashx/akx-subprocess-local`（[`packages/subprocess/subprocess-local/src/index.ts`](../packages/subprocess/subprocess-local/src/index.ts)）

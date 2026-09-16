@@ -14,13 +14,13 @@ Status: implemented
 
 ## 决策
 
-`@akashx/akx-akashx-llm-api-extensions` 注册 `ctx.akashxLlmApiExtensions`，即 `akashx-official` 请求正文顶层字段的增量注册表。贡献方通过 `register()` 认领一个经声明合并的字段。适配器在序列化确切协议消息后调用 `prepare()`、传入请求取消信号，在 HTTP 前拒绝准备失败或基础字段冲突，合并分离字段，并在 HTTP 2xx 后调用捕获的 `accept()` 事务。即使贡献方忽略信号，注册表也会在取消后停止等待准备。接受失败仍以 `REQUEST_EXTENSION` 使请求失败；传输失败与非 2xx 失败绝不会接受贡献。未挂载注册表的组合会保留可复用基础适配器。随附组合会挂载注册表与两个贡献方：插件包元数据默认开启，会话日志上传默认关闭，需要设置 `session-log-akashx.enabled: true`。无密钥 `akashx-official` 回放会使用合成的空基础正文执行准备，并在第一个已记录分片前调用同一接受事务；它保持的是 2xx 后扩展副作用，而非字段字节。
+`@akashx/akx-llm-api-extensions` 注册 `ctx.akashxLlmApiExtensions`，即 `akashx-official` 请求正文顶层字段的增量注册表。贡献方通过 `register()` 认领一个经声明合并的字段。适配器在序列化确切协议消息后调用 `prepare()`、传入请求取消信号，在 HTTP 前拒绝准备失败或基础字段冲突，合并分离字段，并在 HTTP 2xx 后调用捕获的 `accept()` 事务。即使贡献方忽略信号，注册表也会在取消后停止等待准备。接受失败仍以 `REQUEST_EXTENSION` 使请求失败；传输失败与非 2xx 失败绝不会接受贡献。未挂载注册表的组合会保留可复用基础适配器。随附组合会挂载注册表与两个贡献方：插件包元数据默认开启，会话日志上传默认关闭，需要设置 `session-log-akx.enabled: true`。无密钥 `akashx-official` 回放会使用合成的空基础正文执行准备，并在第一个已记录分片前调用同一接受事务；它保持的是 2xx 后扩展副作用，而非字段字节。
 
 提供方无关的 `llm` 包与 `llm-pi-ai` 不包含任何扩展类型、服务查找、字段合并或接受调用。
 
 ## 增量会话日志字段
 
-`@akashx/akx-session-log-akashx` 以显式选择启用的方式拥有 `akx_session_log`。启用后，每个携带存活会话 id 的请求都会发送该确切会话身份最大持久 `session-log-akashx/delivery-accepted` 水位之后的连续权威事件后缀。该字段包含不可变会话 header 与完整事件信封。2xx 会为已发送的 `throughSeq` 追加新水位；该事件会进入下一次请求的后缀。Fork 日志会保留父级水位 id，因此子会话会在自己的身份下从序列零开始。并发接受可能乱序到达，最大水位仍保持权威。进程内 fold 会让每条会话事件只被扫描一次，并增量消费后续追加；新的会话对象或 HMR generation 会从持久历史重建该 fold。
+`@akashx/akx-session-log-akx` 以显式选择启用的方式拥有 `akx_session_log`。启用后，每个携带存活会话 id 的请求都会发送该确切会话身份最大持久 `session-log-akx/delivery-accepted` 水位之后的连续权威事件后缀。该字段包含不可变会话 header 与完整事件信封。2xx 会为已发送的 `throughSeq` 追加新水位；该事件会进入下一次请求的后缀。Fork 日志会保留父级水位 id，因此子会话会在自己的身份下从序列零开始。并发接受可能乱序到达，最大水位仍保持权威。进程内 fold 会让每条会话事件只被扫描一次，并增量消费后续追加；新的会话对象或 HMR generation 会从持久历史重建该 fold。
 
 失败方向为至少一次。传输失败或提供方拒绝不会记录水位。远端接受后、水位持久化前发生崩溃，会在恢复后触发重放，绝不会跳过序列。现有会话检查点会持久化该事件；上传插件不拥有第二份存储。
 

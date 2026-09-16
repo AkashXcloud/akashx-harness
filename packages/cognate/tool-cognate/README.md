@@ -29,7 +29,7 @@ English | [中文](README.zh.md)
 <a id="further-exploration"></a>
 ## Further Exploration
 
-See the [Cognate subsystem reference](../../../docs/subsystems/cognate.md) and the [generated tool catalog](../../../docs/tool-catalog.md#akashx-akx-tool-cognate).
+See the [Cognate subsystem reference](../../../docs/subsystems/cognate.md) and the [generated tool catalog](../../../docs/tool-catalog.md#akashxakx-tool-cognate).
 
 <a id="implementation-notes"></a>
 ## Implementation Notes
@@ -43,7 +43,7 @@ No runtime invariant companion is published because tool registration and model-
 
 #### What the model sees
 
-The generated [`run_sql` and `render_chart` schemas`](../../../docs/tool-catalog.md#akashx-akx-tool-cognate) expose one SQL argument or chart metadata and rows. `render_chart` cannot execute a query or access a provider.
+The generated [`run_sql` and `render_chart` schemas`](../../../docs/tool-catalog.md#akashxakx-tool-cognate) expose one SQL argument or chart metadata and rows. `render_chart` cannot execute a query or access a provider.
 
 #### Token effect
 

@@ -43,7 +43,7 @@ kind: "package-reference"
 
 #### What the model sees
 
-生成的 [`run_sql` 和 `render_chart` Schema](../../../docs/tool-catalog.zh.md#akashx-akx-tool-cognate) 提供 SQL 参数或图表元数据和数据行。`render_chart` 不能执行查询或访问 Provider。
+生成的 [`run_sql` 和 `render_chart` Schema](../../../docs/tool-catalog.zh.md#akashxakx-tool-cognate) 提供 SQL 参数或图表元数据和数据行。`render_chart` 不能执行查询或访问 Provider。
 
 #### Token effect
 

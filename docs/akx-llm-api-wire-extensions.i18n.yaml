@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write docs/akx-llm-api-wire-extensions.md
-akx-llm-api-wire-extensions.md: f3d38036917b49f8e3cf243777c47426c658bd80
-akx-llm-api-wire-extensions.zh.md: eae3818cfa73875b39337594f2b7aad5974a6a45
+akx-llm-api-wire-extensions.md: e8d6d1230f1b0d8acc2bd44347d1d341fd5f710f
+akx-llm-api-wire-extensions.zh.md: ddf9720cb3eb8738330705365e3fa44681155d3d

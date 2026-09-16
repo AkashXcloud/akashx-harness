@@ -39,7 +39,7 @@ Load the shared policy service, then this backend, then the tools; the read-befo
 - name: '@akashx/akx-tool-fs'
 ```
 
-The backend's config is unchanged from the local backend's (`cwd` resolution default and `diffBasisMaxBytes` overwrite bound); the [configuration catalog](../../../docs/config-catalog.md#akashx-akx-fs-sandbox) is the exhaustive source.
+The backend's config is unchanged from the local backend's (`cwd` resolution default and `diffBasisMaxBytes` overwrite bound); the [configuration catalog](../../../docs/config-catalog.md#akashxakx-fs-sandbox) is the exhaustive source.
 
 ### How the fence behaves
 
