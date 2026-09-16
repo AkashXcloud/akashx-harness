@@ -540,10 +540,10 @@ describe('Chat node rendering', () => {
     expect(formatRunDuration(15_999, t)).toBe('15s')
     expect(formatRunDuration(125_000, t)).toBe('2m 05s')
     // The hour rolls at exactly 3600s, never at 60 displayed minutes.
-    expect(formatRunDuration(3_599_999, t)).toBe('59分59s')
-    expect(formatRunDuration(3_600_000, t)).toBe('1h 00m00s')
-    expect(formatRunDuration(3_903_000, t)).toBe('1h 05m03s')
-    expect(formatRunDuration(7_261_000, t)).toBe('2h 01m01s')
+    expect(formatRunDuration(3_599_999, t)).toBe('59m 59s')
+    expect(formatRunDuration(3_600_000, t)).toBe('1h 00m 00s')
+    expect(formatRunDuration(3_903_000, t)).toBe('1h 05m 03s')
+    expect(formatRunDuration(7_261_000, t)).toBe('2h 01m 01s')
   })
 
   it('formatRunDuration uses the English hour template', () => {
@@ -1263,7 +1263,7 @@ describe('ChatView', () => {
     })
     expect(within(disclosure).getAllByRole('status')).toHaveLength(1)
     expect(view.container.querySelector('details')).toBe(disclosure)
-    expect(within(disclosure).getByRole('status').textContent).toBe('Retrying model request (2 of 2) · 1s')
+    expect(within(disclosure).getByRole('status').textContent).toBe('Retrying model request (2/2) · 1s')
 
     act(() => {
       h.setChat({
@@ -1277,7 +1277,7 @@ describe('ChatView', () => {
       h.setSession({ running: false })
     })
     expect(disclosure.dataset.active).toBeUndefined()
-    expect(within(disclosure).getByRole('status').textContent).toBe('Retried model request (2 of 2) · 1s')
+    expect(within(disclosure).getByRole('status').textContent).toBe('Retried model request (2/2) · 1s')
 
     act(() => {
       h.setChat({ nodes: [user(1, 'try'), { ...retry(6), retryState: 'cancelled' }] })
@@ -1285,7 +1285,7 @@ describe('ChatView', () => {
     })
     const cancelledDisclosure = view.container.querySelector('details') as HTMLDetailsElement
     expect(cancelledDisclosure.dataset.active).toBeUndefined()
-    expect(within(cancelledDisclosure).getByRole('status').textContent).toContain('RetryCancelled')
+    expect(within(cancelledDisclosure).getByRole('status').textContent).toContain('Model request retry cancelled')
   })
 
   it('renders terminal turn failures inline with their durable message and optional code', () => {
@@ -1303,7 +1303,7 @@ describe('ChatView', () => {
     const view = render(<h.ChatView {...h.props} />)
     const statuses = view.getAllByRole('status')
     expect(statuses.map(status => status.textContent)).toEqual([
-      '已达到输出 token 上限回答被截断, 已有输出保留在对话中。发送“继续”可让模型接着输出。',
+      'Output token limit reachedThe reply was cut off; earlier output is preserved in the conversation. Send "continue" to let the model resume.',
     ])
     expect(view.queryByText('This turn failed')).toBeNull()
   })
@@ -1863,7 +1863,7 @@ describe('ChatView', () => {
     })
     const view = render(<h.ChatView {...h.props} />)
     expect(view.container.querySelector('[data-turn-tail="1"]')?.textContent)
-      .toContain('Ran for 1h 05m03s')
+      .toContain('Ran for 1h 05m 03s')
   })
 
   it('the settled footer exposes ttft, decode throughput, and usage as the details trigger', () => {
@@ -1909,7 +1909,7 @@ describe('ChatView', () => {
     const timeDialog = view.getByRole('dialog')
     expect(timeDialog.getAttribute('aria-label')).toBe('Turn time and speed')
     expect(timeDialog.textContent).toContain('Total run time19s')
-    expect(timeDialog.textContent).toContain('Output speed (TPS) 20 tok/s')
+    expect(timeDialog.textContent).toContain('Tokens per second (TPS)20 tok/s')
     expect(timeDialog.textContent).toContain('Time to first token (TTFT)1.2s')
   })
 
@@ -1927,7 +1927,7 @@ describe('ChatView', () => {
     const view = render(<h.ChatView {...h.props} />)
     // Timing facts keep their pill, but with no usage in the window there is
     // no usage pill to click.
-    expect(view.getByRole('button', { name: /用时/ })).toBeTruthy()
+    expect(view.getByRole('button', { name: /Ran for / })).toBeTruthy()
     expect(view.queryByRole('button', { name: /Usage/u })).toBeNull()
   })
 
@@ -1974,7 +1974,7 @@ describe('ChatView', () => {
       turnEnds: new Map([[1, 16]]),
     })
     const view = render(<h.ChatView {...h.props} />)
-    expect(view.queryByText(/用时/)).toBeNull()
+    expect(view.queryByText(/Turn usage/)).toBeNull()
   })
 
   it('enables fork only on the finalized assistant at the completed transcript tail', () => {
@@ -2177,7 +2177,7 @@ describe('ChatView', () => {
     const view = render(<h.ChatView {...h.props} />)
     // Freshly mounted (as after a reload) yet already past the 15s gate.
     const status = view.getByRole('status')
-    expect(status.textContent).toMatch(/^深度求索中\.\.\.2分0\ds$/u)
+    expect(status.textContent).toMatch(/^Deep diving\.\.\.2m 0\ds$/u)
     expect(status.querySelector('[aria-hidden="true"]')).not.toBeNull()
     act(() => {
       h.setSession({ queue: [{
@@ -2189,7 +2189,7 @@ describe('ChatView', () => {
         text: 'also',
       }] })
     })
-    expect(status.textContent).toMatch(/^深度求索中\.\.\.2分0\ds$/u)
+    expect(status.textContent).toMatch(/^Deep diving\.\.\.2m 0\ds$/u)
   })
 
   it('the running clock reads hours once the turn passes an hour', () => {
@@ -2200,7 +2200,7 @@ describe('ChatView', () => {
       { running: true },
     )
     const view = render(<h.ChatView {...h.props} />)
-    expect(view.getByRole('status').textContent).toMatch(/^深度求索中\.\.\.1小时05分0\ds$/u)
+    expect(view.getByRole('status').textContent).toMatch(/^Deep diving\.\.\.1h 05m 0\ds$/u)
   })
 
   it('hands each ordered root call to the keyed business-node slot', () => {
@@ -2803,7 +2803,7 @@ describe('ChatView', () => {
       openError: { code: 'gateway/internal', message: 'boom' } as never,
     })
     const view = render(<h.ChatView {...h.props} />)
-    expect(view.getByText(/历史Failed to load：boom/u)).toBeTruthy()
+    expect(view.getByText(/Failed to load history: boom/u)).toBeTruthy()
     const loading = makeHarness({}, { openState: 'loading' })
     const lv = render(<loading.ChatView {...loading.props} />)
     expect(lv.getByText('Loading history…')).toBeTruthy()
@@ -2843,7 +2843,7 @@ describe('ChatView', () => {
       nodes: [command({ seq: 8, commandId: 'cmd-4' as CommandNode['commandId'], name: null, args: null, outcome: { kind: 'success' } })],
     })
     const ov = render(<orphan.ChatView {...orphan.props} />)
-    expect(ov.getByText('Commands')).toBeTruthy()
+    expect(ov.getByText('Command')).toBeTruthy()
     expect(ov.getByText('Completed')).toBeTruthy()
   })
 
