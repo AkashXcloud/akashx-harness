@@ -155,8 +155,8 @@ describe('SubagentHeaderLineage', () => {
 
     expect(input.setCatalogOpen).toHaveBeenCalledWith(PARENT, true)
     expect(screen.getAllByRole('treeitem')).toHaveLength(3)
-    expect(screen.getByText('正在扫描项目文件 · 可继续 · 正在运行')).toBeTruthy()
-    expect(screen.getByText('一次性 · 当前未运行')).toBeTruthy()
+    expect(screen.getByText('正在扫描项目文件 · continuable · running')).toBeTruthy()
+    expect(screen.getByText('one-shot · not running')).toBeTruthy()
     const diagnostic = screen.getByRole('treeitem', { name: /corrupted session record/u })
     expect(diagnostic.getAttribute('aria-disabled')).toBe('true')
     expect(screen.getByRole('button', { name: 'Expand worker descendants' })).toBeTruthy()
@@ -416,26 +416,26 @@ describe('SubagentHeaderLineage', () => {
     expect(within(trigger).getByText('9 subagents')).toBeTruthy()
     hoverCatalog(trigger)
 
-    const runningRow = screen.getByRole('treeitem', { name: /running.*4\.6K tok · 1分10s/u })
+    const runningRow = screen.getByRole('treeitem', { name: /running.*4\.6K tok · 1m 10s/u })
     const runningMetrics = within(runningRow)
     const tokenMetric = runningMetrics.getByText('4.6K tok')
-    const durationMetric = runningMetrics.getByText('1分10s')
+    const durationMetric = runningMetrics.getByText('1m 10s')
     expect(tokenMetric.parentElement).toBe(durationMetric.parentElement)
     expect(tokenMetric.nextElementSibling).toBe(durationMetric)
-    expect(screen.getByRole('treeitem', { name: /finished.*123 tok · 1h 02m03s/u })).toBeTruthy()
+    expect(screen.getByRole('treeitem', { name: /finished.*123 tok · 1h 02m 03s/u })).toBeTruthy()
     expect(screen.getByRole('treeitem', { name: /interrupted.*123M tok · 6s/u })).toBeTruthy()
-    expect(screen.getByRole('treeitem', { name: /days.*12天05h 06m07s/u })).toBeTruthy()
-    expect(screen.getByText('12d5h').getAttribute('title'))
-      .toBe('Total active duration: 12天05小时06分07s')
+    expect(screen.getByRole('treeitem', { name: /days.*12d 05h 06m 07s/u })).toBeTruthy()
+    expect(screen.getByText('12d 5h').getAttribute('title'))
+      .toBe('Total active duration: 12d 05h 06m 07s')
     expect(screen.getByText('1d')).toBeTruthy()
-    expect(screen.getByText('~6mo12d')).toBeTruthy()
-    expect(screen.getByText('约1mo')).toBeTruthy()
-    expect(screen.getByText('~2y3mo')).toBeTruthy()
-    expect(screen.getByText('约1y')).toBeTruthy()
+    expect(screen.getByText('~6mo 12d')).toBeTruthy()
+    expect(screen.getByText('~1mo')).toBeTruthy()
+    expect(screen.getByText('~2y 3mo')).toBeTruthy()
+    expect(screen.getByText('~1y')).toBeTruthy()
 
     await vi.advanceTimersByTimeAsync(1_000)
-    expect(screen.getByRole('treeitem', { name: /running.*4\.6K tok · 1分11s/u })).toBeTruthy()
-    expect(screen.getByRole('treeitem', { name: /finished.*123 tok · 1h 02m03s/u })).toBeTruthy()
+    expect(screen.getByRole('treeitem', { name: /running.*4\.6K tok · 1m 11s/u })).toBeTruthy()
+    expect(screen.getByRole('treeitem', { name: /finished.*123 tok · 1h 02m 03s/u })).toBeTruthy()
     expect(screen.getByRole('treeitem', { name: /interrupted.*123M tok · 6s/u })).toBeTruthy()
   })
 
@@ -726,7 +726,7 @@ describe('SubagentHeaderLineage', () => {
     }
     render(<SubagentHeaderLineage {...input} />)
 
-    expect(screen.getByRole('button', { name: `切换子代理：${CHILD}` })).toBeTruthy()
+    expect(screen.getByRole('button', { name: `Switch subagent: ${CHILD}` })).toBeTruthy()
   })
 
   it('keeps an ancestor switcher muted and omits its descendant count', () => {
@@ -821,11 +821,11 @@ describe('SubagentHeaderLineage', () => {
 describe('SubagentReadOnlyComposer', () => {
   it('explains the exact missing-parent recovery path', () => {
     render(<SubagentReadOnlyComposer matched={{ reason: 'parent-unavailable' }} t={t} />)
-    expect(screen.getByRole('status').textContent).toContain('父会话当前不在线')
+    expect(screen.getByRole('status').textContent).toContain('The parent session is offline')
   })
 
   it('explains that one-shot histories never accept follow-ups', () => {
     render(<SubagentReadOnlyComposer matched={{ reason: 'one-shot' }} t={t} />)
-    expect(screen.getByRole('status').textContent).toContain('一次性任务不支持后续消息')
+    expect(screen.getByRole('status').textContent).toContain('One-shot tasks do not accept follow-ups')
   })
 })
