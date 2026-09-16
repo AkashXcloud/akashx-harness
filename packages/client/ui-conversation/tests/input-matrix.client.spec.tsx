@@ -147,7 +147,7 @@ describe('matrix row: claimed', () => {
     expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
     expect(textarea.getAttribute('contenteditable')).toBe('true')
     // Free editing beyond the token: hint drops, claim holds.
-    act(() => { shell.setDraft(' of goal 发布版本') })
+    act(() => { shell.setDraft('/goal 发布版本') })
     expect(shell.snapshot.phase).toBe('claimed')
     expect(textarea.style.getPropertyValue('--dsh-composer-hint')).toBe('')
   })
@@ -156,7 +156,7 @@ describe('matrix row: claimed', () => {
     const submit = vi.fn(() => Promise.resolve({ kind: 'success' as const, text: 'Complete', source: 'command', name: 'goal' }))
     const { view, textarea, shell, sink, claim } = bench({ submit })
     claim()
-    act(() => { shell.setDraft(' of goal 发布') })
+    act(() => { shell.setDraft('/goal 发布') })
     fireEvent.keyDown(textarea, { key: 'Enter' })
     expect(sink).not.toHaveBeenCalled()
     await vi.waitFor(() => { expect(submit).toHaveBeenCalledWith('发布', SCTX, []) })

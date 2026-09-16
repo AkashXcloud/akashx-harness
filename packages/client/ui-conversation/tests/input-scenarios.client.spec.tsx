@@ -225,11 +225,11 @@ describe('scenario A: menu-pick /goal, type args, enter submits', () => {
     // The en dictionary owns a hint.goal entry, which overrides the machine's raw hint (production behavior).
     expect(b.textarea.style.getPropertyValue('--dsh-composer-hint')).toBe(JSON.stringify('describe the objective for a long-running task'))
     // Continue typing args; hint drops; claim holds.
-    b.type(' of goal 发布 v1')
+    b.type('/goal 发布 v1')
     expect(b.shell.snapshot.phase).toBe('claimed')
     // Enter: submitting → command execute → commit clears.
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of goal 发布 v1', []) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 发布 v1', []) })
     await vi.waitFor(() => { expect(b.shell.snapshot.draft).toBe('') })
     expect(b.shell.snapshot.phase).toBe('plain')
     expect(b.view.getByText('已执行  of goal 发布 v1')).toBeTruthy()
@@ -242,9 +242,9 @@ describe('scenario C: pasted /goal xxx + enter (menu never opened)', () => {
     const b = await bench()
     // Paste lands whole; caret at end means detectTrigger sees no token under
     // the caret mid-whitespace — menu stays closed; enter runs adjudication.
-    act(() => { b.shell.setDraft(' of goal 尽快发布') })
+    act(() => { b.shell.setDraft('/goal 尽快发布') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of goal 尽快发布', []) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 尽快发布', []) })
     await vi.waitFor(() => { expect(b.shell.snapshot.phase).toBe('plain') })
     expect(b.shell.snapshot.draft).toBe('')
     expect(b.sink).not.toHaveBeenCalled()
@@ -297,9 +297,9 @@ describe('scenario: images ride an accepting command through the real pipeline',
 
   it('an imageless enter adjudicates with a zero-image envelope', async () => {
     const b = await bench()
-    act(() => { b.shell.setDraft(' of goal 发布') })
+    act(() => { b.shell.setDraft('/goal 发布') })
     fireEvent.keyDown(b.textarea, { key: 'Enter' })
-    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith(' of goal 发布', []) })
+    await vi.waitFor(() => { expect(b.execute).toHaveBeenCalledWith('/goal 发布', []) })
     expect(b.envelopes).toEqual([{ attachments: 0 }])
     expect(b.serialize).not.toHaveBeenCalled()
     expect(b.release).not.toHaveBeenCalled()

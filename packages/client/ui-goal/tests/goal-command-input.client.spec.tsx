@@ -158,13 +158,13 @@ describe('goal command input projection', () => {
     const props = {
       node: {
         key: 'goal-command-input:two',
-        data: { commandId: 'command-goal', text: ' of goal 检查  of goal 的语法', time: 1_700_000_000_000 },
+        data: { commandId: 'command-goal', text: '/goal 检查  of goal 的语法', time: 1_700_000_000_000 },
       },
       t,
     } as unknown as Parameters<typeof GoalCommandInputView>[0]
     const view = render(<GoalCommandInputView {...props} />)
     const bubble = view.getByRole('group', { name: 'Command input' })
-    expect(bubble.textContent).toBe(' of goal 检查  of goal 的语法')
+    expect(bubble.textContent).toBe('/goal 检查  of goal 的语法')
     const chips = [...bubble.querySelectorAll('[data-ref-chip]')]
     expect(chips.map(chip => chip.textContent)).toEqual(['/goal'])
   })

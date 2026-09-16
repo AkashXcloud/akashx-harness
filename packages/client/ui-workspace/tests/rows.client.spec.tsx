@@ -349,7 +349,7 @@ describe('workspace browser rows', () => {
       expect(screen.getAllByText('Project')).toHaveLength(2)
       expect(screen.getByText('/projects/project')).toBeTruthy()
       expect(screen.getByText(/^Created \d+-\d+-\d+ /)).toBeTruthy()
-      await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Copy:  of projects of project' })) })
+      await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Copy: /projects/project' })) })
       expect(writeText).toHaveBeenCalledWith('/projects/project')
       expect(screen.getByRole('status').textContent).toBe('Copied')
     } finally {
@@ -372,7 +372,7 @@ describe('workspace browser rows', () => {
       act(() => { vi.advanceTimersByTime(500) })
       expect(screen.getByText('~/Documents/project')).toBeTruthy()
       expect(screen.queryByText('/home/u/Documents/project')).toBeNull()
-      await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Copy:  of home of u/Documents/project' })) })
+      await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Copy: /home/u/Documents/project' })) })
       expect(writeText).toHaveBeenCalledWith('/home/u/Documents/project')
     } finally {
       restoreClipboard()

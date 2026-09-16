@@ -12,7 +12,6 @@ import { en } from '../src/client/locales.ts'
 afterEach(cleanup)
 
 const t = makeTranslate(en, commonEn) as ContextMeterProps['t']
-const tEn = makeTranslate(en, commonEn) as ContextMeterProps['t']
 
 const BREAKDOWN = { systemTokens: 120, toolsTokens: 21_500, messageTokens: 477_000 }
 
@@ -57,9 +56,9 @@ describe('ContextMeter', () => {
     expect(panel.textContent).toContain('~32K / 128K')
     expect(panel.textContent).toContain('25%')
     expect(panel.textContent).toContain('of context used')
-    expect(panel.textContent).toContain('系统提示词~120')
-    expect(panel.textContent).toContain('工具定义~21.5K')
-    expect(panel.textContent).toContain('对话消息~477K')
+    expect(panel.textContent).toContain('System prompt~120')
+    expect(panel.textContent).toContain('Tool definitions~21.5K')
+    expect(panel.textContent).toContain('Messages~477K')
     // The occupancy bar splits into one colored segment per composition row.
     expect(panel.getElementsByClassName(segmentClass)).toHaveLength(3)
     // Clicking the trigger again toggles the panel shut.
@@ -72,15 +71,11 @@ describe('ContextMeter', () => {
       contextPressure: { pressureTokens: 32_000, contextWindow: 128_000 },
       contextBreakdown: BREAKDOWN,
     }
-    const zhView = meter(values)
-    fireEvent.click(zhView.getByRole('button', { name: '25% of context used' }))
-    // The reading follows the label in Chinese and leads it in English; both
-    // headers read as one sentence rather than a concatenated fragment.
-    expect(zhView.container.querySelector('[role="dialog"]')!.textContent)
-      .toMatch(/^of context used25%/u)
-    const enView = meter(values, tEn)
-    fireEvent.click(enView.getByRole('button', { name: '25% of context used' }))
-    expect(enView.container.querySelector('[role="dialog"]')!.textContent)
+    const view = meter(values)
+    fireEvent.click(view.getByRole('button', { name: '25% of context used' }))
+    // The shipment's dictionary leads with the reading, so the header reads as
+    // one sentence rather than a fragment concatenated in the wrong order.
+    expect(view.container.querySelector('[role="dialog"]')!.textContent)
       .toMatch(/^25%of context used/)
   })
 
