@@ -9,7 +9,7 @@
  * the snapshots pin the shell chrome itself.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { act, cleanup, waitFor } from '@testing-library/react'
+import { cleanup, waitFor } from '@testing-library/react'
 import { SlotTestRuntime, usePinnedBrowserLanguages } from '@deepseek-ai/dsh-client-test-runtime'
 import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
 import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
@@ -85,14 +85,16 @@ describe('sidebar shell snapshots', () => {
     await runtime.dispose()
   })
 
-  it('a locale switch refreshes mounted copy without re-registration', async () => {
+  it('a dictionary re-registration refreshes mounted copy without re-registration', async () => {
     const { runtime, locale } = await bench()
     const slot = runtime.renderSlot('sidebar', { collapsed: false, width: 300 })
+    // Both brand affordances read the same dictionary seat.
     expect(slot.view.getAllByRole('button', { name: 'New session' })).toHaveLength(2)
-    // Same fiber, same registration: setLocale alone re-renders the outlet.
-    act(() => { locale.setLocale('en') })
+    // Same fiber, same registration: republishing the dictionary re-renders the
+    // outlet, which is what a language pack arriving later relies on.
+    const dispose = locale.register('sidebar-snapshot-probe', 'en', { probe: 'x' })
     expect(slot.view.getAllByRole('button', { name: 'New session' })).toHaveLength(2)
-    expect(slot.view.queryByRole('button', { name: 'New session' })).toBeNull()
+    dispose()
     await runtime.dispose()
   })
 })

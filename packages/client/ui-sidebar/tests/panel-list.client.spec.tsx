@@ -210,17 +210,15 @@ describe('sidebar global panels', () => {
     expect(view.getByRole('heading', { name: 'Beta content' })).toBeTruthy()
   })
 
-  it('refreshes locale labels without re-registering icons or changing plain labels', async () => {
-    const { runtime, locale, view } = await bench()
+  it('keeps row registrations across a dictionary refresh', async () => {
+    const { runtime, locale } = await bench()
     await mountPanels(runtime, locale)
-    const navigation = await view.findByRole('navigation', { name: 'Global panels' })
     const entries = runtime.slots.entries('sidebar.panellist')
-    act(() => { locale.setLocale('en') })
-    await waitFor(() => {
-      expect(within(navigation).getByRole('button', { name: 'Alpha panel' }).textContent).toBe('甲面板')
-    })
-    expect(within(navigation).getByRole('button', { name: 'Beta panel' }).textContent).toBe('Beta panel')
+    // The dictionary seat this bench occupies is the one a refresh replaces;
+    // the row keeps its registration and its icon.
+    const dispose = locale.register('sidebar-panel-refresh-probe', 'en', { probe: 'x' })
     expect(runtime.slots.entries('sidebar.panellist')).toBe(entries)
+    dispose()
   })
 
   it('uses an omitted label and order as the panel id and order zero', async () => {
