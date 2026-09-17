@@ -14,6 +14,24 @@ const SQL_FUNCTIONS = new Set([
   'last_value', 'lead', 'lower', 'max', 'min', 'month', 'nullif', 'rank', 'regexp', 'round',
   'row_number', 'sum', 'substring', 'to_date', 'trim', 'upper', 'year', 'current_date',
   'current_timestamp', 'current_version', 'unix_timestamp',
+  // Native StarRocks vector search: the approx_* forms are the only ones that
+  // engage the HNSW index; the exact forms stay allowed for brute-force checks.
+  'approx_cosine_similarity', 'cosine_similarity', 'approx_l2_distance', 'l2_distance',
+  // JSON readers for ASK output and ontology provenance payloads.
+  'get_json_string', 'get_json_int', 'get_json_double', 'json_query', 'json_length',
+  // Plain scalars the ontology and chunk paths need.
+  'abs', 'substr', 'left', 'right', 'locate', 'length', 'char_length', 'floor',
+  'ceil', 'ceiling', 'greatest', 'least', 'mod', 'replace', 'split_part',
+])
+
+/** Keywords that may legally precede an open paren. `functionNames` matches any
+ * identifier followed by `(`, so without this `AND (`, `IN (`, `OR (` and friends
+ * were reported as unapproved functions and rejected valid SQL. */
+const SQL_KEYWORDS = new Set([
+  'and', 'or', 'not', 'in', 'exists', 'select', 'from', 'where', 'values', 'on', 'using',
+  'when', 'then', 'else', 'case', 'by', 'over', 'partition', 'union', 'all', 'distinct',
+  'as', 'between', 'like', 'is', 'null', 'having', 'group', 'order', 'limit', 'offset',
+  'join', 'inner', 'outer', 'cross', 'full', 'with', 'set', 'interval', 'array', 'row',
 ])
 
 /** Remove comments and quoted contents while preserving statement keywords.
@@ -106,7 +124,8 @@ export function authorizeSql(sql: string, kind: CognateQueryKind, allowExternalO
     throw new Error('Cognate external SQL operations are disabled by policy')
   }
   if (kind === 'read') {
-    const unknown = functionNames(sql).find(name => !SQL_FUNCTIONS.has(name) && !name.startsWith('count'))
+    const unknown = functionNames(sql).find(name =>
+      !SQL_KEYWORDS.has(name) && !SQL_FUNCTIONS.has(name) && !name.startsWith('count'))
     if (unknown !== undefined) throw new Error(`Cognate SQL function "${unknown}" is not approved`)
   }
 }

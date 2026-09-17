@@ -99,7 +99,7 @@ export function apply(ctx: Context, config: Config): void {
   ctx.systemPrompt.section({
     name: 'tool:cognate',
     order: ctx.systemPrompt.getSectionOrder('TOOL_COGNATE'),
-    text: () => `Cognate provider status: ${providerStatus(ctx)} Use run_sql for AkashXDB tables, ontology views, RagBucket ASK statements, and approved cognitive SQL. Use ontology views for structured extraction and filter completed rows with status = 'done'. Use ASK only with a known RagBucket. Use render_chart with explicitly supplied tabular data; it never runs SQL and does not require run_sql. Use Bash for local process and filesystem work. Never invent tables, columns, buckets, credentials, or citations.`,
+    text: () => `Cognate provider status: ${providerStatus(ctx)} Use run_sql for AkashXDB tables, ontology views, RagBucket ASK statements, and approved cognitive SQL. Use ontology views for structured extraction; their columns are machine-extracted, so confirm the units and the period each column refers to before relying on a figure, and do not assume a row status filter -- the deployment's semantic context states which statuses carry usable values. Use ASK only with a known RagBucket. Use render_chart with explicitly supplied tabular data; it never runs SQL and does not require run_sql. Use Bash for local process and filesystem work. Never invent tables, columns, buckets, credentials, or citations.`,
   })
   ctx.systemPrompt.context({
     name: 'cognate:semantic-context',

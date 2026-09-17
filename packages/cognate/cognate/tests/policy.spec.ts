@@ -22,4 +22,25 @@ describe('Cognate SQL policy', () => {
     expect(() => { authorizeSql("ASK 'x' ON docs", 'cognitive', false) }).toThrow('external SQL operations are disabled')
     expect(() => { authorizeSql('SELECT custom_udf(value) FROM sales', 'read', true) }).toThrow('custom_udf')
   })
+
+  it.each([
+    'SELECT id FROM sales WHERE a = 1 AND (b = 2 OR c = 3)',
+    'SELECT count(*) FROM sales WHERE id IN (1, 2, 3)',
+    'SELECT id FROM sales WHERE NOT (archived)',
+  ])('accepts keywords that precede an open paren: %s', (sql) => {
+    expect(() => { authorizeSql(sql, 'read', false) }).not.toThrow()
+  })
+
+  it.each([
+    'SELECT approx_cosine_similarity(vector, [0.1, 0.2]) AS score FROM chunks ORDER BY score DESC LIMIT 10',
+    'SELECT cosine_similarity(vector, [0.1]) FROM chunks LIMIT 1',
+    "SELECT get_json_string(result, '$.result.provenance.Revenue_P0') FROM fb_ov_income LIMIT 1",
+    'SELECT ABS(Capital_Expenditures_P0) FROM fb_ov_cashflow LIMIT 1',
+  ])('approves the read-path functions the retrieval modes need: %s', (sql) => {
+    expect(() => { authorizeSql(sql, 'read', false) }).not.toThrow()
+  })
+
+  it('still rejects an unapproved function that merely looks like a keyword', () => {
+    expect(() => { authorizeSql('SELECT ordered(value) FROM sales', 'read', true) }).toThrow('ordered')
+  })
 })
