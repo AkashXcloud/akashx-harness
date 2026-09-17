@@ -21,6 +21,8 @@ export interface AgentPresetRow {
   readonly description?: string
   /** Why this preset cannot compose a session; absent when it can. */
   readonly broken?: string
+  /** Whether the picker omits this preset while it stays resolvable for Sessions on it. */
+  readonly hidden?: boolean
 }
 
 /** The roster one deployment currently supplies, with its authoring capability. */

@@ -129,9 +129,18 @@ export async function beginRosterRead<S extends { status: string; error: string 
  * @returns one option per selectable preset, in roster order.
  */
 export function presetOptions(
-  presets: readonly { id: string; trust: 'system' | 'user'; name?: string; description?: string; broken?: string }[],
+  presets: readonly {
+    id: string
+    trust: 'system' | 'user'
+    name?: string
+    description?: string
+    broken?: string
+    hidden?: boolean
+  }[],
 ): AgentPresetOption[] {
-  return presets.filter(preset => preset.broken === undefined).map(preset => ({
+  // A hidden preset stays in the roster so a Session running one is still labelled;
+  // it is only kept out of the list a person picks from.
+  return presets.filter(preset => preset.broken === undefined && preset.hidden !== true).map(preset => ({
     id: preset.id,
     trust: preset.trust,
     ...preset.name === undefined ? {} : { name: preset.name },

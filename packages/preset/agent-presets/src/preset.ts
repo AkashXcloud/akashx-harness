@@ -31,6 +31,8 @@ export interface AgentPreset {
   readonly description?: string
   /** Declared position within its group; absent sorts after those that declare one. */
   readonly order?: number
+  /** Whether the picker omits this preset while it stays resolvable for Sessions on it. */
+  readonly hidden?: boolean
   /**
    * Why this preset cannot compose a session, absent when it can. A broken
    * preset stays on the roster — hiding it would leave its directory blocking

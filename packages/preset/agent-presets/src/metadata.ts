@@ -36,6 +36,15 @@ export interface PresetMetadata {
    * can read in capability order while authored ones stay alphabetical.
    */
   readonly order?: number
+  /**
+   * Keep this preset out of the picker while leaving it resolvable.
+   *
+   * A preset a deployment has retired still composes every Session recorded
+   * under it, so removing the directory would strand them; hiding it stops new
+   * Sessions choosing it without breaking the old ones. The chip still labels a
+   * Session running one, because the roster carries it either way.
+   */
+  readonly hidden?: boolean
 }
 
 /** A non-empty trimmed string, or undefined for anything else. */
@@ -77,10 +86,12 @@ export async function readPresetMetadata(directory: string): Promise<PresetMetad
   const order = typeof record.order === 'number' && Number.isFinite(record.order)
     ? record.order
     : undefined
+  const hidden = record.hidden === true ? true : undefined
   return {
     ...name === undefined ? {} : { name },
     ...description === undefined ? {} : { description },
     ...order === undefined ? {} : { order },
+    ...hidden === undefined ? {} : { hidden },
   }
 }
 

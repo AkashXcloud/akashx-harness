@@ -1,3 +1,4 @@
 name: "Cognate (legacy)"
 description: "Superseded by AkashX Ecosystem. Kept so sessions recorded under it still open."
 order: 90
+hidden: true

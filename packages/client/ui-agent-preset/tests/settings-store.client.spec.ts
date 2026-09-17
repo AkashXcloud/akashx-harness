@@ -12,7 +12,7 @@ import { RemoteError } from '@akashx/akx-client-test-runtime'
 import type { SessionSummary } from '@akashx/akx-api-session-controller/client'
 import type { SessionId } from '@akashx/akx-session/types'
 import {
-  AGENT_PRESET_SETTINGS_NS, AgentPresetSettingsController,
+  AGENT_PRESET_SETTINGS_NS, AgentPresetSettingsController, presetOptions,
   writeDefaultPreset, writeModeSelectionEnabled,
 } from '../src/client/settings-store.ts'
 
@@ -517,3 +517,25 @@ function remoteRoster(modeSelectionEnabled: boolean) {
     },
   }
 }
+
+describe('a retired preset', () => {
+  it('is kept out of the picker but stays in the roster that labels it', () => {
+    const roster = [
+      { id: 'akashx-ecosystem', trust: 'system' as const, name: 'AkashX Ecosystem' },
+      { id: 'cognate', trust: 'system' as const, name: 'Cognate (legacy)', hidden: true },
+      { id: 'cognate-tree', trust: 'system' as const, name: 'Concept Tree only' },
+    ]
+    // Only the pickable ones become options...
+    expect(presetOptions(roster).map(option => option.id)).toEqual(['akashx-ecosystem', 'cognate-tree'])
+    // ...while the roster still carries the retired id, so a Session composed from it
+    // is labelled rather than falling back to the default's name.
+    expect(roster.some(preset => preset.id === 'cognate')).toBe(true)
+  })
+
+  it('is omitted for the same reason a broken preset is', () => {
+    expect(presetOptions([
+      { id: 'a', trust: 'system' as const, hidden: true },
+      { id: 'b', trust: 'system' as const, broken: 'unreadable' },
+    ])).toEqual([])
+  })
+})
