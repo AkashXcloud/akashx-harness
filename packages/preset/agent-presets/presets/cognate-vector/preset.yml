@@ -1,0 +1,3 @@
+name: "Vector search only"
+description: "Single-path mode: native StarRocks HNSW vector similarity, the plain-RAG baseline."
+order: 14

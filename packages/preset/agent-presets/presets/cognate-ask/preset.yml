@@ -1,0 +1,3 @@
+name: "RagBucket ASK only"
+description: "Single-path mode: server-side retrieve, rerank and answer over bucket chunks."
+order: 12

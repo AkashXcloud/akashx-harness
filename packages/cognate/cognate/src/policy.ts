@@ -112,20 +112,61 @@ function functionNames(sql: string): string[] {
     .filter((name): name is string => name !== undefined)
 }
 
+/** Cognitive operations a statement invokes: the leading `ASK`/`PROMPT` verb and every
+ * `cognitive_*` / `excel_ai_*` call, lowercased. Used to gate one retrieval path per
+ * session without also unlocking the others. */
+export function cognitiveOperations(sql: string): string[] {
+  const redacted = redactSqlForPolicy(sql)
+  const ops = new Set<string>()
+  const verb = /^(ASK|PROMPT)\b/i.exec(redacted)
+  if (verb?.[1] !== undefined) ops.add(verb[1].toLowerCase())
+  for (const match of redacted.matchAll(/\b((?:cognitive_|excel_ai_)[a-z0-9_]*)\s*\(/gi)) {
+    const name = match[1]
+    if (name !== undefined) ops.add(name.toLowerCase())
+  }
+  return [...ops]
+}
+
 /** Reject statements that exceed the read-only Cognate policy.
  * @param sql - SQL text to authorize.
  * @param kind - classification produced by {@link classifySql}.
  * @param allowExternalOperations - whether cognitive SQL may invoke external services.
+ * @param allowedOperations - when set, the only cognitive operations this session may
+ * invoke (see {@link cognitiveOperations}). Omitted means every operation is permitted
+ * once `allowExternalOperations` is set.
+ * @param deniedIdentifiers - substrings no statement may reference, matched against the
+ * comment- and literal-stripped SQL. Gates the read paths that {@link classifySql} cannot
+ * tell apart, so a session limited to one corpus cannot read another.
  */
-export function authorizeSql(sql: string, kind: CognateQueryKind, allowExternalOperations: boolean): void {
+export function authorizeSql(
+  sql: string,
+  kind: CognateQueryKind,
+  allowExternalOperations: boolean,
+  allowedOperations?: readonly string[],
+  deniedIdentifiers?: readonly string[],
+): void {
   if (statementCount(sql) !== 1) throw new Error('Cognate SQL must contain exactly one statement')
   if (kind === 'mutation') throw new Error('Cognate SQL permits only metadata and read operations')
   if (kind === 'cognitive' && !allowExternalOperations) {
     throw new Error('Cognate external SQL operations are disabled by policy')
   }
+  if (kind === 'cognitive' && allowedOperations !== undefined) {
+    const permitted = new Set(allowedOperations.map(name => name.toLowerCase()))
+    const refused = cognitiveOperations(sql).find(name => !permitted.has(name))
+    if (refused !== undefined) {
+      throw new Error(`Cognate operation "${refused}" is not enabled for this session`)
+    }
+  }
   if (kind === 'read') {
     const unknown = functionNames(sql).find(name =>
       !SQL_KEYWORDS.has(name) && !SQL_FUNCTIONS.has(name) && !name.startsWith('count'))
     if (unknown !== undefined) throw new Error(`Cognate SQL function "${unknown}" is not approved`)
+  }
+  if (deniedIdentifiers !== undefined) {
+    const redacted = redactSqlForPolicy(sql).toLowerCase()
+    const denied = deniedIdentifiers.find(name => redacted.includes(name.toLowerCase()))
+    if (denied !== undefined) {
+      throw new Error(`Cognate source "${denied}" is not enabled for this session`)
+    }
   }
 }

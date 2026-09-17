@@ -1,0 +1,3 @@
+name: "Concept Tree only"
+description: "Single-path mode: per-document concept-tree traversal via cognitive_ask."
+order: 11

@@ -19,6 +19,13 @@ export interface CognateConfig {
   readonly provider?: string
   /** Permit ASK and cognitive UDF calls that may invoke external services. */
   readonly allowExternalOperations?: boolean
+  /** When set, the only cognitive operations this session may invoke, e.g.
+   * `['ask']` or `['cognitive_ask']`. Lets one deployment expose a single
+   * retrieval path while `allowExternalOperations` is on. Omitted permits all. */
+  readonly allowedOperations?: readonly string[]
+  /** Substrings no statement may reference, e.g. `['_chunks']`. Gates the read paths
+   * that SQL classification cannot tell apart. */
+  readonly deniedIdentifiers?: readonly string[]
   /** Maximum SQL statement length in characters. */
   readonly maxSqlLength?: number
   /** Maximum returned rows retained in one result. */
@@ -35,12 +42,20 @@ export interface CognateConfig {
 export const Config: z<CognateConfig> = z.object({
   provider: z.string(),
   allowExternalOperations: z.boolean().default(false),
+  allowedOperations: z.array(z.string()),
+  deniedIdentifiers: z.array(z.string()),
   maxSqlLength: z.number().default(100_000),
   maxRows: z.number().default(200),
   maxBytes: z.number().default(1_000_000),
   contextMaxChars: z.number().default(16_000),
   semanticContext: z.any(),
 })
+
+/** A configured list, or undefined when it is unset. Schemastery materializes an unset
+ * `z.array()` as `[]`, and an empty allowlist must not read as "deny everything". */
+function configuredList(value: readonly string[] | undefined): readonly string[] | undefined {
+  return value !== undefined && value.length > 0 ? value : undefined
+}
 
 /** Provider registry and bounded AkashXDB execution service. */
 export class CognateRuntime extends Service {
@@ -102,7 +117,8 @@ export class CognateRuntime extends Service {
     const maxSqlLength = this.config.maxSqlLength ?? 100_000
     if (request.sql.length > maxSqlLength) throw new Error(`Cognate SQL exceeds the ${maxSqlLength} character limit`)
     const kind = classifySql(request.sql)
-    authorizeSql(request.sql, kind, this.config.allowExternalOperations === true)
+    authorizeSql(request.sql, kind, this.config.allowExternalOperations === true,
+      configuredList(this.config.allowedOperations), configuredList(this.config.deniedIdentifiers))
     const provider = this.resolveProvider(true)
     if (provider === undefined) throw new Error('no usable Cognate provider is registered')
     const result = await provider.execute({ sql: request.sql, kind, signal: request.signal })
@@ -122,7 +138,8 @@ export class CognateRuntime extends Service {
       ids.add(probe.id)
       if (probe.sql.length > (this.config.maxSqlLength ?? 100_000)) throw new Error(`Cognate capability "${probe.id}" exceeds the SQL character limit`)
       const kind = classifySql(probe.sql)
-      authorizeSql(probe.sql, kind, this.config.allowExternalOperations === true)
+      authorizeSql(probe.sql, kind, this.config.allowExternalOperations === true,
+        configuredList(this.config.allowedOperations), configuredList(this.config.deniedIdentifiers))
     }
     const provider = this.resolveProvider(true)
     if (provider === undefined) throw new Error('no usable Cognate provider is registered')
