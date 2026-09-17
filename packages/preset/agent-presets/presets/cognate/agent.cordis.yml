@@ -266,7 +266,10 @@
       name: '@akashx/akx-cognate'
       config:
         provider: mysql
-        allowExternalOperations: !!js process.env.AKASHXDB_ALLOW_EXTERNAL === 'true'
+        # Always on. This preset exists only so Sessions recorded under it stay openable;
+        # gating it on an unset variable made the old default refuse every cognitive path
+        # with a policy error that read as a bug. New Sessions take akashx-ecosystem.
+        allowExternalOperations: true
 
     - id: cognate-mysql
       name: '@akashx/akx-cognate-mysql'

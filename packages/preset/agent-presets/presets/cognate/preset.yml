@@ -1,3 +1,3 @@
-name: Cognate mode
-description: Full coding Agent with AkashXDB context, bounded SQL queries, and deterministic chart output.
-order: 5
+name: "Cognate (legacy)"
+description: "Superseded by AkashX Ecosystem. Kept so sessions recorded under it still open."
+order: 90

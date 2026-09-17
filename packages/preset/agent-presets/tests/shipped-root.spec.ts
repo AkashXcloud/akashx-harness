@@ -60,7 +60,12 @@ describe('the shipped preset root', () => {
     const ctx = await roster({ includeUserRoot: false })
 
     const listed = await ctx.agentPresets.list()
-    expect(listed.map(preset => preset.id).sort()).toEqual(['cognate'])
+    // One preset per isolated retrieval path, plus the one that carries them all and the
+    // retired default kept so Sessions recorded under it still open.
+    expect(listed.map(preset => preset.id).sort()).toEqual([
+      'akashx-ecosystem', 'cognate', 'cognate-ask', 'cognate-chunks',
+      'cognate-ov', 'cognate-tree', 'cognate-vector',
+    ])
     expect(listed.every(preset => preset.trust === 'system')).toBe(true)
     // Not `broken === undefined`: health asks whether each row's package is
     // installed above the base, and the shipped rows name packages the

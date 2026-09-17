@@ -486,4 +486,4 @@
     - id: agent-presets
       name: '@akashx/akx-agent-presets'
       config:
-        default: cognate
+        default: akashx-ecosystem
