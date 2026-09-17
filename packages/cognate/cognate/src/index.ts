@@ -10,6 +10,8 @@ import type { CognateCapabilityProbe, CognateProbeResult, CognateProvider, Cogna
 export type * from './types.ts'
 export { authorizeSql, classifySql, redactSqlForPolicy, statementCount } from './policy.ts'
 export { deriveUsage, parseProfileUsage } from './usage.ts'
+export { findEmbedCalls, shouldHoistEmbeddings, spliceEmbeddings, vectorFromRow } from './embed-hoist.ts'
+export type { EmbedCall } from './embed-hoist.ts'
 
 declare module '@akashx/cordis' {
   interface Context { cognate: CognateRuntime }

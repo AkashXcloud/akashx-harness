@@ -273,11 +273,10 @@
           database: financebench
           dialect: StarRocks
           instructions:
-            - "Answer ONLY by native vector similarity, in two steps."
-            - "Step 1 -- embed the question once: SELECT cognitive_embed('foundry','text-embedding-3-large','<question>')"
-            - "Step 2 -- paste the returned array into the scan as a LITERAL and use approx_cosine_similarity: SELECT file_name, chunk_index, chunk_page_start, approx_cosine_similarity(vector, [<floats>]) AS score FROM financebench.<bucket>_chunks ORDER BY score DESC LIMIT 10"
-            - "approx_cosine_similarity with a literal array is the ONLY form that engages the HNSW index (about 140ms). cosine_similarity, a user variable, or any WHERE on a normal column all fall back to a full scan of every chunk."
-            - "Never place cognitive_embed inside a CTE, a scalar subquery, or the scan projection: StarRocks re-evaluates it per row, one HTTP call per chunk."
+            - "Answer ONLY by native vector similarity, in ONE statement."
+            - "Write the embedding call inline as the second argument: SELECT file_name, chunk_index, chunk_page_start, chunk_text, approx_cosine_similarity(vector, cognitive_embed('foundry','text-embedding-3-large','<question>')) AS score FROM financebench.<bucket>_chunks ORDER BY score DESC LIMIT 10"
+            - "The embedding is evaluated once before the statement runs and substituted as the array literal the index requires. Do NOT embed in a separate query and copy the numbers in yourself: the vector is 768 floats and transcribing it loses elements, which the deployment rejects as a dimension mismatch."
+            - "approx_cosine_similarity, a single ORDER BY score DESC and a positive LIMIT are what make the HNSW index eligible. cosine_similarity, a scalar subquery or a user variable all scan every chunk instead -- minutes rather than milliseconds."
             - "Read the answer off the returned chunk text yourself. There is no synthesis step in this mode."
             - "Database financebench on AkashXDB (StarRocks dialect)."
             - "Row status 'deleted' is a terminal released state on this deployment, not a tombstone: the values and their provenance are intact. Do NOT filter rows by status = 'done' -- it discards almost the whole corpus."

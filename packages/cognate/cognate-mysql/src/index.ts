@@ -4,7 +4,9 @@ import { Context } from '@akashx/cordis'
 import z from '@akashx/schemastery'
 import { createConnection } from 'mysql2/promise'
 import type { JsonValue } from '@akashx/akx-util-values'
-import { parseProfileUsage } from '@akashx/akx-cognate'
+import {
+  findEmbedCalls, parseProfileUsage, shouldHoistEmbeddings, spliceEmbeddings, vectorFromRow,
+} from '@akashx/akx-cognate'
 import type {
   CognateColumn,
   CognateCapabilityProbe,
@@ -141,6 +143,43 @@ export class MysqlCognateProvider implements CognateProvider {
     return results
   }
 
+  /**
+   * Replace each `cognitive_embed(...)` call in a retrieval statement with its vector.
+   *
+   * The vector must reach the deployment as an array literal for the HNSW index to be
+   * eligible, and the calls are evaluated here rather than by the caller because a model
+   * copying hundreds of floats between statements loses elements. Each call is evaluated
+   * once on the connection that will run the statement.
+   *
+   * A call that yields no usable vector leaves the statement untouched, so the deployment
+   * reports what is actually wrong with it instead of this silently rewriting it into
+   * something else.
+   * @param connection - the connection the rewritten statement will run on.
+   * @param sql - the statement as authorized.
+   * @param signal - cancellation signal for the evaluations.
+   * @returns the statement to execute, rewritten only when every call resolved.
+   */
+  private async resolveEmbeddings(
+    connection: { query(sql: string): Promise<unknown> },
+    sql: string,
+    signal: AbortSignal,
+  ): Promise<string> {
+    if (!shouldHoistEmbeddings(sql)) return sql
+    const calls = findEmbedCalls(sql)
+    if (calls.length === 0) return sql
+    const vectors: number[][] = []
+    for (const call of calls) {
+      signal.throwIfAborted()
+      const result = await connection.query(`SELECT ${call.expression}`)
+      const rows: unknown = Array.isArray(result) ? result[0] : undefined
+      const row: unknown = Array.isArray(rows) ? rows[0] : undefined
+      const vector = vectorFromRow(typeof row === 'object' && row !== null ? row as Record<string, unknown> : undefined)
+      if (vector === undefined) return sql
+      vectors.push(vector)
+    }
+    return spliceEmbeddings(sql, calls, vectors)
+  }
+
   /** Read one statement's spend from the deployment's profile service.
    * @param queryId - deployment query id captured when the statement ran.
    * @param signal - cancellation signal for the lookup.
@@ -184,7 +223,7 @@ export class MysqlCognateProvider implements CognateProvider {
       // Profiling is a session variable and the id names the LAST statement, so both rides
       // must share this connection with the statement they describe.
       if (captureQueryId) await connection.query('SET enable_profile = true')
-      const query = connection.query(sql)
+      const query = connection.query(await this.resolveEmbeddings(connection, sql, signal))
       if (timeout !== undefined) timer = setTimeout(() => { connection.destroy() }, timeout)
       const [rows, fields] = await query
       if (signal.aborted) throw signal.reason ?? new Error('Cognate SQL was cancelled')
