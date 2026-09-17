@@ -79,3 +79,64 @@ describe('run_sql in the native Harness agent loop', () => {
     expect(assistantMessages.some(event => event.type === 'assistant/message' && event.data.usage !== undefined)).toBe(true)
   })
 })
+
+/** A provider whose cognitive statement reports its spend the way ASK does: in the row. */
+function spendingProvider(): CognateProvider {
+  return {
+    id: 'fixture',
+    available: () => true,
+    context: () => ({ dialect: 'starrocks', ragBuckets: ['docs'] }),
+    execute: async request => ({
+      sql: request.sql,
+      kind: request.kind,
+      columns: [{ name: 'Answer', type: 'VARCHAR' }],
+      rows: [{
+        Answer: '42',
+        TotalInputTokens: 37_924,
+        TotalOutputTokens: 5261,
+        ModelUsed: 'gpt-5-nano',
+        ModelProvider: 'foundry',
+        RewriteMs: 431,
+      }],
+      citations: [],
+      externalOperation: true,
+    }),
+  }
+}
+
+describe('deployment spend through the mounted composition', () => {
+  it('totals a cognitive statement into the cognateUsage projection', async () => {
+    const adapter = new MockAdapter([
+      toolCallResponse('sql-1', 'run_sql', { sql: "ASK 'revenue' ON docs" }),
+      textResponse('42.'),
+    ])
+    ctx = new Context()
+    await mountAgentLoopTestDependencies(ctx)
+    await ctx.plugin(AgentLoop, { agents: [] })
+    await ctx.plugin(CognateRuntime, { provider: 'fixture', allowExternalOperations: true })
+    ctx.cognate.registerProvider(spendingProvider())
+    await ctx.plugin(toolCognate)
+    ctx.llm.registerAdapter(['mock'], adapter)
+    agent = await ctx.agentLoop.create(SessionId('cognate-usage'), { provider: 'mock', model: 'mock' })
+
+    agent.followup(createUserMessage({ content: [{ type: 'text', text: 'ask' }], source: { kind: 'user' } }))
+    await waitForIdle(ctx, agent)
+
+    // Registration rides the tools' own fiber in the agent plane while the registry is the
+    // host's; reading the service directly at apply() time raced its publication and
+    // registered nothing at all, with no error. Assert the unit is actually driven.
+    // run_sql must persist its result as tool/result meta; without that declaration the
+    // fold below sees nothing and every deployment total silently reads zero.
+    const ev = agent.session.snapshotEvents().find(e => e.type === 'tool/result')
+    expect(ev?.type === 'tool/result' && ev.data.meta !== undefined).toBe(true)
+    const totals = ctx.sessionProjections.stateOf(agent.session, 'cognateUsage')
+    expect(totals).toBeDefined()
+    expect(totals?.inputTokens).toBe(37_924)
+    expect(totals?.outputTokens).toBe(5261)
+    expect(totals?.calls).toBe(1)
+    expect(totals?.stageMs).toBe(431)
+    expect(totals?.routes).toEqual([
+      { provider: 'foundry', model: 'gpt-5-nano', inputTokens: 37_924, outputTokens: 5261, calls: 1 },
+    ])
+  })
+})

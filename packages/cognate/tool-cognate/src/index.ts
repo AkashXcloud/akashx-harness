@@ -155,6 +155,10 @@ export function apply(ctx: Context, config: Config): void {
     output: {
       schema: QUERY_OUTPUT_SCHEMA,
       render: (_args, value) => [{ type: 'text', text: JSON.stringify(value, null, 2) }],
+      // Persist the result beside the event so the deployment's spend survives in the
+      // durable log: the `cognateUsage` fold reads it from there, and a rendered card
+      // reproduces on replay without re-running the statement.
+      presentationMeta: (_args, value) => value,
     },
     execute: async (args, exec) => normalizeQueryResult(await ctx.cognate.execute({ sql: args.sql, signal: exec.signal })),
     presentCall: args => ({ card: 'generic', title: 'Run SQL', kind: 'read', rawInput: args.sql }),
