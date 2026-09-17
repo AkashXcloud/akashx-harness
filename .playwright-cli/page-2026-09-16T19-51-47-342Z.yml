@@ -1,0 +1,36 @@
+- generic [ref=e4]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - button "New session" [ref=e9] [cursor=pointer]:
+        - generic [ref=e10]: AkashX
+      - button "Collapse sidebar" [ref=e18] [cursor=pointer]
+    - button "New session" [ref=e21] [cursor=pointer]:
+      - generic [ref=e24]: New Session
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: Workspaces
+        - generic [ref=e31]:
+          - button "Search sessions" [ref=e32] [cursor=pointer]
+          - textbox "Search sessions..."
+        - generic [ref=e36]:
+          - button "View options" [ref=e38] [cursor=pointer]
+          - button "Add workspace" [ref=e41] [cursor=pointer]
+      - tree "Sessions" [ref=e47]:
+        - treeitem "financebench_results" [ref=e50] [cursor=pointer]
+        - treeitem "tunir" [ref=e58] [cursor=pointer]
+        - treeitem "FinanceBenchOneByOne" [ref=e66] [cursor=pointer]
+    - button "Settings" [ref=e76] [cursor=pointer]
+  - generic [ref=e92]:
+    - generic [ref=e100]:
+      - generic [ref=e101]: Cognitive Processing for Humans and Agents
+      - generic [ref=e102]: Preview
+    - button "Choose workspace" [ref=e104] [cursor=pointer]
+    - generic [ref=e112] [cursor=pointer]:
+      - generic [ref=e114]:
+        - textbox "Choose workspace" [ref=e115]
+        - generic: Choose a workspace to start
+      - generic [ref=e116]:
+        - generic [ref=e117]:
+          - button "Add files or run commands" [disabled]
+        - generic [ref=e118]:
+          - button "Send message" [disabled]

@@ -1,0 +1,150 @@
+- generic [ref=e4]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - button "New session" [ref=e9] [cursor=pointer]:
+        - generic [ref=e10]: AkashX
+      - button "Collapse sidebar" [ref=e18] [cursor=pointer]
+    - button "New session" [ref=e21] [cursor=pointer]:
+      - generic [ref=e24]: New Session
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: Workspaces
+        - generic [ref=e31]:
+          - button "Search sessions" [ref=e32] [cursor=pointer]
+          - textbox "Search sessions..."
+        - generic [ref=e36]:
+          - button "View options" [ref=e38] [cursor=pointer]
+          - button "Add workspace" [ref=e41] [cursor=pointer]
+      - tree "Sessions" [ref=e47]:
+        - treeitem "financebench_results" [expanded] [ref=e50] [cursor=pointer]
+        - treeitem "tunir" [ref=e58] [cursor=pointer]
+        - generic [ref=e64]:
+          - treeitem "FinanceBenchOneByOne" [expanded] [ref=e204] [cursor=pointer]
+          - treeitem "Cognate Knowledge Inquiry 13h" [ref=e179] [cursor=pointer]:
+            - generic [ref=e181]: Cognate Knowledge Inquiry
+            - generic [ref=e182]: 13h
+          - treeitem "Q150 · WALMART_2020_10K · What is the FY2018 - FY2020 3 year average unadjuste 1d" [selected] [ref=e184] [cursor=pointer]:
+            - generic [ref=e186]: Q150 · WALMART_2020_10K · What is the FY2018 - FY2020 3 year average unadjuste
+            - generic [ref=e187]: 1d
+          - treeitem "Q149 · WALMART_2019_10K · Based on the information provided primarily in the s 1d" [ref=e410] [cursor=pointer]:
+            - generic [ref=e191]: Q149 · WALMART_2019_10K · Based on the information provided primarily in the s
+            - generic [ref=e192]: 1d
+          - treeitem "Q148 · WALMART_2018_10K · What is FY2018 days payable outstanding (DPO) for Wa 1d" [ref=e194] [cursor=pointer]:
+            - generic [ref=e196]: Q148 · WALMART_2018_10K · What is FY2018 days payable outstanding (DPO) for Wa
+            - generic [ref=e197]: 1d
+          - treeitem "Q147 · VERIZON_2022_10K · Has Verizon increased its debt on balance sheet betw 1d" [ref=e199] [cursor=pointer]:
+            - generic [ref=e201]: Q147 · VERIZON_2022_10K · Has Verizon increased its debt on balance sheet betw
+            - generic [ref=e202]: 1d
+          - button "Show 147 more sessions" [ref=e203] [cursor=pointer]
+        - treeitem "Ungrouped" [ref=e128] [cursor=pointer]
+    - generic [ref=e74]:
+      - button "Settings" [expanded] [ref=e76] [cursor=pointer]
+      - dialog "Settings" [ref=e412]:
+        - navigation [ref=e413]:
+          - generic [ref=e414]: Settings
+          - generic [ref=e415]:
+            - button "General" [ref=e416] [cursor=pointer]
+            - button "Models" [ref=e422] [cursor=pointer]
+            - button "Database" [ref=e427] [cursor=pointer]
+            - button "Plugins" [ref=e433] [cursor=pointer]
+            - button "Agent presets" [ref=e437] [cursor=pointer]
+        - generic [ref=e444]:
+          - generic [ref=e445]:
+            - button "Open configuration file" [ref=e449] [cursor=pointer]
+            - button "Close" [active] [ref=e450] [cursor=pointer]
+          - generic [ref=e458]:
+            - generic [ref=e459]:
+              - generic [ref=e460]:
+                - generic [ref=e461]: Permission
+                - generic [ref=e462]: Choose the default permission mode for new sessions
+              - button "Workspace Write" [ref=e464] [cursor=pointer]
+            - generic [ref=e467]:
+              - generic [ref=e468]: Language
+              - button "English" [ref=e471] [cursor=pointer]
+            - generic [ref=e474]:
+              - generic [ref=e475]: Appearance
+              - generic [ref=e476]:
+                - button "Light" [ref=e477] [cursor=pointer]
+                - button "Dark" [ref=e488] [cursor=pointer]
+                - button "System" [pressed] [ref=e491] [cursor=pointer]
+            - generic [ref=e495]:
+              - generic [ref=e496]:
+                - generic [ref=e497]: Font size
+                - generic [ref=e498]: Only affects conversation content
+              - generic [ref=e499]:
+                - generic [ref=e500]:
+                  - generic [ref=e501]: "14"
+                  - generic [ref=e502]:
+                    - button "Increase font size" [ref=e503] [cursor=pointer]
+                    - button "Decrease font size" [ref=e506] [cursor=pointer]
+                - generic [ref=e509]: px
+            - generic [ref=e510]:
+              - generic [ref=e511]:
+                - generic [ref=e512]: Conversation display
+                - generic [ref=e513]: Controls process content in completed turns
+              - button "Compact" [ref=e515] [cursor=pointer]
+            - generic [ref=e518]:
+              - generic [ref=e519]:
+                - generic [ref=e520]: Send behavior while busy
+                - generic [ref=e521]: What Enter and the Send button do while the agent is running; Cmd/Ctrl+Enter uses the other behavior
+              - button "Queue" [ref=e523] [cursor=pointer]
+  - generic [ref=e217]:
+    - banner [ref=e219]:
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - navigation "Session hierarchy" [ref=e222]:
+            - button "Q150 · WALMART_2020_10K · What is the FY2018 - FY2020 3 year average unadjuste" [disabled] [ref=e224]
+          - generic "The Cognate coding agent." [ref=e227]: Cognate
+        - generic [ref=e234]:
+          - generic [ref=e236]:
+            - button "Open workspace in Files" [ref=e237] [cursor=pointer]
+            - button "Choose an app to open in" [ref=e240] [cursor=pointer]
+          - button "More actions" [ref=e244] [cursor=pointer]
+        - button "Open right sidebar" [ref=e251] [cursor=pointer]
+      - tablist [ref=e254]:
+        - tab "Chat" [selected] [ref=e255] [cursor=pointer]
+        - tab "Trajectory" [ref=e256] [cursor=pointer]
+    - generic [ref=e258]:
+      - generic [ref=e264]:
+        - button "System prompt" [ref=e268] [cursor=pointer]
+        - generic [ref=e280]:
+          - generic [ref=e281]: "# FinanceBench answering brief (shared context for all workers) You have ONE tool: `run_sql` — read-only SQL over AkashXDB (StarRocks-compatible), database `financebench`. Answer only from values `run_sql` returns **in this session**. Never answer from memory. Never invent a number, table, column, or quote. If no query returns support, say \"Not found in the filing via available tools\" and name what you tried. ## Routing order (follow strictly) ### 1) Ontology views (structured — try FIRST) Views: `fb_ov_identity`, `fb_ov_income`, `fb_ov_balance`, `fb_ov_cashflow`, `fb_ov_narrative`. Join/scope by `https_url LIKE '%<DOC>%'` (the doc name from the question, e.g. `%BOEING_2022_10K%`). Always `LIMIT 1`. Columns are period-suffixed `_P0` (most recent) / `_P1` / `_P2`. **Always confirm what each suffix means and the units before trusting a number:** ```sql SELECT Company, Ticker, Fiscal_Year, Reporting_Units, Period_Label_P0, Period_Label_P1, Period_Label_P2 FROM financebench.fb_ov_identity WHERE https_url LIKE '%<DOC>%' LIMIT 1 ``` Useful columns (exact names): - identity: Company, Ticker, Filing_Type, Fiscal_Year, Fiscal_Period, Period_End_Date, Reporting_Units, Period_Label_P0/P1/P2, Registered_Debt_Securities, Exchange, Absent_Fields - income: Revenue_P0..P2, Cost_Of_Revenue_P0..P2, Gross_Profit_P0..P2, SGA_Expense_P0/P1, RnD_Expense_P0, Operating_Income_P0..P2, Interest_Expense_P0/P1, Pre_Tax_Income_P0/P1, Income_Tax_Expense_P0/P1, Effective_Tax_Rate_P0/P1, Net_Income_P0..P2, EPS_Basic_P0, EPS_Diluted_P0/P1, Weighted_Shares_Diluted_P0, Restructuring_Costs_P0/P1, Restructuring_Costs_Source, Absent_Fields - balance: Cash_And_Equivalents_P0/P1, Short_Term_Investments_P0/P1, Accounts_Receivable_Net_P0/P1, Inventory_P0/P1, Total_Current_Assets_P0/P1, PPE_Net_P0/P1, Goodwill_P0, Total_Assets_P0/P1, Accounts_Payable_P0/P1, Short_Term_Debt_P0/P1, Total_Current_Liabilities_P0/P1, Long_Term_Debt_P0/P1, Total_Liabilities_P0, Total_Equity_P0/P1, Shares_Outstanding_P0, Largest_Liability_Line, Absent_Fields (NOTE: balance has NO _P2 — only P0/P1.) - cashflow: Cash_From_Operations_P0..P2, Cash_From_Investing_P0, Cash_From_Financing_P0, Capital_Expenditures_P0..P2, Depreciation_Amortization_P0..P2, Dividends_Paid_P0/P1, Share_Repurchases_P0/P1, Free_Cash_Flow_P0, Dividends_Per_Share_P0/P1, Highest_Cash_Activity, Absent_Fields - narrative: Business_Description, Products_And_Services, Geographies, Geographic_Results, Segment_Results, Primary_Customers, MDA_Drivers, Non_GAAP_Measures, Guidance_Outlook, Acquisitions, Divestitures_And_Spinoffs, Legal_Proceedings, Restructuring_Detail, Debt_And_Credit_Facilities, Dividend_And_Buyback_Policy, One_Off_Items, Risk_And_Cyclicality, Market_Risk_Measures, Pension_And_Benefits, Governance_And_People, Operating_Metrics, Filing_Agenda, Other_Notable_Disclosures, Absent_Fields **The views can be WRONG — they are machine-extracted.** A single-column critical figure MUST be verified against the filing text (route 3) before you rely on it. Do not compute anything the filing already states. ### 2) Concept tree (fallback when the view lacks the value) `concept_tree` is a real column, not a tool. Takes ~30s per call. **ALWAYS scope with `file_name`** or it is slow. ```sql SELECT cognitive_ask(CAST(raw_text AS VARCHAR), '<full question>', concept_tree, 'foundry', 'gpt-5-nano') AS answer FROM financebench.financebenchragbkt18_raw_files WHERE file_name LIKE '%<DOC>%' LIMIT 1 ``` ### 3) Verbatim chunk lookup (reliable last resort AND your provenance source — no LLM, fast) ```sql SELECT section_title, chunk_page_start, chunk_text FROM financebench.financebenchragbkt18_chunks WHERE file_name LIKE '%<DOC>%' AND chunk_text LIKE '%<distinct phrase>%' LIMIT 5 ``` This is how you get verbatim quotes and how you verify view values. Copy quotes EXACTLY, never paraphrase. ## SQL limits — do not waste turns Rejected by policy: `get_json_string`, `cosine_similarity`, `substring_index`, `length`, `now`, `json_object`, window functions (`OVER`), and `OR` in WHERE. Use `LIKE` and simple aggregation; one topic per query. `COUNT(*)` and plain joins on `https_url` work. ## Units caution `Reporting_Units` tells you the statement units — READ IT. These docs are in **thousands**, not millions: `ADOBE_2015_10K`, `ADOBE_2016_10K`, `ADOBE_2017_10K`, `BLOCK_2016_10K`, `BLOCK_2020_10K`, `MGMRESORTS_2018_10K`, `MGMRESORTS_2020_10K`, `MGMRESORTS_2022_10K`, `MGMRESORTS_2022Q4_EARNINGS`, `MGMRESORTS_2023Q2_10Q`, `NETFLIX_2015_10K`, `NETFLIX_2017_10K`, `ULTABEAUTY_2023_10K`, `ULTABEAUTY_2023Q4_EARNINGS`. Everything else in this task is **millions** unless identity says otherwise. ## Rules for answers - Compute ratios/averages/YoY/CAGR yourself from operands you READ, and SHOW the operands. - Round/format exactly as the question asks (two decimals, one decimal, USD millions, USD billions, percents...). - \"If metric X is not meaningful / not a useful metric for this company, state that and explain why\" questions: answer with the filing's own reasoning (narrative view / chunks) and, where the filing gives no company-specific caveat, give the computed metric and note the caveat yourself. - A derived answer lists EVERY operand and its source. - NEVER invent a quote. If nothing supports the value, set `quote` to `\"\"` and say so in `method`. ## Required output — ONE JSON object per question, in question order ```json {\"financebench_id\":\"...\",\"tool_used\":\"ov|concept_tree|chunk\",\"method\":\"<one sentence: the exact technique and values used>\",\"answer\":\"<answer with units>\",\"provenance\":[{\"source\":\"...\",\"locator\":\"<view.Column=value | bucket / doc_file / page-or-section>\",\"quote\":\"<verbatim text, copied not paraphrased>\"}]} ``` Return that ONE JSON object as your final message — this session answers exactly one question. --- financebench_id: financebench_id_06741 document: WALMART_2020_10K question: What is the FY2018 - FY2020 3 year average unadjusted EBITDA % margin for Walmart? Define unadjusted EBITDA as unadjusted operating income + depreciation and amortization from the cash flow statement. Answer in units of percents and round to one decimal place. Calculate what was asked by utilizing the line items clearly shown in the P&L statement and the cash flow statement."
+          - generic [ref=e283]:
+            - generic [ref=e284]: 9/15 22:43
+            - button "Copy" [ref=e285] [cursor=pointer]
+        - button "6 tool calls · 3 messages" [ref=e290] [cursor=pointer]
+        - generic [ref=e299]:
+          - generic [ref=e301]:
+            - generic [ref=e302]: json
+            - button "Copy" [ref=e304] [cursor=pointer]
+          - code [ref=e308]:
+            - generic [ref=e309]: "{\"financebench_id\":\"financebench_id_06741\",\"tool_used\":\"ov\",\"method\":\"Read Operating_Income and Revenue from fb_ov_income (P0=2020, P1=2019, P2=2018) and Depreciation_Amortization from fb_ov_cashflow for WALMART_2020_10K, verified both against verbatim filing chunks (Consolidated Statements of Income p.50, Consolidated Statements of Cash Flows p.56); computed unadjusted EBITDA = operating income + D&A, divided each year by total revenues, then averaged the three annual margins.\",\"answer\":\"6.2% (3-year average unadjusted EBITDA margin, FY2018-FY2020). FY2018: (20,437 + 10,529) / 500,343 = 6.19%; FY2019: (21,957 + 10,678) / 514,405 = 6.34%; FY2020: (20,568 + 10,987) / 523,964 = 6.02%; average = (6.1890 + 6.3442 + 6.0224) / 3 = 6.1852% -> 6.2%. All amounts in USD millions per the filing's '(Amounts in millions)' caption.\",\"provenance\":[{\"source\":\"financebench.fb_ov_income\",\"locator\":\"https_url LIKE '%WALMART_2020_10K%': Operating_Income_P0=20568, Operating_Income_P1=21957, Operating_Income_P2=20437; Revenue_P0=523964, Revenue_P1=514405, Revenue_P2=500343\",\"quote\":\"Walmart Inc.\\nConsolidated Statements of Income\\nFiscal Years Ended January 31,\\n(Amounts in millions, except per share data)\\n2020\\n2019\\n2018\\nRevenues:\\nNet sales\\n$\\n519,926\\n$\\n510,329\\n$\\n495,761\\nMembership and other income\\n4,038\\n4,076\\n4,582\\nTotal revenues\\n523,964\\n514,405\\n500,343\\nCosts and expenses:\\nCost of sales\\n394,605\\n385,301\\n373,396\\nOperating, selling, general and administrative expenses\\n108,791\\n107,147\\n106,510\\nOperating income\\n20,568\\n21,957\\n20,437\"},{\"source\":\"financebench.fb_ov_cashflow\",\"locator\":\"https_url LIKE '%WALMART_2020_10K%': Depreciation_Amortization_P0=10987, Depreciation_Amortization_P1=10678, Depreciation_Amortization_P2=10529\",\"quote\":\"Walmart Inc.\\nConsolidated Statements of Cash Flows\\nFiscal Years Ended January 31,\\n(Amounts in millions)\\n2020\\n2019\\n2018\\nCash flows from operating activities:\\nConsolidated net income\\n$\\n15,201\\n$\\n7,179\\n$\\n10,523\\nAdjustments to reconcile consolidated net income to net cash provided by operating activities:\\nDepreciation and amortization\\n10,987\\n10,678\\n10,529\"},{\"source\":\"financebench.financebenchragbkt18_chunks\",\"locator\":\"WALMART_2020_10K, section 'Segments and Disaggregated Revenue / Segment Financial Performance and Reconciliation', page 81\",\"quote\":\"Fiscal Year Ended January 31, 2018\\nNet sales\\n$\\n318,477\\n$\\n118,068\\n$\\n59,216\\n$\\n—\\n$\\n495,761\\nOperating income (loss)\\n16,995\\n5,229\\n915\\n(2,702)\\n20,437\\nInterest, net\\n(2,178)\\nLoss on extinguishment of debt\\n(3,136)\\nIncome before income taxes\\n$\\n15,123\\nTotal assets\\n$\\n104,347\\n$\\n81,549\\n$\\n13,418\\n$\\n5,208\\n$\\n204,522\\nDepreciation and amortization\\n6,005\\n2,601\\n698\\n1,225\\n10,529\\nCapital expenditures\\n5,680\\n2,607\\n626\\n1,138\\n10,051\"}]}"
+        - generic [ref=e313]:
+          - button "Copy" [ref=e314] [cursor=pointer]
+          - generic [ref=e317]:
+            - button "Good response" [ref=e318] [cursor=pointer]
+            - button "Bad response" [ref=e321] [cursor=pointer]
+          - button "Branch into a new conversation" [ref=e324] [cursor=pointer]
+          - button "Usage 77.4K tok" [ref=e328] [cursor=pointer]
+          - button "Ran for 6m 15s" [ref=e335] [cursor=pointer]
+          - generic [ref=e340]: 9/15 22:49
+      - generic [ref=e346]:
+        - generic [ref=e347]:
+          - generic [ref=e349]:
+            - textbox "Message or run a task, / commands, @ files or sessions" [ref=e350]
+            - generic: Message or run a task, / commands, @ files or sessions
+          - generic [ref=e351]:
+            - generic [ref=e352]:
+              - button "Add files or run commands" [ref=e353] [cursor=pointer]
+              - 'button "Access mode, current: Workspace Write" [ref=e358] [cursor=pointer]':
+                - generic [ref=e366]: Workspace Write
+            - generic [ref=e370]:
+              - button "Select model, current deepseek-v4.1-flash" [ref=e373] [cursor=pointer]:
+                - generic [ref=e374]: deepseek-v4.1-flash
+              - button "7% of context used" [ref=e378] [cursor=pointer]
+              - button "Send message" [disabled] [ref=e382]
+        - generic [ref=e386]:
+          - button "1 turns 5 steps · 15 tok/s" [ref=e388] [cursor=pointer]:
+            - generic [ref=e393]: 1 turns 5 steps·15 tok/s
+          - button "77.4K tok · Cache hit 54%" [ref=e395] [cursor=pointer]:
+            - generic [ref=e400]: 77.4K tok·Cache hit 54%

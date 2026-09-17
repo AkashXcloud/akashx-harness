@@ -5,10 +5,14 @@ import z from '@akashx/schemastery'
 import type { CognateQueryResult, CognateSemanticContext } from '@akashx/akx-cognate'
 import type {} from '@akashx/akx-cognate'
 import { defineTool } from '@akashx/akx-tools'
+import { cognateUsageProjectionDefinition } from './projection.ts'
 import type { JsonValue } from '@akashx/akx-util-values'
 
 /** Cordis plugin name. */
 export const name = 'tool-cognate'
+
+export type * from './types.ts'
+export { cognateUsageProjectionDefinition } from './projection.ts'
 
 /** Services required by the Cognate model-facing tools. */
 export const inject = ['tools', 'systemPrompt', 'cognate']
@@ -117,6 +121,10 @@ interface ChartToolValue {
 
 /** Register `run_sql` and the SQL-independent `render_chart` tool. */
 export function apply(ctx: Context, config: Config): void {
+  // The projection registry is optional: a host that serves no projections still gets the
+  // tools, and `ctx.get` reads the global store rather than a topology-sensitive proxy.
+  ctx.get('sessionProjections')?.register(cognateUsageProjectionDefinition)
+
   const contextMaxChars = config.contextMaxChars ?? 16_000
   const maxChartPoints = config.maxChartPoints ?? 500
   assertPositiveInteger('contextMaxChars', contextMaxChars)

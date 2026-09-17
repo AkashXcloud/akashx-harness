@@ -2,7 +2,9 @@
   "name": "@akashx/akx-tool-cognate",
   "description": "Model-facing Cognate SQL and deterministic chart tools",
   "version": "0.1.5-rc.2",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/akashx-ai/akx-harness.git",
@@ -12,11 +14,25 @@
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
   "exports": {
-    ".": { "types": "./lib/types/index.d.ts", "default": "./lib/index.js" },
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./client": {
+      "types": "./lib/types/client.d.ts",
+      "default": "./lib/types/client.js"
+    },
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "files": ["lib/index.js", "lib/types/**/*.d.ts"],
+  "files": [
+    "lib/index.js",
+    "lib/types/**/*.d.ts"
+  ],
   "license": "MIT",
   "peerDependencies": {
     "@akashx/cordis": "workspace:^",
@@ -26,7 +42,9 @@
     "@akashx/akx-util-values": "workspace:^"
   },
   "dependencies": {
-    "@akashx/schemastery": "workspace:^"
+    "@akashx/akx-session-projection": "workspace:^",
+    "@akashx/schemastery": "workspace:^",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@akashx/cordis": "workspace:^",

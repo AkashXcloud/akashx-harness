@@ -103,6 +103,9 @@
     },
     {
       "path": "../ui-input-trigger"
+    },
+    {
+      "path": "../../cognate/tool-cognate"
     }
   ]
 }

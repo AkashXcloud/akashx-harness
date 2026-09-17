@@ -290,6 +290,11 @@
       name: '@akashx/akx-cognate-mysql'
       config:
         url: !!js process.env.AKASHXDB_URL
+        # Record each cognitive statement's query id and read its profile afterwards, so
+        # `cognitive_ask` reports the tokens and time it spent. ASK needs neither: it
+        # returns its own counts as result columns.
+        captureQueryId: true
+        profileUrl: !!js process.env.AKASHXDB_PROFILE_URL
 
     - id: tool-cognate
       name: '@akashx/akx-tool-cognate'

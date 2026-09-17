@@ -5,13 +5,16 @@
 // Mounted on 'conversation.composer.dock' so it sticks with the composer in the
 // active conversation scrollport (see ConversationRoot data-conversation-scroll).
 
-import { memo, useMemo, useState } from 'react'
+import { Fragment, memo, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IconDatabaseOutline16, IconGaugeOutline16 } from '@akashx/akx-client-ui-primitives'
 import type { UseProjection } from '@akashx/akx-api-session-controller/client'
 import type { SnapshotSelectorHook } from '@akashx/akx-client-ui-slots'
 // Type-only: merges the sessionStats key into SessionProjectionMap for useProjection.
 import type {} from '@akashx/akx-session-stats/client'
+// Type-only: merges the cognateUsage key the same way.
+import type {} from '@akashx/akx-tool-cognate/client'
+import type { CognateUsageProjection } from '@akashx/akx-tool-cognate/client'
 import type { TokenUsageProjection } from '@akashx/akx-token-meter/client'
 import type { ChatViewSlotProps } from '../contract/slots.ts'
 import type { ChatSnapshot } from '../contract/snapshot.ts'
@@ -233,8 +236,9 @@ function TimePill({ stats, t, dialog }: {
   )
 }
 
-function UsagePill({ usage, t, dialog }: {
+function UsagePill({ usage, deployment, t, dialog }: {
   usage: TokenUsageProjection
+  deployment: CognateUsageProjection | undefined
   t: ChatViewSlotProps['t']
   dialog: PillDialog
 }) {
@@ -244,6 +248,15 @@ function UsagePill({ usage, t, dialog }: {
   const totalText = t('message.turnUsage.count', { count: formatTokens(total, t) })
   const cacheHit = cacheHitPercent(usage)
   const cacheHitText = cacheHit !== null ? t('stats.cacheHit', { percent: cacheHit }) : null
+  // What answering cost beyond the session's fixed overhead: cache reads are the
+  // already-paid-for prefix, so they are excluded rather than discounted.
+  const working = usage.uncachedInputTokens + usage.outputTokens
+  // Tokens the DEPLOYMENT's models spent, kept beside the session's own rather than added
+  // to them: the two pools are billed to different models at different prices.
+  const databaseTokens = deployment === undefined ? 0 : deployment.inputTokens + deployment.outputTokens
+  const databaseText = databaseTokens > 0
+    ? t('stats.databaseShort', { count: formatTokens(databaseTokens, t) })
+    : null
   return (
     <span ref={rootRef} className={css.anchor}>
       <button
@@ -251,12 +264,18 @@ function UsagePill({ usage, t, dialog }: {
         className={css.pill}
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-label={cacheHitText === null ? totalText : `${totalText} · ${cacheHitText}`}
+        aria-label={[totalText, databaseText, cacheHitText].filter(part => part !== null).join(' · ')}
         onClick={() => { setOpen(!open) }}
       >
         <IconDatabaseOutline16 />
         <span className={css.label}>
           {totalText}
+          {databaseText !== null && (
+            <>
+              <span className={css.sep} aria-hidden>·</span>
+              {databaseText}
+            </>
+          )}
           {cacheHitText !== null && (
             <>
               <span className={css.sep} aria-hidden>·</span>
@@ -305,8 +324,39 @@ function UsagePill({ usage, t, dialog }: {
             )}
             <dt>{t('message.turnUsage.output')}</dt>
             <dd>{exactCount(usage.outputTokens, t)}</dd>
+            <dt>{t('message.turnUsage.working')}</dt>
+            <dd>{exactCount(working, t)}</dd>
           </dl>
           {/* jscpd:ignore-end */}
+          {deployment !== undefined && deployment.calls > 0 && (
+            <>
+              <div className={dialogCss.titleRule} aria-hidden />
+              <div className={dialogCss.title}>
+                <span className={dialogCss.titleLabel}>{t('stats.dialog.databaseTitle')}</span>
+                <span className={dialogCss.titleValue}>{exactCount(databaseTokens, t)}</span>
+              </div>
+              <dl className={dialogCss.details} data-session-stats-database>
+                <dt>{t('stats.dialog.databaseCalls')}</dt>
+                <dd>{deployment.calls}</dd>
+                <dt>{t('message.turnUsage.input')}</dt>
+                <dd>{exactCount(deployment.inputTokens, t)}</dd>
+                <dt>{t('message.turnUsage.output')}</dt>
+                <dd>{exactCount(deployment.outputTokens, t)}</dd>
+                {deployment.stageMs > 0 && (
+                  <>
+                    <dt>{t('stats.dialog.databaseTime')}</dt>
+                    <dd>{formatDuration(deployment.stageMs, t)}</dd>
+                  </>
+                )}
+                {deployment.routes.map(route => (
+                  <Fragment key={`${route.provider}/${route.model}`}>
+                    <dt>{`${route.provider} / ${route.model}`}</dt>
+                    <dd>{exactCount(route.inputTokens + route.outputTokens, t)}</dd>
+                  </Fragment>
+                ))}
+              </dl>
+            </>
+          )}
         </div>,
         document.body,
       )}
@@ -317,6 +367,8 @@ function UsagePill({ usage, t, dialog }: {
 export const StatsPills = memo(function StatsPills({ useChat, useProjection, t }: StatsPillsProps) {
   const settledNodes = useChat(s => s.legacy.nodes)
   const usage = useProjection('tokenUsage')
+  // Deployment spend is absent unless a cognitive tool registered its unit and spent.
+  const deployment = useProjection('cognateUsage')
   // One exclusive slot for both dialogs: opening either pill closes the other.
   const [openPill, setOpenPill] = useState<'time' | 'usage' | null>(null)
   // Every figure rides the durable sessionStats projection, so paging and
@@ -347,6 +399,7 @@ export const StatsPills = memo(function StatsPills({ useChat, useProjection, t }
       {hasTokens && (
         <UsagePill
           usage={usage}
+          deployment={deployment}
           t={t}
           dialog={{
             open: openPill === 'usage',

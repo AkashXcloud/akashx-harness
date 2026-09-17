@@ -1,16 +1,42 @@
 {
   "extends": "../../../tsconfig.base.json",
-  "compilerOptions": { "rootDir": "src", "outDir": "lib/types" },
-  "include": ["src"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types"
+  },
+  "include": [
+    "src"
+  ],
   "references": [
-    { "path": "../../../vendor/cordis" },
-    { "path": "../../../vendor/schemastery" },
-    { "path": "../../core/system-prompt" },
-    { "path": "../../core/tools" },
-    { "path": "../../core/agent-loop" },
-    { "path": "../../test-support/agent-loop-testkit" },
-    { "path": "../../llm/llm" },
-    { "path": "../cognate" },
-    { "path": "../../util/values" }
+    {
+      "path": "../../../vendor/cordis"
+    },
+    {
+      "path": "../../../vendor/schemastery"
+    },
+    {
+      "path": "../../core/system-prompt"
+    },
+    {
+      "path": "../../core/tools"
+    },
+    {
+      "path": "../../core/agent-loop"
+    },
+    {
+      "path": "../../test-support/agent-loop-testkit"
+    },
+    {
+      "path": "../../llm/llm"
+    },
+    {
+      "path": "../cognate"
+    },
+    {
+      "path": "../../util/values"
+    },
+    {
+      "path": "../../session/session-projection"
+    }
   ]
 }

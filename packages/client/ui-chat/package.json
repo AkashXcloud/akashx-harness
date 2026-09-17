@@ -90,6 +90,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@akashx/akx-tool-cognate": "workspace:^",
     "@akashx/schemastery": "workspace:^"
   },
   "files": [

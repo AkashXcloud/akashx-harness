@@ -1,0 +1,65 @@
+- generic [ref=e4]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - button "New session" [ref=e9] [cursor=pointer]:
+        - generic [ref=e10]: AkashX
+      - button "Collapse sidebar" [ref=e18] [cursor=pointer]
+    - button "New session" [ref=e21] [cursor=pointer]:
+      - generic [ref=e24]: New Session
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]: Workspaces
+        - generic [ref=e31]:
+          - button "Search sessions" [ref=e32] [cursor=pointer]
+          - textbox "Search sessions..."
+        - generic [ref=e36]:
+          - button "View options" [ref=e38] [cursor=pointer]
+          - button "Add workspace" [ref=e41] [cursor=pointer]
+      - tree "Sessions" [ref=e47]:
+        - generic [ref=e48]:
+          - treeitem "financebench_results" [expanded] [ref=e50] [cursor=pointer]
+          - treeitem "New Session" [selected] [ref=e124] [cursor=pointer]
+        - treeitem "tunir" [ref=e58] [cursor=pointer]
+        - generic [ref=e64]:
+          - treeitem "FinanceBenchOneByOne Workspace actions for FinanceBenchOneByOne New session in FinanceBenchOneByOne" [expanded] [ref=e164] [cursor=pointer]:
+            - generic [ref=e70]: FinanceBenchOneByOne
+            - generic [ref=e168]:
+              - button "Workspace actions for FinanceBenchOneByOne" [ref=e170]
+              - button "New session in FinanceBenchOneByOne" [ref=e175]
+          - treeitem "Cognate Knowledge Inquiry 13h" [ref=e179] [cursor=pointer]:
+            - generic [ref=e181]: Cognate Knowledge Inquiry
+            - generic [ref=e182]: 13h
+          - treeitem "Q150 · WALMART_2020_10K · What is the FY2018 - FY2020 3 year average unadjuste 1d" [ref=e184] [cursor=pointer]:
+            - generic [ref=e186]: Q150 · WALMART_2020_10K · What is the FY2018 - FY2020 3 year average unadjuste
+            - generic [ref=e187]: 1d
+          - treeitem "Q149 · WALMART_2019_10K · Based on the information provided primarily in the s 1d" [ref=e189] [cursor=pointer]:
+            - generic [ref=e191]: Q149 · WALMART_2019_10K · Based on the information provided primarily in the s
+            - generic [ref=e192]: 1d
+          - treeitem "Q148 · WALMART_2018_10K · What is FY2018 days payable outstanding (DPO) for Wa 1d" [ref=e194] [cursor=pointer]:
+            - generic [ref=e196]: Q148 · WALMART_2018_10K · What is FY2018 days payable outstanding (DPO) for Wa
+            - generic [ref=e197]: 1d
+          - treeitem "Q147 · VERIZON_2022_10K · Has Verizon increased its debt on balance sheet betw 1d" [ref=e199] [cursor=pointer]:
+            - generic [ref=e201]: Q147 · VERIZON_2022_10K · Has Verizon increased its debt on balance sheet betw
+            - generic [ref=e202]: 1d
+          - button "Show 147 more sessions" [ref=e203] [cursor=pointer]
+        - treeitem "Ungrouped" [ref=e128] [cursor=pointer]
+    - button "Settings" [ref=e76] [cursor=pointer]
+  - generic [ref=e92]:
+    - generic [ref=e100]:
+      - generic [ref=e101]: Cognitive Processing for Humans and Agents
+      - generic [ref=e102]: Preview
+    - button "Choose workspace" [ref=e104] [cursor=pointer]:
+      - generic [ref=e107]: financebench_results
+    - generic [ref=e112]:
+      - generic [ref=e114]:
+        - textbox "Describe what you want to build, / commands, @ files or sessions" [ref=e137]
+        - generic: Describe what you want to build, / commands, @ files or sessions
+      - generic [ref=e116]:
+        - generic [ref=e117]:
+          - button "Add files or run commands" [ref=e138] [cursor=pointer]
+          - 'button "Access mode, current: Workspace Write" [ref=e143] [cursor=pointer]':
+            - generic [ref=e151]: Workspace Write
+        - generic [ref=e118]:
+          - button "Select model, current deepseek-v4.1-flash" [ref=e157] [cursor=pointer]:
+            - generic [ref=e158]: deepseek-v4.1-flash
+          - button "Send message" [disabled] [ref=e161]
