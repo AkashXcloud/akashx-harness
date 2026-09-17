@@ -4,10 +4,12 @@ import { Context, Service } from '@akashx/cordis'
 import z from '@akashx/schemastery'
 import { snapshotJsonValue, type JsonValue } from '@akashx/akx-util-values'
 import { authorizeSql, classifySql } from './policy.ts'
+import { deriveUsage } from './usage.ts'
 import type { CognateCapabilityProbe, CognateProbeResult, CognateProvider, CognateQueryResult, CognateSemanticContext } from './types.ts'
 
 export type * from './types.ts'
 export { authorizeSql, classifySql, redactSqlForPolicy, statementCount } from './policy.ts'
+export { deriveUsage, parseProfileUsage } from './usage.ts'
 
 declare module '@akashx/cordis' {
   interface Context { cognate: CognateRuntime }
@@ -122,7 +124,14 @@ export class CognateRuntime extends Service {
     const provider = this.resolveProvider(true)
     if (provider === undefined) throw new Error('no usable Cognate provider is registered')
     const result = await provider.execute({ sql: request.sql, kind, signal: request.signal })
-    return capResult(result, this.config.maxRows ?? 200, this.config.maxBytes ?? 1_000_000)
+    // Read the deployment's own spend off the uncapped rows: the figures live in the result
+    // row itself, which row bounding may drop.
+    // ASK reports its spend in the row; cognitive_ask reports it only in the query profile,
+    // which costs a second round trip and is therefore attempted only when the row had none.
+    const usage = result.usage ?? deriveUsage(result)
+      ?? (result.queryId === undefined ? undefined : await provider.usage?.(result.queryId, request.signal))
+    const measured = usage === undefined ? result : { ...result, usage }
+    return capResult(measured, this.config.maxRows ?? 200, this.config.maxBytes ?? 1_000_000)
   }
 
   /** Run host-owned deployment capability checks through the selected provider.

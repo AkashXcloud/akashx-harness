@@ -4,6 +4,7 @@ import { Context } from '@akashx/cordis'
 import z from '@akashx/schemastery'
 import { createConnection } from 'mysql2/promise'
 import type { JsonValue } from '@akashx/akx-util-values'
+import { parseProfileUsage } from '@akashx/akx-cognate'
 import type {
   CognateColumn,
   CognateCapabilityProbe,
@@ -12,6 +13,7 @@ import type {
   CognateQueryRequest,
   CognateQueryResult,
   CognateSemanticContext,
+  CognateUsage,
 } from '@akashx/akx-cognate'
 import type {} from '@akashx/akx-cognate'
 
@@ -21,6 +23,8 @@ export interface DirectQueryResult {
   readonly rows: readonly Record<string, JsonValue>[]
   readonly answer?: string
   readonly citations?: CognateQueryResult['citations']
+  /** Deployment query id of the executed statement, when the provider captured one. */
+  readonly queryId?: string
 }
 
 /** Optional query override used by host tests and embedded deployments. */
@@ -42,6 +46,16 @@ export interface Config {
   readonly database?: string
   /** Provider-side query timeout in milliseconds. */
   readonly queryTimeoutMs?: number
+  /** Record the deployment query id of every cognitive statement, so its query profile can
+   * be read afterwards. Costs one `SET enable_profile` and one `SELECT last_query_id()` on
+   * the statement's own connection, and makes the deployment retain a profile per statement;
+   * deployments that do not read profiles should leave it off. */
+  readonly captureQueryId?: boolean
+  /** Base URL of the deployment's HTTP profile service, e.g. `http://127.0.0.1:8030`. It is a
+   * different port, and often a different interface, from the MySQL wire, so it is configured
+   * rather than derived from `host`. Without it no query profile is read and `cognitive_ask`
+   * reports no spend. The MySQL user and password authenticate the request. */
+  readonly profileUrl?: string
   /** Bounded semantic model supplied to the prompt consumer. */
   readonly semanticContext?: CognateSemanticContext
 }
@@ -54,6 +68,8 @@ export const Config: z<Config> = z.object({
   password: z.string(),
   database: z.string(),
   queryTimeoutMs: z.number().default(120_000),
+  captureQueryId: z.boolean().default(false),
+  profileUrl: z.string(),
   semanticContext: z.any(),
 })
 
@@ -90,7 +106,9 @@ export class MysqlCognateProvider implements CognateProvider {
   }
 
   async execute(request: CognateQueryRequest): Promise<CognateQueryResult> {
-    const result = await this.rawQuery(request.sql, request.signal)
+    // Only cognitive statements spend deployment tokens, so only they are worth profiling.
+    const capture = this.config.captureQueryId === true && request.kind === 'cognitive'
+    const result = await this.rawQuery(request.sql, request.signal, capture)
     return {
       sql: request.sql,
       kind: request.kind,
@@ -98,6 +116,7 @@ export class MysqlCognateProvider implements CognateProvider {
       rows: result.rows,
       ...result.answer !== undefined ? { answer: result.answer } : {},
       citations: result.citations ?? [],
+      ...result.queryId !== undefined ? { queryId: result.queryId } : {},
       externalOperation: request.kind === 'cognitive',
     }
   }
@@ -122,12 +141,36 @@ export class MysqlCognateProvider implements CognateProvider {
     return results
   }
 
-  private async rawQuery(sql: string, signal: AbortSignal): Promise<DirectQueryResult> {
-    if (this.directExecutor !== undefined) return this.directExecutor(sql, signal)
-    return this.queryMySql(sql, signal)
+  /** Read one statement's spend from the deployment's profile service.
+   * @param queryId - deployment query id captured when the statement ran.
+   * @param signal - cancellation signal for the lookup.
+   * @returns usage when the profile carries cognitive counters.
+   */
+  async usage(queryId: string, signal: AbortSignal): Promise<CognateUsage | undefined> {
+    const base = this.config.profileUrl
+    if (base === undefined || this.options === undefined) return undefined
+    try {
+      const url = new URL('/api/profile', base)
+      url.searchParams.set('query_id', queryId)
+      const credentials = `${this.options.user}:${this.options.password}`
+      const response = await fetch(url, {
+        signal,
+        headers: { authorization: `Basic ${Buffer.from(credentials).toString('base64')}` },
+      })
+      if (!response.ok) return undefined
+      return parseProfileUsage(await response.text())
+    } catch {
+      // The statement has already returned its rows; losing only its profile must not fail it.
+      return undefined
+    }
   }
 
-  private async queryMySql(sql: string, signal: AbortSignal): Promise<DirectQueryResult> {
+  private async rawQuery(sql: string, signal: AbortSignal, captureQueryId = false): Promise<DirectQueryResult> {
+    if (this.directExecutor !== undefined) return this.directExecutor(sql, signal)
+    return this.queryMySql(sql, signal, captureQueryId)
+  }
+
+  private async queryMySql(sql: string, signal: AbortSignal, captureQueryId: boolean): Promise<DirectQueryResult> {
     if (this.options === undefined) throw new Error('cognate-mysql: no connection is configured')
     signal.throwIfAborted()
     const connection = await createConnection(this.options)
@@ -138,13 +181,18 @@ export class MysqlCognateProvider implements CognateProvider {
     signal.addEventListener('abort', abort, { once: true })
     try {
       const timeout = this.config.queryTimeoutMs
+      // Profiling is a session variable and the id names the LAST statement, so both rides
+      // must share this connection with the statement they describe.
+      if (captureQueryId) await connection.query('SET enable_profile = true')
       const query = connection.query(sql)
       if (timeout !== undefined) timer = setTimeout(() => { connection.destroy() }, timeout)
       const [rows, fields] = await query
       if (signal.aborted) throw signal.reason ?? new Error('Cognate SQL was cancelled')
+      const queryId = captureQueryId ? await lastQueryId(connection) : undefined
       return {
         columns: fields.map(field => ({ name: field.name, type: String(field.type) })),
         rows: Array.isArray(rows) ? rows.map(row => normalizeRow(row)) : [],
+        ...queryId !== undefined ? { queryId } : {},
       }
     } finally {
       if (timer !== undefined) clearTimeout(timer)
@@ -157,6 +205,29 @@ export class MysqlCognateProvider implements CognateProvider {
 /** Register the configured provider in the host Cognate service. */
 export function apply(ctx: Context, config: Config): void {
   ctx.cognate.registerProvider(new MysqlCognateProvider(config))
+}
+
+/** Read the deployment id of the statement that just ran on this connection.
+ *
+ * The id is returned under a function-call column name, so the value is taken positionally
+ * rather than by key. A deployment that does not implement `last_query_id()` yields no id
+ * instead of failing the statement that already succeeded.
+ *
+ * @param connection - the connection the described statement ran on.
+ * @returns the query id, or undefined when the deployment reported none.
+ */
+async function lastQueryId(connection: { query(sql: string): Promise<unknown> }): Promise<string | undefined> {
+  try {
+    const result = await connection.query('SELECT last_query_id()')
+    const rows: unknown = Array.isArray(result) ? result[0] : undefined
+    const row: unknown = Array.isArray(rows) ? rows[0] : undefined
+    if (typeof row !== 'object' || row === null) return undefined
+    const value: unknown = Object.values(row)[0]
+    return typeof value === 'string' && value !== '' ? value : undefined
+  } catch {
+    // The statement itself has already returned; losing only its id must not fail the call.
+    return undefined
+  }
 }
 
 function connectionOptions(config: Config): { host: string; port: number; user: string; password: string; database?: string } | undefined {

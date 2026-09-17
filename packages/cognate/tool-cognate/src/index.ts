@@ -51,6 +51,19 @@ const QUERY_OUTPUT_SCHEMA = {
     answer: { type: 'string' as const },
     citations: { type: 'array' as const, required: true as const, items: { type: 'json' as const } },
     query_id: { type: 'string' as const },
+    usage: {
+      type: 'object' as const,
+      additionalProperties: false,
+      properties: {
+        input_tokens: { type: 'integer' as const },
+        output_tokens: { type: 'integer' as const },
+        reasoning_tokens: { type: 'integer' as const },
+        provider: { type: 'string' as const },
+        model: { type: 'string' as const },
+        stage_ms: { type: 'json' as const },
+        units: { type: 'json' as const },
+      },
+    },
   },
 } as const
 
@@ -78,6 +91,19 @@ interface QueryToolValue {
   readonly answer?: string
   readonly citations: JsonValue[]
   readonly query_id?: string
+  readonly usage?: QueryToolUsage
+}
+
+/** Tokens and stage timing the DEPLOYMENT billed for one cognitive statement, separate
+ * from this session's own model spend. */
+interface QueryToolUsage {
+  readonly input_tokens?: number
+  readonly output_tokens?: number
+  readonly reasoning_tokens?: number
+  readonly provider?: string
+  readonly model?: string
+  readonly stage_ms?: JsonValue
+  readonly units?: JsonValue
 }
 
 interface ChartToolValue {
@@ -154,6 +180,19 @@ function normalizeQueryResult(result: CognateQueryResult): QueryToolValue {
     ...result.answer !== undefined ? { answer: result.answer } : {},
     citations: result.citations.map(normalizeCitation),
     ...result.queryId !== undefined ? { query_id: result.queryId } : {},
+    ...result.usage !== undefined ? { usage: normalizeUsage(result.usage) } : {},
+  }
+}
+
+function normalizeUsage(usage: NonNullable<CognateQueryResult['usage']>): QueryToolUsage {
+  return {
+    ...usage.inputTokens !== undefined ? { input_tokens: usage.inputTokens } : {},
+    ...usage.outputTokens !== undefined ? { output_tokens: usage.outputTokens } : {},
+    ...usage.reasoningTokens !== undefined ? { reasoning_tokens: usage.reasoningTokens } : {},
+    ...usage.provider !== undefined ? { provider: usage.provider } : {},
+    ...usage.model !== undefined ? { model: usage.model } : {},
+    ...usage.stageMs !== undefined ? { stage_ms: { ...usage.stageMs } } : {},
+    ...usage.units !== undefined ? { units: { ...usage.units } } : {},
   }
 }
 

@@ -96,6 +96,29 @@ export interface CognateProbeResult {
   readonly supported: boolean
 }
 
+/** Token spend and stage timing billed to the DEPLOYMENT's models by one cognitive statement.
+ *
+ * These figures are separate from the harness's own model usage: a session running one model
+ * can issue statements the database answers with another. Callers that present a single total
+ * must keep {@link CognateUsage.provider} and {@link CognateUsage.model} alongside it, because
+ * the two pools are priced independently.
+ */
+export interface CognateUsage {
+  /** Prompt tokens the deployment billed, summed over every stage that reports them. */
+  readonly inputTokens?: number
+  readonly outputTokens?: number
+  /** Thinking share already counted inside `outputTokens`; never added on top of it. */
+  readonly reasoningTokens?: number
+  /** Provider that billed the spend, as the deployment names it. */
+  readonly provider?: string
+  /** Model that billed the spend, as the deployment names it. */
+  readonly model?: string
+  /** Wall time per named pipeline stage, in milliseconds. */
+  readonly stageMs?: Readonly<Record<string, number>>
+  /** Non-token billing units, such as reranker search units, per named unit. */
+  readonly units?: Readonly<Record<string, number>>
+}
+
 /** Provider-normalized query output before service-owned result bounds. */
 export interface CognateQueryResult {
   readonly sql: string
@@ -107,6 +130,8 @@ export interface CognateQueryResult {
   readonly truncated?: boolean
   readonly queryId?: string
   readonly externalOperation: boolean
+  /** Deployment-side spend for a cognitive statement, when the statement reported any. */
+  readonly usage?: CognateUsage
 }
 
 /** Provider implementation for one AkashXDB transport. */
@@ -117,5 +142,13 @@ export interface CognateProvider {
   availabilityReason?(): string | undefined
   context(): CognateSemanticContext | undefined
   execute(request: CognateQueryRequest): Promise<CognateQueryResult>
+  /** Fetch the deployment's spend for an executed statement that did not report it in its own
+   * result row. Implemented only by providers that can reach the deployment's profile service;
+   * failing to retrieve a profile yields undefined rather than failing the completed statement.
+   * @param queryId - deployment query id captured when the statement ran.
+   * @param signal - cancellation signal for the lookup.
+   * @returns usage when the deployment served a profile carrying it.
+   */
+  usage?(queryId: string, signal: AbortSignal): Promise<CognateUsage | undefined>
   probe?(probes: readonly CognateCapabilityProbe[], signal: AbortSignal): Promise<readonly CognateProbeResult[]>
 }
