@@ -452,7 +452,7 @@ export class ApiSessionAgentController {
     if (hasApiSessionSubagentOwner(this.ctx, { header: observation.header }, undefined)) {
       throw new ApiSessionSubagentOwnership(sessionId)
     }
-    const composition = await this.composeAgent(this.presetForObservation(observation))
+    const composition = await this.composeAgent(await this.composablePreset(observation))
     const published = this.ctx.sessions.get(sessionId)
     const live = this.ctx.agents.get(sessionId)
     if (published !== undefined && hasApiSessionSubagentOwner(this.ctx, published, live)) {
@@ -543,6 +543,30 @@ export class ApiSessionAgentController {
       throw new Error('api-session: Agent activation requires a projected Session observation')
     }
     return observation.projections.values.agentPreset ?? undefined
+  }
+
+  /**
+   * The preset a resumed Session may actually be composed with.
+   *
+   * A deployment that stops supplying a preset leaves every Session recorded under it
+   * naming a composition that no longer exists. A Session that has run a turn produced
+   * its history under that composition, so resolution still fails loud rather than
+   * answering later turns under capabilities the earlier ones never had. A Session that
+   * has run nothing has no such history: composing it with the default is exactly what
+   * creating it now would do, and it keeps a removed preset from stranding blank
+   * Sessions that can never be opened again to be switched off it.
+   * @param observation - exact Session observation carrying its projection snapshot.
+   * @returns the recorded preset, or undefined to take the configured default.
+   */
+  private async composablePreset(observation: SessionObservation): Promise<string | undefined> {
+    const recorded = this.presetForObservation(observation)
+    if (recorded === undefined) return undefined
+    const presets = this.ctx.get('agentPresets')
+    if (presets === undefined) return recorded
+    if ((await presets.list()).some(preset => preset.id === recorded)) return recorded
+    // Reached only for a preset the deployment no longer supplies, so the log scan (which
+    // materializes the event array) stays off the ordinary resume path.
+    return observation.events.some(event => event.type === 'turn/start') ? recorded : undefined
   }
 
   private assertPresetUnchanged(

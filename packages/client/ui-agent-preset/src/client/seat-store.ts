@@ -53,6 +53,10 @@ export class AgentPresetSeatController {
    */
   private fallback = ''
 
+  /** Ids the roster currently supplies, so a Session recorded under a preset the
+   * deployment has since removed is not offered as the mode it is running. */
+  private known: ReadonlySet<string> = new Set()
+
   /** Set while a pick is waiting for a session; cleared once applied. */
   private staged: string | undefined
 
@@ -67,6 +71,24 @@ export class AgentPresetSeatController {
       'id' | 'blank' | 'projectionValues'
     > | undefined,
   ) {}
+
+  /**
+   * The Session's own preset, but only while the roster still supplies it.
+   *
+   * A preset removed from the deployment after a Session recorded it names a
+   * composition that no longer exists. Showing that id would label the chip with a
+   * mode the picker cannot offer and the Host cannot resolve, so the caller falls
+   * through to the Host-effective default instead.
+   * @param session - the session the chip is showing, when there is one.
+   * @returns the recorded preset, or undefined when it is unknown or absent.
+   */
+  private composedPreset(
+    session: Pick<SessionSummary, 'id' | 'blank' | 'projectionValues'> | undefined,
+  ): string | undefined {
+    const recorded = presetOf(session)
+    if (recorded === undefined) return undefined
+    return this.known.has(recorded) ? recorded : undefined
+  }
 
   private set(patch: Partial<AgentPresetSeatState>): void {
     this.store.set({ ...this.store.getSnapshot(), ...patch })
@@ -87,6 +109,7 @@ export class AgentPresetSeatController {
     const { presets, modeSelectionEnabled } = roster.value
     if (!modeSelectionEnabled) this.staged = undefined
     this.fallback = presets.find(preset => preset.isDefault)?.id ?? presets[0]?.id ?? ''
+    this.known = new Set(presets.map(preset => preset.id))
     const session = this.currentSession()
     this.set({
       showPicker: modeSelectionEnabled,
@@ -100,7 +123,7 @@ export class AgentPresetSeatController {
       // A blank Session carries no agentPreset projection yet, so falling through
       // to '' here left `ready` false and hid the chip on the one surface it
       // exists for. The Host-effective default is the documented last term.
-      current: this.staged ?? presetOf(session) ?? this.fallback,
+      current: this.staged ?? this.composedPreset(session) ?? this.fallback,
       error: null,
       ...modeSelectionEnabled ? {} : { introduce: false },
     })
@@ -185,7 +208,7 @@ export class AgentPresetSeatController {
     const staged = this.staged
     const session = this.currentSession()
     if (staged === undefined) {
-      const current = session === undefined ? this.fallback : presetOf(session) ?? ''
+      const current = session === undefined ? this.fallback : this.composedPreset(session) ?? ''
       if (current !== this.store.getSnapshot().current) this.set({ current })
       return
     }
