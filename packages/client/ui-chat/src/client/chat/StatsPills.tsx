@@ -248,9 +248,12 @@ function UsagePill({ usage, deployment, t, dialog }: {
   const totalText = t('message.turnUsage.count', { count: formatTokens(total, t) })
   const cacheHit = cacheHitPercent(usage)
   const cacheHitText = cacheHit !== null ? t('stats.cacheHit', { percent: cacheHit }) : null
-  // What answering cost beyond the session's fixed overhead: cache reads are the
-  // already-paid-for prefix, so they are excluded rather than discounted.
-  const working = usage.uncachedInputTokens + usage.outputTokens
+  // What answering cost beyond the prefix the session had already paid for. The prompt-side
+  // buckets are disjoint, and NEW content that enters the cache lands in cacheWrite rather
+  // than uncachedInput -- so a turn whose tool result first enters the context reports it
+  // there. Counting only uncachedInput reads such a turn as near-zero work. Cache READS are
+  // the already-paid-for prefix and stay excluded.
+  const working = usage.uncachedInputTokens + usage.cacheWriteTokens + usage.outputTokens
   // Tokens the DEPLOYMENT's models spent, kept beside the session's own rather than added
   // to them: the two pools are billed to different models at different prices.
   const databaseTokens = deployment === undefined ? 0 : deployment.inputTokens + deployment.outputTokens

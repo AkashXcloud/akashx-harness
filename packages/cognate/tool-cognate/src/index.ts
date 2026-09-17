@@ -121,9 +121,14 @@ interface ChartToolValue {
 
 /** Register `run_sql` and the SQL-independent `render_chart` tool. */
 export function apply(ctx: Context, config: Config): void {
-  // The projection registry is optional: a host that serves no projections still gets the
-  // tools, and `ctx.get` reads the global store rather than a topology-sensitive proxy.
-  ctx.get('sessionProjections')?.register(cognateUsageProjectionDefinition)
+  // Optional registration: a host that serves no projections still gets the tools. This is
+  // the documented shape for it -- reading the service directly here races its publication
+  // and silently registers nothing, because the tools mount in the agent plane while the
+  // registry is the host's. Registering per agent preset is expected: the registry counts
+  // registrants sharing a key and keeps the unit until the last one unloads.
+  ctx.inject(['sessionProjections'], (scope) => {
+    scope.sessionProjections.register(cognateUsageProjectionDefinition)
+  })
 
   const contextMaxChars = config.contextMaxChars ?? 16_000
   const maxChartPoints = config.maxChartPoints ?? 500
