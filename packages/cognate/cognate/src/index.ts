@@ -22,10 +22,10 @@ export interface CognateConfig {
   /** When set, the only cognitive operations this session may invoke, e.g.
    * `['ask']` or `['cognitive_ask']`. Lets one deployment expose a single
    * retrieval path while `allowExternalOperations` is on. Omitted permits all. */
-  readonly allowedOperations?: readonly string[]
+  allowedOperations?: string[]
   /** Substrings no statement may reference, e.g. `['_chunks']`. Gates the read paths
    * that SQL classification cannot tell apart. */
-  readonly deniedIdentifiers?: readonly string[]
+  deniedIdentifiers?: string[]
   /** Maximum SQL statement length in characters. */
   readonly maxSqlLength?: number
   /** Maximum returned rows retained in one result. */
@@ -42,8 +42,8 @@ export interface CognateConfig {
 export const Config: z<CognateConfig> = z.object({
   provider: z.string(),
   allowExternalOperations: z.boolean().default(false),
-  allowedOperations: z.array(z.string()),
-  deniedIdentifiers: z.array(z.string()),
+  allowedOperations: z.array(z.string()).default([]),
+  deniedIdentifiers: z.array(z.string()).default([]),
   maxSqlLength: z.number().default(100_000),
   maxRows: z.number().default(200),
   maxBytes: z.number().default(1_000_000),
