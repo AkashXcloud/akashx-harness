@@ -312,6 +312,7 @@ export function ConversationRoot({
         },
         onClose: () => { setPickerOpen(false) },
       })}
+      {renderSlot('conversation.hero.agentPreset', {})}
     </div>
   )
 

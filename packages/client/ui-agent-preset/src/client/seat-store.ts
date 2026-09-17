@@ -97,7 +97,10 @@ export class AgentPresetSeatController {
       // an applied stage was consumed — the chip mounts (and loads) only
       // once the flow's session is current, so the reply can arrive after
       // apply() already composed it.
-      current: this.staged ?? (session === undefined ? this.fallback : presetOf(session) ?? ''),
+      // A blank Session carries no agentPreset projection yet, so falling through
+      // to '' here left `ready` false and hid the chip on the one surface it
+      // exists for. The Host-effective default is the documented last term.
+      current: this.staged ?? presetOf(session) ?? this.fallback,
       error: null,
       ...modeSelectionEnabled ? {} : { introduce: false },
     })
