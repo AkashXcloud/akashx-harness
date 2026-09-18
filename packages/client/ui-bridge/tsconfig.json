@@ -21,22 +21,22 @@
       "path": "../store"
     },
     {
+      "path": "../ui-conversation"
+    },
+    {
       "path": "../ui-layout"
     },
     {
       "path": "../ui-primitives"
     },
     {
-      "path": "../ui-slots"
+      "path": "../ui-renderer"
     },
     {
       "path": "../ui-sidebar"
     },
     {
-      "path": "../ui-renderer"
-    },
-    {
-      "path": "../ui-conversation"
+      "path": "../ui-slots"
     }
   ]
 }

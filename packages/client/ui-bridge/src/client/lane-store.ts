@@ -19,6 +19,7 @@ import type { SessionId } from '@akashx/akx-session/types'
 import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
 import type {} from '@akashx/akx-agent-presets/types'
 import { EMPTY_READING, readLane, type LaneReading } from './lane-watch.ts'
+import { dealBlind, judgePrompt, readVerdicts, type JudgeVerdict } from './judge.ts'
 
 /** One mode a lane may be seated on. */
 export interface BridgeMode {
@@ -39,6 +40,8 @@ export interface BridgeLane {
   readonly error?: string
   /** What the lane is reporting right now. */
   readonly reading: LaneReading
+  /** How the grader ruled on this lane's latest answer, once graded. */
+  readonly verdict?: JudgeVerdict
 }
 
 /** Panel snapshot the renderer subscribes to. */
@@ -48,14 +51,27 @@ export interface BridgeState {
   readonly modes: readonly BridgeMode[]
   /** The lane the composer addresses alone; null sends to every lane. */
   readonly focused: string | null
+  /** The known-good answer the grader marks against. */
+  readonly gold: string
+  /** Whether a grading run is in flight. */
+  readonly judging: boolean
   readonly error: string | null
 }
 
-/** How many times a settled lane re-reads the list, and how far apart. */
-const SETTLE_PULLS = 6
-const SETTLE_PULL_MS = 2500
+/** How often the panel re-reads the Session list while it is waiting on answers,
+ * and how long it keeps asking before it gives up. */
+const POLL_INTERVAL_MS = 3000
+const POLL_MAX_TICKS = 100
+/** How much longer the poll runs once every lane has answered, so the deployment
+ * spend -- written behind the answer -- is read before the panel stops looking. */
+const POLL_GRACE_TICKS = 6
+/** How long to wait on the grader, and how often to look. */
+const JUDGE_TIMEOUT_MS = 180_000
+const JUDGE_POLL_MS = 2500
 
-const INITIAL: BridgeState = { lanes: [], modes: [], focused: null, error: null }
+const INITIAL: BridgeState = {
+  lanes: [], modes: [], focused: null, gold: '', judging: false, error: null,
+}
 
 /** Owns the lane roster and the Session work behind it. */
 export class BridgeLaneController {
@@ -64,8 +80,8 @@ export class BridgeLaneController {
 
   private nextKey = 0
 
-  /** Active settle-pull timer, so overlapping settles share one. */
-  private settling: ReturnType<typeof setInterval> | undefined
+  /** Active answer poll, so a second question replaces it rather than racing it. */
+  private polling: ReturnType<typeof setInterval> | undefined
 
   constructor(private readonly ctx: ClientContext) {}
 
@@ -125,15 +141,50 @@ export class BridgeLaneController {
     }
   }
 
+  /** Re-read every lane from the Session list. */
+  refresh(): void {
+    this.publishReadings()
+  }
+
+  /** Stop the answer poll, for a panel that is going away. */
+  stop(): void {
+    if (this.polling === undefined) return
+    clearInterval(this.polling)
+    this.polling = undefined
+  }
+
   /**
-   * Follow one lane's Session and publish what it reports.
+   * Re-read the Session list until every lane has answered and its spend is in.
    *
-   * The values are that Session's own projections, so a lane steered from the
-   * conversation view updates here too -- Bridge shows a Session, it does not
-   * own one.
-   * @param key - the lane to publish under.
-   * @param sessionId - the Session to follow.
+   * A lane's list row is built while its turn-end event is still being handled,
+   * before the turn outline has folded that same event, so the row carries an
+   * empty response and nothing rebuilds it afterwards. Re-reading is how the
+   * answer reaches the panel at all.
+   *
+   * The poll is tied to the question rather than to an observed running-to-idle
+   * transition, because the list does not reliably show one. It runs on past the
+   * last answer for the grace window: a lane's deployment spend reaches the list
+   * through a write-behind checkpoint and is still absent at the moment its
+   * answer appears, and a cost that lands after the panel stopped looking reads
+   * as a path that spent nothing. It gives up rather than polling for the life of
+   * the panel.
    */
+  private pollUntilAnswered(): void {
+    this.stop()
+    let ticks = 0
+    let answeredAt: number | undefined
+    this.polling = setInterval(() => {
+      ticks += 1
+      void this.ctx.sessions.refresh()
+      const { lanes } = this.store.getSnapshot()
+      const answered = lanes.length > 0 && lanes.every(lane => lane.reading.answer !== undefined)
+      if (answered && answeredAt === undefined) answeredAt = ticks
+      const done = answeredAt !== undefined && ticks >= answeredAt + POLL_GRACE_TICKS
+      if (!done && ticks < POLL_MAX_TICKS) return
+      this.stop()
+    }, POLL_INTERVAL_MS)
+  }
+
   /**
    * Publish every lane's reading from the Session list.
    *
@@ -142,33 +193,6 @@ export class BridgeLaneController {
    * opens one, because opening means becoming the current Session and only one
    * can be. One subscription covers every lane rather than one per lane.
    */
-  /** Re-read every lane from the Session list. */
-  refresh(): void {
-    this.publishReadings()
-  }
-
-  /**
-   * Pull fresh Session-list hints for a little while after a lane stops working.
-   *
-   * A lane's deployment spend reaches the list through a write-behind checkpoint,
-   * so it is still absent at the moment the answer appears. Without this the cost
-   * of a question lands a minute after the answer it belongs to, which is no use
-   * beside it. The retries stop on their own rather than polling forever.
-   */
-  private pullSettledReadings(): void {
-    if (this.settling !== undefined) return
-    let attempts = 0
-    const tick = (): void => {
-      attempts += 1
-      void this.ctx.sessions.refresh()
-      if (attempts >= SETTLE_PULLS) {
-        clearInterval(this.settling)
-        this.settling = undefined
-      }
-    }
-    this.settling = setInterval(tick, SETTLE_PULL_MS)
-  }
-
   private publishReadings(): void {
     const { byId } = this.ctx.sessions.list.getSnapshot()
     const previous = this.store.getSnapshot().lanes
@@ -184,10 +208,6 @@ export class BridgeLaneController {
       return { ...lane, reading }
     })
     this.set({ lanes })
-    // A lane that just stopped working is the moment its spend is still missing.
-    const settled = lanes.some((lane, at) =>
-      previous[at]?.reading.running === true && !lane.reading.running)
-    if (settled) this.pullSettledReadings()
   }
 
   /**
@@ -261,6 +281,7 @@ export class BridgeLaneController {
     const { lanes, focused } = this.store.getSnapshot()
     const addressed = lanes.filter(lane =>
       lane.status === 'ready' && lane.sessionId !== undefined && (focused === null || lane.key === focused))
+    this.pollUntilAnswered()
     await Promise.all(addressed.map(async (lane) => {
       const scope = this.ctx.sessions.scope(lane.sessionId as SessionId)
       // `scope.conversation` would be refused: the Session scope is its own
@@ -278,6 +299,78 @@ export class BridgeLaneController {
         this.replace(lane.key, { error: error instanceof Error ? error.message : String(error) })
       }
     }))
+  }
+
+  /**
+   * Set the answer the grader marks against.
+   * @param gold - the known-good answer.
+   */
+  setGold(gold: string): void {
+    this.set({ gold })
+  }
+
+  /**
+   * Grade every answered lane against the gold answer.
+   *
+   * The grading runs in a Session of its own. A lane's spend is the figure this
+   * panel compares, so grading inside one would add tokens to the very number
+   * being read; and no lane holds the other lanes' answers, which a comparison
+   * needs. Answers go in blind and the labels are restored from the deal.
+   * @param question - the question the lanes were asked.
+   */
+  async judge(question: string): Promise<void> {
+    const { lanes, gold } = this.store.getSnapshot()
+    const entries = lanes
+      .filter(lane => lane.reading.answer !== undefined)
+      .map(lane => ({ key: lane.key, answer: lane.reading.answer as string }))
+    if (entries.length === 0 || gold.trim() === '') return
+
+    this.set({ judging: true, error: null })
+    try {
+      const dealt = dealBlind(entries)
+      const sessionId = await this.ctx.sessions.create({})
+      const conversation = this.ctx.sessions.scope(sessionId)?.get('conversation')
+      if (conversation === undefined) throw new Error('judge session has no conversation scope')
+      await conversation.send(judgePrompt(question, gold, dealt))
+
+      const reply = await this.awaitReply(sessionId)
+      const verdicts = readVerdicts(reply, dealt)
+      const byKey = new Map(verdicts.map(verdict => [verdict.key, verdict]))
+      this.set({
+        lanes: this.store.getSnapshot().lanes.map((lane) => {
+          const verdict = byKey.get(lane.key)
+          return verdict === undefined ? lane : { ...lane, verdict }
+        }),
+        judging: false,
+      })
+    } catch (error: unknown) {
+      this.set({ judging: false, error: error instanceof Error ? error.message : String(error) })
+    }
+  }
+
+  /**
+   * Wait for the grading Session's answer.
+   *
+   * The reply arrives the same way a lane's does -- through the Session list's
+   * projections -- so this polls that rather than opening the Session.
+   * @param sessionId - the grading Session.
+   * @returns its latest turn response.
+   */
+  private async awaitReply(sessionId: SessionId): Promise<string> {
+    const deadline = Date.now() + JUDGE_TIMEOUT_MS
+    while (Date.now() < deadline) {
+      await new Promise((resolve) => { setTimeout(resolve, JUDGE_POLL_MS) })
+      await this.ctx.sessions.refresh()
+      const summary = this.ctx.sessions.list.getSnapshot().byId[sessionId]
+      const values: Record<string, unknown> = summary?.projectionValues ?? {}
+      const outline: readonly unknown[] = Array.isArray(values.turnOutline) ? values.turnOutline : []
+      const latest: unknown = outline.at(-1)
+      const response: unknown = typeof latest === 'object' && latest !== null
+        ? (latest as { response?: unknown }).response
+        : undefined
+      if (typeof response === 'string' && response.trim() !== '' && summary?.running !== true) return response
+    }
+    throw new Error('the grader did not answer in time')
   }
 
   /**

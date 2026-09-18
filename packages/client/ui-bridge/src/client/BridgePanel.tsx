@@ -18,6 +18,10 @@ export interface BridgePanelInjected {
   focus: (key: string | null) => void
   /** Reseat one lane on a different mode, before it has run. */
   changeMode: (key: string, modeId: string) => void
+  /** Set the answer the grader marks against. */
+  setGold: (gold: string) => void
+  /** Grade every answered lane against the gold answer. */
+  judge: (question: string) => void
   /** Private reactive sources bound to framework selector hooks. */
   hooks: { bridge: ObservableSnapshot<BridgeState> }
 }
@@ -141,6 +145,15 @@ function Lane({ lane, modes, focused, removeLane, focus, changeMode, t }: {
         >
           <IconBranchOutline16 size={12} />
         </button>
+        {lane.verdict !== undefined && (
+          <span
+            className={css.verdict}
+            data-correct={lane.verdict.correct || undefined}
+            title={lane.verdict.reason ?? ''}
+          >
+            {lane.verdict.correct ? t('verdict.correct') : t('verdict.incorrect')}
+          </span>
+        )}
         <button
           type="button"
           className={css.laneClose}
@@ -215,7 +228,45 @@ function Composer({ focusedName, ask, t }: {
   )
 }
 
-export function BridgePanel({ useBridge, addLane, removeLane, ask, focus, changeMode, t }: BridgePanelProps) {
+/** The grading row: the known-good answer, and the control that marks against it. */
+function JudgeBar({ gold, judging, canJudge, setGold, judge, t }: {
+  gold: string
+  judging: boolean
+  canJudge: boolean
+  setGold: (gold: string) => void
+  judge: (question: string) => void
+  t: BridgePanelProps['t']
+}) {
+  const [question, setQuestion] = useState('')
+  return (
+    <div className={css.judgeBar} data-bridge-judge>
+      <input
+        className={css.judgeInput}
+        value={question}
+        placeholder={t('judge.question')}
+        onChange={(event) => { setQuestion(event.target.value) }}
+      />
+      <input
+        className={css.judgeInput}
+        value={gold}
+        placeholder={t('judge.gold')}
+        onChange={(event) => { setGold(event.target.value) }}
+      />
+      <button
+        type="button"
+        className={css.composerSend}
+        disabled={judging || !canJudge || gold.trim() === ''}
+        onClick={() => { judge(question) }}
+      >
+        {judging ? t('judge.running') : t('judge.run')}
+      </button>
+    </div>
+  )
+}
+
+export function BridgePanel({
+  useBridge, addLane, removeLane, ask, focus, changeMode, setGold, judge, t,
+}: BridgePanelProps) {
   const state = useBridge(snapshot => snapshot)
   const focusedLane = state.lanes.find(lane => lane.key === state.focused)
   const focusedName = focusedLane === undefined
@@ -252,7 +303,19 @@ export function BridgePanel({ useBridge, addLane, removeLane, ask, focus, change
             ))}
           </div>
         )}
-      {state.lanes.length > 0 && <Composer focusedName={focusedName} ask={ask} t={t} />}
+      {state.lanes.length > 0 && (
+        <>
+          <JudgeBar
+            gold={state.gold}
+            judging={state.judging}
+            canJudge={state.lanes.some(lane => lane.reading.answer !== undefined)}
+            setGold={setGold}
+            judge={judge}
+            t={t}
+          />
+          <Composer focusedName={focusedName} ask={ask} t={t} />
+        </>
+      )}
     </div>
   )
 }

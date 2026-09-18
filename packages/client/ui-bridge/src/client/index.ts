@@ -75,6 +75,7 @@ export function apply(ctx: ClientContext): void {
   // One subscription feeds every lane: the Session list is where a Session the
   // client has not opened reports its projections.
   ctx.effect(() => ctx.sessions.list.subscribe(() => { lanes.refresh() }), 'ui-bridge: lane readings')
+  ctx.effect(() => () => { lanes.stop() }, 'ui-bridge: answer poll')
   ctx.effect(() => ctx.on('connection/reset', () => { void lanes.loadModes() }), 'ui-bridge: roster refresh')
 
   ctx.slots.inject('main', () => ctx.slots.register({
@@ -87,6 +88,8 @@ export function apply(ctx: ClientContext): void {
       ask: (text: string) => { void lanes.ask(text) },
       focus: (key: string | null) => { lanes.focus(key) },
       changeMode: (key: string, modeId: string) => { void lanes.changeMode(key, modeId) },
+      setGold: (gold: string) => { lanes.setGold(gold) },
+      judge: (question: string) => { void lanes.judge(question) },
       hooks: { bridge: lanes.store },
     }),
   }, BridgePanel))

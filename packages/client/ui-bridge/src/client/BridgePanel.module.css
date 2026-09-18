@@ -255,3 +255,36 @@
 
 .laneSteer:hover { opacity: 0.9; }
 .laneSteer[aria-pressed='true'] { opacity: 1; background: color-mix(in srgb, currentColor 14%, transparent); }
+
+.verdict {
+  flex: none;
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  opacity: 0.85;
+}
+
+.verdict[data-correct] {
+  color: light-dark(#0a7c42, #6ee7a8);
+  border-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.verdict:not([data-correct]) {
+  color: light-dark(#b42318, #ff9d94);
+  border-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+.judgeBar { display: flex; gap: 8px; flex: none; align-items: center; }
+
+.judgeInput {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  background: transparent;
+  color: inherit;
+}
