@@ -100,6 +100,10 @@
   min-height: 0;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  /* A lane carries content, so it sits on the content plane rather than on the
+     panel's ground; without that the two planes merge wherever the ground is
+     light. */
+  background: var(--dsw-alias-bg-layer-2);
   overflow: hidden;
 }
 

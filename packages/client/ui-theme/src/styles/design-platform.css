@@ -339,24 +339,57 @@ body[data-ds-dark-theme] {
   --dsw-specific-tip: var(--dsw-static-neutral-bluish-800);
 }
 
-/* AkashX purple-and-white dressing: light surfaces stay white with purple
-   actions, while dark mode uses the site's deep navy rather than neutral gray. */
+/* AkashX purple-and-white dressing: light mode grounds the app in lavender and
+   keeps the surfaces that carry content white, so the two read as separate
+   planes; an all-white light mode has no plane separation at all and the brand
+   survives only in the buttons. Dark mode uses the site's deep navy rather than
+   neutral gray. */
 body {
   --dsw-akashx-purple: #6d4dff;
   --dsw-akashx-purple-dark: #5439cc;
   --dsw-akashx-purple-tint: #eeebff;
+  /* The ground everything else sits on, and the rail beside it. */
+  --dsw-akashx-ground: #f4f1ff;
+  --dsw-akashx-rail: #ece7ff;
+  --dsw-akashx-line: #e0d8ff;
   --dsw-akashx-layer-2: #ffffff;
   --dsw-akashx-layer-3: #ffffff;
   --dsw-alias-brand-primary: var(--dsw-akashx-purple);
   --dsw-alias-brand-text: #2a1660;
+  --dsw-alias-bg-base: var(--dsw-akashx-ground);
+  --dsw-alias-bg-layer-1: var(--dsw-akashx-ground);
   --dsw-alias-bg-layer-2: var(--dsw-akashx-layer-2);
   --dsw-alias-bg-layer-3: var(--dsw-akashx-layer-3);
+  --dsw-alias-bg-module-platform: var(--dsw-akashx-ground);
+  --dsw-alias-bg-overlay: var(--dsw-akashx-rail);
+  --dsw-alias-border-l1: var(--dsw-akashx-line);
+  --dsw-alias-border-l2: var(--dsw-akashx-line);
+  --dsw-alias-border-l3: #d4c9ff;
   --dsw-alias-button-primary-fill: var(--dsw-akashx-purple);
   --dsw-alias-button-primary-hover: var(--dsw-akashx-purple-dark);
+  --dsw-alias-interactive-bg-active: rgba(109, 77, 255, 0.14);
+  --dsw-alias-interactive-bg-hover: rgba(109, 77, 255, 0.08);
+  --dsw-alias-interactive-bg-hover-accent: rgba(109, 77, 255, 0.18);
+  --dsw-alias-interactive-bg-hover-solid: var(--dsw-akashx-rail);
+  --dsw-alias-label-primary: #241452;
+  --dsw-alias-label-secondary: #57508a;
   --dsw-alias-link: var(--dsw-akashx-purple);
+  --dsw-alias-markdown-code-block: var(--dsw-akashx-ground);
+  --dsw-alias-markdown-code-block-banner: var(--dsw-akashx-rail);
+  --dsw-alias-markdown-inline-code: var(--dsw-akashx-purple-tint);
+  --dsw-alias-scrollbar-bg-l1: #ddd4ff;
+  --dsw-alias-scrollbar-bg-l2: #ddd4ff;
+  --dsw-alias-scrollbar-hover-l1: #c9bcff;
+  --dsw-alias-scrollbar-hover-l2: #c9bcff;
   --dsw-alias-state-business-primary: var(--dsw-akashx-purple);
   --dsw-alias-state-business-tertiary: var(--dsw-akashx-purple-tint);
+  --dsw-specific-bubble: var(--dsw-akashx-purple-tint);
+  --dsw-specific-bubble-highlight: #ddd4ff;
   --dsw-specific-input-major: var(--dsw-alias-bg-layer-2);
+  --dsw-specific-sidebar-fill: var(--dsw-akashx-rail);
+  --dsw-specific-sidebar-nav-item-active: #ddd4ff;
+  --dsw-specific-sidebar-nav-item-active-accent: var(--dsw-akashx-purple);
+  --dsw-specific-sidebar-nav-item-hover: #e3dcff;
   --dsw-specific-tip: var(--dsw-alias-bg-layer-2);
 }
 

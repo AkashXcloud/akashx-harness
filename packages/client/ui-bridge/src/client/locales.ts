@@ -32,9 +32,12 @@ export const en = {
   'judge.running': 'Judging\u2026',
   'verdict.correct': 'correct',
   'verdict.incorrect': 'incorrect',
-  'metric.harness': 'Harness',
-  'metric.database': 'Database',
+  'metric.harness': 'Agent work',
+  'metric.harnessHint': 'New tokens this lane\u2019s own model was billed: uncached input + cache writes + output. Tokens re-read from cache cost nothing new and are excluded.',
+  'metric.database': 'Database work',
+  'metric.databaseHint': 'Tokens the DEPLOYMENT\u2019s models spent answering this lane\u2019s retrieval. Billed separately from the agent\u2019s own model.',
   'metric.elapsed': 'Elapsed',
+  'metric.elapsedHint': 'Model and tool wall time across this lane\u2019s session.',
 } as const
 
 /** Key union for the Bridge dictionary. */

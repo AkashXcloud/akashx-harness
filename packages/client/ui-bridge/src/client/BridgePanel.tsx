@@ -84,9 +84,9 @@ function formatElapsed(ms: number): string {
 }
 
 /** One figure in a lane's footer. */
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, hint, value }: { label: string; hint: string; value: string }) {
   return (
-    <span className={css.metric}>
+    <span className={css.metric} title={hint}>
       <span className={css.metricLabel}>{label}</span>
       <span className={css.metricValue}>{value}</span>
     </span>
@@ -192,9 +192,21 @@ function Lane({ lane, modes, focused, removeLane, focus, openLane, changeMode, t
             )}
       </div>
       <footer className={css.laneFoot}>
-        <Metric label={t('metric.harness')} value={formatTokens(lane.reading.workingTokens, settled)} />
-        <Metric label={t('metric.database')} value={formatTokens(lane.reading.databaseTokens, settled)} />
-        <Metric label={t('metric.elapsed')} value={formatElapsed(lane.reading.elapsedMs)} />
+        <Metric
+          label={t('metric.harness')}
+          hint={t('metric.harnessHint')}
+          value={formatTokens(lane.reading.workingTokens, settled)}
+        />
+        <Metric
+          label={t('metric.database')}
+          hint={t('metric.databaseHint')}
+          value={formatTokens(lane.reading.databaseTokens, settled)}
+        />
+        <Metric
+          label={t('metric.elapsed')}
+          hint={t('metric.elapsedHint')}
+          value={formatElapsed(lane.reading.elapsedMs)}
+        />
       </footer>
     </section>
   )
