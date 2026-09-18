@@ -12,6 +12,10 @@ export interface BridgePanelInjected {
   addLane: (modeId: string) => void
   /** Drop one lane from the panel. */
   removeLane: (key: string) => void
+  /** Send one prompt to every lane, or to the focused lane alone. */
+  ask: (text: string) => void
+  /** Address the composer at one lane, or at every lane. */
+  focus: (key: string | null) => void
   /** Private reactive sources bound to framework selector hooks. */
   hooks: { bridge: ObservableSnapshot<BridgeState> }
 }
@@ -55,17 +59,28 @@ function AddLane({ modes, addLane, t }: {
 }
 
 /** One lane column: which mode it runs and how far it got. */
-function Lane({ lane, modes, removeLane, t }: {
+function Lane({ lane, modes, focused, removeLane, focus, t }: {
   lane: BridgeLane
   modes: readonly BridgeMode[]
+  focused: string | null
   removeLane: (key: string) => void
+  focus: (key: string | null) => void
   t: BridgePanelProps['t']
 }) {
   const name = modes.find(mode => mode.id === lane.modeId)?.name ?? lane.modeId ?? ''
+  const steering = focused === lane.key
   return (
-    <section className={css.lane} data-bridge-lane={lane.key}>
+    <section className={css.lane} data-bridge-lane={lane.key} data-steering={steering || undefined}>
       <header className={css.laneHead}>
-        <span className={css.laneMode}>{name}</span>
+        <button
+          type="button"
+          className={css.laneMode}
+          aria-pressed={steering}
+          title={steering ? t('lane.unfocus') : t('lane.focus')}
+          onClick={() => { focus(steering ? null : lane.key) }}
+        >
+          {name}
+        </button>
         <button
           type="button"
           className={css.laneClose}
@@ -89,8 +104,50 @@ function Lane({ lane, modes, removeLane, t }: {
  * @param props - the live panel snapshot, its lane actions, and the locale seat.
  * @returns the lane grid, or its empty state while no lane is open.
  */
-export function BridgePanel({ useBridge, addLane, removeLane, t }: BridgePanelProps) {
+/** One box for every lane, or for the one being steered. */
+function Composer({ focusedName, ask, t }: {
+  focusedName: string | undefined
+  ask: (text: string) => void
+  t: BridgePanelProps['t']
+}) {
+  const [text, setText] = useState('')
+  const submit = () => {
+    const trimmed = text.trim()
+    if (trimmed === '') return
+    ask(trimmed)
+    setText('')
+  }
+  return (
+    <div className={css.composer} data-bridge-composer>
+      <textarea
+        className={css.composerInput}
+        value={text}
+        rows={2}
+        placeholder={focusedName === undefined
+          ? t('composer.placeholder')
+          : t('composer.placeholderFocused', { lane: focusedName })}
+        onChange={(event) => { setText(event.target.value) }}
+        onKeyDown={(event) => {
+          // Enter sends; the modifier keeps a newline, matching the composer a
+          // person already knows from the conversation view.
+          if (event.key !== 'Enter' || event.shiftKey) return
+          event.preventDefault()
+          submit()
+        }}
+      />
+      <button type="button" className={css.composerSend} onClick={submit} disabled={text.trim() === ''}>
+        {t('composer.send')}
+      </button>
+    </div>
+  )
+}
+
+export function BridgePanel({ useBridge, addLane, removeLane, ask, focus, t }: BridgePanelProps) {
   const state = useBridge(snapshot => snapshot)
+  const focusedLane = state.lanes.find(lane => lane.key === state.focused)
+  const focusedName = focusedLane === undefined
+    ? undefined
+    : state.modes.find(mode => mode.id === focusedLane.modeId)?.name ?? focusedLane.modeId
   return (
     <div className={css.root} data-bridge-panel>
       <div className={css.header}>
@@ -109,10 +166,19 @@ export function BridgePanel({ useBridge, addLane, removeLane, t }: BridgePanelPr
         : (
           <div className={css.lanes} data-bridge-lanes>
             {state.lanes.map(lane => (
-              <Lane key={lane.key} lane={lane} modes={state.modes} removeLane={removeLane} t={t} />
+              <Lane
+                key={lane.key}
+                lane={lane}
+                modes={state.modes}
+                focused={state.focused}
+                removeLane={removeLane}
+                focus={focus}
+                t={t}
+              />
             ))}
           </div>
         )}
+      {state.lanes.length > 0 && <Composer focusedName={focusedName} ask={ask} t={t} />}
     </div>
   )
 }

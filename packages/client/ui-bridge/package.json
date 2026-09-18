@@ -29,6 +29,7 @@
     "client": {
       "inject": [
         "@akashx/akx-api-session-controller",
+        "@akashx/akx-client-ui-conversation",
         "@akashx/akx-client-ui-layout",
         "@akashx/akx-client-ui-sidebar",
         "@akashx/akx-client-ui-slots"
@@ -49,6 +50,7 @@
     "@akashx/akx-client-locale": "workspace:^",
     "@akashx/akx-client-store": "workspace:^",
     "@akashx/akx-client-test-runtime": "workspace:^",
+    "@akashx/akx-client-ui-conversation": "workspace:^",
     "@akashx/akx-client-ui-layout": "workspace:^",
     "@akashx/akx-client-ui-primitives": "workspace:^",
     "@akashx/akx-client-ui-renderer": "workspace:^",

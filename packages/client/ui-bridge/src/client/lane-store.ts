@@ -13,6 +13,8 @@
 import type { Context as ClientContext } from '@akashx/cordis'
 // Type-only: pulls the ctx.remote merge carrying the agent-preset roster.
 import type {} from '@akashx/akx-api-remotes/client'
+// Type-only: pulls the conversation service onto a Session-scoped context.
+import type {} from '@akashx/akx-client-ui-conversation/client'
 import type { SessionId } from '@akashx/akx-session/types'
 import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
 import type {} from '@akashx/akx-agent-presets/types'
@@ -134,6 +136,42 @@ export class BridgeLaneController {
    */
   focus(key: string | null): void {
     this.set({ focused: key })
+  }
+
+  /**
+   * Send one prompt to every lane, or to the focused lane alone.
+   *
+   * Each lane is addressed through its own Session scope, so the prompt takes
+   * the same submission path a person typing into that conversation would --
+   * the same draft handling, the same queue-versus-steer decision, the same
+   * durable user message. Bridge adds no second way to talk to an Agent.
+   *
+   * Lanes are dispatched together rather than in turn: the comparison being
+   * drawn is between paths running at once, and awaiting each one would stage
+   * them into a sequence that misreports every elapsed time after the first.
+   * @param text - the prompt, sent verbatim to each addressed lane.
+   */
+  async ask(text: string): Promise<void> {
+    const { lanes, focused } = this.store.getSnapshot()
+    const addressed = lanes.filter(lane =>
+      lane.status === 'ready' && lane.sessionId !== undefined && (focused === null || lane.key === focused))
+    await Promise.all(addressed.map(async (lane) => {
+      const scope = this.ctx.sessions.scope(lane.sessionId as SessionId)
+      // `scope.conversation` would be refused: the Session scope is its own
+      // context with its own inject set, which this plugin's declaration does not
+      // reach. `get` resolves the same service and rebinds it to the scope, so the
+      // send still lands on that lane's Session rather than the root.
+      const conversation = scope?.get('conversation')
+      if (conversation === undefined) {
+        this.replace(lane.key, { error: 'lane has no live session scope' })
+        return
+      }
+      try {
+        await conversation.send(text)
+      } catch (error: unknown) {
+        this.replace(lane.key, { error: error instanceof Error ? error.message : String(error) })
+      }
+    }))
   }
 
   /**

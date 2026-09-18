@@ -156,3 +156,61 @@
   font-size: 13px;
   opacity: 0.75;
 }
+
+.lane[data-steering] {
+  border-color: color-mix(in srgb, currentColor 42%, transparent);
+}
+
+.laneMode {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.laneMode[aria-pressed='true'] { text-decoration: underline; text-underline-offset: 3px; }
+
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex: none;
+  padding-top: 4px;
+}
+
+.composerInput {
+  flex: 1;
+  resize: none;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  background: transparent;
+  color: inherit;
+}
+
+.composerInput:focus-visible { outline: 2px solid color-mix(in srgb, currentColor 35%, transparent); outline-offset: -1px; }
+
+.composerSend {
+  flex: none;
+  padding: 8px 14px;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.composerSend:disabled { opacity: 0.4; cursor: default; }

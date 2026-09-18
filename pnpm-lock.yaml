@@ -2441,6 +2441,9 @@ importers:
       '@akashx/akx-client-test-runtime':
         specifier: workspace:^
         version: link:../../test-support/client-runtime
+      '@akashx/akx-client-ui-conversation':
+        specifier: workspace:^
+        version: link:../ui-conversation
       '@akashx/akx-client-ui-layout':
         specifier: workspace:^
         version: link:../ui-layout

@@ -41,7 +41,12 @@ export type { BridgePanelInjected, BridgePanelProps } from './BridgePanel.tsx'
 export type { BridgeLane, BridgeMode, BridgeState } from './lane-store.ts'
 
 /** Required services (cordis fiber inject). */
-export const inject = ['slots', 'locale', 'sessions', 'layout', 'remote', 'remote.agentPresets']
+export const inject = [
+  'slots', 'locale', 'sessions', 'layout', 'remote', 'remote.agentPresets',
+  // A lane sends through its own Session scope's conversation service, and the
+  // context proxy refuses an undeclared name.
+  'conversation',
+]
 
 /** The panel key, shared by the rail entry and the main occupant. */
 const BRIDGE_PANEL = 'bridge'
@@ -76,6 +81,8 @@ export function apply(ctx: ClientContext): void {
     inject: () => ({
       addLane: (modeId: string) => { void lanes.addLane(modeId) },
       removeLane: (key: string) => { lanes.removeLane(key) },
+      ask: (text: string) => { void lanes.ask(text) },
+      focus: (key: string | null) => { lanes.focus(key) },
       hooks: { bridge: lanes.store },
     }),
   }, BridgePanel))

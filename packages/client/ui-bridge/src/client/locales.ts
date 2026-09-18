@@ -22,7 +22,7 @@ export const en = {
   'lane.unfocus': 'Back to all lanes',
   'lane.open': 'Open as conversation',
   'composer.placeholder': 'Ask every lane…',
-  'composer.placeholderFocused': 'Ask this lane only…',
+  'composer.placeholderFocused': 'Ask {lane} only…',
   'composer.send': 'Send',
   'metric.harness': 'Harness',
   'metric.database': 'Database',
