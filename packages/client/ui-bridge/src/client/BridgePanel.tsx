@@ -1,6 +1,8 @@
 /** Root-scoped main occupant: the Bridge lane grid and its shared composer. */
 import { useState } from 'react'
-import { IconBranchOutline16, IconCloseOutline16, IconPlusOutline16 } from '@akashx/akx-client-ui-primitives'
+import {
+  IconBranchOutline16, IconCloseOutline16, IconPlusOutline16, IconRightUpOutline16,
+} from '@akashx/akx-client-ui-primitives'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@akashx/akx-client-ui-slots'
 import type { ObservableSnapshot } from '@akashx/akx-client-store'
 import type { BridgeLane, BridgeMode, BridgeState } from './lane-store.ts'
@@ -16,6 +18,8 @@ export interface BridgePanelInjected {
   ask: (text: string) => void
   /** Address the composer at one lane, or at every lane. */
   focus: (key: string | null) => void
+  /** Leave the panel and continue one lane in the conversation view. */
+  openLane: (key: string) => void
   /** Reseat one lane on a different mode, before it has run. */
   changeMode: (key: string, modeId: string) => void
   /** Set the answer the grader marks against. */
@@ -90,12 +94,13 @@ function Metric({ label, value }: { label: string; value: string }) {
 }
 
 /** One lane column: which mode it runs and how far it got. */
-function Lane({ lane, modes, focused, removeLane, focus, changeMode, t }: {
+function Lane({ lane, modes, focused, removeLane, focus, openLane, changeMode, t }: {
   lane: BridgeLane
   modes: readonly BridgeMode[]
   focused: string | null
   removeLane: (key: string) => void
   focus: (key: string | null) => void
+  openLane: (key: string) => void
   changeMode: (key: string, modeId: string) => void
   t: BridgePanelProps['t']
 }) {
@@ -154,6 +159,16 @@ function Lane({ lane, modes, focused, removeLane, focus, changeMode, t }: {
             {lane.verdict.correct ? t('verdict.correct') : t('verdict.incorrect')}
           </span>
         )}
+        <button
+          type="button"
+          className={css.laneSteer}
+          disabled={lane.sessionId === undefined}
+          aria-label={t('lane.open')}
+          title={t('lane.open')}
+          onClick={() => { openLane(lane.key) }}
+        >
+          <IconRightUpOutline16 size={12} />
+        </button>
         <button
           type="button"
           className={css.laneClose}
@@ -265,7 +280,7 @@ function JudgeBar({ gold, judging, canJudge, setGold, judge, t }: {
 }
 
 export function BridgePanel({
-  useBridge, addLane, removeLane, ask, focus, changeMode, setGold, judge, t,
+  useBridge, addLane, removeLane, ask, focus, openLane, changeMode, setGold, judge, t,
 }: BridgePanelProps) {
   const state = useBridge(snapshot => snapshot)
   const focusedLane = state.lanes.find(lane => lane.key === state.focused)
@@ -297,6 +312,7 @@ export function BridgePanel({
                 focused={state.focused}
                 removeLane={removeLane}
                 focus={focus}
+                openLane={openLane}
                 changeMode={changeMode}
                 t={t}
               />

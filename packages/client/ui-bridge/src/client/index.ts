@@ -87,6 +87,7 @@ export function apply(ctx: ClientContext): void {
       removeLane: (key: string) => { lanes.removeLane(key) },
       ask: (text: string) => { void lanes.ask(text) },
       focus: (key: string | null) => { lanes.focus(key) },
+      openLane: (key: string) => { lanes.openLane(key) },
       changeMode: (key: string, modeId: string) => { void lanes.changeMode(key, modeId) },
       setGold: (gold: string) => { lanes.setGold(gold) },
       judge: (question: string) => { void lanes.judge(question) },

@@ -374,11 +374,18 @@ export class BridgeLaneController {
   }
 
   /**
-   * Show one lane's Session in the conversation view.
-   * @param sessionId - the lane's Session.
+   * Take over one lane in the conversation view.
+   *
+   * The lane is an ordinary Session, so the full view serves it with its whole
+   * transcript, its composer and its tools -- Bridge hands a lane over rather
+   * than reimplementing a conversation inside a pane. Leaving the panel does not
+   * end the run: the other lanes keep working and report again on return.
+   * @param key - the lane to open.
    */
-  open(sessionId: SessionId): void {
-    this.ctx.sessions.open(sessionId)
+  openLane(key: string): void {
+    const lane = this.store.getSnapshot().lanes.find(candidate => candidate.key === key)
+    if (lane?.sessionId === undefined) return
+    this.ctx.sessions.open(lane.sessionId)
     this.ctx.layout.selectPanel(null)
   }
 }

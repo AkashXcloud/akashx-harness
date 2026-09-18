@@ -23,6 +23,8 @@ Both share the `bridge` panel id: the sidebar entry addresses the main occupant 
 
 A lane holds a Session id and nothing else. Steering one lane, or leaving Bridge to continue in the full conversation view, needs no special path back — the Session a lane points at is the same Session the rest of the product already serves, with the same durable log, the same projections, and the same preset gate.
 
+Every lane carries a control that hands it over to the conversation view, where it is served with its whole transcript, its own composer and its tools. Leaving the panel does not end the run: the other lanes keep working and report again on return.
+
 That is also why per-lane mode selection reuses the agent-preset seat rather than reimplementing it: the seat controller takes a Session accessor, so one instance per lane binds to that lane's Session.
 
 ## Judging
