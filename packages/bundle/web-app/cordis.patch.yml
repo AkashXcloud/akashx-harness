@@ -225,6 +225,12 @@
     - id: ui-sidebar
       name: '@akashx/akx-client-ui-sidebar'
 
+    # AkashX Bridge: one question across several mode-locked Sessions, compared
+    # side by side. A Session runs one preset and a subagent inherits its
+    # parent's, so comparing retrieval paths means running several Sessions.
+    - id: ui-bridge
+      name: '@akashx/akx-client-ui-bridge'
+
     # The right Sidebar: one docking surface per session over ui-dockkit.
     - id: ui-sidebar-right
       name: '@akashx/akx-client-ui-sidebar-right'

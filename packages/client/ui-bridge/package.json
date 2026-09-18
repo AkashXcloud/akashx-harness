@@ -1,0 +1,71 @@
+{
+  "name": "@akashx/akx-client-ui-bridge",
+  "description": "AkashX Bridge: one question fanned across several mode-locked sessions, watched side by side and judged together",
+  "version": "0.1.5-rc.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akashx-ai/akx-harness.git",
+    "directory": "packages/client/ui-bridge"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "akx": {
+    "client": {
+      "inject": [
+        "@akashx/akx-api-session-controller",
+        "@akashx/akx-client-ui-layout",
+        "@akashx/akx-client-ui-sidebar",
+        "@akashx/akx-client-ui-slots"
+      ],
+      "platform": "web"
+    }
+  },
+  "scripts": {
+    "bundle": "tsdown",
+    "watch": "tsdown --watch"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@akashx/cordis": "workspace:^"
+  },
+  "devDependencies": {
+    "@akashx/akx-api-session-controller": "workspace:^",
+    "@akashx/akx-client-locale": "workspace:^",
+    "@akashx/akx-client-store": "workspace:^",
+    "@akashx/akx-client-test-runtime": "workspace:^",
+    "@akashx/akx-client-ui-layout": "workspace:^",
+    "@akashx/akx-client-ui-primitives": "workspace:^",
+    "@akashx/akx-client-ui-renderer": "workspace:^",
+    "@akashx/akx-client-ui-sidebar": "workspace:^",
+    "@akashx/akx-client-ui-slots": "workspace:^",
+    "@akashx/akx-session": "workspace:^",
+    "@akashx/cordis": "workspace:^",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "~18.3.1",
+    "@types/react-dom": "~18.3.0",
+    "clsx": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/types/**/*.d.ts"
+  ]
+}

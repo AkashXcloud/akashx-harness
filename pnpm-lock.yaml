@@ -1836,6 +1836,9 @@ importers:
       '@akashx/akx-client-ui-brand-official':
         specifier: workspace:^
         version: link:../../client/ui-brand-official
+      '@akashx/akx-client-ui-bridge':
+        specifier: workspace:^
+        version: link:../../client/ui-bridge
       '@akashx/akx-client-ui-chat':
         specifier: workspace:^
         version: link:../../client/ui-chat
@@ -2417,6 +2420,60 @@ importers:
       '@types/react':
         specifier: ~18.3.1
         version: 18.3.31
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+
+  packages/client/ui-bridge:
+    devDependencies:
+      '@akashx/akx-api-session-controller':
+        specifier: workspace:^
+        version: link:../../api/session-controller
+      '@akashx/akx-client-locale':
+        specifier: workspace:^
+        version: link:../locale
+      '@akashx/akx-client-store':
+        specifier: workspace:^
+        version: link:../store
+      '@akashx/akx-client-test-runtime':
+        specifier: workspace:^
+        version: link:../../test-support/client-runtime
+      '@akashx/akx-client-ui-layout':
+        specifier: workspace:^
+        version: link:../ui-layout
+      '@akashx/akx-client-ui-primitives':
+        specifier: workspace:^
+        version: link:../ui-primitives
+      '@akashx/akx-client-ui-renderer':
+        specifier: workspace:^
+        version: link:../ui-renderer
+      '@akashx/akx-client-ui-sidebar':
+        specifier: workspace:^
+        version: link:../ui-sidebar
+      '@akashx/akx-client-ui-slots':
+        specifier: workspace:^
+        version: link:../ui-slots
+      '@akashx/akx-session':
+        specifier: workspace:^
+        version: link:../../core/session
+      '@akashx/cordis':
+        specifier: workspace:^
+        version: link:../../../vendor/cordis
+      '@testing-library/react':
+        specifier: ^16.1.0
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@types/react':
+        specifier: ~18.3.1
+        version: 18.3.31
+      '@types/react-dom':
+        specifier: ~18.3.0
+        version: 18.3.7(@types/react@18.3.31)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
       react:
         specifier: ^18.2.0
         version: 18.3.1

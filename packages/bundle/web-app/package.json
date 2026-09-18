@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@akashx/akx-agent-presets": "workspace:^",
+    "@akashx/akx-api-cognate-controller": "workspace:^",
     "@akashx/akx-api-remotes": "workspace:^",
     "@akashx/akx-api-session-controller": "workspace:^",
     "@akashx/akx-api-settings-controller": "workspace:^",
@@ -56,6 +57,7 @@
     "@akashx/akx-client-ui-approval": "workspace:^",
     "@akashx/akx-client-ui-attachment": "workspace:^",
     "@akashx/akx-client-ui-brand-official": "workspace:^",
+    "@akashx/akx-client-ui-bridge": "workspace:^",
     "@akashx/akx-client-ui-chat": "workspace:^",
     "@akashx/akx-client-ui-commands": "workspace:^",
     "@akashx/akx-client-ui-conversation": "workspace:^",
@@ -82,9 +84,9 @@
     "@akashx/akx-client-ui-settings-plugin-inventory": "workspace:^",
     "@akashx/akx-client-ui-settings-plugins": "workspace:^",
     "@akashx/akx-client-ui-sidebar": "workspace:^",
+    "@akashx/akx-client-ui-sidebar-documentpreview": "workspace:^",
     "@akashx/akx-client-ui-sidebar-files": "workspace:^",
     "@akashx/akx-client-ui-sidebar-right": "workspace:^",
-    "@akashx/akx-client-ui-sidebar-documentpreview": "workspace:^",
     "@akashx/akx-client-ui-skill": "workspace:^",
     "@akashx/akx-client-ui-subagent": "workspace:^",
     "@akashx/akx-client-ui-theme": "workspace:^",
@@ -118,8 +120,7 @@
     "@akashx/akx-workspace": "workspace:^",
     "@akashx/schemastery": "workspace:^",
     "commander": "^15.0.0",
-    "open": "^11.0.0",
-    "@akashx/akx-api-cognate-controller": "workspace:^"
+    "open": "^11.0.0"
   },
   "peerDependencies": {
     "@akashx/cordis": "workspace:^",

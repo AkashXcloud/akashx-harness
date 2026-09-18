@@ -159,6 +159,8 @@
       "@akashx/akx-client-ui-attachment": ["./packages/client/ui-attachment/src"],
       "@akashx/akx-client-ui-primitives": ["./packages/client/ui-primitives/src"],
       "@akashx/akx-client-ui-dockkit": ["./packages/client/ui-dockkit/src"],
+      "@akashx/akx-client-ui-bridge": ["./packages/client/ui-bridge/src"],
+      "@akashx/akx-client-ui-bridge/client": ["./packages/client/ui-bridge/src/client"],
       "@akashx/akx-client-ui-sidebar-right": ["./packages/client/ui-sidebar-right/src"],
       "@akashx/akx-client-ui-sidebar-right/client": ["./packages/client/ui-sidebar-right/src/client"],
       "@akashx/akx-client-ui-sidebar-documentpreview": ["./packages/client/ui-sidebar-documentpreview/src"],
