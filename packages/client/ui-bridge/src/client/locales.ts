@@ -19,6 +19,8 @@ export const en = {
   'lane.done': 'Answered',
   'lane.failed': 'Failed',
   'lane.focus': 'Steer this lane only',
+  'lane.modeChange': 'Change this lane\u2019s mode',
+  'lane.modeLocked': 'Mode is fixed once a lane has answered',
   'lane.unfocus': 'Back to all lanes',
   'lane.open': 'Open as conversation',
   'composer.placeholder': 'Ask every lane…',

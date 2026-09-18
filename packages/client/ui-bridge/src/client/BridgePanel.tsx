@@ -1,6 +1,6 @@
 /** Root-scoped main occupant: the Bridge lane grid and its shared composer. */
 import { useState } from 'react'
-import { IconCloseOutline16, IconPlusOutline16 } from '@akashx/akx-client-ui-primitives'
+import { IconBranchOutline16, IconCloseOutline16, IconPlusOutline16 } from '@akashx/akx-client-ui-primitives'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@akashx/akx-client-ui-slots'
 import type { ObservableSnapshot } from '@akashx/akx-client-store'
 import type { BridgeLane, BridgeMode, BridgeState } from './lane-store.ts'
@@ -16,6 +16,8 @@ export interface BridgePanelInjected {
   ask: (text: string) => void
   /** Address the composer at one lane, or at every lane. */
   focus: (key: string | null) => void
+  /** Reseat one lane on a different mode, before it has run. */
+  changeMode: (key: string, modeId: string) => void
   /** Private reactive sources bound to framework selector hooks. */
   hooks: { bridge: ObservableSnapshot<BridgeState> }
 }
@@ -58,28 +60,86 @@ function AddLane({ modes, addLane, t }: {
   )
 }
 
+/** Compact token count: exact under a thousand, one decimal above.
+ *
+ * A lane that has answered reports a real zero rather than a dash: a retrieval
+ * path that spends nothing at the deployment is a finding, not missing data. */
+function formatTokens(value: number, settled: boolean): string {
+  if (value === 0) return settled ? '0' : '—'
+  return value < 1000 ? String(value) : `${(value / 1000).toFixed(1)}K`
+}
+
+/** Elapsed wall time; a turn that has not closed reports nothing rather than zero. */
+function formatElapsed(ms: number): string {
+  if (ms === 0) return '—'
+  return ms < 10_000 ? `${(ms / 1000).toFixed(1)}s` : `${Math.round(ms / 1000)}s`
+}
+
+/** One figure in a lane's footer. */
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <span className={css.metric}>
+      <span className={css.metricLabel}>{label}</span>
+      <span className={css.metricValue}>{value}</span>
+    </span>
+  )
+}
+
 /** One lane column: which mode it runs and how far it got. */
-function Lane({ lane, modes, focused, removeLane, focus, t }: {
+function Lane({ lane, modes, focused, removeLane, focus, changeMode, t }: {
   lane: BridgeLane
   modes: readonly BridgeMode[]
   focused: string | null
   removeLane: (key: string) => void
   focus: (key: string | null) => void
+  changeMode: (key: string, modeId: string) => void
   t: BridgePanelProps['t']
 }) {
+  const [picking, setPicking] = useState(false)
   const name = modes.find(mode => mode.id === lane.modeId)?.name ?? lane.modeId ?? ''
   const steering = focused === lane.key
+  // A Session that has run cannot be recomposed, so the mode stops being a choice
+  // once the lane has answered -- the same rule that keeps the comparison honest.
+  const settled = lane.reading.answer !== undefined || lane.reading.running
   return (
     <section className={css.lane} data-bridge-lane={lane.key} data-steering={steering || undefined}>
       <header className={css.laneHead}>
+        <span className={css.laneModeWrap}>
+          <button
+            type="button"
+            className={css.laneMode}
+            disabled={settled || lane.status !== 'ready'}
+            title={settled ? t('lane.modeLocked') : t('lane.modeChange')}
+            aria-expanded={picking}
+            onClick={() => { setPicking(!picking) }}
+          >
+            {name}
+          </button>
+          {picking && (
+            <ul className={css.addMenu} role="menu">
+              {modes.map(mode => (
+                <li key={mode.id}>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={css.addMenuItem}
+                    onClick={() => { changeMode(lane.key, mode.id); setPicking(false) }}
+                  >
+                    {mode.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </span>
         <button
           type="button"
-          className={css.laneMode}
+          className={css.laneSteer}
           aria-pressed={steering}
           title={steering ? t('lane.unfocus') : t('lane.focus')}
           onClick={() => { focus(steering ? null : lane.key) }}
         >
-          {name}
+          <IconBranchOutline16 size={12} />
         </button>
         <button
           type="button"
@@ -91,10 +151,23 @@ function Lane({ lane, modes, focused, removeLane, focus, t }: {
         </button>
       </header>
       <div className={css.laneBody}>
-        <span className={css.laneStatus} data-status={lane.status}>
-          {lane.status === 'spawning' ? t('lane.spawning') : lane.error ?? t('lane.ready')}
-        </span>
+        {lane.error !== undefined
+          ? <span className={css.laneStatus} data-status="failed">{lane.error}</span>
+          : lane.reading.answer !== undefined
+            ? <p className={css.laneAnswer}>{lane.reading.answer}</p>
+            : (
+              <span className={css.laneStatus} data-status={lane.status}>
+                {lane.status === 'spawning'
+                  ? t('lane.spawning')
+                  : lane.reading.running ? t('lane.running') : t('lane.ready')}
+              </span>
+            )}
       </div>
+      <footer className={css.laneFoot}>
+        <Metric label={t('metric.harness')} value={formatTokens(lane.reading.workingTokens, settled)} />
+        <Metric label={t('metric.database')} value={formatTokens(lane.reading.databaseTokens, settled)} />
+        <Metric label={t('metric.elapsed')} value={formatElapsed(lane.reading.elapsedMs)} />
+      </footer>
     </section>
   )
 }
@@ -142,7 +215,7 @@ function Composer({ focusedName, ask, t }: {
   )
 }
 
-export function BridgePanel({ useBridge, addLane, removeLane, ask, focus, t }: BridgePanelProps) {
+export function BridgePanel({ useBridge, addLane, removeLane, ask, focus, changeMode, t }: BridgePanelProps) {
   const state = useBridge(snapshot => snapshot)
   const focusedLane = state.lanes.find(lane => lane.key === state.focused)
   const focusedName = focusedLane === undefined
@@ -173,6 +246,7 @@ export function BridgePanel({ useBridge, addLane, removeLane, ask, focus, t }: B
                 focused={state.focused}
                 removeLane={removeLane}
                 focus={focus}
+                changeMode={changeMode}
                 t={t}
               />
             ))}

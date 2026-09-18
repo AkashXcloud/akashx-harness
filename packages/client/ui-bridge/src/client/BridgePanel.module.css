@@ -214,3 +214,44 @@
 }
 
 .composerSend:disabled { opacity: 0.4; cursor: default; }
+
+.laneAnswer {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.laneFoot {
+  display: flex;
+  gap: 10px;
+  flex: none;
+  padding: 6px 10px 8px;
+  border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.metric { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.metricLabel { font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.45; }
+.metricValue { font-size: 11px; font-variant-numeric: tabular-nums; }
+
+.laneStatus[data-status='ready'] { opacity: 0.45; }
+
+.laneModeWrap { position: relative; flex: 1; min-width: 0; }
+
+.laneMode:disabled { cursor: default; opacity: 0.85; }
+
+.laneSteer {
+  flex: none;
+  display: inline-flex;
+  padding: 3px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.laneSteer:hover { opacity: 0.9; }
+.laneSteer[aria-pressed='true'] { opacity: 1; background: color-mix(in srgb, currentColor 14%, transparent); }

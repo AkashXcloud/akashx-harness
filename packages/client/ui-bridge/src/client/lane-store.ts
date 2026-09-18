@@ -18,6 +18,7 @@ import type {} from '@akashx/akx-client-ui-conversation/client'
 import type { SessionId } from '@akashx/akx-session/types'
 import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
 import type {} from '@akashx/akx-agent-presets/types'
+import { EMPTY_READING, readLane, type LaneReading } from './lane-watch.ts'
 
 /** One mode a lane may be seated on. */
 export interface BridgeMode {
@@ -36,6 +37,8 @@ export interface BridgeLane {
   readonly status: 'spawning' | 'ready' | 'failed'
   /** Why the lane could not open, when it could not. */
   readonly error?: string
+  /** What the lane is reporting right now. */
+  readonly reading: LaneReading
 }
 
 /** Panel snapshot the renderer subscribes to. */
@@ -48,6 +51,10 @@ export interface BridgeState {
   readonly error: string | null
 }
 
+/** How many times a settled lane re-reads the list, and how far apart. */
+const SETTLE_PULLS = 6
+const SETTLE_PULL_MS = 2500
+
 const INITIAL: BridgeState = { lanes: [], modes: [], focused: null, error: null }
 
 /** Owns the lane roster and the Session work behind it. */
@@ -56,6 +63,9 @@ export class BridgeLaneController {
   readonly store: SnapshotStore<BridgeState> = createSnapshotStore(INITIAL)
 
   private nextKey = 0
+
+  /** Active settle-pull timer, so overlapping settles share one. */
+  private settling: ReturnType<typeof setInterval> | undefined
 
   constructor(private readonly ctx: ClientContext) {}
 
@@ -98,7 +108,7 @@ export class BridgeLaneController {
    */
   async addLane(modeId: string): Promise<void> {
     const key = `lane-${this.nextKey += 1}`
-    this.set({ lanes: [...this.store.getSnapshot().lanes, { key, modeId, status: 'spawning' }] })
+    this.set({ lanes: [...this.store.getSnapshot().lanes, { key, modeId, status: 'spawning', reading: EMPTY_READING }] })
     try {
       const sessionId = await this.ctx.sessions.create({})
       // Seat before anything runs: the Host refuses to reseat a Session that
@@ -109,9 +119,75 @@ export class BridgeLaneController {
         return
       }
       this.replace(key, { sessionId, status: 'ready' })
+      this.publishReadings()
     } catch (error: unknown) {
       this.replace(key, { status: 'failed', error: error instanceof Error ? error.message : String(error) })
     }
+  }
+
+  /**
+   * Follow one lane's Session and publish what it reports.
+   *
+   * The values are that Session's own projections, so a lane steered from the
+   * conversation view updates here too -- Bridge shows a Session, it does not
+   * own one.
+   * @param key - the lane to publish under.
+   * @param sessionId - the Session to follow.
+   */
+  /**
+   * Publish every lane's reading from the Session list.
+   *
+   * The list carries each Session's own projection values, which is the only
+   * source that serves a Session the client has not opened -- and Bridge never
+   * opens one, because opening means becoming the current Session and only one
+   * can be. One subscription covers every lane rather than one per lane.
+   */
+  /** Re-read every lane from the Session list. */
+  refresh(): void {
+    this.publishReadings()
+  }
+
+  /**
+   * Pull fresh Session-list hints for a little while after a lane stops working.
+   *
+   * A lane's deployment spend reaches the list through a write-behind checkpoint,
+   * so it is still absent at the moment the answer appears. Without this the cost
+   * of a question lands a minute after the answer it belongs to, which is no use
+   * beside it. The retries stop on their own rather than polling forever.
+   */
+  private pullSettledReadings(): void {
+    if (this.settling !== undefined) return
+    let attempts = 0
+    const tick = (): void => {
+      attempts += 1
+      void this.ctx.sessions.refresh()
+      if (attempts >= SETTLE_PULLS) {
+        clearInterval(this.settling)
+        this.settling = undefined
+      }
+    }
+    this.settling = setInterval(tick, SETTLE_PULL_MS)
+  }
+
+  private publishReadings(): void {
+    const { byId } = this.ctx.sessions.list.getSnapshot()
+    const previous = this.store.getSnapshot().lanes
+    const lanes = previous.map((lane) => {
+      if (lane.sessionId === undefined) return lane
+      const summary = byId[lane.sessionId]
+      if (summary === undefined) return lane
+      const values: Record<string, unknown> = summary.projectionValues ?? {}
+      const reading = readLane(
+        values.tokenUsage, values.cognateUsage, values.sessionStats, values.turnOutline,
+        summary.running,
+      )
+      return { ...lane, reading }
+    })
+    this.set({ lanes })
+    // A lane that just stopped working is the moment its spend is still missing.
+    const settled = lanes.some((lane, at) =>
+      previous[at]?.reading.running === true && !lane.reading.running)
+    if (settled) this.pullSettledReadings()
   }
 
   /**
@@ -127,6 +203,36 @@ export class BridgeLaneController {
     this.set({
       lanes: lanes.filter(lane => lane.key !== key),
       focused: focused === key ? null : focused,
+    })
+  }
+
+  /**
+   * Reseat one lane on a different mode.
+   *
+   * Only before the lane has run: the Host refuses to recompose a Session whose
+   * history was produced under another preset, which is the same rule that keeps
+   * a comparison honest. A lane that has answered is therefore left alone and the
+   * caller is told why.
+   * @param key - the lane to reseat.
+   * @param modeId - the preset to seat it on instead.
+   */
+  async changeMode(key: string, modeId: string): Promise<void> {
+    const lane = this.store.getSnapshot().lanes.find(candidate => candidate.key === key)
+    if (lane?.sessionId === undefined) return
+    if (lane.reading.answer !== undefined || lane.reading.running) return
+    const seated = await this.ctx.remote.agentPresets.select(lane.sessionId, modeId)
+    if (!seated.ok) {
+      this.replace(key, { error: seated.error.message })
+      return
+    }
+    // The key is dropped rather than set undefined: a reseated lane has no error,
+    // and `exactOptionalPropertyTypes` treats the two as different states.
+    this.set({
+      lanes: this.store.getSnapshot().lanes.map((candidate) => {
+        if (candidate.key !== key) return candidate
+        const { error: _cleared, ...rest } = candidate
+        return { ...rest, modeId }
+      }),
     })
   }
 

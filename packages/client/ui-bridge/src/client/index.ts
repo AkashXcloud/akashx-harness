@@ -72,6 +72,9 @@ export function apply(ctx: ClientContext): void {
   // The roster is a live directory, so a preset added or retired while Bridge is
   // open changes what a new lane may be opened on.
   void lanes.loadModes()
+  // One subscription feeds every lane: the Session list is where a Session the
+  // client has not opened reports its projections.
+  ctx.effect(() => ctx.sessions.list.subscribe(() => { lanes.refresh() }), 'ui-bridge: lane readings')
   ctx.effect(() => ctx.on('connection/reset', () => { void lanes.loadModes() }), 'ui-bridge: roster refresh')
 
   ctx.slots.inject('main', () => ctx.slots.register({
@@ -83,6 +86,7 @@ export function apply(ctx: ClientContext): void {
       removeLane: (key: string) => { lanes.removeLane(key) },
       ask: (text: string) => { void lanes.ask(text) },
       focus: (key: string | null) => { lanes.focus(key) },
+      changeMode: (key: string, modeId: string) => { void lanes.changeMode(key, modeId) },
       hooks: { bridge: lanes.store },
     }),
   }, BridgePanel))
