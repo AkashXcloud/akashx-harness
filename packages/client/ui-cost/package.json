@@ -1,6 +1,6 @@
 {
-  "name": "@akashx/akx-client-ui-bridge",
-  "description": "AkashX Bridge: one question fanned across several mode-locked sessions, watched side by side and judged together",
+  "name": "@akashx/akx-client-ui-cost",
+  "description": "What a session cost in money: configured per-model rates applied to the tokens it and the deployment spent",
   "version": "0.1.5-rc.2",
   "publishConfig": {
     "access": "public"
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/akashx-ai/akx-harness.git",
-    "directory": "packages/client/ui-bridge"
+    "directory": "packages/client/ui-cost"
   },
   "type": "module",
   "main": "lib/index.js",
@@ -28,10 +28,10 @@
   "akx": {
     "client": {
       "inject": [
-        "@akashx/akx-api-session-controller",
+        "@akashx/akx-api-remotes",
+        "@akashx/akx-client-locale",
         "@akashx/akx-client-ui-conversation",
-        "@akashx/akx-client-ui-layout",
-        "@akashx/akx-client-ui-sidebar",
+        "@akashx/akx-client-ui-settings",
         "@akashx/akx-client-ui-slots"
       ],
       "platform": "web"
@@ -48,23 +48,16 @@
   "devDependencies": {
     "@akashx/akx-api-session-controller": "workspace:^",
     "@akashx/akx-client-locale": "workspace:^",
-    "@akashx/akx-client-store": "workspace:^",
-    "@akashx/akx-client-test-runtime": "workspace:^",
     "@akashx/akx-client-ui-conversation": "workspace:^",
-    "@akashx/akx-client-ui-cost": "workspace:^",
-    "@akashx/akx-client-ui-layout": "workspace:^",
     "@akashx/akx-client-ui-primitives": "workspace:^",
-    "@akashx/akx-client-ui-renderer": "workspace:^",
-    "@akashx/akx-client-ui-sidebar": "workspace:^",
+    "@akashx/akx-client-ui-settings": "workspace:^",
     "@akashx/akx-client-ui-slots": "workspace:^",
-    "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-settings": "workspace:^",
+    "@akashx/akx-token-meter": "workspace:^",
+    "@akashx/akx-tool-cognate": "workspace:^",
     "@akashx/cordis": "workspace:^",
-    "@testing-library/react": "^16.1.0",
     "@types/react": "~18.3.1",
-    "@types/react-dom": "~18.3.0",
-    "clsx": "^2.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^18.2.0"
   },
   "files": [
     "lib/index.js",

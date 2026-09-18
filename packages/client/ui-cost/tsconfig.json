@@ -15,28 +15,25 @@
       "path": "../../api/session-controller/tsconfig.client.json"
     },
     {
-      "path": "../../core/session"
+      "path": "../../cognate/tool-cognate"
     },
     {
-      "path": "../store"
+      "path": "../../llm/token-meter"
+    },
+    {
+      "path": "../../settings/settings"
+    },
+    {
+      "path": "../locale"
     },
     {
       "path": "../ui-conversation"
     },
     {
-      "path": "../ui-cost"
-    },
-    {
-      "path": "../ui-layout"
-    },
-    {
       "path": "../ui-primitives"
     },
     {
-      "path": "../ui-renderer"
-    },
-    {
-      "path": "../ui-sidebar"
+      "path": "../ui-settings"
     },
     {
       "path": "../ui-slots"

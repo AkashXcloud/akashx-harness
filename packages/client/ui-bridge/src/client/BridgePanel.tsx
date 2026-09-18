@@ -77,6 +77,17 @@ function formatTokens(value: number, settled: boolean): string {
   return value < 1000 ? String(value) : `${(value / 1000).toFixed(1)}K`
 }
 
+/** Money, to the precision a single question needs; unpriced lanes show nothing.
+ *
+ * An unconfigured rate is missing information, not a free answer, so the dash
+ * stays until a rate card covers every model the lane used. */
+function formatCost(value: number | undefined): string {
+  if (value === undefined) return '—'
+  if (value === 0) return '$0'
+  if (value < 0.01) return `$${value.toFixed(4)}`
+  return value < 1 ? `$${value.toFixed(3)}` : `$${value.toFixed(2)}`
+}
+
 /** Elapsed wall time; a turn that has not closed reports nothing rather than zero. */
 function formatElapsed(ms: number): string {
   if (ms === 0) return '—'
@@ -201,6 +212,11 @@ function Lane({ lane, modes, focused, removeLane, focus, openLane, changeMode, t
           label={t('metric.database')}
           hint={t('metric.databaseHint')}
           value={formatTokens(lane.reading.databaseTokens, settled)}
+        />
+        <Metric
+          label={t('metric.cost')}
+          hint={t('metric.costHint')}
+          value={formatCost(lane.reading.costUsd)}
         />
         <Metric
           label={t('metric.elapsed')}

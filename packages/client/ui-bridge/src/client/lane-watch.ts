@@ -27,6 +27,8 @@ export interface LaneReading {
   readonly databaseTokens: number
   /** Model and tool wall time across the Session, in milliseconds. */
   readonly elapsedMs: number
+  /** US dollars for both pools, absent while any model this lane used is unpriced. */
+  readonly costUsd?: number
 }
 
 /** A reading with nothing in it, for a lane that has not been asked anything. */
@@ -52,6 +54,7 @@ function count(source: unknown, key: string): number {
  * @param sessionStats - the Session's `sessionStats` projection value.
  * @param turnOutline - the Session's `turnOutline` projection value.
  * @param running - whether the Session is working, from its own snapshot.
+ * @param costUsd - what the Session cost, when every model it used carries a rate.
  * @returns the lane's current reading.
  */
 export function readLane(
@@ -60,6 +63,7 @@ export function readLane(
   sessionStats: unknown,
   turnOutline: unknown,
   running: boolean,
+  costUsd?: number,
 ): LaneReading {
   // Same arithmetic as the composer's usage pill: cache reads are the prefix the
   // Session had already paid for, while cache writes are new input it is paying
@@ -83,5 +87,6 @@ export function readLane(
     workingTokens,
     databaseTokens,
     elapsedMs,
+    ...costUsd === undefined ? {} : { costUsd },
   }
 }

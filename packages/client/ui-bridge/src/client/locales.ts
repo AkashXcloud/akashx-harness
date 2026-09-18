@@ -36,6 +36,8 @@ export const en = {
   'metric.harnessHint': 'New tokens this lane\u2019s own model was billed: uncached input + cache writes + output. Tokens re-read from cache cost nothing new and are excluded.',
   'metric.database': 'Database work',
   'metric.databaseHint': 'Tokens the DEPLOYMENT\u2019s models spent answering this lane\u2019s retrieval. Billed separately from the agent\u2019s own model.',
+  'metric.cost': 'Cost',
+  'metric.costHint': 'Both pools priced at the deployment\u2019s configured rates: this lane\u2019s own model plus the database models its retrieval spent on.',
   'metric.elapsed': 'Elapsed',
   'metric.elapsedHint': 'Model and tool wall time across this lane\u2019s session.',
 } as const

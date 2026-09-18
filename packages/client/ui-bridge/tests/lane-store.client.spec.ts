@@ -74,6 +74,9 @@ function fakeCtx(bench: Bench): ClientContext {
       },
     },
     layout: { selectPanel: (panel: string | null) => { bench.panels.push(panel) } },
+    // The cost service is optional, and a bench without a rate card is the
+    // deployment that prices nothing.
+    get: () => undefined,
   } as unknown as ClientContext
 }
 

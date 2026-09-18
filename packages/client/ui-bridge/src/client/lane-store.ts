@@ -18,6 +18,8 @@ import type {} from '@akashx/akx-client-ui-conversation/client'
 import type { SessionId } from '@akashx/akx-session/types'
 import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
 import type {} from '@akashx/akx-agent-presets/types'
+// Type-only: pulls the cost service merge (ctx.get('cost')), which is optional.
+import type {} from '@akashx/akx-client-ui-cost/client'
 import { EMPTY_READING, readLane, type LaneReading } from './lane-watch.ts'
 import { dealBlind, judgePrompt, readVerdicts, type JudgeVerdict } from './judge.ts'
 
@@ -186,6 +188,31 @@ export class BridgeLaneController {
   }
 
   /**
+   * Price one lane's session, when a rate card is installed and covers it.
+   *
+   * The cost plugin is optional, so this reads it through the global store
+   * rather than declaring it: a deployment that prices nothing still gets
+   * every other figure.
+   * @param values - that Session's projection values from the list.
+   * @returns both pools in US dollars, or undefined when anything is unpriced.
+   */
+  private priceOf(values: Record<string, unknown>): number | undefined {
+    const cost = this.ctx.get('cost')
+    if (cost === undefined) return undefined
+    const selection = values.modelSelection
+    const lastUsed = typeof selection === 'object' && selection !== null
+      ? (selection as { lastUsed?: { provider?: string; model?: string } | null }).lastUsed
+      : undefined
+    const model = lastUsed?.model === undefined
+      ? undefined
+      : { ...lastUsed.provider === undefined ? {} : { provider: lastUsed.provider }, model: lastUsed.model }
+    const priced = cost.price(model, values.tokenUsage, values.cognateUsage)
+    if (priced.unpriced.length > 0) return undefined
+    if (priced.agentUsd === undefined && priced.deploymentUsd === undefined) return undefined
+    return (priced.agentUsd ?? 0) + (priced.deploymentUsd ?? 0)
+  }
+
+  /**
    * Publish every lane's reading from the Session list.
    *
    * The list carries each Session's own projection values, which is the only
@@ -203,7 +230,7 @@ export class BridgeLaneController {
       const values: Record<string, unknown> = summary.projectionValues ?? {}
       const reading = readLane(
         values.tokenUsage, values.cognateUsage, values.sessionStats, values.turnOutline,
-        summary.running,
+        summary.running, this.priceOf(values),
       )
       return { ...lane, reading }
     })

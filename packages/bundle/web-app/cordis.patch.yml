@@ -231,6 +231,12 @@
     - id: ui-bridge
       name: '@akashx/akx-client-ui-bridge'
 
+    # What a session cost in money. The rates are a durable settings section
+    # (`ui-cost.rates`), because a price is a deployment fact: an unpriced model
+    # reports as unpriced rather than as free.
+    - id: ui-cost
+      name: '@akashx/akx-client-ui-cost'
+
     # The right Sidebar: one docking surface per session over ui-dockkit.
     - id: ui-sidebar-right
       name: '@akashx/akx-client-ui-sidebar-right'
