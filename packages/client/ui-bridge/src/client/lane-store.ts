@@ -23,6 +23,8 @@ import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-stor
 import type {} from '@akashx/akx-agent-presets/types'
 // Type-only: pulls the cost service merge (ctx.get('cost')), which is optional.
 import type {} from '@akashx/akx-client-ui-cost/client'
+import type { BenchAnswer } from '../bridge-settings.ts'
+import { lookupGold } from './answer-key.ts'
 import { EMPTY_READING, readLane, type LaneReading } from './lane-watch.ts'
 import { dealBlind, judgePrompt, readVerdicts, type JudgeVerdict } from './judge.ts'
 
@@ -56,7 +58,11 @@ export interface BridgeState {
   readonly modes: readonly BridgeMode[]
   /** The lane the composer addresses alone; null sends to every lane. */
   readonly focused: string | null
-  /** The known-good answer the grader marks against. */
+  /** The question every lane was last asked, which is the one being graded. */
+  readonly asked: string
+  /** The answer key's answer for {@link BridgeState.asked}, undefined when the key does not cover it. */
+  readonly keyGold: string | undefined
+  /** A typed answer, which overrides {@link BridgeState.keyGold} when it is not blank. */
   readonly gold: string
   /** Whether a grading run is in flight. */
   readonly judging: boolean
@@ -75,7 +81,7 @@ const JUDGE_TIMEOUT_MS = 180_000
 const JUDGE_POLL_MS = 2500
 
 const INITIAL: BridgeState = {
-  lanes: [], modes: [], focused: null, gold: '', judging: false, error: null,
+  lanes: [], modes: [], focused: null, asked: '', keyGold: undefined, gold: '', judging: false, error: null,
 }
 
 /** Owns the lane roster and the Session work behind it. */
@@ -88,7 +94,15 @@ export class BridgeLaneController {
   /** Active answer poll, so a second question replaces it rather than racing it. */
   private polling: ReturnType<typeof setInterval> | undefined
 
-  constructor(private readonly ctx: ClientContext) {}
+  /**
+   * @param ctx - the browser plugin context.
+   * @param answerKey - the deployment's benchmark answer key, read on each use so
+   * a key edited in the settings document reaches the next grade.
+   */
+  constructor(
+    private readonly ctx: ClientContext,
+    private readonly answerKey: () => readonly BenchAnswer[] = () => [],
+  ) {}
 
   private set(patch: Partial<BridgeState>): void {
     this.store.set({ ...this.store.getSnapshot(), ...patch })
@@ -324,6 +338,10 @@ export class BridgeLaneController {
     const { lanes, focused } = this.store.getSnapshot()
     const addressed = lanes.filter(lane =>
       lane.status === 'ready' && lane.sessionId !== undefined && (focused === null || lane.key === focused))
+    // Grading needs the question, and the panel is the only thing that knows it.
+    // Recording it here is what lets the grade run from one button.
+    this.set({ asked: text })
+    this.resolveGold()
     this.pollUntilAnswered()
     await Promise.all(addressed.map(async (lane) => {
       const scope = this.ctx.sessions.scope(lane.sessionId as SessionId)
@@ -345,11 +363,34 @@ export class BridgeLaneController {
   }
 
   /**
-   * Set the answer the grader marks against.
-   * @param gold - the known-good answer.
+   * Set the answer the grader marks against, overriding the answer key.
+   * @param gold - the known-good answer, or blank to fall back to the key.
    */
   setGold(gold: string): void {
     this.set({ gold })
+  }
+
+  /**
+   * Re-read the answer key for the question that was asked.
+   *
+   * Called again when the key itself changes, because the settings document it
+   * comes from loads after the panel mounts and can be edited while it is open.
+   */
+  resolveGold(): void {
+    const { asked } = this.store.getSnapshot()
+    const keyGold = asked === '' ? undefined : lookupGold(this.answerKey(), asked)
+    this.set({ keyGold })
+  }
+
+  /**
+   * The answer this grade is measured against: a typed one when there is one,
+   * otherwise the answer key's.
+   * @param state - the snapshot being graded from.
+   * @returns the known-good answer, or undefined when neither supplies one.
+   */
+  private goldFor(state: BridgeState): string | undefined {
+    const typed = state.gold.trim()
+    return typed !== '' ? typed : state.keyGold
   }
 
   /**
@@ -359,14 +400,19 @@ export class BridgeLaneController {
    * panel compares, so grading inside one would add tokens to the very number
    * being read; and no lane holds the other lanes' answers, which a comparison
    * needs. Answers go in blind and the labels are restored from the deal.
-   * @param question - the question the lanes were asked.
+   *
+   * It takes no arguments: the panel sent the question, so it already knows what
+   * was asked, and the answer key -- or a typed override -- supplies what the
+   * answer should have been. Nothing is retyped to run a grade.
    */
-  async judge(question: string): Promise<void> {
-    const { lanes, gold } = this.store.getSnapshot()
+  async judge(): Promise<void> {
+    const state = this.store.getSnapshot()
+    const { lanes, asked } = state
+    const gold = this.goldFor(state)
     const entries = lanes
       .filter(lane => lane.reading.answer !== undefined)
       .map(lane => ({ key: lane.key, answer: lane.reading.answer as string }))
-    if (entries.length === 0 || gold.trim() === '') return
+    if (entries.length === 0 || gold === undefined || asked === '') return
 
     this.set({ judging: true, error: null })
     try {
@@ -374,7 +420,7 @@ export class BridgeLaneController {
       const sessionId = await this.ctx.sessions.create({})
       const conversation = this.ctx.sessions.scope(sessionId)?.get('conversation')
       if (conversation === undefined) throw new Error('judge session has no conversation scope')
-      await conversation.send(judgePrompt(question, gold, dealt))
+      await conversation.send(judgePrompt(asked, gold, dealt))
 
       const reply = await this.awaitReply(sessionId)
       const verdicts = readVerdicts(reply, dealt)

@@ -293,6 +293,18 @@
   color: inherit;
 }
 
+/* The answer key covered the question, so the grade needs no typing: the row
+   says so where the answer box would otherwise sit. */
+.judgeKeyed {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Pane mode: the bar above the grid, and each pane's own header. */
 .bar {
   display: flex;

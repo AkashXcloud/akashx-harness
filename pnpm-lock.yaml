@@ -2462,6 +2462,9 @@ importers:
       '@akashx/akx-client-ui-renderer':
         specifier: workspace:^
         version: link:../ui-renderer
+      '@akashx/akx-client-ui-settings':
+        specifier: workspace:^
+        version: link:../ui-settings
       '@akashx/akx-client-ui-sidebar':
         specifier: workspace:^
         version: link:../ui-sidebar
@@ -2471,6 +2474,9 @@ importers:
       '@akashx/akx-session':
         specifier: workspace:^
         version: link:../../core/session
+      '@akashx/akx-settings':
+        specifier: workspace:^
+        version: link:../../settings/settings
       '@akashx/akx-workspace':
         specifier: workspace:^
         version: link:../../workspace/workspace

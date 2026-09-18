@@ -14,8 +14,8 @@ export interface PanesBarInjected {
   ask: (text: string) => void
   /** Set the answer the grader marks against. */
   setGold: (gold: string) => void
-  /** Grade every answered lane against the gold answer. */
-  judge: (question: string) => void
+  /** Grade every answered lane against the correct answer. */
+  judge: () => void
   /** Leave pane mode for the single current-Session view. */
   closePanes: () => void
   /** Private reactive sources bound to framework selector hooks. */
@@ -106,7 +106,6 @@ function Composer({ focusedName, ask, t }: {
  */
 export function PanesBar({ useBridge, addLane, ask, setGold, judge, closePanes, t }: PanesBarProps) {
   const state = useBridge(snapshot => snapshot)
-  const [question, setQuestion] = useState('')
   const focusedLane = state.lanes.find(lane => lane.key === state.focused)
   const focusedName = focusedLane === undefined
     ? undefined
@@ -114,6 +113,10 @@ export function PanesBar({ useBridge, addLane, ask, setGold, judge, closePanes, 
   // Every lane, not any: a grade run before the last answer lands silently
   // omits that lane, and an ungraded lane beside graded ones reads as a failure.
   const canJudge = state.lanes.length > 0 && state.lanes.every(lane => lane.reading.answer !== undefined)
+  // The answer key covers the question, so there is nothing left to type and the
+  // grade is one button. A question it does not cover still asks for the answer.
+  const keyed = state.keyGold !== undefined
+  const gradable = canJudge && state.asked !== '' && (keyed || state.gold.trim() !== '')
   return (
     <div className={css.bar} data-bridge-panel>
       <div className={css.barHead}>
@@ -126,23 +129,22 @@ export function PanesBar({ useBridge, addLane, ask, setGold, judge, closePanes, 
       <div className={css.barRow}>
         <Composer focusedName={focusedName} ask={ask} t={t} />
         <div className={css.judgeBar} data-bridge-judge>
-          <input
-            className={css.judgeInput}
-            value={question}
-            placeholder={t('judge.question')}
-            onChange={(event) => { setQuestion(event.target.value) }}
-          />
-          <input
-            className={css.judgeInput}
-            value={state.gold}
-            placeholder={t('judge.gold')}
-            onChange={(event) => { setGold(event.target.value) }}
-          />
+          {keyed
+            ? <span className={css.judgeKeyed} data-bridge-judge-keyed>{t('judge.keyed')}</span>
+            : (
+              <input
+                className={css.judgeInput}
+                value={state.gold}
+                placeholder={t('judge.gold')}
+                onChange={(event) => { setGold(event.target.value) }}
+              />
+            )}
           <button
             type="button"
             className={css.composerSend}
-            disabled={state.judging || !canJudge || state.gold.trim() === ''}
-            onClick={() => { judge(question) }}
+            title={state.asked === '' ? t('judge.unasked') : state.asked}
+            disabled={state.judging || !gradable}
+            onClick={judge}
           >
             {state.judging ? t('judge.running') : t('judge.run')}
           </button>

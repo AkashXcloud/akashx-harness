@@ -18,7 +18,7 @@ Bridge is the surface that makes running several practical. It spawns one Sessio
 | --- | --- | --- |
 | `sidebar.panellist` | `bridge` | The rail icon that selects the starter panel. |
 | `main` | `bridge` | The starter: the mode picker, and the way back to the panes. |
-| `conversation.panes.bar` | — | One question for every lane, and the grade. |
+| `conversation.panes.bar` | — | One question for every lane, and the one-button grade. |
 | `conversation.pane.chrome` | — | One pane's mode, verdict, and what it spent. |
 
 A lane is watched as a conversation, not as a summary of one. Opening a lane hands the screen to the conversation surface in [pane mode](../ui-conversation/README.md#panes-several-conversations-at-once): each pane is that Session's own transcript, streaming its steps and tool cards exactly as the single view does. Bridge names the Sessions and fills the two seats above and inside the panes; it renders no transcript of its own, so nothing can drift from what a conversation really shows.
@@ -41,6 +41,25 @@ The grade is blind: answers are shuffled and relabelled, and the lane each one c
 
 A letter the grader does not rule on yields no verdict. An ungraded answer must not read as a failed one.
 
+### The grade takes no typing
+
+Grading needs the question and the answer it should have produced. The panel already sent the question, so it keeps it; nothing is retyped to grade what was just asked.
+
+The correct answer comes from a benchmark answer key held in the Host user-settings document under `ui-bridge`, matched against the question that was asked:
+
+```yaml
+ui-bridge:
+  answerKey:                # question text as the benchmark states it, and its answer
+    - question: What is the FY2018 capital expenditure amount (in USD millions) for 3M?
+      gold: $1577.00
+```
+
+The key is configuration rather than shipped data: which suite a deployment grades against differs by machine and changes without any code moving.
+
+Matching compares the two questions reduced to their words and figures, so a paste that picks up a newline or a curly apostrophe still resolves. A question stored in the key and contained in what was asked counts as the same question, which is what lets a prompt wrap the benchmark text in a retrieval hint. Containment runs one way only, and nothing fuzzier is attempted: grading a lane against a near miss is worse than not grading it.
+
+A question the key does not cover asks for the answer instead, in one box, and a typed answer overrides the key. An empty key is therefore the deployment that grades by hand, which is what shipped before the key existed.
+
 ## Model Experience
 
 None, as this browser panel registers nothing model-facing: it sends prompts a person typed to Sessions that already exist, so a model reached through a lane sees exactly what it would see in the conversation view.
@@ -56,3 +75,5 @@ Nothing here enters a model request, so provider cache reuse is unaffected; a la
 - The grade is read from the host's response preview, which is clipped well short of a full answer. A lane that states its figure only after the clip cannot be graded on it, even though its pane shows the whole answer.
 - Selecting Bridge in the rail selects the starter panel; the panes live in the conversation panel, so the rail highlight moves off Bridge as soon as the panes open.
 - The grader runs on the deployment's default preset, which can reach the database. Only the prompt stops it looking an answer up; there is no preset that withholds the capability.
+- The answer key is matched against the last question sent to the lanes. Asking a second question before grading the first replaces what a grade would be measured against.
+- The key holds one answer per question. A benchmark whose question text repeats across filings cannot be keyed on the question alone.

@@ -24,7 +24,11 @@ import type {} from '@akashx/akx-client-ui-layout/client'
 import type {} from '@akashx/akx-client-ui-renderer/client'
 // Type-only: pulls the sidebar's SlotMap merge (the 'sidebar.panellist' entry).
 import type {} from '@akashx/akx-client-ui-sidebar/client'
+// Type-only: pulls the settings scope Context merge (ctx.settingsScope).
+import type {} from '@akashx/akx-client-ui-settings/client'
 import type { Context as ClientContext } from '@akashx/cordis'
+import { BRIDGE_SETTINGS_NAMESPACE } from '../bridge-settings.ts'
+import type { BenchAnswer, BridgeSettings } from '../bridge-settings.ts'
 import { BridgeIcon } from './BridgeIcon.tsx'
 import { BridgePanel } from './BridgePanel.tsx'
 import { PaneChrome } from './PaneChrome.tsx'
@@ -43,10 +47,14 @@ export type { BridgePanelInjected, BridgePanelProps } from './BridgePanel.tsx'
 export type { PaneChromeInjected, PaneChromeProps } from './PaneChrome.tsx'
 export type { PanesBarInjected, PanesBarProps } from './PanesBar.tsx'
 export type { BridgeLane, BridgeMode, BridgeState } from './lane-store.ts'
+export { lookupGold, normalizeQuestion } from './answer-key.ts'
 
 /** Required services (cordis fiber inject). */
 export const inject = [
   'slots', 'locale', 'sessions', 'layout', 'remote', 'remote.agentPresets',
+  // The benchmark answer key, which is what lets a grade run without retyping
+  // the question or its answer.
+  'settingsScope',
   // A lane sends through its own Session scope's conversation service, and the
   // context proxy refuses an undeclared name.
   'conversation',
@@ -72,7 +80,12 @@ export function apply(ctx: ClientContext): void {
     locale: 'bridge',
   }, BridgeIcon))
 
-  const lanes = new BridgeLaneController(ctx)
+  const answers = ctx.settingsScope.bind<BridgeSettings>({ namespace: BRIDGE_SETTINGS_NAMESPACE })
+  const answerKey = (): readonly BenchAnswer[] => answers.getSnapshot().value?.answerKey ?? []
+  const lanes = new BridgeLaneController(ctx, answerKey)
+  // The document loads after the panel mounts and can be edited while it is
+  // open, so a question already asked picks up a key that arrives late.
+  ctx.effect(() => answers.subscribe(() => { lanes.resolveGold() }), 'ui-bridge: answer key')
   // The roster is a live directory, so a preset added or retired while Bridge is
   // open changes what a new lane may be opened on.
   void lanes.loadModes()
@@ -103,7 +116,7 @@ export function apply(ctx: ClientContext): void {
       addLane: (modeId: string) => { void lanes.addLane(modeId) },
       ask: (text: string) => { void lanes.ask(text) },
       setGold: (gold: string) => { lanes.setGold(gold) },
-      judge: (question: string) => { void lanes.judge(question) },
+      judge: () => { void lanes.judge() },
       closePanes: () => { lanes.showPanes(false) },
       hooks: { bridge: lanes.store },
     }),

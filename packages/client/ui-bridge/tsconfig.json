@@ -21,6 +21,9 @@
       "path": "../../core/session"
     },
     {
+      "path": "../../settings/settings"
+    },
+    {
       "path": "../../workspace/workspace"
     },
     {
@@ -40,6 +43,9 @@
     },
     {
       "path": "../ui-renderer"
+    },
+    {
+      "path": "../ui-settings"
     },
     {
       "path": "../ui-sidebar"
