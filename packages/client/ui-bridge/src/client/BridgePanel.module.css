@@ -279,7 +279,7 @@
   border-color: color-mix(in srgb, currentColor 45%, transparent);
 }
 
-.judgeBar { display: flex; gap: 8px; flex: none; align-items: center; }
+.judgeBar { display: flex; gap: 8px; flex: 3 1 0; min-width: 0; align-items: center; }
 
 .judgeInput {
   flex: 1;

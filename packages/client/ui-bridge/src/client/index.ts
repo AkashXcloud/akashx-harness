@@ -115,6 +115,7 @@ export function apply(ctx: ClientContext): void {
     inject: () => ({
       removeLane: (key: string) => { lanes.removeLane(key) },
       focus: (key: string | null) => { lanes.focus(key) },
+      openLane: (key: string) => { lanes.openLane(key) },
       hooks: { bridge: lanes.store },
     }),
   }, PaneChrome))

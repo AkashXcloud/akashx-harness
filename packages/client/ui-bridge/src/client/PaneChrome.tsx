@@ -1,5 +1,5 @@
 /** One pane's own header: which mode it runs, how it was graded, what it spent. */
-import { IconBranchOutline16, IconCloseOutline16 } from '@akashx/akx-client-ui-primitives'
+import { IconBranchOutline16, IconCloseOutline16, IconRightUpOutline16 } from '@akashx/akx-client-ui-primitives'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@akashx/akx-client-ui-slots'
 import type { ObservableSnapshot } from '@akashx/akx-client-store'
 import { formatCost, formatElapsed, formatTokens, Metric } from './metrics.tsx'
@@ -12,6 +12,8 @@ export interface PaneChromeInjected {
   removeLane: (key: string) => void
   /** Address the composer at one lane, or at every lane. */
   focus: (key: string | null) => void
+  /** Leave the comparison and continue this lane alone. */
+  openLane: (key: string) => void
   /** Private reactive sources bound to framework selector hooks. */
   hooks: { bridge: ObservableSnapshot<BridgeState> }
 }
@@ -31,7 +33,7 @@ export type PaneChromeProps =
  * @param props - the pane's Session, the lane actions, and the locale seat.
  * @returns the pane header, or nothing when the pane is not a lane.
  */
-export function PaneChrome({ sessionId, useBridge, removeLane, focus, t }: PaneChromeProps) {
+export function PaneChrome({ sessionId, useBridge, removeLane, focus, openLane, t }: PaneChromeProps) {
   const state = useBridge(snapshot => snapshot)
   const lane = state.lanes.find(candidate => candidate.sessionId === sessionId)
   if (lane === undefined) return null
@@ -79,6 +81,15 @@ export function PaneChrome({ sessionId, useBridge, removeLane, focus, t }: PaneC
         onClick={() => { focus(steering ? null : lane.key) }}
       >
         <IconBranchOutline16 size={12} />
+      </button>
+      <button
+        type="button"
+        className={css.laneSteer}
+        aria-label={t('lane.open')}
+        title={t('lane.open')}
+        onClick={() => { openLane(lane.key) }}
+      >
+        <IconRightUpOutline16 size={12} />
       </button>
       <button
         type="button"

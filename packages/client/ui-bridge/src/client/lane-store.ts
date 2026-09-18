@@ -278,36 +278,6 @@ export class BridgeLaneController {
   }
 
   /**
-   * Reseat one lane on a different mode.
-   *
-   * Only before the lane has run: the Host refuses to recompose a Session whose
-   * history was produced under another preset, which is the same rule that keeps
-   * a comparison honest. A lane that has answered is therefore left alone and the
-   * caller is told why.
-   * @param key - the lane to reseat.
-   * @param modeId - the preset to seat it on instead.
-   */
-  async changeMode(key: string, modeId: string): Promise<void> {
-    const lane = this.store.getSnapshot().lanes.find(candidate => candidate.key === key)
-    if (lane?.sessionId === undefined) return
-    if (lane.reading.answer !== undefined || lane.reading.running) return
-    const seated = await this.ctx.remote.agentPresets.select(lane.sessionId, modeId)
-    if (!seated.ok) {
-      this.replace(key, { error: seated.error.message })
-      return
-    }
-    // The key is dropped rather than set undefined: a reseated lane has no error,
-    // and `exactOptionalPropertyTypes` treats the two as different states.
-    this.set({
-      lanes: this.store.getSnapshot().lanes.map((candidate) => {
-        if (candidate.key !== key) return candidate
-        const { error: _cleared, ...rest } = candidate
-        return { ...rest, modeId }
-      }),
-    })
-  }
-
-  /**
    * Address the composer at one lane, or at every lane.
    * @param key - the lane to steer alone, or null for all of them.
    */
