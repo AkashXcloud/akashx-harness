@@ -55,7 +55,13 @@ export function apply(ctx: Context): void {
   const schema = new SettingsSchemaService(ctx)
   // Resolved once here, where `remote` is declared in this plugin's own
   // `inject`; the binder hands the same answer to every scope it binds.
-  const persistence = ctx.remote.$host.isLoopback ? 'host' : 'memory'
+  // Privileged, not loopback: a deployment that declared this authority through
+  // `trustedHosts` means its browser to reach the durable document, and the
+  // Host fence still refuses anything it did not declare. Reading `isLoopback`
+  // here left every remote page silently on process-local settings, so a
+  // configured rate card or answer key never arrived and the surfaces reading
+  // them showed nothing.
+  const persistence = ctx.remote.$host.isPrivileged ? 'host' : 'memory'
   const mirror = new SettingsDescribeMirror(ctx, persistence)
   ctx.effect(() => {
     const disposers = [

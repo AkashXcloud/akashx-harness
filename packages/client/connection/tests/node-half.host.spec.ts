@@ -132,12 +132,17 @@ describe('connection node half', () => {
     try {
       const rows: IndexInjection[] = []
       ctx.emit('webserver/index-inject', rows)
-      expect(rows).toEqual([{
-        kind: 'global', name: '__AKX_CONNECTION_RECOVERY__', value: {
-          backoffBaseMs: 500, backoffFactor: 2, backoffMaxMs: 10_000,
-          generationReadyWarnMs: 3_000, generationReadyTimeoutMs: 25_000,
+      expect(rows).toEqual([
+        {
+          kind: 'global', name: '__AKX_CONNECTION_RECOVERY__', value: {
+            backoffBaseMs: 500, backoffFactor: 2, backoffMaxMs: 10_000,
+            generationReadyWarnMs: 3_000, generationReadyTimeoutMs: 25_000,
+          },
         },
-      }])
+        // The page reads its own authority against these to know whether it may
+        // reach privileged surfaces; a deployment declaring none stays loopback-only.
+        { kind: 'global', name: '__AKX_TRUSTED_HOSTS__', value: [] },
+      ])
       await dispose()
       const after: IndexInjection[] = []
       ctx.emit('webserver/index-inject', after)

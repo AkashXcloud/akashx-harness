@@ -11,6 +11,7 @@ import {
 import { createFixtureConnectionRpc } from './fixture.ts'
 import { createWebConnectionRpc, type RpcFetch, type RpcStreamOpen } from './rpc.ts'
 import { isLoopbackHostname } from '../loopback-hostname.ts'
+import { isDeclaredTrustedAuthority } from '../trusted-authority.ts'
 import type { ClientConnectionRpc } from '../rpc.ts'
 import { resolveConnectionConfig } from '../recovery-config.ts'
 
@@ -109,6 +110,8 @@ export interface ClientTransportHooks {
 interface ClientTransportGlobal {
   __AKX_TRANSPORT__?: ClientTransportHooks
   __AKX_CONNECTION_RECOVERY__?: unknown
+  /** Authorities this deployment declared trusted, injected by the node half. */
+  __AKX_TRUSTED_HOSTS__?: unknown
 }
 
 /**
@@ -122,6 +125,21 @@ export interface ConnectionHandle {
    * ({@link ClientTransportHooks.ownsHost}), or the context is not a browser.
    */
   readonly isLoopback: boolean
+  /**
+   * Whether this page may reach privileged surfaces: it is
+   * {@link ConnectionHandle.isLoopback}, or its authority is one the operator
+   * declared through `trustedHosts`.
+   *
+   * Separate from `isLoopback` because the two answer different questions. A
+   * remote authority the operator named is intended to reach the deployment's
+   * durable settings; it is still not loopback, and anything that genuinely
+   * requires the operator's own machine must keep reading `isLoopback`.
+   *
+   * This is the page's reading of its own authority, so it decides only what
+   * the page attempts. Every request is still refused or allowed by the Host
+   * fence, which reads the same declaration on the Host.
+   */
+  readonly isPrivileged: boolean
   /** Current Remote event generation and the Host facts carried by its opening frame. */
   readonly generation: ConnectionGenerationState
   /** Current recovery lifecycle for connection-specific consumers. */
@@ -229,8 +247,16 @@ export function apply(ctx: Context): void {
     publishGeneration(undefined)
     publishState(undefined)
   }
+  const isLoopback = transport?.ownsHost === true
+    || pageLocation === undefined
+    || isLoopbackHostname(pageLocation.hostname)
+  const declared = (globalThis as ClientTransportGlobal).__AKX_TRUSTED_HOSTS__
+  const trustedHosts = Array.isArray(declared) ? declared.filter(entry => typeof entry === 'string') : []
   const handle: ConnectionHandle = {
-    isLoopback: transport?.ownsHost === true || pageLocation === undefined || isLoopbackHostname(pageLocation.hostname),
+    isLoopback,
+    // `isLoopback` is already true when there is no page, so the authority read
+    // below runs only where one exists.
+    isPrivileged: isLoopback || isDeclaredTrustedAuthority(pageLocation.host, trustedHosts),
     generation: {
       getSnapshot: () => generation,
       subscribe: (listener) => {

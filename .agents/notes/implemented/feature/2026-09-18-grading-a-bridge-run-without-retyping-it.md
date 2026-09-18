@@ -40,3 +40,15 @@ Running this on a real server found two things a laptop never would.
 **A lane could not be handed to the conversation view.** `openLane` set the current Session and cleared the panel, but never left pane mode — and the conversation surface draws the pane grid whenever a pane list is set. The Session changed underneath a grid that kept rendering the same panes, so the control looked dead. It now ends pane mode first.
 
 **Every cost read as unpriced.** The deployment's database answers with the dated snapshot it served, `gpt-5-nano-2025-08-07`, while the rate card is written against `gpt-5-nano`. No entry matched, and an unmatched model is reported unpriced rather than free, so every lane showed no money at all. `rateFor` now drops a trailing `-YYYY-MM-DD` and retries, with the exact match still taking precedence so a card may price one snapshot apart deliberately. Without it a rate card is correct on the day it is written and quietly prices nothing after the next snapshot ships.
+
+## Postscript 2: durable settings on a declared authority
+
+Serving the harness on a remote authority disabled every durable setting in the browser, silently. `ui-settings` chose its persistence with `ctx.remote.$host.isLoopback ? 'host' : 'memory'`, and a `memory` mirror starts terminally `unavailable`: it never issues `settings.describe` at all. A deployment reached by anything but loopback therefore had no rate card, no answer key, and no stored preferences, while every other surface worked — so the symptom was a missing cost figure rather than anything naming settings.
+
+The Host and the page disagreed about the same declaration. `isTrustedApiRequest` already admits `isLoopbackHostname(host) || isTrustedAuthority(host, trustedHosts)`, so an operator passing `--trusted-host` had already said which authority this deployment serves; only the page ignored it.
+
+They now read one implementation. `trusted-authority.ts` owns the matching for both faces, the node half publishes the declared authorities to the page beside the recovery timing it already injects, and the page exposes `isPrivileged` — loopback, or an authority the operator named — alongside the literal `isLoopback`. Two names because they answer different questions: durable settings want the former, and anything genuinely requiring the operator's own machine keeps the latter.
+
+`ui-settings-general`'s raw document controller deliberately stays on `isLoopback`. Reading a namespace's value and editing the whole settings document are different privileges, and only the first is needed to serve a configured deployment.
+
+This is what the page attempts, never what it is granted: the Host fence still decides every request from the same declaration, so a page that guessed wrong is refused rather than believed.

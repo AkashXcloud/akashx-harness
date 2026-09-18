@@ -120,6 +120,13 @@ export interface RemoteHostFacts {
   readonly home: string | undefined
   /** Whether the carrier connects to the local Host. */
   readonly isLoopback: boolean
+  /**
+   * Whether this page may reach privileged surfaces: loopback, or an authority
+   * the operator declared through `trustedHosts`. Durable Host settings read
+   * this; anything requiring the operator's own machine reads
+   * {@link RemoteHostFacts.isLoopback}.
+   */
+  readonly isPrivileged: boolean
 }
 
 declare module '@akashx/cordis' {
@@ -190,10 +197,14 @@ class ClientRemoteService extends Service implements ClientRemote {
   get $host(): RemoteHostFacts {
     // Identity-stable: readers (useSyncExternalStore snapshots, memo inputs)
     // compare by reference, so a fresh object is minted only when the fact
-    // itself changed. isLoopback is fixed for the page lifetime.
+    // itself changed. Both authority facts are fixed for the page lifetime.
     const home = this.connection.generation.getSnapshot()?.host.home
     if (this.hostFacts === undefined || this.hostFacts.home !== home) {
-      this.hostFacts = { home, isLoopback: this.connection.isLoopback }
+      this.hostFacts = {
+        home,
+        isLoopback: this.connection.isLoopback,
+        isPrivileged: this.connection.isPrivileged,
+      }
     }
     return this.hostFacts
   }

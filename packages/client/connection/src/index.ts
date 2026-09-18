@@ -120,6 +120,10 @@ export async function apply(ctx: Context, config?: ConnectionConfig): Promise<vo
     assertImageBodyCapacity(webCtx, maxRequestBodyBytes)
     webCtx.on('webserver/index-inject', (table) => {
       table.push({ kind: 'global', name: '__AKX_CONNECTION_RECOVERY__', value: recovery })
+      // The page needs the authorities this deployment declared to know whether
+      // it is itself privileged. The Host fence still decides every request; a
+      // page that guessed wrong is refused, never trusted on its own word.
+      table.push({ kind: 'global', name: '__AKX_TRUSTED_HOSTS__', value: trustedHosts })
     })
     const fetchHandler = connection.createSharedFetchHandler(API_PATH)
     const route: WebRoute = {
