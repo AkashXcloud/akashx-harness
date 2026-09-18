@@ -126,6 +126,40 @@ export function RootStandardProvider({ children }: { children: ReactNode }) {
   return <RootBindingContext.Provider value={binding}>{children}</RootBindingContext.Provider>
 }
 
+/**
+ * Bind a subtree to one named scope identity instead of the current selection.
+ *
+ * Everything below reads the scope binding from context, so re-binding it is
+ * what lets one surface render the same registrations for several identities
+ * at once — side-by-side conversation panes, each on its own Session. The
+ * identity must already be materialized (a Session is materialized while it is
+ * current or held); an unresolvable one renders the empty branch rather than
+ * a stale neighbour's data.
+ *
+ * @param props - the scope, the identity to bind, the subtree, and the branch
+ * to render while the identity resolves nothing.
+ * @returns the subtree under the named identity's binding.
+ */
+export function ScopeIdentityProvider({
+  scope,
+  identity,
+  children,
+  empty,
+}: {
+  scope: 'session' | 'session-maybe'
+  identity: string
+  children: ReactNode
+  empty?: ReactNode
+}) {
+  const host = useHost()
+  observableHook(host.scopeRevision)(value => value)
+  const adapter = host.scope(scope)
+  if (adapter === undefined) throw new SlotAssemblyError(`scope '${scope}' rendered without an installed adapter`)
+  const binding = adapter.resolve(identity)
+  if (binding === undefined) return <>{empty ?? null}</>
+  return <ScopeBindingContext.Provider value={binding}>{children}</ScopeBindingContext.Provider>
+}
+
 /** Subscribe to the scope roster before resolving and binding its current adapter. */
 export function ScopeProvider({
   scope,

@@ -20,6 +20,7 @@ import { inspectRequestPrompt } from '../contract/request-inspection.ts'
 import { inspectSystemPrompt, type SystemPromptState } from '../contract/system-prompt.ts'
 import { ConversationNodeAssembler } from './assembler.ts'
 import { ConversationEventRegistry } from './event-registry.ts'
+import type { ConversationPanes } from '../panes.ts'
 import { HistoricalImageCache } from './historical-images.ts'
 import { ConversationViewRegistry } from './view-registry.ts'
 
@@ -177,8 +178,32 @@ export class UiConversation extends Service {
   readonly events: ConversationEventRegistry
   /** Registry of target View definitions. */
   readonly views: ConversationViewRegistry
+  /** Pane mode: several Sessions on screen at once. Installed by the plugin body. */
+  private panes: ConversationPanes | undefined
   private readonly bindings = new Map<SessionId, BindingRecord>()
   private readonly images: HistoricalImageCache
+
+  /**
+   * Install the pane holder the plugin body owns.
+   * @param panes - the holder, whose lifetime is the plugin's.
+   */
+  installPanes(panes: ConversationPanes): void {
+    this.panes = panes
+  }
+
+  /**
+   * Show several Sessions side by side, or return to the single current one.
+   *
+   * Each pane renders the ordinary conversation subtree under that Session's
+   * scope, so a pane streams exactly what the single view streams. The panes
+   * are held open while shown: a pane is not the current Session, and staging
+   * is what opens a window.
+   *
+   * @param panes - Sessions to show, or `undefined` for the single view.
+   */
+  showPanes(panes: readonly SessionId[] | undefined): void {
+    this.panes?.set(panes)
+  }
 
   /**
    * @param ctx - owning Client context.

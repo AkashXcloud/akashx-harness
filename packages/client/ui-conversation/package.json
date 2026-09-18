@@ -27,6 +27,9 @@
   },
   "akx": {
     "client": {
+      "external": [
+        "@akashx/akx-client-ui-renderer/client"
+      ],
       "inject": [
         "@akashx/akx-api-session-controller",
         "@akashx/akx-client-file-upload",

@@ -30,6 +30,8 @@ import { EnterBehaviorRow } from './settings/EnterBehaviorRow.tsx'
 import type { EnterBehaviorRowInjected } from './settings/EnterBehaviorRow.tsx'
 import { ConversationRoot } from './skeleton/ConversationRoot.tsx'
 import { ConversationPanel } from './skeleton/ConversationPanel.tsx'
+import type { ConversationPanelInjected } from './skeleton/ConversationPanel.tsx'
+import { ConversationPanes } from './panes.ts'
 import { ConversationSession, ConversationSessionHeader } from './skeleton/ConversationSession.tsx'
 import { InputBar } from './skeleton/InputBar.tsx'
 import { todoDockEntry } from './skeleton/TodoPanel.tsx'
@@ -207,6 +209,11 @@ export function apply(ctx: Context, config: Config = Config({})): void {
   }, 'ui-conversation: View selection')
 
   const inputHub = new InputHub(ctx, t)
+  // Pane mode: several Sessions on screen at once, each held open for as long
+  // as its pane is shown.
+  const panes = new ConversationPanes(sessions)
+  uiConversation.installPanes(panes)
+  ctx.effect(() => () => { panes.dispose() }, 'ui-conversation: pane holds')
   const composerBlocks = new ComposerBlockRegistry()
 
   ctx.inject(['commandUi'], (scope) => {
@@ -412,7 +419,12 @@ export function apply(ctx: Context, config: Config = Config({})): void {
     yield slots.register({
       name: 'main',
       key: 'conversation',
-      children: { 'main.conversation': { kind: 'single', scope: 'session-maybe' } },
+      children: {
+        'main.conversation': { kind: 'single', scope: 'session-maybe' },
+        'conversation.panes.bar': { kind: 'single', scope: 'root' },
+        'conversation.pane.chrome': { kind: 'single', scope: 'session' },
+      },
+      inject: (): ConversationPanelInjected => ({ hooks: { panes: panes.store } }),
     }, ConversationPanel)
     yield registerConversationRoot()
     yield registerConversationSession()

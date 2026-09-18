@@ -198,9 +198,12 @@ export class TestSessions implements ISessions {
   /** Calls observed on the service-level face, newest last. */
   readonly calls: {
     method: 'create' | 'delete' | 'open' | 'openSubagent' | 'setSubagentCatalogOpen' | 'refreshSubagents'
-      | 'clear' | 'refresh' | 'search' | 'fork'
+      | 'clear' | 'refresh' | 'search' | 'fork' | 'hold' | 'release'
     args: unknown[]
   }[] = []
+
+  /** Sessions currently held on stage by a surface showing them. */
+  readonly holds = new Set<SessionId>()
 
   /** The wire schema's `session.search` result bound (production parity). */
   readonly searchResultLimit = SESSION_SEARCH_RESULT_LIMIT
@@ -474,6 +477,20 @@ export class TestSessions implements ISessions {
   refreshSubagents(parentSessionId: SessionId): Promise<void> {
     this.calls.push({ method: 'refreshSubagents', args: [parentSessionId] })
     return Promise.resolve()
+  }
+
+  /**
+   * Hold one Session on stage (recorded; the bench opens no real window).
+   * @param id - the Session held.
+   * @returns the release, recorded the same way.
+   */
+  hold(id: SessionId): () => void {
+    this.calls.push({ method: 'hold', args: [id] })
+    this.holds.add(id)
+    return () => {
+      this.calls.push({ method: 'release', args: [id] })
+      this.holds.delete(id)
+    }
   }
 
   /** Clear the current selection (recorded; the production no-session flow). */

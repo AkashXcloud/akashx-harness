@@ -72,6 +72,19 @@ export interface ISessions {
    */
   refreshSubagents(parentSessionId: SessionId): Promise<void>
 
+  /**
+   * Keep one Session's history window open while a surface is showing it.
+   *
+   * Staging is the open signal, and the stage is normally the one current
+   * Session — a surface that shows several at once (side-by-side panes) needs
+   * their windows open without any of them becoming current. A held Session
+   * keeps its scope and window for as long as the hold lasts, including across
+   * a removal, and is torn down like any other once released.
+   *
+   * @param id - the Session to hold on stage.
+   * @returns the release; calling it twice releases once.
+   */
+  hold(id: SessionId): () => void
   /** Clear the current selection into the no-session view state. */
   clear(): void
   /**

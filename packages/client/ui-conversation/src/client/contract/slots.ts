@@ -119,6 +119,16 @@ declare module '@akashx/akx-client-ui-slots' {
   interface SlotMap {
     /** Conversation shell beneath its root-scoped main-panel entry. */
     'main.conversation': { kind: 'single'; scope: 'session-maybe' }
+    /**
+     * Controls above a side-by-side pane grid, for the feature that set the
+     * panes. Laid out only in pane mode.
+     */
+    'conversation.panes.bar': { kind: 'single'; scope: 'root' }
+    /**
+     * One pane's own chrome, above its conversation and bound to that pane's
+     * Session rather than to the current one.
+     */
+    'conversation.pane.chrome': { kind: 'single'; scope: 'session' }
     /** Strict per-Session Conversation body. */
     'conversation.session': { kind: 'single'; scope: 'session' }
     /** Strict per-Session title, actions, and View navigation. */
@@ -255,6 +265,12 @@ export interface ConvViewOwnerProps {
 }
 
 /** Base props of one target-owned Conversation View entry. */
+/** Props the panes bar renders from. */
+export type ConversationPanesBarProps = PropsRuntime<'conversation.panes.bar'>
+
+/** Props one pane's chrome renders from. */
+export type ConversationPaneChromeProps = PropsRuntime<'conversation.pane.chrome'>
+
 export type ConvViewProps = PropsRuntime<'conversation.view'>
 
 /** Business callbacks injected into the resident Conversation shell. */

@@ -16,6 +16,7 @@ English | [中文](README.zh.md)
 - [Conversation assembly](#conversation-assembly)
 - [Shell and standard props](#shell-and-standard-props)
 - [Temporary composer entries](#temporary-composer-entries)
+- [Panes: several conversations at once](#panes-several-conversations-at-once)
 - [Model Experience](#model-experience)
 - [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
 - [Dev Note](#dev-note)
@@ -107,6 +108,17 @@ try {
 The selector must be a pure function of the owner currency. Its non-null return is delivered to the component as `matched`; `PropsRuntime<'conversation.composer'>` supplies the standard Session and global props. Chain order remains ascending `priority`, then registration order, and the first non-null selector wins. The shell keeps the default composer mounted beneath a takeover. Request state, listeners, response encoding, and any request-specific child slots belong to the business package; they are not carried by `SessionSnapshot` or declared by this core package.
 
 <a id="model-experience"></a>
+<a id="panes-several-conversations-at-once"></a>
+## Panes: several conversations at once
+
+The surface normally shows the current Session, because there is one stage and `current` occupies it. A comparison needs more: the same question in several Sessions, each on its own composition, watched together.
+
+`ctx.uiConversation.showPanes(ids)` enters pane mode; `showPanes(undefined)` leaves it. Each pane is the ordinary `main.conversation` subtree re-rendered under that Session's scope binding, so a pane streams exactly what the single view streams — the same transcript, the same tool cards, the same composer. Nothing about a conversation is reimplemented per pane, and nothing can drift between the two.
+
+Panes are **held**, not selected: `ISessions.hold` keeps a Session's history window open without making it current, because staging is the open signal and only one Session can be current. The hold is released when the pane list stops naming that Session, which is what stops a closed pane from keeping a window and a scope alive.
+
+Two slots belong to whichever feature set the panes: `conversation.panes.bar` above the grid, and `conversation.pane.chrome` inside each pane, bound to that pane's Session rather than to the current one.
+
 ## Model Experience
 
 None, as this package renders browser state and sends user-admitted inputs through Session Controller APIs without constructing model requests.
@@ -120,6 +132,8 @@ None; Conversation assembly and browser input state do not alter provider-side p
 <a id="known-limitations-and-deferred-work"></a>
 
 - **Only registered targets can render** — the shell deliberately has no implicit fallback target beyond the registered `chat` preference.
+- **Pane mode is not persisted** — a reload leaves every Session intact and returns to the single current-Session view, because the pane list lives in client state.
+- **Panes are laid out in one row** — the grid gives each pane an equal share of the width, so a comparison wider than the screen is cramped rather than wrapped or scrolled.
 
 
 <a id="dev-note"></a>

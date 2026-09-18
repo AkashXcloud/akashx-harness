@@ -27,6 +27,8 @@ import type {} from '@akashx/akx-client-ui-sidebar/client'
 import type { Context as ClientContext } from '@akashx/cordis'
 import { BridgeIcon } from './BridgeIcon.tsx'
 import { BridgePanel } from './BridgePanel.tsx'
+import { PaneChrome } from './PaneChrome.tsx'
+import { PanesBar } from './PanesBar.tsx'
 import { BridgeLaneController } from './lane-store.ts'
 import { en, type BridgeKey } from './locales.ts'
 
@@ -38,6 +40,8 @@ declare module '@akashx/akx-client-ui-slots' {
 }
 
 export type { BridgePanelInjected, BridgePanelProps } from './BridgePanel.tsx'
+export type { PaneChromeInjected, PaneChromeProps } from './PaneChrome.tsx'
+export type { PanesBarInjected, PanesBarProps } from './PanesBar.tsx'
 export type { BridgeLane, BridgeMode, BridgeState } from './lane-store.ts'
 
 /** Required services (cordis fiber inject). */
@@ -84,14 +88,34 @@ export function apply(ctx: ClientContext): void {
     locale: 'bridge',
     inject: () => ({
       addLane: (modeId: string) => { void lanes.addLane(modeId) },
-      removeLane: (key: string) => { lanes.removeLane(key) },
-      ask: (text: string) => { void lanes.ask(text) },
-      focus: (key: string | null) => { lanes.focus(key) },
-      openLane: (key: string) => { lanes.openLane(key) },
-      changeMode: (key: string, modeId: string) => { void lanes.changeMode(key, modeId) },
-      setGold: (gold: string) => { lanes.setGold(gold) },
-      judge: (question: string) => { void lanes.judge(question) },
+      showPanes: () => { lanes.showPanes() },
       hooks: { bridge: lanes.store },
     }),
   }, BridgePanel))
+
+  // The comparison itself lives in the conversation surface: one pane per lane,
+  // each streaming its own Session. Bridge fills the bar above the panes and the
+  // header inside each one; the panes are the product's own conversations.
+  ctx.slots.inject('conversation.panes.bar', () => ctx.slots.register({
+    name: 'conversation.panes.bar',
+    locale: 'bridge',
+    inject: () => ({
+      addLane: (modeId: string) => { void lanes.addLane(modeId) },
+      ask: (text: string) => { void lanes.ask(text) },
+      setGold: (gold: string) => { lanes.setGold(gold) },
+      judge: (question: string) => { void lanes.judge(question) },
+      closePanes: () => { lanes.showPanes(false) },
+      hooks: { bridge: lanes.store },
+    }),
+  }, PanesBar))
+
+  ctx.slots.inject('conversation.pane.chrome', () => ctx.slots.register({
+    name: 'conversation.pane.chrome',
+    locale: 'bridge',
+    inject: () => ({
+      removeLane: (key: string) => { lanes.removeLane(key) },
+      focus: (key: string | null) => { lanes.focus(key) },
+      hooks: { bridge: lanes.store },
+    }),
+  }, PaneChrome))
 }

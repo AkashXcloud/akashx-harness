@@ -292,3 +292,40 @@
   background: transparent;
   color: inherit;
 }
+
+/* Pane mode: the bar above the grid, and each pane's own header. */
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 10px 8px;
+}
+
+.barHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.barRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.barComposer {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+.paneHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  flex: none;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}

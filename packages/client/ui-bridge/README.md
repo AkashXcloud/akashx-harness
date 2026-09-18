@@ -14,16 +14,20 @@ Bridge is the surface that makes running several practical. It spawns one Sessio
 
 | Slot | Entry | Purpose |
 | --- | --- | --- |
-| `sidebar.panellist` | `bridge` | The rail icon that selects the panel. |
-| `main` | `bridge` | The lane grid, which occupies the central column while selected. |
+| `sidebar.panellist` | `bridge` | The rail icon that selects the starter panel. |
+| `main` | `bridge` | The starter: the mode picker, and the way back to the panes. |
+| `conversation.panes.bar` | — | One question for every lane, and the grade. |
+| `conversation.pane.chrome` | — | One pane's mode, verdict, and what it spent. |
 
-Both share the `bridge` panel id: the sidebar entry addresses the main occupant by that key, and `ctx.layout.selectPanel` switches between them. Selecting a panel does not change the current Session, so leaving Bridge returns to whatever conversation was open.
+A lane is watched as a conversation, not as a summary of one. Opening a lane hands the screen to the conversation surface in [pane mode](../ui-conversation/README.md#panes-several-conversations-at-once): each pane is that Session's own transcript, streaming its steps and tool cards exactly as the single view does. Bridge names the Sessions and fills the two seats above and inside the panes; it renders no transcript of its own, so nothing can drift from what a conversation really shows.
+
+The starter panel is what the rail selects, because the rail selects panels. It carries the mode picker before any lane exists, and the way back to the panes afterwards.
 
 ## Lanes are ordinary Sessions
 
-A lane holds a Session id and nothing else. Steering one lane, or leaving Bridge to continue in the full conversation view, needs no special path back — the Session a lane points at is the same Session the rest of the product already serves, with the same durable log, the same projections, and the same preset gate.
+A lane holds a Session id and nothing else. The Session a lane points at is the same Session the rest of the product already serves, with the same durable log, the same projections, and the same preset gate — which is why a pane can be that conversation rather than a view of it, and why a lane can be continued alone in the single view with no path back to build.
 
-Every lane carries a control that hands it over to the conversation view, where it is served with its whole transcript, its own composer and its tools. Leaving the panel does not end the run: the other lanes keep working and report again on return.
+Every pane carries its own composer, so one lane can be steered directly while the others keep working.
 
 That is also why per-lane mode selection reuses the agent-preset seat rather than reimplementing it: the seat controller takes a Session accessor, so one instance per lane binds to that lane's Session.
 
@@ -43,5 +47,6 @@ Bridge adds no tool, no prompt section and no context injection. It sends prompt
 
 - Lanes are not persisted. A reload leaves the Sessions intact but empties the panel, because the lane roster lives in client state rather than in a durable projection.
 - A lane's answer and its deployment spend both reach the panel by polling the Session list, because the list row is built before the turn outline has folded the turn that produced them. The poll starts when a question is sent and runs on past the last answer for a grace window; a checkpoint slower than that window shows the answer before the cost.
-- A lane shows the host's response preview, which is clipped well short of a full answer. The grade is read from the same preview, so a lane that states its figure only after the clip cannot be graded on it.
+- The grade is read from the host's response preview, which is clipped well short of a full answer. A lane that states its figure only after the clip cannot be graded on it, even though its pane shows the whole answer.
+- Selecting Bridge in the rail selects the starter panel; the panes live in the conversation panel, so the rail highlight moves off Bridge as soon as the panes open.
 - The grader runs on the deployment's default preset, which can reach the database. Only the prompt stops it looking an answer up; there is no preset that withholds the capability.

@@ -213,6 +213,12 @@ export class ClientSessions implements ISessions {
   private watched: SessionId | undefined
   /** Removed-while-staged sessions whose teardown waits for the stage to move away. */
   private readonly deferredRemovals = new Set<SessionId>()
+  /**
+   * Sessions held on stage beside the current one, by how many surfaces hold
+   * each. A held Session's window is open and its scope survives teardown for
+   * the same reason the staged one's does: something is showing it.
+   */
+  private readonly holds = new Map<SessionId, number>()
 
   /**
    * @param ctx - client root context (scope fibers mount under it).
@@ -248,6 +254,10 @@ export class ClientSessions implements ISessions {
     // touches only session-side state and its own microtask-batched notifier.
     const disposeStageFollower = this.list.subscribe(() => {
       this.followCurrent()
+      // Held sessions are followed on every projection, not only when the
+      // current one moves: a hold placed while current stands still would
+      // otherwise never reach a list that can resolve it.
+      this.followHolds()
     })
     rootCtx.effect(() => async () => {
       disposeStageFollower()
@@ -315,6 +325,37 @@ export class ClientSessions implements ISessions {
    */
   clear(): void {
     this.manager.clearSelection()
+  }
+
+  /**
+   * Keep one Session's history window open while a surface is showing it.
+   *
+   * Staging is the open signal, so a pane that shows a Session without making
+   * it current holds it instead. Holds nest: the window closes and the scope
+   * becomes collectable again only when the last holder releases.
+   *
+   * @param id - the Session to hold on stage.
+   * @returns the release; calling it twice releases once.
+   */
+  hold(id: SessionId): () => void {
+    this.holds.set(id, (this.holds.get(id) ?? 0) + 1)
+    const record = this.resolve(id)
+    // A hold on a Session the list does not carry yet mints nothing; the next
+    // list projection resolves it, and the hold is already recorded.
+    if (record !== undefined) void record.session.open()
+    let released = false
+    return () => {
+      if (released) return
+      released = true
+      const count = (this.holds.get(id) ?? 1) - 1
+      if (count > 0) {
+        this.holds.set(id, count)
+        return
+      }
+      this.holds.delete(id)
+      this.sweepDeferred()
+      this.pruneScopes()
+    }
   }
 
   /**
@@ -544,6 +585,20 @@ export class ClientSessions implements ISessions {
   }
 
   /**
+   * Open the window of every held Session the list can now resolve.
+   *
+   * A hold placed before its Session reached the list mints no scope, and a
+   * reconnect replaces the stream behind an open one. Both are covered by
+   * re-opening on every list projection, which is idempotent.
+   */
+  private followHolds(): void {
+    for (const id of this.holds.keys()) {
+      const record = this.resolve(id)
+      if (record !== undefined) void record.session.open()
+    }
+  }
+
+  /**
    * Lazily mint the scope + binding for an eligible session. Eligibility and
    * prune share one predicate: listed on the host or selected
    * through a retained subagent address. Breadcrumb-only ancestors remain
@@ -658,7 +713,7 @@ export class ClientSessions implements ISessions {
     if (this.list.getSnapshot().phase === 'pending') return
     for (const [id, record] of this.scopes) {
       if (this.eligible(id)) continue
-      if (id === this.watched) {
+      if (id === this.watched || this.holds.has(id)) {
         this.deferredRemovals.add(id)
         continue
       }
@@ -703,10 +758,10 @@ export class ClientSessions implements ISessions {
   /** Run deferred teardowns whose session is no longer staged (called when the stage moves). */
   private sweepDeferred(): void {
     for (const id of [...this.deferredRemovals]) {
-      /* v8 ignore next -- defensive: only the staged id ever defers, and every
-       * stage move sweeps first, so the set cannot contain the id the stage just
-       * moved to; kept as a guard against future extra sweep call sites. */
-      if (id === this.watched) continue
+      // A still-held id keeps its deferral: a release sweeps again. The staged
+      // id cannot be here (every stage move sweeps first), but the guard is
+      // shared with the hold case.
+      if (id === this.watched || this.holds.has(id)) continue
       // Eligible again? (A re-added id cancels the deferred teardown.)
       if (this.eligible(id)) {
         this.deferredRemovals.delete(id)

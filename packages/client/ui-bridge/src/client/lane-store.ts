@@ -138,6 +138,7 @@ export class BridgeLaneController {
       }
       this.replace(key, { sessionId, status: 'ready' })
       this.publishReadings()
+      this.showPanes()
     } catch (error: unknown) {
       this.replace(key, { status: 'failed', error: error instanceof Error ? error.message : String(error) })
     }
@@ -146,6 +147,28 @@ export class BridgeLaneController {
   /** Re-read every lane from the Session list. */
   refresh(): void {
     this.publishReadings()
+  }
+
+  /**
+   * Show the lanes as conversation panes, or leave pane mode.
+   *
+   * A pane is the ordinary conversation subtree bound to that lane's Session,
+   * so every lane streams its steps exactly as the single view does. Bridge
+   * names the Sessions; the conversation surface renders them.
+   * @param open - false to return to the single current-Session view.
+   */
+  showPanes(open = true): void {
+    const conversation = this.ctx.get('uiConversation')
+    if (conversation === undefined) return
+    if (!open) {
+      conversation.showPanes(undefined)
+      return
+    }
+    const panes = this.store.getSnapshot().lanes
+      .map(lane => lane.sessionId)
+      .filter((id): id is SessionId => id !== undefined)
+    conversation.showPanes(panes)
+    this.ctx.layout.selectPanel(null)
   }
 
   /** Stop the answer poll, for a panel that is going away. */
@@ -251,6 +274,7 @@ export class BridgeLaneController {
       lanes: lanes.filter(lane => lane.key !== key),
       focused: focused === key ? null : focused,
     })
+    this.showPanes()
   }
 
   /**
