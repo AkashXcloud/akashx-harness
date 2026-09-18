@@ -2,7 +2,9 @@
 
 English | [中文](README.zh.md)
 
-AkashX Bridge: one question fanned across several mode-locked Sessions, watched side by side.
+## Summary
+
+AkashX Bridge: one question fanned across several mode-locked Sessions, each watched as its own live conversation and graded together.
 
 ## Why it exists
 
@@ -41,7 +43,11 @@ A letter the grader does not rule on yields no verdict. An ungraded answer must 
 
 ## Model Experience
 
-Bridge adds no tool, no prompt section and no context injection. It sends prompts a person typed to Sessions that already exist, so a model reached through a lane sees exactly what it would see in the conversation view — the same system prompt, the same tools, the same preset gate. Token and KV-cache behaviour are unchanged; a lane's cost is that Session's own cost.
+None, as this browser panel registers nothing model-facing: it sends prompts a person typed to Sessions that already exist, so a model reached through a lane sees exactly what it would see in the conversation view.
+
+#### KV Cache effect
+
+Nothing here enters a model request, so provider cache reuse is unaffected; a lane's cost is that Session's own cost.
 
 ## Known Limitations and Deferred Work
 
