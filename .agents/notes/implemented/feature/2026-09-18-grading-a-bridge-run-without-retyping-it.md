@@ -32,3 +32,11 @@ The cost is one wrong match away from a confident false verdict, so the grader r
 A live run on the FinanceBench suite, asked in a person's words rather than the benchmark's: *"How much did 3M spend on capital expenditures in fiscal 2018?"* — a question the string matching this replaced could not have resolved.
 
 Three lanes, nothing typed into the judge bar (`inputs to type into: 0`), and the grader's reply was `Q=financebench_id_03029 A=correct B=wrong:says-1540 C=correct` — the right row out of 150, and a real discrimination rather than three rubber stamps: the vector-search lane answered 1540 against a gold of $1577.00 and was marked wrong with its reason.
+
+## Postscript: two faults the deployment exposed
+
+Running this on a real server found two things a laptop never would.
+
+**A lane could not be handed to the conversation view.** `openLane` set the current Session and cleared the panel, but never left pane mode — and the conversation surface draws the pane grid whenever a pane list is set. The Session changed underneath a grid that kept rendering the same panes, so the control looked dead. It now ends pane mode first.
+
+**Every cost read as unpriced.** The deployment's database answers with the dated snapshot it served, `gpt-5-nano-2025-08-07`, while the rate card is written against `gpt-5-nano`. No entry matched, and an unmatched model is reported unpriced rather than free, so every lane showed no money at all. `rateFor` now drops a trailing `-YYYY-MM-DD` and retries, with the exact match still taking precedence so a card may price one snapshot apart deliberately. Without it a rate card is correct on the day it is written and quietly prices nothing after the next snapshot ships.

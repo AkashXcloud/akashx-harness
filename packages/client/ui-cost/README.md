@@ -14,6 +14,8 @@ Token counts answer "how much work", not "how much money". The two diverge sharp
 
 A model's price is a deployment fact: it differs by contract, by region and by date, and it changes without any code moving. The rate card is therefore validated `Config`, keyed `provider/model` with a bare `model` fallback so the same model can be priced differently on two providers.
 
+Providers report the dated snapshot they actually served — `gpt-5-nano` answers as `gpt-5-nano-2025-08-07` — while a card is written against the model. A lookup that finds no exact entry therefore drops a trailing `-YYYY-MM-DD` and tries again, so a card stays correct when the next snapshot ships instead of silently pricing nothing. A card that names a snapshot explicitly keeps that rate, because the exact match runs first.
+
 The card ships empty, and an empty card prices nothing. A model absent from the card makes its side of the reading **unpriced** rather than free — a missing rate and a free model are different facts, and only the second one is a claim. Surfaces show nothing at all rather than `$0`.
 
 The card lives in the Host user-settings document under `ui-cost`:

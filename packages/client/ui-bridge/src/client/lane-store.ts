@@ -481,11 +481,17 @@ export class BridgeLaneController {
    * transcript, its composer and its tools -- Bridge hands a lane over rather
    * than reimplementing a conversation inside a pane. Leaving the panel does not
    * end the run: the other lanes keep working and report again on return.
+   *
+   * Pane mode has to end first. The conversation surface renders the pane grid
+   * whenever a pane list is set, so opening a Session while that list stands
+   * changes which Session is current and nothing else: the grid keeps drawing
+   * the same panes and the hand-off looks like a dead button.
    * @param key - the lane to open.
    */
   openLane(key: string): void {
     const lane = this.store.getSnapshot().lanes.find(candidate => candidate.key === key)
     if (lane?.sessionId === undefined) return
+    this.showPanes(false)
     this.ctx.sessions.open(lane.sessionId)
     this.ctx.layout.selectPanel(null)
   }

@@ -69,12 +69,25 @@ const PER_MILLION = 1_000_000
  * @param model - model id.
  * @returns the rate, or undefined when the card prices neither key.
  */
+/** Trailing dated snapshot on a provider's model id, as in `gpt-5-nano-2025-08-07`. */
+const SNAPSHOT_SUFFIX = /-\d{4}-\d{2}-\d{2}$/
+
 export function rateFor(
   rates: RateCard,
   provider: string | undefined,
   model: string,
 ): ModelRate | undefined {
-  return (provider === undefined ? undefined : rates[`${provider}/${model}`]) ?? rates[model]
+  const keyed = (name: string): ModelRate | undefined =>
+    (provider === undefined ? undefined : rates[`${provider}/${name}`]) ?? rates[name]
+  const exact = keyed(model)
+  if (exact !== undefined) return exact
+  // Providers report the dated snapshot they actually served -- `gpt-5-nano`
+  // answers as `gpt-5-nano-2025-08-07` -- while a rate card is written against
+  // the model. Without this a card is correct on the day it is written and
+  // silently prices nothing after the next snapshot ships. A card may still
+  // name a snapshot explicitly, which the exact match above honours first.
+  const base = model.replace(SNAPSHOT_SUFFIX, '')
+  return base === model ? undefined : keyed(base)
 }
 
 function usd(tokens: number, perMillion: number): number {
