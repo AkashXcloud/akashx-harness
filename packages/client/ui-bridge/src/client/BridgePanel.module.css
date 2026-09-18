@@ -329,3 +329,15 @@
   flex: none;
   border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
 }
+
+/* Which mode a pane runs is the one thing its header must never clip: it names
+   what the whole comparison is about. The figures give way instead. */
+.paneHead .laneMode {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.paneHead .metric {
+  flex: 0 1 auto;
+  min-width: 0;
+}
