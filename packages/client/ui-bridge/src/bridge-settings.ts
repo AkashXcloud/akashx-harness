@@ -7,7 +7,13 @@ export const BRIDGE_SETTINGS_NAMESPACE = 'ui-bridge'
 
 /** One benchmark question and the answer a grade is measured against. */
 export interface BenchAnswer {
-  /** The question as the benchmark states it; matched against what the lanes were asked. */
+  /**
+   * The benchmark's own id for the question, which the grader answers with so a
+   * grade says which row it was measured against. Defaults to the row's
+   * position when the suite has no ids of its own.
+   */
+  id?: string
+  /** The question as the benchmark states it; the grader matches what was asked against this. */
   question: string
   /** The known-good answer. */
   gold: string
@@ -16,8 +22,9 @@ export interface BenchAnswer {
 /** Durable Bridge section shared by the Host schema and the browser scope. */
 export interface BridgeSettings {
   /**
-   * The benchmark's questions and their answers. A question absent from the key
-   * is graded against a typed answer instead; the key never invents one.
+   * The benchmark's questions and their answers. The grader reads the whole key
+   * and picks the row that asks what the lanes were asked; a typed answer
+   * replaces the key for that one grade.
    */
   answerKey: BenchAnswer[]
 }
@@ -25,6 +32,7 @@ export interface BridgeSettings {
 /** Durable Bridge schema; also the wire envelope the browser scope validates against. */
 export const BridgeSettingsSchema = z.object({
   answerKey: z.array(z.object({
+    id: z.string(),
     question: z.string(),
     gold: z.string(),
   })).default([]),

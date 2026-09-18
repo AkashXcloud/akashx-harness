@@ -47,7 +47,6 @@ export type { BridgePanelInjected, BridgePanelProps } from './BridgePanel.tsx'
 export type { PaneChromeInjected, PaneChromeProps } from './PaneChrome.tsx'
 export type { PanesBarInjected, PanesBarProps } from './PanesBar.tsx'
 export type { BridgeLane, BridgeMode, BridgeState } from './lane-store.ts'
-export { lookupGold, normalizeQuestion } from './answer-key.ts'
 
 /** Required services (cordis fiber inject). */
 export const inject = [
@@ -84,8 +83,9 @@ export function apply(ctx: ClientContext): void {
   const answerKey = (): readonly BenchAnswer[] => answers.getSnapshot().value?.answerKey ?? []
   const lanes = new BridgeLaneController(ctx, answerKey)
   // The document loads after the panel mounts and can be edited while it is
-  // open, so a question already asked picks up a key that arrives late.
-  ctx.effect(() => answers.subscribe(() => { lanes.resolveGold() }), 'ui-bridge: answer key')
+  // open, so the panel learns about a key that arrives late.
+  lanes.refreshKey()
+  ctx.effect(() => answers.subscribe(() => { lanes.refreshKey() }), 'ui-bridge: answer key')
   // The roster is a live directory, so a preset added or retired while Bridge is
   // open changes what a new lane may be opened on.
   void lanes.loadModes()

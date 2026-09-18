@@ -160,45 +160,59 @@ describe('grading from one button', () => {
   beforeEach(() => { vi.useFakeTimers() })
   afterEach(() => { vi.useRealTimers() })
 
-  const KEY = [{ question: 'What was the FY2018 revenue?', gold: '$32,765 million' }]
+  const KEY = [{ id: 'fb-1', question: 'What was the FY2018 revenue?', gold: '$32,765 million' }]
 
-  it('remembers the question and finds its answer, so neither is retyped', async () => {
-    const bench = newBench()
+  /**
+   * A controller over a bench, with the answer key it grades against.
+   * @param bench - the bench the controller runs against.
+   * @param key - the deployment's answer key.
+   * @returns the controller, with one ready lane.
+   */
+  async function withKey(bench: Bench, key: readonly { question: string; gold: string }[]) {
     const ctx = fakeCtx(bench)
-    const lanes = new BridgeLaneController(ctx, () => KEY)
-    ctx.sessions.list.subscribe(() => { lanes.refresh() })
-    await lanes.addLane('tree')
-    await lanes.ask('What was the FY2018 revenue?')
-
-    const state = lanes.store.getSnapshot()
-    expect(state.asked).toBe('What was the FY2018 revenue?')
-    expect(state.keyGold).toBe('$32,765 million')
-  })
-
-  it('asks for an answer only when the key does not hold the question', async () => {
-    const bench = newBench()
-    const ctx = fakeCtx(bench)
-    const lanes = new BridgeLaneController(ctx, () => KEY)
-    ctx.sessions.list.subscribe(() => { lanes.refresh() })
-    await lanes.addLane('tree')
-    await lanes.ask('What did Amcor acquire in FY2023?')
-
-    expect(lanes.store.getSnapshot().keyGold).toBeUndefined()
-  })
-
-  it('picks up a key that loads after the question was asked', async () => {
-    const bench = newBench()
-    const ctx = fakeCtx(bench)
-    let key: { question: string; gold: string }[] = []
     const lanes = new BridgeLaneController(ctx, () => key)
     ctx.sessions.list.subscribe(() => { lanes.refresh() })
+    lanes.refreshKey()
     await lanes.addLane('tree')
+    return lanes
+  }
+
+  it('remembers the question, so it is not retyped to grade it', async () => {
+    const lanes = await withKey(newBench(), KEY)
     await lanes.ask('What was the FY2018 revenue?')
-    expect(lanes.store.getSnapshot().keyGold).toBeUndefined()
+
+    expect(lanes.store.getSnapshot().asked).toBe('What was the FY2018 revenue?')
+  })
+
+  it('knows a key is installed, so nothing has to be typed', async () => {
+    const lanes = await withKey(newBench(), KEY)
+    expect(lanes.store.getSnapshot().hasKey).toBe(true)
+  })
+
+  it('reports no key when the deployment supplies none', async () => {
+    const lanes = await withKey(newBench(), [])
+    expect(lanes.store.getSnapshot().hasKey).toBe(false)
+  })
+
+  it('picks up a key that loads after the panel mounted', async () => {
+    const bench = newBench()
+    const ctx = fakeCtx(bench)
+    let key: readonly { question: string; gold: string }[] = []
+    const lanes = new BridgeLaneController(ctx, () => key)
+    lanes.refreshKey()
+    expect(lanes.store.getSnapshot().hasKey).toBe(false)
 
     key = KEY
-    lanes.resolveGold()
-    expect(lanes.store.getSnapshot().keyGold).toBe('$32,765 million')
+    lanes.refreshKey()
+    expect(lanes.store.getSnapshot().hasKey).toBe(true)
+  })
+
+  it('drops the row a previous grade matched when a new question is asked', async () => {
+    const lanes = await withKey(newBench(), KEY)
+    lanes.store.set({ ...lanes.store.getSnapshot(), matched: KEY[0] })
+    await lanes.ask('What was the FY2019 revenue?')
+
+    expect(lanes.store.getSnapshot().matched).toBeUndefined()
   })
 })
 

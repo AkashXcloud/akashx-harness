@@ -113,10 +113,10 @@ export function PanesBar({ useBridge, addLane, ask, setGold, judge, closePanes, 
   // Every lane, not any: a grade run before the last answer lands silently
   // omits that lane, and an ungraded lane beside graded ones reads as a failure.
   const canJudge = state.lanes.length > 0 && state.lanes.every(lane => lane.reading.answer !== undefined)
-  // The answer key covers the question, so there is nothing left to type and the
-  // grade is one button. A question it does not cover still asks for the answer.
-  const keyed = state.keyGold !== undefined
-  const gradable = canJudge && state.asked !== '' && (keyed || state.gold.trim() !== '')
+  // The grader matches the question against the key itself, so a deployment with
+  // a key needs nothing typed. Without one, the answer is asked for.
+  const typed = state.gold.trim() !== ''
+  const gradable = canJudge && state.asked !== '' && (state.hasKey || typed)
   return (
     <div className={css.bar} data-bridge-panel>
       <div className={css.barHead}>
@@ -129,8 +129,14 @@ export function PanesBar({ useBridge, addLane, ask, setGold, judge, closePanes, 
       <div className={css.barRow}>
         <Composer focusedName={focusedName} ask={ask} t={t} />
         <div className={css.judgeBar} data-bridge-judge>
-          {keyed
-            ? <span className={css.judgeKeyed} data-bridge-judge-keyed>{t('judge.keyed')}</span>
+          {state.hasKey && !typed
+            ? (
+              <span className={css.judgeKeyed} data-bridge-judge-keyed>
+                {state.matched === undefined
+                  ? t('judge.keyed')
+                  : t('judge.matched', { question: state.matched.question })}
+              </span>
+            )
             : (
               <input
                 className={css.judgeInput}

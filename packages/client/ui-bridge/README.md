@@ -45,20 +45,27 @@ A letter the grader does not rule on yields no verdict. An ungraded answer must 
 
 Grading needs the question and the answer it should have produced. The panel already sent the question, so it keeps it; nothing is retyped to grade what was just asked.
 
-The correct answer comes from a benchmark answer key held in the Host user-settings document under `ui-bridge`, matched against the question that was asked:
+The correct answer comes from a benchmark answer key held in the Host user-settings document under `ui-bridge`:
 
 ```yaml
 ui-bridge:
-  answerKey:                # question text as the benchmark states it, and its answer
-    - question: What is the FY2018 capital expenditure amount (in USD millions) for 3M?
+  answerKey:                # the benchmark's id, its question, and its answer
+    - id: financebench_id_03029
+      question: What is the FY2018 capital expenditure amount (in USD millions) for 3M?
       gold: $1577.00
 ```
 
 The key is configuration rather than shipped data: which suite a deployment grades against differs by machine and changes without any code moving.
 
-Matching compares the two questions reduced to their words and figures, so a paste that picks up a newline or a curly apostrophe still resolves. A question stored in the key and contained in what was asked counts as the same question, which is what lets a prompt wrap the benchmark text in a retrieval hint. Containment runs one way only, and nothing fuzzier is attempted: grading a lane against a near miss is worse than not grading it.
+### The grader matches the question, not the strings
 
-A question the key does not cover asks for the answer instead, in one box, and a typed answer overrides the key. An empty key is therefore the deployment that grades by hand, which is what shipped before the key existed.
+The whole key goes into the grading prompt, and finding the row that was asked is the grader's first job. Nobody asks a question in the benchmark's own wording — they paraphrase it, they wrap it in retrieval instructions, they ask for the same figure a different way — and a string lookup that missed would put the typing straight back in front of them. Reading for what is being asked is the one part of this that needs a model.
+
+The grader answers with the row it matched, which the bar then shows in the benchmark's wording. A grade always says what it was measured against, so a wrong match is visible rather than silent. A reply naming no row marks nothing at all: every ruling in it was measured against an answer the panel cannot name, which is worse than no grade.
+
+Grading itself is lenient about form and strict about substance. The same figure in a different unit, format or phrasing is correct; a different figure, unit or period is not, and neither is a refusal.
+
+A typed answer replaces the key for one grade, which is also how a deployment with no key at all grades — by hand, one box, as it did before the key existed.
 
 ## Model Experience
 
@@ -75,5 +82,6 @@ Nothing here enters a model request, so provider cache reuse is unaffected; a la
 - The grade is read from the host's response preview, which is clipped well short of a full answer. A lane that states its figure only after the clip cannot be graded on it, even though its pane shows the whole answer.
 - Selecting Bridge in the rail selects the starter panel; the panes live in the conversation panel, so the rail highlight moves off Bridge as soon as the panes open.
 - The grader runs on the deployment's default preset, which can reach the database. Only the prompt stops it looking an answer up; there is no preset that withholds the capability.
-- The answer key is matched against the last question sent to the lanes. Asking a second question before grading the first replaces what a grade would be measured against.
-- The key holds one answer per question. A benchmark whose question text repeats across filings cannot be keyed on the question alone.
+- The grade is measured against the last question sent to the lanes. Asking a second question before grading the first replaces what a grade would be matched against.
+- The whole answer key enters the grading prompt on every grade. A suite far larger than FinanceBench's 150 questions would need narrowing before it is sent.
+- Which row the grader matched is reported but not checked. A confident wrong match is visible in the bar and nowhere else.

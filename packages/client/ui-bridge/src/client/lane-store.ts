@@ -24,9 +24,8 @@ import type {} from '@akashx/akx-agent-presets/types'
 // Type-only: pulls the cost service merge (ctx.get('cost')), which is optional.
 import type {} from '@akashx/akx-client-ui-cost/client'
 import type { BenchAnswer } from '../bridge-settings.ts'
-import { lookupGold } from './answer-key.ts'
 import { EMPTY_READING, readLane, type LaneReading } from './lane-watch.ts'
-import { dealBlind, judgePrompt, readVerdicts, type JudgeVerdict } from './judge.ts'
+import { dealBlind, judgePrompt, readGrade, type JudgeVerdict } from './judge.ts'
 
 /** One mode a lane may be seated on. */
 export interface BridgeMode {
@@ -60,9 +59,11 @@ export interface BridgeState {
   readonly focused: string | null
   /** The question every lane was last asked, which is the one being graded. */
   readonly asked: string
-  /** The answer key's answer for {@link BridgeState.asked}, undefined when the key does not cover it. */
-  readonly keyGold: string | undefined
-  /** A typed answer, which overrides {@link BridgeState.keyGold} when it is not blank. */
+  /** Whether the deployment supplies an answer key at all. */
+  readonly hasKey: boolean
+  /** The answer-key row the last grade was measured against, once one has run. */
+  readonly matched: BenchAnswer | undefined
+  /** A typed answer, which replaces the key for one grade when it is not blank. */
   readonly gold: string
   /** Whether a grading run is in flight. */
   readonly judging: boolean
@@ -81,7 +82,8 @@ const JUDGE_TIMEOUT_MS = 180_000
 const JUDGE_POLL_MS = 2500
 
 const INITIAL: BridgeState = {
-  lanes: [], modes: [], focused: null, asked: '', keyGold: undefined, gold: '', judging: false, error: null,
+  lanes: [], modes: [], focused: null, asked: '', hasKey: false, matched: undefined,
+  gold: '', judging: false, error: null,
 }
 
 /** Owns the lane roster and the Session work behind it. */
@@ -339,9 +341,9 @@ export class BridgeLaneController {
     const addressed = lanes.filter(lane =>
       lane.status === 'ready' && lane.sessionId !== undefined && (focused === null || lane.key === focused))
     // Grading needs the question, and the panel is the only thing that knows it.
-    // Recording it here is what lets the grade run from one button.
-    this.set({ asked: text })
-    this.resolveGold()
+    // Recording it here is what lets the grade run from one button. A new
+    // question clears the last grade's row, which was another question's.
+    this.set({ asked: text, matched: undefined })
     this.pollUntilAnswered()
     await Promise.all(addressed.map(async (lane) => {
       const scope = this.ctx.sessions.scope(lane.sessionId as SessionId)
@@ -363,34 +365,36 @@ export class BridgeLaneController {
   }
 
   /**
-   * Set the answer the grader marks against, overriding the answer key.
-   * @param gold - the known-good answer, or blank to fall back to the key.
+   * Set the answer the grader marks against, replacing the answer key.
+   * @param gold - the known-good answer, or blank to grade against the key.
    */
   setGold(gold: string): void {
     this.set({ gold })
   }
 
   /**
-   * Re-read the answer key for the question that was asked.
+   * Re-read whether the deployment supplies an answer key.
    *
    * Called again when the key itself changes, because the settings document it
    * comes from loads after the panel mounts and can be edited while it is open.
    */
-  resolveGold(): void {
-    const { asked } = this.store.getSnapshot()
-    const keyGold = asked === '' ? undefined : lookupGold(this.answerKey(), asked)
-    this.set({ keyGold })
+  refreshKey(): void {
+    this.set({ hasKey: this.answerKey().length > 0 })
   }
 
   /**
-   * The answer this grade is measured against: a typed one when there is one,
-   * otherwise the answer key's.
+   * The rows this grade matches against.
+   *
+   * A typed answer is the whole key for that grade: someone who states the
+   * answer has said which question was asked, so there is nothing left to
+   * match.
    * @param state - the snapshot being graded from.
-   * @returns the known-good answer, or undefined when neither supplies one.
+   * @returns the rows, empty when neither the key nor a typed answer supplies any.
    */
-  private goldFor(state: BridgeState): string | undefined {
+  private rowsFor(state: BridgeState): readonly BenchAnswer[] {
     const typed = state.gold.trim()
-    return typed !== '' ? typed : state.keyGold
+    if (typed !== '') return [{ id: 'typed', question: state.asked, gold: typed }]
+    return this.answerKey()
   }
 
   /**
@@ -402,17 +406,17 @@ export class BridgeLaneController {
    * needs. Answers go in blind and the labels are restored from the deal.
    *
    * It takes no arguments: the panel sent the question, so it already knows what
-   * was asked, and the answer key -- or a typed override -- supplies what the
+   * was asked, and the answer key -- or a typed override -- carries what the
    * answer should have been. Nothing is retyped to run a grade.
    */
   async judge(): Promise<void> {
     const state = this.store.getSnapshot()
     const { lanes, asked } = state
-    const gold = this.goldFor(state)
+    const rows = this.rowsFor(state)
     const entries = lanes
       .filter(lane => lane.reading.answer !== undefined)
       .map(lane => ({ key: lane.key, answer: lane.reading.answer as string }))
-    if (entries.length === 0 || gold === undefined || asked === '') return
+    if (entries.length === 0 || rows.length === 0 || asked === '') return
 
     this.set({ judging: true, error: null })
     try {
@@ -420,16 +424,24 @@ export class BridgeLaneController {
       const sessionId = await this.ctx.sessions.create({})
       const conversation = this.ctx.sessions.scope(sessionId)?.get('conversation')
       if (conversation === undefined) throw new Error('judge session has no conversation scope')
-      await conversation.send(judgePrompt(asked, gold, dealt))
+      await conversation.send(judgePrompt(asked, rows, dealt))
 
       const reply = await this.awaitReply(sessionId)
-      const verdicts = readVerdicts(reply, dealt)
+      const { matched, verdicts } = readGrade(reply, rows, dealt)
+      if (matched === undefined) {
+        // Nothing is marked: every ruling in that reply was measured against an
+        // answer the panel cannot name, and an unattributable grade is worse
+        // than none.
+        this.set({ judging: false, error: 'the grader found no question matching what the lanes were asked' })
+        return
+      }
       const byKey = new Map(verdicts.map(verdict => [verdict.key, verdict]))
       this.set({
         lanes: this.store.getSnapshot().lanes.map((lane) => {
           const verdict = byKey.get(lane.key)
           return verdict === undefined ? lane : { ...lane, verdict }
         }),
+        matched,
         judging: false,
       })
     } catch (error: unknown) {
