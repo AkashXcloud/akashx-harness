@@ -1,6 +1,8 @@
 /** What this session has cost so far, beside the counts it was priced from. */
 import type { UseProjection } from '@akashx/akx-api-session-controller/client'
 import type { PropsLocale } from '@akashx/akx-client-ui-slots'
+// Type-only: pulls the statistics-row slot ui-chat declares.
+import type {} from '@akashx/akx-client-ui-chat/client'
 // Type-only: merges the cognateUsage key into SessionProjectionMap for useProjection.
 import type {} from '@akashx/akx-tool-cognate/client'
 // Type-only: merges the tokenUsage key the same way.
@@ -54,6 +56,7 @@ export function CostPill({ useProjection, price, t }: CostPillProps) {
         cost.unpriced.length === 0 ? undefined : t('pill.unpriced', { models: cost.unpriced.join(', ') }),
       ].filter(line => line !== undefined).join('\n')}
     >
+      <span className={css.label}>{t('pill.label')}</span>
       {formatUsd(total)}
     </span>
   )

@@ -144,7 +144,13 @@ describe('StatsPills', () => {
     source: { getSnapshot(): ChatSnapshot; subscribe(fn: () => void): () => void },
     values: Record<string, unknown> = { tokenUsage: USAGE },
   ): StatsPillsProps {
-    return { useChat: bindSnapshotSelector(source), useProjection: projections(values), t: tEn }
+    return {
+      useChat: bindSnapshotSelector(source),
+      useProjection: projections(values),
+      // The row's own slot: unoccupied in these benches, so it renders nothing.
+      renderSlot: () => null,
+      t: tEn,
+    }
   }
 
   function tokenUsage(cacheReadTokens: number, uncachedInputTokens: number) {

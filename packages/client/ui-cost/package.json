@@ -30,6 +30,7 @@
       "inject": [
         "@akashx/akx-api-remotes",
         "@akashx/akx-client-locale",
+        "@akashx/akx-client-ui-chat",
         "@akashx/akx-client-ui-conversation",
         "@akashx/akx-client-ui-settings",
         "@akashx/akx-client-ui-slots"
@@ -48,6 +49,7 @@
   "devDependencies": {
     "@akashx/akx-api-session-controller": "workspace:^",
     "@akashx/akx-client-locale": "workspace:^",
+    "@akashx/akx-client-ui-chat": "workspace:^",
     "@akashx/akx-client-ui-conversation": "workspace:^",
     "@akashx/akx-client-ui-primitives": "workspace:^",
     "@akashx/akx-client-ui-settings": "workspace:^",

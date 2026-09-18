@@ -9,7 +9,7 @@ import { Fragment, memo, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IconDatabaseOutline16, IconGaugeOutline16 } from '@akashx/akx-client-ui-primitives'
 import type { UseProjection } from '@akashx/akx-api-session-controller/client'
-import type { SnapshotSelectorHook } from '@akashx/akx-client-ui-slots'
+import type { PropsRenderSlots, SnapshotSelectorHook } from '@akashx/akx-client-ui-slots'
 // Type-only: merges the sessionStats key into SessionProjectionMap for useProjection.
 import type {} from '@akashx/akx-session-stats/client'
 // Type-only: merges the cognateUsage key the same way.
@@ -123,12 +123,14 @@ export function billedInputTokens(usage: TokenUsageProjection): number {
   return usage.uncachedInputTokens + usage.cacheReadTokens + usage.cacheWriteTokens
 }
 
-/** Props: the conversation-snapshot selector plus the projection read seat. */
+/** Props: the conversation-snapshot selector, the projection read seat, and the row's own slot. */
 export interface StatsPillsProps {
   useChat: SnapshotSelectorHook<ChatSnapshot>
   useProjection: UseProjection
   /** The owning dock's locale seat. */
   t: ChatViewSlotProps['t']
+  /** The row's own slot: figures other packages add after the shipped pills. */
+  renderSlot: PropsRenderSlots<'conversation.stats.item'>['renderSlot']
 }
 
 function exactCount(value: number, t: ChatViewSlotProps['t']): string {
@@ -367,7 +369,7 @@ function UsagePill({ usage, deployment, t, dialog }: {
   )
 }
 
-export const StatsPills = memo(function StatsPills({ useChat, useProjection, t }: StatsPillsProps) {
+export const StatsPills = memo(function StatsPills({ useChat, useProjection, renderSlot, t }: StatsPillsProps) {
   const settledNodes = useChat(s => s.legacy.nodes)
   const usage = useProjection('tokenUsage')
   // Deployment spend is absent unless a cognitive tool registered its unit and spent.
@@ -410,6 +412,7 @@ export const StatsPills = memo(function StatsPills({ useChat, useProjection, t }
           }}
         />
       )}
+      {renderSlot('conversation.stats.item', {})}
     </div>
   )
 })

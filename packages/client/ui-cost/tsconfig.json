@@ -27,6 +27,9 @@
       "path": "../locale"
     },
     {
+      "path": "../ui-chat"
+    },
+    {
       "path": "../ui-conversation"
     },
     {

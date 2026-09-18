@@ -15,6 +15,7 @@ import type {} from '@akashx/akx-client-ui-layout/client'
 import type { SessionId } from '@akashx/akx-session/types'
 import type { WorkspaceId } from '@akashx/akx-workspace/types'
 import type { ComposerBlock } from './composer-blocks.ts'
+import type { PaneState } from '../panes.ts'
 import type {
   ComposerKeyboard, DraftAttachmentId, EditSelection, InputActions, InputNotice, InputState,
 } from './input.ts'
@@ -277,8 +278,19 @@ export type ConvViewProps = PropsRuntime<'conversation.view'>
 export interface ConversationInjected {
   /** Connect and open a blank Session in the selected Workspace. */
   selectWorkspace: (workspaceId: WorkspaceId) => Promise<void>
-  /** Session-addressed composer block source, or the stable absent source. */
-  hooks: { composerBlock: ObservableSnapshot<ComposerBlock | undefined> }
+  /**
+   * Session-addressed composer block source (or the stable absent source), and
+   * whether the surface is showing comparison panes.
+   *
+   * A pane is an existing Session someone else opened and composed, so the
+   * new-session hero does not belong in it: the hero's workspace and preset
+   * pickers are root-scoped, and several panes would show and edit one value
+   * between them.
+   */
+  hooks: {
+    composerBlock: ObservableSnapshot<ComposerBlock | undefined>
+    panes: ObservableSnapshot<PaneState>
+  }
 }
 
 /** Business callbacks injected into the strict Session body. */

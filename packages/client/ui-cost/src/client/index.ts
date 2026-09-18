@@ -153,8 +153,10 @@ export function apply(ctx: Context): void {
   const card = (): RateCard => host.getSnapshot().value?.rates ?? {}
   ctx.effect(() => ctx.locale.register('cost', { en }), 'ui-cost: dictionaries')
   ctx.plugin(CostService, card)
-  ctx.slots.inject('conversation.composer.dock', () => ctx.slots.register({
-    name: 'conversation.composer.dock',
+  // The row of figures, not a line under it: a session's money belongs beside
+  // the tokens it was priced from.
+  ctx.slots.inject('conversation.stats.item', () => ctx.slots.register({
+    name: 'conversation.stats.item',
     id: 'cost',
     order: 10,
     locale: 'cost',

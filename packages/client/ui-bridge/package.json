@@ -29,6 +29,7 @@
     "client": {
       "inject": [
         "@akashx/akx-api-session-controller",
+        "@akashx/akx-api-workspace-controller",
         "@akashx/akx-client-ui-conversation",
         "@akashx/akx-client-ui-layout",
         "@akashx/akx-client-ui-sidebar",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@akashx/akx-api-session-controller": "workspace:^",
+    "@akashx/akx-api-workspace-controller": "workspace:^",
     "@akashx/akx-client-locale": "workspace:^",
     "@akashx/akx-client-store": "workspace:^",
     "@akashx/akx-client-test-runtime": "workspace:^",
@@ -58,6 +60,7 @@
     "@akashx/akx-client-ui-sidebar": "workspace:^",
     "@akashx/akx-client-ui-slots": "workspace:^",
     "@akashx/akx-session": "workspace:^",
+    "@akashx/akx-workspace": "workspace:^",
     "@akashx/cordis": "workspace:^",
     "@testing-library/react": "^16.1.0",
     "@types/react": "~18.3.1",

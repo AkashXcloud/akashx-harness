@@ -49,6 +49,7 @@ describe('render branch tails', () => {
         t={t}
         useChat={bindSnapshotSelector(source)}
         useProjection={() => undefined}
+        renderSlot={() => null}
       />,
     )
     expect(view.container.textContent).toBe('2 turns 3 steps')

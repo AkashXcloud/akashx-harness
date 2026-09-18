@@ -308,6 +308,8 @@ function mount(
     useWorkspaces: bindSnapshotSelector(workspaces),
     useProjection: (() => undefined),
     useComposerBlock: select => select(options.composerBlock),
+    // The single view, not a comparison pane: the hero belongs here.
+    usePanes: select => select({ panes: undefined }),
     useInput,
     inputActions,
     renderSlot,

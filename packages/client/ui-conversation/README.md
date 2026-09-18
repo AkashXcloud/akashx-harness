@@ -119,6 +119,8 @@ Panes are **held**, not selected: `ISessions.hold` keeps a Session's history win
 
 Two slots belong to whichever feature set the panes: `conversation.panes.bar` above the grid, and `conversation.pane.chrome` inside each pane, bound to that pane's Session rather than to the current one.
 
+A pane never shows the new-session hero. The hero's workspace and agent-preset pickers are **root-scoped** — they configure the next new session, not the one on screen — so several panes would show one value between them and editing any of them would move all. A pane is an existing Session someone else already composed, so it shows its conversation and its composer, and nothing that would offer to reconfigure it.
+
 ## Model Experience
 
 None, as this package renders browser state and sends user-admitted inputs through Session Controller APIs without constructing model requests.

@@ -16,6 +16,9 @@ import type {} from '@akashx/akx-api-remotes/client'
 // Type-only: pulls the conversation service onto a Session-scoped context.
 import type {} from '@akashx/akx-client-ui-conversation/client'
 import type { SessionId } from '@akashx/akx-session/types'
+import type { WorkspaceId } from '@akashx/akx-workspace/types'
+// Type-only: pulls the Workspace Controller service merge (ctx.get('workspaces')).
+import type {} from '@akashx/akx-api-workspace-controller/client'
 import { createSnapshotStore, type SnapshotStore } from '@akashx/akx-client-store'
 import type {} from '@akashx/akx-agent-presets/types'
 // Type-only: pulls the cost service merge (ctx.get('cost')), which is optional.
@@ -128,7 +131,7 @@ export class BridgeLaneController {
     const key = `lane-${this.nextKey += 1}`
     this.set({ lanes: [...this.store.getSnapshot().lanes, { key, modeId, status: 'spawning', reading: EMPTY_READING }] })
     try {
-      const sessionId = await this.ctx.sessions.create({})
+      const sessionId = await this.ctx.sessions.create(this.laneWorkspace())
       // Seat before anything runs: the Host refuses to reseat a Session that
       // has already taken a turn, so this is the only window for it.
       const seated = await this.ctx.remote.agentPresets.select(sessionId, modeId)
@@ -142,6 +145,25 @@ export class BridgeLaneController {
     } catch (error: unknown) {
       this.replace(key, { status: 'failed', error: error instanceof Error ? error.message : String(error) })
     }
+  }
+
+  /**
+   * The workspace a new lane opens in.
+   *
+   * A lane without one is a Session with nowhere to work: its composer refuses
+   * input until someone picks a workspace, which is not a choice a lane should
+   * put in front of anyone. The current conversation's workspace is the answer
+   * when there is one, because a comparison is run against what is already
+   * open.
+   * @returns the create options, empty when nothing is open to inherit from.
+   */
+  private laneWorkspace(): { workspaceId?: WorkspaceId } {
+    const { current } = this.ctx.sessions.list.getSnapshot()
+    if (current === undefined) return {}
+    const workspaces = this.ctx.get('workspaces')
+    const owner = workspaces?.list.getSnapshot().items
+      .find(item => item.sessionIds.includes(current))
+    return owner === undefined ? {} : { workspaceId: owner.workspaceId }
   }
 
   /** Re-read every lane from the Session list. */

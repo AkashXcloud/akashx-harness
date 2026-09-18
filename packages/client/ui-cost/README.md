@@ -37,7 +37,9 @@ ui-cost:
 
 | Slot | Entry | Purpose |
 | --- | --- | --- |
-| `conversation.composer.dock` | `cost` | The money pill beside the session's token pills. |
+| `conversation.stats.item` | `cost` | The money figure, inside the composer's statistics row. |
+
+It sits in the row, not under it: a session's money is one of that session's figures, and a reader compares it against the tokens it was priced from.
 
 It also publishes `ctx.cost`, whose `price` applies the card to one session's projection values. Callers pass values rather than a session id because the two surfaces that need it read from different places: the pill from its own session's projection seat, and Bridge from the Session list, which is the only source that serves a session the client has not opened.
 

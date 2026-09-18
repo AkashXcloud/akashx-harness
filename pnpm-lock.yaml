@@ -2435,6 +2435,9 @@ importers:
       '@akashx/akx-api-session-controller':
         specifier: workspace:^
         version: link:../../api/session-controller
+      '@akashx/akx-api-workspace-controller':
+        specifier: workspace:^
+        version: link:../../api/workspace-controller
       '@akashx/akx-client-locale':
         specifier: workspace:^
         version: link:../locale
@@ -2468,6 +2471,9 @@ importers:
       '@akashx/akx-session':
         specifier: workspace:^
         version: link:../../core/session
+      '@akashx/akx-workspace':
+        specifier: workspace:^
+        version: link:../../workspace/workspace
       '@akashx/cordis':
         specifier: workspace:^
         version: link:../../../vendor/cordis
@@ -2806,6 +2812,9 @@ importers:
       '@akashx/akx-client-locale':
         specifier: workspace:^
         version: link:../locale
+      '@akashx/akx-client-ui-chat':
+        specifier: workspace:^
+        version: link:../ui-chat
       '@akashx/akx-client-ui-conversation':
         specifier: workspace:^
         version: link:../ui-conversation

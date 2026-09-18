@@ -7,6 +7,7 @@
 
 /** The cost dictionary, and the source of its key union. */
 export const en = {
+  'pill.label': 'Cost',
   'pill.agent': 'Agent model: {amount}',
   'pill.database': 'Database models: {amount}',
   'pill.unpriced': 'No rate configured for: {models}',

@@ -198,6 +198,12 @@ declare module '@akashx/akx-client-ui-slots' {
      */
     'conversation.message.images': { kind: 'single'; scope: 'session'; owner: MessageImagesOwnerProps }
     /**
+     * Figures added to the composer's statistics row, after the shipped time
+     * and usage pills. A figure derived from the same session belongs beside
+     * them rather than under them.
+     */
+    'conversation.stats.item': { kind: 'list'; scope: 'session' }
+    /**
      * Command row keyed by the command name. The component receives the folded
      * command lifecycle and linked compaction when present. Reusing a key
      * replaces that command renderer; an unoccupied key uses the generic card.
